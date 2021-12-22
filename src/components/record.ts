@@ -1,4 +1,4 @@
-import { BasicElementAttributes } from './element';
+import { BasicElement, BasicElementAttributes } from './element';
 
 export enum BasicRecordType {
   /** add element */
@@ -22,7 +22,7 @@ export interface BasicRecord {
    */
   attr?: keyof BasicElementAttributes | (keyof BasicElementAttributes)[];
   /** record elements */
-  element: BasicRecordType | BasicRecordType[];
+  element: BasicElement | BasicElement[];
 }
 
 /** basic record store */
