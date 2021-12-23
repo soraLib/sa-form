@@ -2,6 +2,18 @@
 # yarn lockfile v1
 
 
+"@antv/x6@^1.29.0":
+  "integrity" "sha512-AP+nypdP3vwD7NzS4LjktuOtpkDv8A0+JlgugN3h+B3tzlyW0zRJIYs/KpDa56TdN5CdOaWqBgkzcpu/iPl8jw=="
+  "resolved" "https://registry.npmjs.org/@antv/x6/-/x6-1.29.0.tgz"
+  "version" "1.29.0"
+  dependencies:
+    "csstype" "^3.0.3"
+    "jquery" "^3.5.1"
+    "jquery-mousewheel" "^3.1.13"
+    "lodash-es" "^4.17.15"
+    "mousetrap" "^1.6.5"
+    "utility-types" "^3.10.0"
+
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.16.0":
   "integrity" "sha512-IF4EOMEV+bfYwOmNxGzSnjR2EmQod7f1UXOpZM3l4i4o4QNwzjtJAu/HxdjHq0aYBvdqMuQEY1eg0nqW9ZPORA=="
   "resolved" "https://registry.npmjs.org/@babel/code-frame/-/code-frame-7.16.0.tgz"
@@ -945,6 +957,11 @@
   "resolved" "https://registry.npmjs.org/csstype/-/csstype-2.6.19.tgz"
   "version" "2.6.19"
 
+"csstype@^3.0.3":
+  "integrity" "sha512-2u44ZG2OcNUO9HDp/Jl8C07x6pU/eTR3ncV91SiK3dhG9TWvRVsCoJw14Ckx5DgWkzGA3waZWO3d7pgqpUI/XA=="
+  "resolved" "https://registry.npmjs.org/csstype/-/csstype-3.0.10.tgz"
+  "version" "3.0.10"
+
 "dayjs@^1.10.7":
   "integrity" "sha512-P6twpd70BcPK34K26uJ1KT3wlhpuOAPoMwJzpsIWUxHZ7wpmbdZL/hQqBDfz7hGurYSa5PhzdhDHtt319hL3ig=="
   "resolved" "https://registry.npmjs.org/dayjs/-/dayjs-1.10.7.tgz"
@@ -1589,6 +1606,16 @@
   "resolved" "https://registry.npmjs.org/isexe/-/isexe-2.0.0.tgz"
   "version" "2.0.0"
 
+"jquery-mousewheel@^3.1.13":
+  "integrity" "sha1-BvAzXxbjU6aV5yBr9QUDy1I6buU="
+  "resolved" "https://registry.npmjs.org/jquery-mousewheel/-/jquery-mousewheel-3.1.13.tgz"
+  "version" "3.1.13"
+
+"jquery@^3.5.1":
+  "integrity" "sha512-JVzAR/AjBvVt2BmYhxRCSYysDsPcssdmTFnzyLEts9qNwmjmu4JTAMYubEfwVOSwpQ1I1sKKFcxhZCI2buerfw=="
+  "resolved" "https://registry.npmjs.org/jquery/-/jquery-3.6.0.tgz"
+  "version" "3.6.0"
+
 "js-stringify@^1.0.2":
   "integrity" "sha1-Fzb939lyTyijaCrcYjCufk6Weds="
   "resolved" "https://registry.npmjs.org/js-stringify/-/js-stringify-1.0.2.tgz"
@@ -1669,6 +1696,11 @@
   "resolved" "https://registry.npmjs.org/lines-and-columns/-/lines-and-columns-1.2.4.tgz"
   "version" "1.2.4"
 
+"lodash-es@^4.17.15":
+  "integrity" "sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw=="
+  "resolved" "https://registry.npmjs.org/lodash-es/-/lodash-es-4.17.21.tgz"
+  "version" "4.17.21"
+
 "lodash.merge@^4.6.2":
   "integrity" "sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ=="
   "resolved" "https://registry.npmjs.org/lodash.merge/-/lodash.merge-4.6.2.tgz"
@@ -1722,6 +1754,11 @@
   "integrity" "sha512-FM9nNUYrRBAELZQT3xeZQ7fmMOBg6nWNmJKTcgsJeaLstP/UODVpGsr5OhXhhXg6f+qtJ8uiZ+PUxkDWcgIXLw=="
   "resolved" "https://registry.npmjs.org/minimist/-/minimist-1.2.5.tgz"
   "version" "1.2.5"
+
+"mousetrap@^1.6.5":
+  "integrity" "sha512-QNo4kEepaIBwiT8CDhP98umTetp+JNfQYBWvC1pc6/OAibuXtRcxZ58Qz8skvEHYvURne/7R8T5VoOI7rDsEUA=="
+  "resolved" "https://registry.npmjs.org/mousetrap/-/mousetrap-1.6.5.tgz"
+  "version" "1.6.5"
 
 "ms@2.1.2":
   "integrity" "sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w=="
@@ -2271,6 +2308,11 @@
   "integrity" "sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8="
   "resolved" "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz"
   "version" "1.0.2"
+
+"utility-types@^3.10.0":
+  "integrity" "sha512-O11mqxmi7wMKCo6HKFt5AhO4BwY3VV68YU07tgxfz8zJTIxr4BpsezN49Ffwy9j3ZpwwJp4fkRwjRzq3uWE6Rg=="
+  "resolved" "https://registry.npmjs.org/utility-types/-/utility-types-3.10.0.tgz"
+  "version" "3.10.0"
 
 "v8-compile-cache@^2.0.3":
   "integrity" "sha512-l8lCEmLcLYZh4nbunNZvQCJc5pv7+RCwa8q/LdUx8u7lsWvPDKmpodJAJNwkAhJC//dFY48KuIEmjtd4RViDrA=="

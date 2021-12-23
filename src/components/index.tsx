@@ -26,6 +26,8 @@ export default defineComponent({
 
     const layout = LAYOUTS[props.type]();
 
+    const SaFormWorkspace = layout.workspace;
+
     return () => (
       <section class="flex flex-col">
         <h1 class="font-bold text-lg py-4">Sa Form</h1>
@@ -41,7 +43,9 @@ export default defineComponent({
             <SaFormSidebar options={layout.side} drawer={layout.drawer} class="bg-slate-500 h-full" />
           </aside>
 
-          <main class="flex-grow justify-center bg-slate-500 mx-1">workspace</main>
+          <main class="flex-grow justify-center bg-slate-500 mx-1 overflow-auto">
+            <SaFormWorkspace canvas={layout.drawer.canvas} />
+          </main>
 
           <aside class="w-48 bg-slate-500">
             properties controller
