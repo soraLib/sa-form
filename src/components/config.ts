@@ -2,9 +2,12 @@ import { BasicDrawer, DrawerType } from './drawer';
 import { HeaderTool } from './layout/header';
 import { SideTool } from './layout/sidebar';
 import { PcDrawer } from './PcForm/drawer';
+import { ComponentOptionsMixin, ComponentPublicInstance, defineComponent, DefineComponent, PropType, VNode } from 'vue';
 
 import { PcHeaderOptions } from './PcForm/layout/header';
 import { PcSideOptions } from './PcForm/layout/side';
+import PcWorkspace from './PcForm/layout/workspace';
+import { BasicElement } from './element';
 
 const createPcFormConfig = () => ({
   drawer: new PcDrawer({
@@ -18,7 +21,8 @@ const createPcFormConfig = () => ({
     }
   }),
   header: PcHeaderOptions,
-  side: PcSideOptions
+  side: PcSideOptions,
+  workspace: PcWorkspace
 });
 
 type ILayout = {
@@ -26,6 +30,12 @@ type ILayout = {
     header: HeaderTool[];
     drawer: BasicDrawer;
     side: SideTool[];
+    workspace: DefineComponent<{
+      canvas: {
+          required: true;
+          type: PropType<BasicElement>;
+      };
+    }, {}, any>
   }
 }
 
