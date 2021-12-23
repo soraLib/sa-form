@@ -1,16 +1,15 @@
 import { BasicElement } from './element';
 import { BasicRecordStore } from './record';
 
-export enum DrawerType {
+export type DrawerType =
   /** pc form */
-  PcForm,
+  'PcForm'
   /** app form */
-  AppForm,
+  // 'AppForm' |
   /** flow form */
-  Flow,
+  // 'Flow' |
   /** print form */
-  Print,
-}
+  // 'Print';
 
 /** basic drawer */
 export interface BasicDrawer {

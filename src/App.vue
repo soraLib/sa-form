@@ -1,12 +1,12 @@
 
 <template>
-  <div>
-
+  <div class="w-3/5 mx-auto h-full">
+    <SaForm id="1" type="PcForm" class="h-1/2" />
   </div>
 </template>
 
 <script lang="ts" setup>
-
+import SaForm from './components/index';
 </script>
 
 <style>
@@ -16,6 +16,7 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  height: 100vh;
+  padding: 24px 0;
 }
 </style>
