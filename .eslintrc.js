@@ -22,7 +22,7 @@ module.exports = {
     'space-before-function-paren': ['error', 'never'],
     'no-multiple-empty-lines': ['error', { 'max': 1 }],
     'newline-before-return': 'error',
-    'indent': ['error', 2],
+    'indent': ['error', 2, { 'SwitchCase': 1 }],
 
     'space-infix-ops': 'error',
     'space-before-blocks': [2, 'always'],

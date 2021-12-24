@@ -3,9 +3,9 @@ import { HeaderTool } from '../../../layout/header';
 export const PcHeaderOptions: HeaderTool[] = [{
   title: 'undo',
   icon: <span>undo</span>,
-  click: (e) => console.log('undo', e)
+  click: (drawer) => console.log('undo', drawer.graph?.undo())
 }, {
-  title: 'resume',
-  icon: <span>resume</span>,
-  click: (e) => console.log('resume', e)
+  title: 'redo',
+  icon: <span>redo</span>,
+  click: (drawer) => console.log('redo', drawer.graph?.redo())
 }];

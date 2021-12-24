@@ -1,3 +1,4 @@
+import { Graph } from '@antv/x6';
 import { BasicDrawer, DrawerType } from '../drawer';
 import { BasicElement, ElementType } from '../element';
 import { BasicRecordStore, BasicRecord } from '../record';
@@ -10,6 +11,7 @@ export class PcDrawer implements BasicDrawer {
   canvas: PcElement;
   record: BasicRecordStore;
   selected: BasicElement[] = [];
+  graph: Graph | undefined;
 
   constructor(config: Partial<PcElement> & {attrs: {}}) {
     this.type = 'PcForm';
@@ -20,5 +22,9 @@ export class PcDrawer implements BasicDrawer {
       children: [],
       attrs: config.attrs
     });
+  }
+
+  setGraph(graph: Graph) {
+    this.graph = graph;
   }
 }

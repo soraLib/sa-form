@@ -1,13 +1,18 @@
 import { Graph } from '@antv/x6';
+import { rect } from '@antv/x6/lib/registry/connection-point/rect';
 import { defineComponent, onMounted, PropType, ref } from 'vue';
-import { PcElement } from '../../element';
+import { ElementType } from '../../../element';
+import { PcDrawer } from '../../drawer';
+import { createMockPcCanvas } from './mock';
+import { createX6PcFormNode, PcNode } from './node';
+import { getCellRecProp, getSelectionRectangle } from './utils';
 
 export default defineComponent({
   name: 'SaPcFormRender',
   props: {
-    canvas: {
+    drawer: {
       required: true,
-      type: Object as PropType<PcElement>
+      type: Object as PropType<PcDrawer>
     }
   },
 
@@ -16,15 +21,15 @@ export default defineComponent({
 
     onMounted(() => {
       if (workspace.value) {
+        const canvas = createMockPcCanvas();
+
         const graph = new Graph({
           container: workspace.value,
           autoResize: true,
-          width: props.canvas.attrs.width,
-          height: props.canvas.attrs.height,
+          history: true,
+          width: canvas.attrs.width,
+          height: canvas.attrs.height,
           snapline: true,
-          translating: {
-            restrict: true
-          },
           grid: {
             visible: true,
             type: 'doubleMesh',
@@ -42,31 +47,79 @@ export default defineComponent({
           },
           selecting: {
             enabled: true,
+            multiple: true,
             rubberband: true,
-            showNodeSelectionBox: true,
+            movable: true,
             showEdgeSelectionBox: true
           },
           rotating: {
             enabled: true,
             grid: 15
+          },
+          resizing: true,
+          translating: {
+            restrict(view) {
+
+              const cell = view.cell;
+              if (cell.isNode()) {
+                const parent = cell.getParent();
+                if (parent) {
+                  const parentBox = parent.getBBox();
+                  const selection = view.graph.selection;
+
+                  if (selection?.cells?.length) {
+                    const rec = getSelectionRectangle(selection);
+                    const prop = getCellRecProp(cell);
+
+                    return {
+                      x: parentBox.x + prop.position.x - rec.x,
+                      y: parentBox.y + prop.position.y - rec.y,
+                      width: parentBox.width - (rec.width - prop.size.width),
+                      height: parentBox.height - (rec.height - prop.size.height)
+                    };
+                  }
+
+                  return parentBox;
+                }
+              }
+
+              return {
+                x: 0,
+                y: 0,
+                width: canvas.attrs.width,
+                height: canvas.attrs.height
+              };
+            }
+          },
+          embedding: {
+            enabled: true,
+            frontOnly: false,
+            findParent({ node, view }) {
+              const bbox = node.getBBox();
+
+              return this.getNodes().filter((node: PcNode) => {
+                const data = node.getData<PcNode['data']>();
+                if (data && data.type === ElementType.Container) {
+                  const targetBBox = node.getBBox();
+                  view.cell.toFront({ deep: true });
+
+                  return bbox.isIntersectWithRect(targetBBox);
+                }
+
+                return false;
+              });
+            }
           }
         });
 
-        graph.addNode({
-          x: 300,
-          y: 40,
-          width: 80,
-          height: 40,
-          label: 'Hello'
-        });
+        props.drawer.setGraph(graph);
 
-        graph.addNode({
-          x: 200,
-          y: 200,
-          width: 80,
-          height: 40,
-          label: 'Hello'
-        });
+        const nodes = canvas.children?.map(child => createX6PcFormNode(child));
+
+        if (nodes) {
+          graph.addNodes(nodes);
+        }
+
       }
     });
 

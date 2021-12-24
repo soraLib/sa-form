@@ -11,7 +11,7 @@ export interface HeaderTool {
   /** icon */
   icon: VNode;
   /** icon click callback */
-  click: (e: Event) => void;
+  click: (drawer: BasicDrawer, e: Event) => void;
 }
 
 export default defineComponent({
@@ -33,7 +33,7 @@ export default defineComponent({
         this.options.map(tool =>
           <span
             class="header-tool"
-            onClick={tool.click}
+            onClick={(e) => tool.click(this.drawer, e)}
             title={tool.title}
             style={{
               width: tool.width ? `${tool.width}px` : '30px',
