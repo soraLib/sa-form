@@ -20,13 +20,13 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: main
-      - name: merge main -> doc
+      - name: merge main -> docs
         uses: devmasx/merge-branch@master
         with:
           github_token: ${{ github.token }}
           type: now
           from_branch: main
-          target_branch: doc
+          target_branch: docs
       - uses: actions/checkout@v2
         with:
           ref: doc
@@ -38,5 +38,5 @@ jobs:
       - run: npm run build:doc
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          branch: doc
+          branch: docs
           commit_message: '[Automated] gen website'
