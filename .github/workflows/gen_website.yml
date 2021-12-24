@@ -34,7 +34,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm i
+      - run: npm install
+      - run: npm install esbuild -g
       - run: npm run build:doc
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
