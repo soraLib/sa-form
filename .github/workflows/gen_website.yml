@@ -1,0 +1,42 @@
+name: gen_website
+
+on:
+  push:
+  release:
+    types: [published]
+    branches: [main]
+
+  workflow_dispatch:
+
+jobs:
+  gen_doc:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: main
+      - name: merge main -> doc
+        uses: devmasx/merge-branch@master
+        with:
+          github_token: ${{ github.token }}
+          type: now
+          from_branch: main
+          target_branch: doc
+      - uses: actions/checkout@v2
+        with:
+          ref: doc
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm i
+      - run: npm run build:doc
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          branch: doc
+          commit_message: '[Automated] gen website'
