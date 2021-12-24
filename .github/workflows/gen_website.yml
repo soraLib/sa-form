@@ -1,4 +1,4 @@
-name: gen_doc
+name: gen_website
 
 on:
   push:
