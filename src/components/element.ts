@@ -4,12 +4,15 @@ export enum ElementType {
   Canvas,
   /** pc form button */
   Button,
-
+  /** pc form container */
+  Container,
   /** extra element type */
 }
 
 /** basic element attributes */
 export interface BasicElementAttributes {
+  /** element type */
+  type: ElementType;
   /** unique id */
   id: string;
   /** unique name */
@@ -26,7 +29,6 @@ export interface BasicElementAttributes {
 
 /** basic element */
 export interface BasicElement {
-  type: ElementType;
   parent: BasicElement | undefined;
   children?: BasicElement[];
   attrs: BasicElementAttributes;

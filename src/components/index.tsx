@@ -1,9 +1,9 @@
 /** sa-form entry */
 
-import { defineComponent, PropType } from 'vue';
-import { DrawerType } from './drawer';
+import { defineComponent, PropType, reactive } from 'vue';
+import { BasicDrawer, DrawerType } from './drawer';
 
-import { LAYOUTS } from './config';
+import { ILayout, LAYOUTS } from './config';
 
 import SaFormHeader from './layout/header';
 import SaFormSidebar from './layout/sidebar';
@@ -24,7 +24,7 @@ export default defineComponent({
   setup(props, ctx) {
     // TODO: return dynamic sa-form component
 
-    const layout = LAYOUTS[props.type]();
+    const layout = reactive(LAYOUTS[props.type]()) as unknown as ReturnType<ILayout[keyof ILayout]>;
 
     const SaFormWorkspace = layout.workspace;
 
@@ -44,7 +44,7 @@ export default defineComponent({
           </aside>
 
           <main class="flex-grow justify-center bg-slate-500 mx-1 overflow-auto">
-            <SaFormWorkspace canvas={layout.drawer.canvas} />
+            <SaFormWorkspace drawer={layout.drawer} />
           </main>
 
           <aside class="w-48 bg-slate-500">

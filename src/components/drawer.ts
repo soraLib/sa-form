@@ -1,3 +1,4 @@
+import { Graph } from '@antv/x6';
 import { BasicElement } from './element';
 import { BasicRecordStore } from './record';
 
@@ -21,4 +22,6 @@ export interface BasicDrawer {
   record: BasicRecordStore;
   /** current selected elements */
   selected: BasicElement[];
+  /** drawer x6 graph instance */
+  graph: Graph | undefined;
 }

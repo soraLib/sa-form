@@ -29,7 +29,7 @@ export interface BasicRecord {
 export interface BasicRecordStore {
   /** record histories */
   records: BasicRecord[];
-  /** current record history index, for record undo and resume */
+  /** current record history index, for record undo and redo */
   index: number;
   /** max length of record history list */
   max: number;
