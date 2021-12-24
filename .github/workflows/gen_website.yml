@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  gen_doc:
+  gen_website:
     runs-on: ubuntu-latest
     
     strategy:
