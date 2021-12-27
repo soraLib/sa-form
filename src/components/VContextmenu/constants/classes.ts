@@ -7,6 +7,7 @@ const CLASSES = {
   contextmenuItem: 'v-contextmenu-item', // 单个菜单
   contextmenuItemHover: 'v-contextmenu-item--hover', // 单个菜单激活状态
   contextmenuItemDisabled: 'v-contextmenu-item--disabled', // 单个菜单禁用状态
+  contextmenuItemDanger: 'v-contextmenu-item--danger', // 危险类型菜单
 
   contextmenuGroup: 'v-contextmenu-group', // 按钮组根元素
   contextmenuGroupTitle: 'v-contextmenu-group__title', // 按钮组标题

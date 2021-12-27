@@ -1,10 +1,13 @@
 import { Graph } from '@antv/x6';
-import { defineComponent, onMounted, PropType, ref } from 'vue';
+import { defineComponent, onBeforeUnmount, onMounted, PropType, Ref, ref } from 'vue';
 import { ElementType } from '../../../element';
 import { PcDrawer } from '../../drawer';
 import { createMockPcCanvas } from './mock';
 import { createX6PcFormNode, PcNode } from './node';
 import { getCellRecProp, getSelectionRectangle } from './utils';
+
+import { DeleteFilled } from '@element-plus/icons-vue';
+import { removeNode } from './graph';
 
 export default defineComponent({
   name: 'SaPcFormRender',
@@ -16,7 +19,9 @@ export default defineComponent({
   },
 
   setup(props) {
-    const workspace = ref(null);
+    const workspace: Ref<HTMLDivElement | null> = ref(null);
+    // TODO: contentmenu type
+    const contextmenu: Ref<any | null> = ref(null);
 
     onMounted(() => {
       if (workspace.value) {
@@ -125,19 +130,57 @@ export default defineComponent({
           graph.addNodes(nodes);
         }
 
+        // bind cell contextmenu event
+        graph.on('cell:contextmenu', ({ cell, e }) => {
+          graph.cleanSelection();
+          graph.select(cell);
+
+          contextmenu.value.show(e.originalEvent);
+
+          document.addEventListener('click', onBodyClick);
+        });
       }
+
+      function onBodyClick() {
+        if (contextmenu.value) {
+          if (contextmenu.value.visible) {
+            contextmenu.value.hide();
+          }
+        }
+      }
+
+      onBeforeUnmount(() => {
+        document.removeEventListener('click', onBodyClick);
+      });
     });
 
     return {
-      workspace
+      workspace,
+      contextmenu
     };
   },
 
   render() {
 
     return (
-      <div ref="workspace"></div>
+      <div>
+        <div ref="workspace"></div>
+
+        <v-contextmenu ref="contextmenu">
+          <v-contextmenu-item onClick={() => {}}>
+            copy
+          </v-contextmenu-item>
+          <v-contextmenu-item onClick={() => {}}>
+            cut
+          </v-contextmenu-item>
+          <v-contextmenu-item onClick={() => {}}>
+            paste
+          </v-contextmenu-item>
+          <v-contextmenu-item type="danger" icon={<DeleteFilled />} onClick={() => removeNode(this.drawer.graph)}>
+            delete
+          </v-contextmenu-item>
+        </v-contextmenu>
+      </div>
     );
   }
-
 });

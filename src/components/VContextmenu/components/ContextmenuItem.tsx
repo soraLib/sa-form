@@ -1,4 +1,4 @@
-import { computed, defineComponent, inject, ref } from 'vue';
+import { computed, defineComponent, inject, PropType, ref, VNode } from 'vue';
 
 import { CLASSES } from '../constants';
 
@@ -13,6 +13,14 @@ const ContextmenuItem = defineComponent({
     hideOnClick: {
       type: Boolean,
       default: true
+    },
+    icon: {
+      required: false,
+      type: Object as PropType<VNode>
+    },
+    type: {
+      requred: false,
+      type: String as PropType<'default' | 'primary' | 'danger'>
     }
   },
 
@@ -25,7 +33,8 @@ const ContextmenuItem = defineComponent({
     const classes = computed(() => ({
       [CLASSES.contextmenuItem]: true,
       [CLASSES.contextmenuItemDisabled]: props.disabled,
-      [CLASSES.contextmenuItemHover]: hover.value
+      [CLASSES.contextmenuItemHover]: hover.value,
+      [CLASSES.contextmenuItemDanger]: props.type === 'danger'
     }));
 
     const handleClick = (evt: Event) => {
@@ -62,6 +71,8 @@ const ContextmenuItem = defineComponent({
   },
 
   render() {
+    const Icon = this.icon;
+
     return (
       <li
         class={this.classes}
@@ -69,6 +80,7 @@ const ContextmenuItem = defineComponent({
         onMouseenter={this.handleMouseenter}
         onMouseleave={this.handleMouseleave}
       >
+        {Icon ? <el-icon class="mr-1 leading-0">{Icon}</el-icon> : <span style={{ width: '18px'}}></span>}
         {this.$slots.default?.()}
       </li>
     );
