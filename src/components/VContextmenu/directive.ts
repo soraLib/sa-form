@@ -17,7 +17,7 @@ const bind = (
   el: ContextmenuDirectiveEl,
   binding: ContextmenuDirectiveBinding
 ): void => {
-  const contextmenuKey = binding.arg;
+  const contextmenuKey = binding.arg || <string>binding.value;
 
   if (!contextmenuKey) {
     console.error('参数有误');
