@@ -17,7 +17,6 @@ export class PcDrawer implements BasicDrawer {
     this.type = 'PcForm';
     this.record = new PcRecordStore();
     this.canvas = new PcElement({
-      type: ElementType.Canvas,
       parent: undefined,
       children: [],
       attrs: config.attrs

@@ -7,10 +7,12 @@ import { DefineComponent, PropType } from 'vue';
 import { PcHeaderOptions } from './PcForm/layout/header';
 import { PcSideOptions } from './PcForm/layout/side';
 import PcWorkspace from './PcForm/layout/workspace';
+import { ElementType } from './element';
 
 const createPcFormConfig = () => ({
   drawer: new PcDrawer({
     attrs: {
+      type: ElementType.Canvas,
       id: '1',
       name: 'Pc Form Demo',
       width: 800,
