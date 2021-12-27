@@ -1,5 +1,4 @@
 import { Graph } from '@antv/x6';
-import { rect } from '@antv/x6/lib/registry/connection-point/rect';
 import { defineComponent, onMounted, PropType, ref } from 'vue';
 import { ElementType } from '../../../element';
 import { PcDrawer } from '../../drawer';
@@ -22,6 +21,8 @@ export default defineComponent({
     onMounted(() => {
       if (workspace.value) {
         const canvas = createMockPcCanvas();
+
+        console.log('create graph', canvas);
 
         const graph = new Graph({
           container: workspace.value,
@@ -91,6 +92,10 @@ export default defineComponent({
               };
             }
           },
+          clipboard: {
+            enabled: true,
+            useLocalStorage: true
+          },
           embedding: {
             enabled: true,
             frontOnly: false,
@@ -130,7 +135,9 @@ export default defineComponent({
 
   render() {
 
-    return (<div ref="workspace"></div>);
+    return (
+      <div ref="workspace"></div>
+    );
   }
 
 });

@@ -3,8 +3,6 @@ import { Shape } from '@antv/x6';
 import { computed, defineComponent, PropType, Ref, ref, VNode, watch } from 'vue';
 import { BasicDrawer } from '../../drawer';
 
-import './index.scss';
-
 export interface SideTool {
   /** icon title on dom */
   title: string;
