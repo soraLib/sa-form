@@ -18,10 +18,14 @@
 
   &-item {
     padding: $vc-padding-vertical $vc-item-padding-horizontal;
+    padding-left: calc($vc-item-padding-horizontal - 6px);
+
     line-height: 1;
     color: $vc-text-color;
     cursor: pointer;
-
+    display: flex;
+    align-items: center;
+  
     &--hover {
       color: $vc-hover-text-color;
       background-color: $vc-active-color;
@@ -30,6 +34,11 @@
     &--disabled {
       color: rgba($vc-text-color, 0.4);
       cursor: not-allowed;
+    }
+
+    &--danger:hover {
+      color: $vc-hover-text-color;
+      background-color: #ef5350;
     }
   }
 
