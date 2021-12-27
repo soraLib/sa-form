@@ -7,7 +7,7 @@ import { createX6PcFormNode, PcNode } from './node';
 import { getCellRecProp, getSelectionRectangle } from './utils';
 
 import { DeleteFilled } from '@element-plus/icons-vue';
-import { removeNode } from './graph';
+import { copyNodes, cutNodes, pasteNodes, removeNode } from './graph';
 
 export default defineComponent({
   name: 'SaPcFormRender',
@@ -57,10 +57,6 @@ export default defineComponent({
             rubberband: true,
             movable: true,
             showEdgeSelectionBox: true
-          },
-          rotating: {
-            enabled: true,
-            grid: 15
           },
           resizing: true,
           translating: {
@@ -134,24 +130,8 @@ export default defineComponent({
         graph.on('cell:contextmenu', ({ cell, e }) => {
           graph.cleanSelection();
           graph.select(cell);
-
-          contextmenu.value.show(e.originalEvent);
-
-          document.addEventListener('click', onBodyClick);
         });
       }
-
-      function onBodyClick() {
-        if (contextmenu.value) {
-          if (contextmenu.value.visible) {
-            contextmenu.value.hide();
-          }
-        }
-      }
-
-      onBeforeUnmount(() => {
-        document.removeEventListener('click', onBodyClick);
-      });
     });
 
     return {
@@ -164,16 +144,16 @@ export default defineComponent({
 
     return (
       <div>
-        <div ref="workspace"></div>
+        <div ref="workspace" v-contextmenu:contextmenu></div>
 
         <v-contextmenu ref="contextmenu">
-          <v-contextmenu-item onClick={() => {}}>
+          <v-contextmenu-item onClick={() => copyNodes(this.drawer.graph)}>
             copy
           </v-contextmenu-item>
-          <v-contextmenu-item onClick={() => {}}>
+          <v-contextmenu-item onClick={() => cutNodes(this.drawer.graph)}>
             cut
           </v-contextmenu-item>
-          <v-contextmenu-item onClick={() => {}}>
+          <v-contextmenu-item onClick={() => pasteNodes(this.drawer.graph)}>
             paste
           </v-contextmenu-item>
           <v-contextmenu-item type="danger" icon={<DeleteFilled />} onClick={() => removeNode(this.drawer.graph)}>
