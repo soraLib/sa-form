@@ -1,10 +1,9 @@
 import { Graph } from '@antv/x6';
-import { defineComponent, onBeforeUnmount, onMounted, PropType, Ref, ref } from 'vue';
-import { ElementType } from '../../../element';
+import { computed, defineComponent, onMounted, PropType, Ref, ref } from 'vue';
 import { PcDrawer } from '../../drawer';
 import { createMockPcCanvas } from './mock';
 import { createX6PcFormNode, PcNode } from './node';
-import { getCellRecProp, getSelectionRectangle } from './utils';
+import { getCellRecProp, getSelectionRectangle, PcCell } from './utils';
 
 import { DeleteFilled } from '@element-plus/icons-vue';
 import { copyNodes, cutNodes, pasteNodes, removeNode } from './graph';
@@ -22,6 +21,7 @@ export default defineComponent({
     const workspace: Ref<HTMLDivElement | null> = ref(null);
     // TODO: contentmenu type
     const contextmenu: Ref<any | null> = ref(null);
+    const selectedCells: Ref<PcCell[]> = ref([]);
 
     onMounted(() => {
       if (workspace.value) {
@@ -31,9 +31,11 @@ export default defineComponent({
 
         const graph = new Graph({
           container: workspace.value,
-          autoResize: true,
           history: true,
           width: canvas.attrs.width,
+          scroller: {
+            pannable: true
+          },
           height: canvas.attrs.height,
           snapline: true,
           grid: {
@@ -96,25 +98,6 @@ export default defineComponent({
           clipboard: {
             enabled: true,
             useLocalStorage: true
-          },
-          embedding: {
-            enabled: true,
-            frontOnly: false,
-            findParent({ node, view }) {
-              const bbox = node.getBBox();
-
-              return this.getNodes().filter((node: PcNode) => {
-                const data = node.getData<PcNode['data']>();
-                if (data && data.type === ElementType.Container) {
-                  const targetBBox = node.getBBox();
-                  view.cell.toFront({ deep: true });
-
-                  return bbox.isIntersectWithRect(targetBBox);
-                }
-
-                return false;
-              });
-            }
           }
         });
 
@@ -126,39 +109,76 @@ export default defineComponent({
           graph.addNodes(nodes);
         }
 
-        // bind cell contextmenu event
+        graph.on('blank:mousedown', () => {
+          graph.cleanSelection();
+          contextmenu.value.hide();
+        });
+
+        graph.on('blank:contextmenu', ({ e }) => {
+          graph.cleanSelection();
+          contextmenu.value.show(e.originalEvent);
+        });
+
+        graph.on('cell:mousedown', ({ cell }) => {
+          cell.toFront();
+          contextmenu.value.hide();
+        });
+
         graph.on('cell:contextmenu', ({ cell, e }) => {
           graph.cleanSelection();
           graph.select(cell);
+
+          contextmenu.value.show(e.originalEvent);
+        });
+
+        graph.on('selection:changed', ({ selected }) => {
+          selectedCells.value = selected;
         });
       }
     });
 
+    const graphContextmenu = computed(() => {
+      if (selectedCells.value.length) {
+        return (
+          <>
+            <v-contextmenu-item onClick={() => copyNodes(props.drawer.graph)}>
+              copy
+            </v-contextmenu-item>
+            <v-contextmenu-item onClick={() => cutNodes(props.drawer.graph)}>
+              cut
+            </v-contextmenu-item>
+            <v-contextmenu-item onClick={() => pasteNodes(props.drawer.graph)}>
+              paste
+            </v-contextmenu-item>
+            <v-contextmenu-item type="danger" icon={<DeleteFilled />} onClick={() => removeNode(props.drawer.graph)}>
+              delete
+            </v-contextmenu-item>
+          </>
+        );
+      }
+
+      return (
+        <v-contextmenu-item onClick={() => pasteNodes(props.drawer.graph)}>
+          paste
+        </v-contextmenu-item>
+      );
+    });
+
     return {
       workspace,
-      contextmenu
+      contextmenu,
+      selectedCells,
+      graphContextmenu
     };
   },
 
   render() {
-
     return (
       <div>
-        <div ref="workspace" v-contextmenu:contextmenu></div>
+        <div ref="workspace"></div>
 
         <v-contextmenu ref="contextmenu">
-          <v-contextmenu-item onClick={() => copyNodes(this.drawer.graph)}>
-            copy
-          </v-contextmenu-item>
-          <v-contextmenu-item onClick={() => cutNodes(this.drawer.graph)}>
-            cut
-          </v-contextmenu-item>
-          <v-contextmenu-item onClick={() => pasteNodes(this.drawer.graph)}>
-            paste
-          </v-contextmenu-item>
-          <v-contextmenu-item type="danger" icon={<DeleteFilled />} onClick={() => removeNode(this.drawer.graph)}>
-            delete
-          </v-contextmenu-item>
+          {this.graphContextmenu}
         </v-contextmenu>
       </div>
     );
