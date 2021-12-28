@@ -39,8 +39,12 @@ export default defineComponent({
           stencil = new Addon.Stencil({
             title: 'Components',
             target: graph.value,
+            scaled: false,
+            animation: true,
             search(cell, keyword) {
-              return cell.shape.indexOf(keyword) !== -1;
+              const text = cell.attrs!.text.text as string;
+
+              return new RegExp(keyword, 'i').test(text);
             },
             placeholder: 'Search by shape name',
             notFoundText: 'Not Found',
@@ -57,7 +61,41 @@ export default defineComponent({
                 title: 'Group',
                 collapsable: false
               }
-            ]
+            ],
+
+            getDragNode(node) {
+              console.log(node);
+
+              switch (node.attrs?.text.text) {
+                case 'Button': {
+                  return new Shape.Rect({
+                    width: 80,
+                    height: 40,
+                    attrs: {
+                      rect: { fill: '#31D0C6', stroke: '#4B4A67', strokeWidth: 1 },
+                      text: { text: 'Button', fill: 'white' }
+                    }
+                  });
+                }
+
+                case 'Container': {
+                  return new Shape.Rect({
+                    width: 200,
+                    height: 100,
+                    attrs: {
+                      rect: { fill: '#31D0C6', stroke: '#4B4A67', strokeWidth: 1 },
+                      text: { text: 'Container', fill: 'white' }
+                    }
+                  });
+                }
+
+                default: {
+                  console.error('[Sa error]: unexpected drag node', node);
+                }
+              }
+
+              return node;
+            }
           });
 
           const r = new Shape.Rect({
@@ -69,9 +107,19 @@ export default defineComponent({
             }
           });
 
+          const c = new Shape.Rect({
+            width: 80,
+            height: 40,
+            attrs: {
+              rect: { fill: '#31D0C6', stroke: '#4B4A67', strokeWidth: 1 },
+              text: { text: 'Container', fill: 'white' }
+            }
+          });
+
           refStencil.value?.appendChild(stencil.container);
 
           stencil.load([r], 'group1');
+          stencil.load([c], 'group2');
         }});
 
     return {

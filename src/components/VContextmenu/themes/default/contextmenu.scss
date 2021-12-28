@@ -17,7 +17,7 @@
   }
 
   &-item {
-    padding: $vc-padding-vertical $vc-item-padding-horizontal;
+    padding: $vc-padding-vertical calc($vc-item-padding-horizontal + 6px);
     padding-left: calc($vc-item-padding-horizontal - 6px);
 
     line-height: 1;
