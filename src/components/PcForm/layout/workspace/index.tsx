@@ -1,5 +1,5 @@
-import { Graph } from '@antv/x6';
-import { computed, defineComponent, onMounted, PropType, Ref, ref } from 'vue';
+import { Graph, JQuery } from '@antv/x6';
+import { computed, defineComponent, onMounted, PropType, Ref, ref, ShallowRef, shallowRef } from 'vue';
 import { PcDrawer } from '../../drawer';
 import { createMockPcCanvas } from './mock';
 import { createX6PcFormNode, PcNode } from './node';
@@ -22,6 +22,7 @@ export default defineComponent({
     // TODO: contentmenu type
     const contextmenu: Ref<any | null> = ref(null);
     const selectedCells: Ref<PcCell[]> = ref([]);
+    const contextmenuEvent: ShallowRef<JQuery.ContextMenuEvent | undefined> = shallowRef();
 
     onMounted(() => {
       if (workspace.value) {
@@ -116,6 +117,7 @@ export default defineComponent({
 
         graph.on('blank:contextmenu', ({ e }) => {
           graph.cleanSelection();
+          contextmenuEvent.value = e;
           contextmenu.value.show(e.originalEvent);
         });
 
@@ -158,7 +160,7 @@ export default defineComponent({
       }
 
       return (
-        <v-contextmenu-item onClick={() => pasteNodes(props.drawer.graph)}>
+        <v-contextmenu-item onClick={() => pasteNodes(contextmenuEvent.value, props.drawer.graph)}>
           paste
         </v-contextmenu-item>
       );

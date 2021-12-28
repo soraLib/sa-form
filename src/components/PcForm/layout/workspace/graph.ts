@@ -1,4 +1,4 @@
-import { Cell, Graph } from '@antv/x6';
+import { Cell, Graph, JQuery } from '@antv/x6';
 
 /** remove graph nodes */
 export function removeNode(graph?: Graph, arg?: Cell | string) {
@@ -33,10 +33,15 @@ export function copyNodes(graph?: Graph) {
 }
 
 /** paste graph nodes */
-export function pasteNodes(graph?: Graph) {
+export function pasteNodes(e?: JQuery.ContextMenuEvent, graph?: Graph) {
   if (!graph) return;
 
-  const cells = graph.paste({ useLocalStorage: true });
+  const cells = graph.paste({ useLocalStorage: true, nodeProps: {
+    position: {
+      x: e.offsetX,
+      y: e.offsetY
+    }
+  }});
   graph.cleanSelection();
   graph.select(cells);
 }
