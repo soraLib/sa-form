@@ -5,9 +5,7 @@ export interface PcCell extends Cell {
   data: PcElement['attrs'];
 }
 
-export function getSelectionRectangle(selection: Graph.SelectionManager): Rectangle.RectangleLike {
-  const cells: PcCell[] = selection.cells;
-
+export function getSelectionRectangle(cells: Cell[]): Rectangle.RectangleLike {
   const prop = getCellRecProp(cells[0]);
 
   let minOffsetX = prop.position.x;
