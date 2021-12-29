@@ -1,4 +1,4 @@
-import { Graph, JQuery } from '@antv/x6';
+import { Cell, Graph, JQuery } from '@antv/x6';
 import { computed, defineComponent, onMounted, PropType, Ref, ref, ShallowRef, shallowRef } from 'vue';
 import { PcDrawer } from '../../drawer';
 import { createMockPcCanvas } from './mock';
@@ -23,6 +23,7 @@ export default defineComponent({
     const contextmenu: Ref<any | null> = ref(null);
     const selectedCells: Ref<PcCell[]> = ref([]);
     const contextmenuEvent: ShallowRef<JQuery.ContextMenuEvent | undefined> = shallowRef();
+    const parent: ShallowRef<Cell | undefined> = shallowRef();
 
     onMounted(() => {
       if (workspace.value) {
@@ -66,14 +67,15 @@ export default defineComponent({
             restrict(view) {
 
               const cell = view.cell;
+              const selection = view.graph.selection;
+
               if (cell.isNode()) {
                 const parent = cell.getParent();
                 if (parent) {
                   const parentBox = parent.getBBox();
-                  const selection = view.graph.selection;
 
                   if (selection?.cells?.length) {
-                    const rec = getSelectionRectangle(selection);
+                    const rec = getSelectionRectangle(selection.cells);
                     const prop = getCellRecProp(cell);
 
                     return {
@@ -85,6 +87,18 @@ export default defineComponent({
                   }
 
                   return parentBox;
+                }
+
+                if (selection?.length) {
+                  const rec = getSelectionRectangle(selection.cells);
+                  const prop = getCellRecProp(cell);
+
+                  return {
+                    x: prop.position.x - rec.x,
+                    y: prop.position.y - rec.y,
+                    width: canvas.attrs.width - (rec.width - prop.size.width),
+                    height: canvas.attrs.height - (rec.height - prop.size.height)
+                  };
                 }
               }
 
@@ -117,19 +131,24 @@ export default defineComponent({
 
         graph.on('blank:contextmenu', ({ e }) => {
           graph.cleanSelection();
+          parent.value = undefined;
           contextmenuEvent.value = e;
           contextmenu.value.show(e.originalEvent);
         });
 
         graph.on('cell:mousedown', ({ cell }) => {
-          cell.toFront();
+          cell.toFront({ deep: true });
           contextmenu.value.hide();
         });
 
         graph.on('cell:contextmenu', ({ cell, e }) => {
-          graph.cleanSelection();
-          graph.select(cell);
+          if (!graph.isSelected(cell)) {
+            graph.cleanSelection();
+            graph.select(cell);
+          }
 
+          parent.value = cell;
+          contextmenuEvent.value = e;
           contextmenu.value.show(e.originalEvent);
         });
 
@@ -149,7 +168,7 @@ export default defineComponent({
             <v-contextmenu-item onClick={() => cutNodes(props.drawer.graph)}>
               cut
             </v-contextmenu-item>
-            <v-contextmenu-item onClick={() => pasteNodes(props.drawer.graph)}>
+            <v-contextmenu-item onClick={() => pasteNodes(contextmenuEvent.value, parent.value, props.drawer.graph)}>
               paste
             </v-contextmenu-item>
             <v-contextmenu-item type="danger" icon={<DeleteFilled />} onClick={() => removeNode(props.drawer.graph)}>
@@ -160,7 +179,7 @@ export default defineComponent({
       }
 
       return (
-        <v-contextmenu-item onClick={() => pasteNodes(contextmenuEvent.value, props.drawer.graph)}>
+        <v-contextmenu-item onClick={() => pasteNodes(contextmenuEvent.value, undefined, props.drawer.graph)}>
           paste
         </v-contextmenu-item>
       );

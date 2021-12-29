@@ -1,4 +1,6 @@
 import { Cell, Graph, JQuery } from '@antv/x6';
+import { ElementType } from '../../../element';
+import { getSelectionRectangle, PcCell } from './utils';
 
 /** remove graph nodes */
 export function removeNode(graph?: Graph, arg?: Cell | string) {
@@ -33,15 +35,31 @@ export function copyNodes(graph?: Graph) {
 }
 
 /** paste graph nodes */
-export function pasteNodes(e?: JQuery.ContextMenuEvent, graph?: Graph) {
-  if (!graph) return;
+export function pasteNodes(e?: JQuery.ContextMenuEvent, parent?: PcCell, graph?: Graph) {
+  if (!graph || graph.isClipboardEmpty()) return;
 
-  const cells = graph.paste({ useLocalStorage: true, nodeProps: {
-    position: {
-      x: e.offsetX,
-      y: e.offsetY
+  if (parent && parent.data.type !== ElementType.Container) {
+    return console.error(`[Sa error]: can not paste elements in ${ElementType[parent.data.type]}.`);
+  }
+
+  const cells = graph.paste({ useLocalStorage: true, offset: 0 });
+  const rect = getSelectionRectangle(cells);
+
+  const offsetX = rect.x - e.offsetX;
+  const offsetY = rect.y - e.offsetY;
+
+  for (const cell of cells) {
+    const prop = cell.getProp<{x: number; y: number}>('position');
+    console.log(cell, prop, offsetX, offsetY);
+    cell.setProp('position', { x: prop.x - offsetX, y: prop.y - offsetY });
+    cell.toFront();
+
+    if (parent) {
+      cell.setParent(parent);
+      parent.addChild(cell);
     }
-  }});
+  }
+
   graph.cleanSelection();
   graph.select(cells);
 }
@@ -51,9 +69,5 @@ export function cutNodes(graph?: Graph) {
   if (!graph) return;
 
   const selected = graph.getSelectedCells();
-  graph.copy(selected, { deep: true, useLocalStorage: true });
-
-  for (const cell of selected) {
-    removeNode(graph, cell);
-  }
+  graph.cut(selected, { deep: true, useLocalStorage: true });
 }

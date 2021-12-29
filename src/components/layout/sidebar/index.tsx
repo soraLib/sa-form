@@ -2,6 +2,8 @@ import { Addon } from '@antv/x6';
 import { Shape } from '@antv/x6';
 import { computed, defineComponent, PropType, Ref, ref, VNode, watch } from 'vue';
 import { BasicDrawer } from '../../drawer';
+import { ElementType } from '../../element';
+import { createX6PcFormNode } from '../../PcForm/layout/workspace/node';
 
 export interface SideTool {
   /** icon title on dom */
@@ -68,24 +70,32 @@ export default defineComponent({
 
               switch (node.attrs?.text.text) {
                 case 'Button': {
-                  return new Shape.Rect({
-                    width: 80,
-                    height: 40,
+                  return createX6PcFormNode({
                     attrs: {
-                      rect: { fill: '#31D0C6', stroke: '#4B4A67', strokeWidth: 1 },
-                      text: { text: 'Button', fill: 'white' }
-                    }
+                      id: '4',
+                      name: 'Button',
+                      width: 80,
+                      height: 40,
+                      type: ElementType.Button,
+                      offsetX: 0,
+                      offsetY: 0
+                    },
+                    parent: undefined
                   });
                 }
 
                 case 'Container': {
-                  return new Shape.Rect({
-                    width: 200,
-                    height: 100,
+                  return createX6PcFormNode({
                     attrs: {
-                      rect: { fill: '#31D0C6', stroke: '#4B4A67', strokeWidth: 1 },
-                      text: { text: 'Container', fill: 'white' }
-                    }
+                      id: '5',
+                      name: 'Container',
+                      width: 200,
+                      height: 100,
+                      type: ElementType.Container,
+                      offsetX: 0,
+                      offsetY: 0
+                    },
+                    parent: undefined
                   });
                 }
 
