@@ -1,4 +1,4 @@
-import { BasicPlugins, SaPluginLayout } from '../Plugin';
+import { BasicPlugins, SaPluginLayout } from '../plugin';
 
 export const PcPlugin: SaPluginLayout = {
   basic: [

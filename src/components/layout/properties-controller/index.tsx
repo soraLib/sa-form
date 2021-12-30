@@ -1,6 +1,6 @@
 import { defineComponent, PropType } from 'vue';
 import { BasicDrawer } from '../../drawer';
-import { SaPluginLayout } from '../../Plugin';
+import { SaPluginLayout } from '../../plugin';
 
 import PluginItem from './item';
 
