@@ -8,6 +8,8 @@ import { PcHeaderOptions } from './PcForm/layout/header';
 import { PcSideOptions } from './PcForm/layout/side';
 import PcWorkspace from './PcForm/layout/workspace';
 import { ElementType } from './element';
+import { SaPlugin, SaPluginLayout } from './Plugin';
+import { PcPlugin } from './PcForm/plugin';
 
 const createPcFormConfig = () => ({
   drawer: new PcDrawer({
@@ -23,7 +25,8 @@ const createPcFormConfig = () => ({
   }),
   header: PcHeaderOptions,
   side: PcSideOptions,
-  workspace: PcWorkspace
+  workspace: PcWorkspace,
+  controller: PcPlugin
 });
 
 export type ILayout = {
@@ -36,7 +39,8 @@ export type ILayout = {
         required: true,
         type: PropType<PcDrawer>
       };
-    }, {}, any>
+    }, {}, any>,
+    controller: SaPluginLayout
   }
 }
 

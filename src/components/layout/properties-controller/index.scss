@@ -1,0 +1,26 @@
+.controller-container {
+  margin-bottom: 4px;
+
+  .controller-item {
+    display: flex;
+    vertical-align: baseline;
+    line-height: 26px;
+    color: white;
+    
+    &-label {
+      width: 80px;
+      text-align: start;
+      text-indent: .75rem;
+    }
+
+    &-plugin {
+      width: 150px;
+      text-align: start;
+    }
+
+    input {
+      height: 26px;
+      border-radius: 0;
+    }
+  }
+}

@@ -35,9 +35,6 @@ export default defineComponent({
           container: workspace.value,
           history: true,
           width: canvas.attrs.width,
-          scroller: {
-            pannable: true
-          },
           height: canvas.attrs.height,
           snapline: true,
           grid: {
@@ -65,7 +62,6 @@ export default defineComponent({
           resizing: true,
           translating: {
             restrict(view) {
-
               const cell = view.cell;
               const selection = view.graph.selection;
 
@@ -93,6 +89,8 @@ export default defineComponent({
                   const rec = getSelectionRectangle(selection.cells);
                   const prop = getCellRecProp(cell);
 
+                  console.log(rec, prop);
+
                   return {
                     x: prop.position.x - rec.x,
                     y: prop.position.y - rec.y,
@@ -117,6 +115,7 @@ export default defineComponent({
         });
 
         props.drawer.setGraph(graph);
+        props.drawer.setCanvas(canvas);
 
         const nodes = canvas.children?.map(child => createX6PcFormNode(child));
 
@@ -136,9 +135,11 @@ export default defineComponent({
           contextmenu.value.show(e.originalEvent);
         });
 
-        graph.on('cell:mousedown', ({ cell }) => {
+        graph.on('cell:mousedown', ({ cell }: { cell: PcNode }) => {
           cell.toFront({ deep: true });
           contextmenu.value.hide();
+
+          props.drawer.setSelected(cell.data['id']);
         });
 
         graph.on('cell:contextmenu', ({ cell, e }) => {
@@ -154,6 +155,12 @@ export default defineComponent({
 
         graph.on('selection:changed', ({ selected }) => {
           selectedCells.value = selected;
+
+          if (selected.length > 1) {
+            graph.disableSnapline();
+          } else {
+            graph.enableSnapline();
+          }
         });
       }
     });

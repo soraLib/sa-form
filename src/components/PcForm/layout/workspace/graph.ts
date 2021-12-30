@@ -50,7 +50,6 @@ export function pasteNodes(e?: JQuery.ContextMenuEvent, parent?: PcCell, graph?:
 
   for (const cell of cells) {
     const prop = cell.getProp<{x: number; y: number}>('position');
-    console.log(cell, prop, offsetX, offsetY);
     cell.setProp('position', { x: prop.x - offsetX, y: prop.y - offsetY });
     cell.toFront();
 

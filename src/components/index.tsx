@@ -7,6 +7,7 @@ import { ILayout, LAYOUTS } from './config';
 
 import SaFormHeader from './layout/header';
 import SaFormSidebar from './layout/sidebar';
+import SaFormController from './layout/properties-controller';
 
 import { ElScrollbar } from 'element-plus';
 
@@ -48,7 +49,7 @@ export default defineComponent({
           </main>
 
           <aside class="w-48 bg-slate-500">
-            properties controller
+            <SaFormController drawer={layout.drawer} controller={layout.controller} />
           </aside>
         </main>
       </section>
