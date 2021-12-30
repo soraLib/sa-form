@@ -1,5 +1,5 @@
 import { computed, defineComponent, PropType, VNode } from 'vue';
-import { SaPlugin, SaPluginType } from '../../Plugin';
+import { SaPlugin, SaPluginType } from '../../plugin';
 
 import { ElInput } from 'element-plus';
 import { BasicDrawer } from '../../drawer';
