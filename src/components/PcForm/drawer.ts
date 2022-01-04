@@ -2,10 +2,10 @@ import { Graph } from '@antv/x6';
 import { BasicDrawer, DrawerType } from '../drawer';
 import { BasicElement, ElementType } from '../element';
 import { BasicRecordStore, BasicRecord } from '../record';
-import { PcElement } from './element';
+import { PcElement, PcElementAttributes } from './element';
 import { PcRecordStore } from './record';
 
-import { findTreeNode } from 'sugar-sajs';
+import { findNode, findTreeNode } from 'sugar-sajs';
 
 /** pc drawer */
 export class PcDrawer implements BasicDrawer {
@@ -27,6 +27,7 @@ export class PcDrawer implements BasicDrawer {
 
   setCanvas(canvas: PcElement) {
     this.canvas = canvas;
+    this.selected = [canvas];
   }
 
   setGraph(graph: Graph) {
@@ -46,11 +47,18 @@ export class PcDrawer implements BasicDrawer {
     return parent;
   }
 
+  setSelected(): PcElement | undefined;
   setSelected(id: string): PcElement | undefined;
   setSelected(ids: string[]): PcElement[];
   setSelected(element: PcElement): PcElement;
   setSelected(elements: PcElement[]): PcElement[];
-  setSelected(arg: string | string[] | PcElement | PcElement[]) {
+  setSelected(arg?: string | string[] | PcElement | PcElement[]) {
+    if (!arguments.length || (Array.isArray(arg) && !arg.length)) {
+      this.selected = [this.canvas];
+
+      return this.canvas;
+    }
+
     if (!this.canvas.children) return;
 
     if (typeof arg === 'string') {
@@ -84,5 +92,17 @@ export class PcDrawer implements BasicDrawer {
     }
   }
 
-  // updateNodeAttr(id: string, key: string, ): PcElement;
+  /** update pc element attribute value */
+  updateElemAttr<T extends keyof PcElementAttributes>(id: string, key: T, value: PcElementAttributes[T]): PcElement | undefined;
+  updateElemAttr<T extends keyof PcElementAttributes>(element: PcElement, key: T, value: PcElementAttributes[T]): PcElement;
+  updateElemAttr<T extends keyof PcElementAttributes>(arg: PcElement | string, key: T, value: PcElementAttributes[T]): PcElement | undefined {
+    const element = typeof arg === 'string' ? findNode(this.canvas, node => node.attrs.id === arg) : arg;
+    if (!element) return undefined;
+
+    element.attrs[key] = value;
+
+    // TODO: value change hook
+
+    return element;
+  }
 }

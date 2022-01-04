@@ -48,7 +48,7 @@ export default defineComponent({
             <SaFormWorkspace drawer={layout.drawer} />
           </main>
 
-          <aside class="w-48 bg-slate-500">
+          <aside class="w-52 bg-slate-500">
             <SaFormController drawer={layout.drawer} controller={layout.controller} />
           </aside>
         </main>

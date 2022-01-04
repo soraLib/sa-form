@@ -25,8 +25,6 @@ export interface BasicElementAttributes {
   width: number;
   /** element height `px` */
   height: number;
-
-  [key: string]: any;
 }
 
 /** basic element */
