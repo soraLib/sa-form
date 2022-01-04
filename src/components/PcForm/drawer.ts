@@ -105,4 +105,16 @@ export class PcDrawer implements BasicDrawer {
 
     return element;
   }
+
+  updateElemData(id: string, data: PcElement['attrs']): PcElement | undefined;
+  updateElemData(element: PcElement, data: PcElement['attrs']): PcElement | undefined;
+  updateElemData(arg: string | PcElement, data: PcElement['attrs']) {
+    const element = typeof arg === 'string' ? findNode(this.canvas, node => node.attrs.id === arg) : arg;
+
+    if (!element) return undefined;
+
+    element.attrs = data;
+
+    return element;
+  }
 }
