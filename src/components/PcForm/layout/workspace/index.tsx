@@ -10,6 +10,11 @@ import { copyNodes, cutNodes, pasteNodes, removeNode } from './graph';
 import { chain } from 'sugar-sajs';
 import { PcElement } from '../../element';
 import { createElementByCell } from '../../../utils/element';
+import { HistoryManager } from '@antv/x6/lib/graph/history';
+
+function isChangingData(data: HistoryManager.Command['data']): data is HistoryManager.ChangingData {
+  return Reflect.has(data, 'key');
+}
 
 export default defineComponent({
   name: 'SaPcFormRender',
@@ -36,7 +41,16 @@ export default defineComponent({
 
         const graph = new Graph({
           container: workspace.value,
-          history: true,
+          history: {
+            enabled: false,
+            beforeAddCommand(_event, args) {
+              if (args && Reflect.has(args, 'key') && Reflect.get(args, 'key') === 'zIndex') {
+                return false;
+              }
+
+              return true;
+            }
+          },
           width: canvas.attrs.width,
           height: canvas.attrs.height,
           snapline: true,
@@ -123,6 +137,8 @@ export default defineComponent({
           graph.addNodes(nodes);
         }
 
+        graph.enableHistory();
+
         graph.on('blank:mousedown', () => {
           graph.cleanSelection();
           contextmenu.value.hide();
@@ -174,6 +190,27 @@ export default defineComponent({
 
         graph.on('node:moved', ({ cell, x, y }) => {
           props.drawer.updateElemAttr(cell.data.id, 'offsetX', x);
+          props.drawer.updateElemAttr(cell.data.id, 'offsetX', y);
+        });
+
+        graph.history.on('undo', ({ cmds }) => {
+          for (const cmd of cmds) {
+            if (cmd.data.id && cmd.event === 'cell:change:data' && isChangingData(cmd.data)) {
+              props.drawer.updateElemData(cmd.data.id, cmd.data.prev.data);
+            }
+          }
+
+          console.log('on undo', cmds);
+        });
+
+        graph.history.on('redo', ({ cmds }) => {
+          for (const cmd of cmds) {
+            if (cmd.data.id && cmd.event === 'cell:change:data' && isChangingData(cmd.data)) {
+              props.drawer.updateElemData(cmd.data.id, cmd.data.next.data);
+            }
+          }
+
+          console.log('on redo', cmds);
         });
       }
     });

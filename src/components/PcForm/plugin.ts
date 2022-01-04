@@ -15,4 +15,10 @@ export function pcPluginValueChange<T extends keyof PcElementAttributes>(key: T,
   if (!seleceted) return;
 
   drawer.updateElemAttr(seleceted, key, value);
+
+  const cell = drawer.graph?.getCellById(seleceted.attrs.id);
+
+  if (cell) {
+    cell.updateData({ [key]: value });
+  }
 }

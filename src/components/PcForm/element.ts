@@ -1,4 +1,4 @@
-import { BasicElement, BasicElementAttributes, ElementType } from '../element';
+import { BasicElement, BasicElementAttributes } from '../element';
 
 export interface PcElementAttributes extends BasicElementAttributes {
 
