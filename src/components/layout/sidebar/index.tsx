@@ -4,6 +4,7 @@ import { computed, defineComponent, PropType, Ref, ref, VNode, watch } from 'vue
 import { BasicDrawer } from '../../drawer';
 import { ElementType } from '../../element';
 import { createX6PcFormNode } from '../../PcForm/layout/workspace/node';
+import { getNextId } from '../../utils/element';
 
 export interface SideTool {
   /** icon title on dom */
@@ -66,13 +67,14 @@ export default defineComponent({
             ],
 
             getDragNode(node) {
-              console.log(node);
+              const nextId = getNextId(props.drawer.canvas);
+              const parent = props.drawer.canvas;
 
               switch (node.attrs?.text.text) {
                 case 'Button': {
                   return createX6PcFormNode({
                     attrs: {
-                      id: '4',
+                      id: nextId,
                       name: 'Button',
                       width: 80,
                       height: 40,
@@ -80,14 +82,14 @@ export default defineComponent({
                       offsetX: 0,
                       offsetY: 0
                     },
-                    parent: undefined
+                    parent: parent
                   });
                 }
 
                 case 'Container': {
                   return createX6PcFormNode({
                     attrs: {
-                      id: '5',
+                      id: nextId,
                       name: 'Container',
                       width: 200,
                       height: 100,
@@ -95,7 +97,7 @@ export default defineComponent({
                       offsetX: 0,
                       offsetY: 0
                     },
-                    parent: undefined
+                    parent: parent
                   });
                 }
 

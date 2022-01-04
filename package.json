@@ -12,7 +12,7 @@
     "@antv/x6": "^1.29.0",
     "@element-plus/icons-vue": "^0.2.4",
     "element-plus": "^1.2.0-beta.6",
-    "sugar-sajs": "^1.0.0-pre.11",
+    "sugar-sajs": "^1.0.0-pre.13",
     "vue": "^3.2.25"
   },
   "devDependencies": {

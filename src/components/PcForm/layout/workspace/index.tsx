@@ -7,6 +7,9 @@ import { getCellRecProp, getSelectionRectangle, PcCell } from './utils';
 
 import { DeleteFilled } from '@element-plus/icons-vue';
 import { copyNodes, cutNodes, pasteNodes, removeNode } from './graph';
+import { chain } from 'sugar-sajs';
+import { PcElement } from '../../element';
+import { createElementByCell } from '../../../utils/element';
 
 export default defineComponent({
   name: 'SaPcFormRender',
@@ -89,8 +92,6 @@ export default defineComponent({
                   const rec = getSelectionRectangle(selection.cells);
                   const prop = getCellRecProp(cell);
 
-                  console.log(rec, prop);
-
                   return {
                     x: prop.position.x - rec.x,
                     y: prop.position.y - rec.y,
@@ -114,8 +115,7 @@ export default defineComponent({
           }
         });
 
-        props.drawer.setGraph(graph);
-        props.drawer.setCanvas(canvas);
+        chain(props.drawer).setGraph(graph).setCanvas(canvas);
 
         const nodes = canvas.children?.map(child => createX6PcFormNode(child));
 
@@ -161,6 +161,18 @@ export default defineComponent({
           } else {
             graph.enableSnapline();
           }
+        });
+
+        graph.on('node:added', ({ cell }) => {
+          console.log('added', cell);
+
+          const addedNode = createElementByCell(cell, PcElement);
+
+          props.drawer.addChild(addedNode); // TODO: set parent
+        });
+
+        graph.on('node:moved', ({ cell, x, y }) => {
+          // TODO:
         });
       }
     });
