@@ -1,10 +1,10 @@
 import { defineComponent, PropType } from 'vue';
 import { BasicDrawer } from '../../drawer';
-import { SaPluginLayout } from '../../plugin';
 
 import PluginItem from './item';
 
 import './index.scss';
+import { SaController } from '../../config';
 
 export default defineComponent({
   name: 'SaFormLayoutController',
@@ -15,7 +15,7 @@ export default defineComponent({
     },
     controller: {
       required: true,
-      type: Object as PropType<SaPluginLayout>
+      type: Object as PropType<SaController>
     }
   },
 
@@ -23,11 +23,11 @@ export default defineComponent({
     return () => (
       <div class="controller-container">
         {
-          props.controller.basic?.map((item =>
+          props.controller.plugins.basic?.map((item =>
             <div class="controller-item">
               <div class="controller-item-label">{item.label}</div>
               <div class="controller-item-plugin">
-                <PluginItem plugin={item} drawer={props.drawer} />
+                <PluginItem plugin={item} drawer={props.drawer} controller={props.controller} />
               </div>
             </div>
           ))

@@ -155,6 +155,7 @@ export default defineComponent({
 
         graph.on('selection:changed', ({ selected }) => {
           selectedCells.value = selected;
+          props.drawer.setSelected(selected.map(cell => cell.data.id));
 
           if (selected.length > 1) {
             graph.disableSnapline();
@@ -172,7 +173,7 @@ export default defineComponent({
         });
 
         graph.on('node:moved', ({ cell, x, y }) => {
-          // TODO:
+          props.drawer.updateElemAttr(cell.data.id, 'offsetX', x);
         });
       }
     });

@@ -12,15 +12,20 @@ export interface SaPlugin {
   label: string;
   attr: string;
   component: SaPluginType;
-  disabled: boolean;
+  disabled?: boolean;
 }
 
 export const BasicPlugins = {
-  'ctrl-name': {
+  'widget-id': {
     label: 'id',
     attr: 'id',
     component: SaPluginType.Input,
     disabled: true
+  },
+  'widget-name': {
+    label: 'name',
+    attr: 'name',
+    component: SaPluginType.Input
   }
 } as const;
 
