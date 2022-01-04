@@ -33,7 +33,20 @@ export class PcDrawer implements BasicDrawer {
     this.graph = graph;
   }
 
-  setSelected(id: string): PcElement;
+  /** add child and return its parent */
+  addChild(child: PcElement, parent?: PcElement): PcElement;
+  addChild(child: PcElement, parent?: string): PcElement;
+  addChild(child: PcElement, arg?: string | PcElement): PcElement {
+    const parent = (typeof arg === 'string' ? findTreeNode(this.canvas.children!, node => node.attrs.id === arg) : arg) ?? this.canvas;
+
+    if (parent.children) {
+      parent.children.push(child);
+    }
+
+    return parent;
+  }
+
+  setSelected(id: string): PcElement | undefined;
   setSelected(ids: string[]): PcElement[];
   setSelected(element: PcElement): PcElement;
   setSelected(elements: PcElement[]): PcElement[];
@@ -70,4 +83,6 @@ export class PcDrawer implements BasicDrawer {
       return arg;
     }
   }
+
+  // updateNodeAttr(id: string, key: string, ): PcElement;
 }
