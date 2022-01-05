@@ -19,7 +19,7 @@ export interface BasicDrawer {
   /** drawer canvas, contain all elements here */
   canvas: BasicElement;
   /** record store */
-  record: BasicRecordStore;
+  history: BasicRecordStore;
   /** current selected elements */
   selected: BasicElement[];
   /** drawer x6 graph instance */

@@ -1,11 +1,19 @@
 import { BasicPlugins, SaPluginLayout } from '../plugin';
+import { BasicRecordType } from '../record';
 import { PcDrawer } from './drawer';
 import { PcElementAttributes } from './element';
+import { PcRecord } from './record';
+
+import { cloneDeep } from 'lodash-es';
 
 export const PcPlugin: SaPluginLayout = {
   basic: [
     BasicPlugins['widget-id'],
-    BasicPlugins['widget-name']
+    BasicPlugins['widget-name'],
+    BasicPlugins['widget-width'],
+    BasicPlugins['widget-height'],
+    BasicPlugins['widget-offsetX'],
+    BasicPlugins['widget-offsetY']
   ]
 };
 
@@ -14,11 +22,20 @@ export function pcPluginValueChange<T extends keyof PcElementAttributes>(key: T,
 
   if (!seleceted) return;
 
+  const record = new PcRecord({
+    time: new Date(),
+    type: BasicRecordType.Attr,
+    data: [{
+      id: seleceted.attrs.id,
+      prev: {
+        [key]: cloneDeep(seleceted.attrs[key])
+      },
+      next: {
+        [key]: cloneDeep(value)
+      }
+    }]
+  });
+
   drawer.updateElemAttr(seleceted, key, value);
-
-  const cell = drawer.graph?.getCellById(seleceted.attrs.id);
-
-  if (cell) {
-    cell.updateData({ [key]: value });
-  }
+  drawer.addRecord(record);
 }

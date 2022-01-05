@@ -26,6 +26,26 @@ export const BasicPlugins = {
     label: 'name',
     attr: 'name',
     component: SaPluginType.Input
+  },
+  'widget-width': {
+    label: 'width',
+    attr: 'width',
+    component: SaPluginType.Number
+  },
+  'widget-height': {
+    label: 'height',
+    attr: 'height',
+    component: SaPluginType.Number
+  },
+  'widget-offsetX': {
+    label: 'x',
+    attr: 'offsetX',
+    component: SaPluginType.Number
+  },
+  'widget-offsetY': {
+    label: 'y',
+    attr: 'offsetY',
+    component: SaPluginType.Number
   }
 } as const;
 

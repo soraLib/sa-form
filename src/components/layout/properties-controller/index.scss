@@ -6,6 +6,7 @@
     vertical-align: baseline;
     line-height: 26px;
     color: white;
+    margin-bottom: 1px;
     
     &-label {
       width: 80px;
@@ -21,6 +22,15 @@
     input {
       height: 26px;
       border-radius: 0;
+    }
+
+    .el-input-number {
+      width: 100%;
+      line-height: inherit;
+    }
+
+    .el-input {
+      line-height: inherit;
     }
   }
 }

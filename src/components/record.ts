@@ -1,4 +1,4 @@
-import { BasicElement, BasicElementAttributes } from './element';
+import { BasicElementAttributes } from './element';
 
 export enum BasicRecordType {
   /** add element */
@@ -16,13 +16,12 @@ export interface BasicRecord {
   type: BasicRecordType;
   /** record time */
   time: Date;
-  /**
-   * record attrs
-   * save all attrs on elements if 'attr' is not set
-   */
-  attr?: keyof BasicElementAttributes | (keyof BasicElementAttributes)[];
-  /** record elements */
-  element: BasicElement | BasicElement[];
+  /** record element history data */
+  data: {
+    id: string;
+    prev: Partial<BasicElementAttributes>;
+    next: Partial<BasicElementAttributes>;
+  }[];
 }
 
 /** basic record store */
@@ -35,4 +34,7 @@ export interface BasicRecordStore {
   max: number;
   /** is recording opened */
   recording: boolean;
+
+  getPrevRecord(): BasicRecord | undefined;
+  getNextRecord(): BasicRecord | undefined;
 }
