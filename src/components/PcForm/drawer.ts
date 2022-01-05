@@ -125,6 +125,10 @@ export class PcDrawer implements BasicDrawer {
   addRecord(record: PcRecord) {
     console.log('[Sa info]: New record has been added.', record);
 
+    if(this.history.index && this.history.records.length > this.history.index + 1) {
+      this.history.records.splice(this.history.index + 1);
+    }
+
     this.history.records.push(record);
     this.history.index += 1;
   }
