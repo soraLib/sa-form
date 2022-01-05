@@ -1,7 +1,7 @@
 import { computed, defineComponent, PropType, VNode } from 'vue';
 import { SaPlugin, SaPluginType } from '../../plugin';
 
-import { ElInput } from 'element-plus';
+import { ElInput, ElInputNumber } from 'element-plus';
 import { BasicDrawer } from '../../drawer';
 import { BasicElement, BasicElementAttributes } from '../../element';
 import { SaController } from '../../config';
@@ -20,7 +20,12 @@ function createPlugin(plu: SaPlugin, drawer: BasicDrawer, controller: SaControll
 
   switch (plu.component) {
     case SaPluginType.Input: {
+      // TODO: emit on change not on input
       return <ElInput modelValue={modelValue} onInput={(v) => handlePluginValueChange(plu, v, drawer, controller.valueChange)} disabled={plu.disabled ?? false} />;
+    }
+
+    case SaPluginType.Number: {
+      return <ElInputNumber controls={false} modelValue={modelValue} onInput={(v) => handlePluginValueChange(plu, v, drawer, controller.valueChange)} disabled={plu.disabled ?? false} />;
     }
 
     default:

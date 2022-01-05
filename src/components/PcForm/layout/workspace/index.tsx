@@ -41,16 +41,6 @@ export default defineComponent({
 
         const graph = new Graph({
           container: workspace.value,
-          history: {
-            enabled: false,
-            beforeAddCommand(_event, args) {
-              if (args && Reflect.has(args, 'key') && Reflect.get(args, 'key') === 'zIndex') {
-                return false;
-              }
-
-              return true;
-            }
-          },
           width: canvas.attrs.width,
           height: canvas.attrs.height,
           snapline: true,
@@ -154,8 +144,6 @@ export default defineComponent({
         graph.on('cell:mousedown', ({ cell }: { cell: PcNode }) => {
           cell.toFront({ deep: true });
           contextmenu.value.hide();
-
-          props.drawer.setSelected(cell.data['id']);
         });
 
         graph.on('cell:contextmenu', ({ cell, e }) => {
@@ -188,9 +176,13 @@ export default defineComponent({
           props.drawer.addChild(addedNode); // TODO: set parent
         });
 
-        graph.on('node:moved', ({ cell, x, y }) => {
-          props.drawer.updateElemAttr(cell.data.id, 'offsetX', x);
-          props.drawer.updateElemAttr(cell.data.id, 'offsetX', y);
+        graph.on('node:moved', ({ cell }) => {
+          const { x, y } = cell.position();
+
+          props.drawer.updateElemData(cell.data.id, {
+            offsetX: x,
+            offsetY: y
+          })
         });
 
         graph.history.on('undo', ({ cmds }) => {

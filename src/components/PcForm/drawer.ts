@@ -1,23 +1,28 @@
-import { Graph } from '@antv/x6';
+import { Cell, Graph } from '@antv/x6';
 import { BasicDrawer, DrawerType } from '../drawer';
-import { BasicElement, ElementType } from '../element';
-import { BasicRecordStore, BasicRecord } from '../record';
+import { BasicElement } from '../element';
+import { BasicRecordStore, BasicRecordType } from '../record';
 import { PcElement, PcElementAttributes } from './element';
-import { PcRecordStore } from './record';
+import { PcRecord, PcRecordStore } from './record';
 
-import { findNode, findTreeNode } from 'sugar-sajs';
+import { findNode, findTreeNode, setObjectValues } from 'sugar-sajs';
+import { cloneDeep, pick } from 'lodash-es';
+import { PcNode } from './layout/workspace/node';
+import { getCellRecProp } from './layout/workspace/utils';
+
+export const NEED_UPDATE_GRAPH_PROPERTIES: (keyof PcElementAttributes)[] = ['offsetX', 'offsetY', 'width', 'height'];
 
 /** pc drawer */
 export class PcDrawer implements BasicDrawer {
   type: DrawerType;
   canvas: PcElement;
-  record: BasicRecordStore;
+  history: BasicRecordStore;
   selected: BasicElement[] = [];
   graph: Graph | undefined;
 
   constructor(config: Partial<PcElement> & {attrs: {}}) {
     this.type = 'PcForm';
-    this.record = new PcRecordStore();
+    this.history = new PcRecordStore();
     this.canvas = new PcElement({
       parent: undefined,
       children: [],
@@ -92,29 +97,94 @@ export class PcDrawer implements BasicDrawer {
     }
   }
 
-  /** update pc element attribute value */
-  updateElemAttr<T extends keyof PcElementAttributes>(id: string, key: T, value: PcElementAttributes[T]): PcElement | undefined;
-  updateElemAttr<T extends keyof PcElementAttributes>(element: PcElement, key: T, value: PcElementAttributes[T]): PcElement;
-  updateElemAttr<T extends keyof PcElementAttributes>(arg: PcElement | string, key: T, value: PcElementAttributes[T]): PcElement | undefined {
-    const element = typeof arg === 'string' ? findNode(this.canvas, node => node.attrs.id === arg) : arg;
-    if (!element) return undefined;
-
-    element.attrs[key] = value;
-
-    // TODO: value change hook
-
-    return element;
-  }
-
-  updateElemData(id: string, data: PcElement['attrs']): PcElement | undefined;
-  updateElemData(element: PcElement, data: PcElement['attrs']): PcElement | undefined;
-  updateElemData(arg: string | PcElement, data: PcElement['attrs']) {
+  updateElemData(id: string, data: Partial<PcElement['attrs']>): PcElement | undefined;
+  updateElemData(element: PcElement, data: Partial<PcElement['attrs']>): PcElement | undefined;
+  updateElemData(arg: string | PcElement, data: Partial<PcElement['attrs']>) {
     const element = typeof arg === 'string' ? findNode(this.canvas, node => node.attrs.id === arg) : arg;
 
     if (!element) return undefined;
 
-    element.attrs = data;
+    const record = new PcRecord({
+      type: BasicRecordType.Attr,
+      time: new Date(),
+      data: [{
+        id: element.attrs.id,
+        prev: cloneDeep(pick(element.attrs, Object.keys(data))),
+        next: cloneDeep(data)
+      }]
+    });
+
+    this.addRecord(record);
+
+    setObjectValues(element.attrs, data);
 
     return element;
   }
+
+  /** add history record */
+  addRecord(record: PcRecord) {
+    console.log('[Sa info]: New record has been added.', record);
+
+    this.history.records.push(record);
+    this.history.index += 1;
+  }
+
+  undo() {
+    const prevRecord = this.history.getPrevRecord();
+
+    if(!prevRecord) {
+      console.warn('[Sa warn]: None previous record in history.');
+
+      return;
+    }
+
+    // TODO: ADD, DELETE, MOVE
+    for(const data of prevRecord.data) {
+      const element = findNode(this.canvas, node => node.attrs.id === data.id);
+        
+      if(element) {
+        setObjectValues(element.attrs, data.prev);
+        nodeDataChangeHook(this.graph!.getCellById(data.id), data.prev);
+      }
+    }
+
+    this.history.index -= 1;
+  }
+
+  redo() {
+    const nextRecord = this.history.getNextRecord();
+
+    if(!nextRecord) {
+      console.warn('[Sa warn]: None next record in history.')
+
+      return;
+    }
+
+     // TODO: ADD, DELETE, MOVE
+     for(const data of nextRecord.data) {
+      const element = findNode(this.canvas, node => node.attrs.id === data.id);
+        
+      if(element) {
+        setObjectValues(element.attrs, data.next);
+        nodeDataChangeHook(this.graph!.getCellById(data.id), data.next);
+      }
+    }
+
+    this.history.index += 1;
+  }
+}
+
+function nodeDataChangeHook(cell: Cell, data: Partial<PcElementAttributes>) {
+  const prop = getCellRecProp(cell);
+
+  cell.setProp({
+    position: {
+      x: data['offsetX'] ?? prop.position.x,
+      y: data['offsetY'] ?? prop.position.y
+    },
+    size: {
+      width: data['width'] ?? prop.size.width,
+      height: data['height'] ?? prop.size.height
+    }
+  });
 }

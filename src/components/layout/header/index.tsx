@@ -11,7 +11,7 @@ export interface HeaderTool {
   /** icon */
   icon: VNode;
   /** icon click callback */
-  click: (drawer: BasicDrawer, e: Event) => void;
+  click: (drawer: any /** TODO: */, e: Event) => void;
 }
 
 export default defineComponent({
