@@ -10,11 +10,6 @@ import { copyNodes, cutNodes, pasteNodes, removeNode } from './graph';
 import { chain } from 'sugar-sajs';
 import { PcElement } from '../../element';
 import { createElementByCell } from '../../../utils/element';
-import { HistoryManager } from '@antv/x6/lib/graph/history';
-
-function isChangingData(data: HistoryManager.Command['data']): data is HistoryManager.ChangingData {
-  return Reflect.has(data, 'key');
-}
 
 export default defineComponent({
   name: 'SaPcFormRender',
