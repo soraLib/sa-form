@@ -72,7 +72,7 @@ export class PcDrawer implements BasicDrawer {
     if (!this.canvas.children) return;
 
     if (typeof arg === 'string') {
-      const node = findTreeNode(this.canvas.children, node => node.attrs.id === arg);
+      const node = findNode(this.canvas, node => node.attrs.id === arg);
       if (node) {
         this.selected = [node];
         setGraphSelected(arg, this.graph);
@@ -86,7 +86,7 @@ export class PcDrawer implements BasicDrawer {
 
       for (const item of arg) {
         if (typeof item === 'string') {
-          const node = findTreeNode(this.canvas.children, node => node.attrs.id === item);
+          const node = findNode(this.canvas, node => node.attrs.id === item);
           if (node) selected.push(node);
         } else {
           selected.push(item);
@@ -125,6 +125,7 @@ export class PcDrawer implements BasicDrawer {
     });
 
     this.addRecord(record);
+    nodeDataChangeHook(this, element.attrs.id, data);
 
     setObjectValues(element.attrs, data);
 
@@ -158,7 +159,7 @@ export class PcDrawer implements BasicDrawer {
         
       if(element) {
         setObjectValues(element.attrs, data.prev);
-        nodeDataChangeHook(this.graph!.getCellById(data.id), data.prev);
+        nodeDataChangeHook(this, data.id, data.prev);
       }
     }
 
@@ -182,7 +183,7 @@ export class PcDrawer implements BasicDrawer {
         
       if(element) {
         setObjectValues(element.attrs, data.next);
-        nodeDataChangeHook(this.graph!.getCellById(data.id), data.next);
+        nodeDataChangeHook(this, data.id, data.next);
       }
     }
 
@@ -192,17 +193,29 @@ export class PcDrawer implements BasicDrawer {
   }
 }
 
-function nodeDataChangeHook(cell: Cell, data: Partial<PcElementAttributes>) {
-  const prop = getCellRecProp(cell);
+function nodeDataChangeHook(drawer: PcDrawer, id: string, data: Partial<PcElementAttributes>) {
+  if(!drawer.graph) return;
 
-  cell.setProp({
-    position: {
-      x: data['offsetX'] ?? prop.position.x,
-      y: data['offsetY'] ?? prop.position.y
-    },
-    size: {
-      width: data['width'] ?? prop.size.width,
-      height: data['height'] ?? prop.size.height
-    }
-  });
+  const cell = drawer.graph.getCellById(id);
+
+  if(cell) {
+    const prop = getCellRecProp(cell);
+
+    cell.setProp({
+      position: {
+        x: data['offsetX'] ?? prop.position.x,
+        y: data['offsetY'] ?? prop.position.y
+      },
+      size: {
+        width: data['width'] ?? prop.size.width,
+        height: data['height'] ?? prop.size.height
+      }
+    });
+  } else {
+    // set canvas data
+    drawer.graph.size.resize(
+      data['width'] ?? drawer.canvas.attrs.width,
+      data['height'] ?? drawer.canvas.attrs.height
+    );
+  }
 }
