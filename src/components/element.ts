@@ -1,11 +1,11 @@
 /** element types */ // TODO: split pc types
 export enum ElementType {
   /** pc form canvas */
-  Canvas = 'pc canvas',
+  Canvas = 1,
   /** pc form button */
-  Button = 'pc button',
+  Button,
   /** pc form container */
-  Container = 'pc container',
+  Container,
   /** extra element type */
 }
 
