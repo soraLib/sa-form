@@ -29,7 +29,7 @@ export class PcClipBoard implements BasicClipBoard {
     };
   }
 
-  paste(drawer: PcDrawer, parent: string | undefined, options?: {
+  paste(drawer: PcDrawer, parent = drawer.canvas.attrs.id, options?: {
     nodeProps?: (element: PcElement) => Partial<PcElement['attrs']>;
     deep?: boolean;
   }): PcElement[] | undefined {
