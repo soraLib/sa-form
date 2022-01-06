@@ -1,3 +1,5 @@
+import { ElementType } from "./element";
+
 /** property controller type */
 export enum SaPluginType {
   Input = 'input',
@@ -49,7 +51,10 @@ export const BasicPlugins = {
   }
 } as const;
 
-export interface SaPluginLayout {
-  basic?: SaPlugin[];
-  extend?: SaPlugin[];
+
+export type SaPluginLayout = {
+  [key in ElementType]?: {
+    basic?: SaPlugin[];
+    extend?: SaPlugin[];
+  }
 }
