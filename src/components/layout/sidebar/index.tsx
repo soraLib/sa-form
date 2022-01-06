@@ -67,7 +67,7 @@ export default defineComponent({
             ],
 
             getDragNode(node) {
-              const nextId = getNextId(props.drawer.canvas);
+              const nextId = props.drawer.getNextId();
               const parent = props.drawer.canvas;
 
               switch (node.attrs?.text.text) {
