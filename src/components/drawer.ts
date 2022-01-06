@@ -24,4 +24,6 @@ export interface BasicDrawer {
   selected: BasicElement[];
   /** drawer x6 graph instance */
   graph: Graph | undefined;
+
+  getNextId(): string;
 }

@@ -43,14 +43,18 @@ export function pasteNodes(e: JQuery.ContextMenuEvent, parent: PcCell | undefine
 
   const rect = getSelectionRectangle(drawer.clipboard.clips.elements);
 
+  console.log('rect',rect);
+
   const offsetX = rect.x - e.offsetX;
   const offsetY = rect.y - e.offsetY;
 
   const pastes = drawer.clipboard.paste(drawer, parent?.data.id, { deep: true, nodeProps: (ele) => ({
-    id: getNextId(drawer.canvas),
+    id: drawer.getNextId(),
     offsetX: ele.attrs.offsetX - offsetX,
     offsetY: ele.attrs.offsetY - offsetY
   })});
+
+  console.log('pastes', pastes)
 
   if(pastes) {
     drawer.graph.cleanSelection();

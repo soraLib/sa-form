@@ -8,7 +8,7 @@ import { PcRecord, PcRecordStore } from './record';
 import { findNode, findTreeNode, setObjectValues } from 'sugar-sajs';
 import { cloneDeep, pick } from 'lodash-es';
 import { getCellRecProp } from './layout/workspace/utils';
-import { setGraphSelected } from '../utils/element';
+import { getNextId, setGraphSelected } from '../utils/element';
 import { PcClipBoard } from './clipboard';
 
 export const NEED_UPDATE_GRAPH_PROPERTIES: (keyof PcElementAttributes)[] = ['offsetX', 'offsetY', 'width', 'height'];
@@ -21,11 +21,13 @@ export class PcDrawer implements BasicDrawer {
   clipboard: PcClipBoard;
   selected: BasicElement[] = [];
   graph: Graph | undefined;
+  nextId: string;
 
   constructor(config: Partial<PcElement> & {attrs: {}}) {
     this.type = 'PcForm';
     this.history = new PcRecordStore();
     this.clipboard = new PcClipBoard();
+    this.nextId = '1';
     this.canvas = new PcElement({
       parent: undefined,
       children: [],
@@ -36,10 +38,20 @@ export class PcDrawer implements BasicDrawer {
   setCanvas(canvas: PcElement) {
     this.canvas = canvas;
     this.selected = [canvas];
+
+    this.nextId = getNextId(canvas);
   }
 
   setGraph(graph: Graph) {
     this.graph = graph;
+  }
+
+
+  getNextId() {
+    const nextId = this.nextId;
+    this.nextId = String(Number(nextId) + 1);
+
+    return nextId;
   }
 
   /** add child and return its parent */
