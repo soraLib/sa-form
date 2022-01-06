@@ -159,13 +159,14 @@ export default defineComponent({
 
         graph.on('selection:changed', ({ selected }) => {
           selectedCells.value = selected;
+         
           props.drawer.setSelected(selected.map(cell => cell.data.id));
 
           if (selected.length > 1) {
             graph.disableSnapline();
           } else {
             graph.enableSnapline();
-          }
+          } 
         });
 
         graph.on('node:added', ({ cell }) => {

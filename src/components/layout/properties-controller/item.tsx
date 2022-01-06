@@ -18,6 +18,8 @@ function createPlugin(plu: SaPlugin, drawer: BasicDrawer, controller: SaControll
     modelValue = selected?.attrs[plu.attr];
   }
 
+  if(modelValue === undefined) return <span></span>;
+
   switch (plu.component) {
     case SaPluginType.Input: {
       // TODO: emit on change not on input

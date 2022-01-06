@@ -1,4 +1,4 @@
-import { Cell } from '@antv/x6';
+import { Cell, Graph } from '@antv/x6';
 import { BasicElement } from '../element';
 
 /**
@@ -49,4 +49,23 @@ export function createElementByCell(cell: Cell, Con: new (config: BasicElement) 
     parent: undefined, // TODO:
     children: [] // TODO:
   });
+}
+
+/** select x6 graph cell */
+export function setGraphSelected(id: string, graph: Graph): void;
+export function setGraphSelected(ids: string[], graph: Graph): void;
+export function setGraphSelected(arg: string | string[], graph: Graph) {
+  const ids = Array.isArray(arg) ? arg : [arg];
+  const preSelected = graph.getSelectedCells().filter(cell => !ids.includes(cell.data.id));
+
+  for(const id of ids) {
+    if(!graph.isSelected(id)) {
+      graph.select(id);
+    }
+  }
+
+  // unselect other selected cells
+  for(const cell of preSelected) {
+    graph.unselect(cell);
+  }
 }
