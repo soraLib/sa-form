@@ -3,7 +3,7 @@ import { Shape } from '@antv/x6';
 import { computed, defineComponent, PropType, Ref, ref, VNode, watch } from 'vue';
 import { BasicDrawer } from '../../drawer';
 import { ElementType } from '../../element';
-import { createX6PcFormNode } from '../../PcForm/layout/workspace/node';
+import { createPcNode } from '../../PcForm/layout/workspace/node';
 import { getNextId } from '../../utils/element';
 
 export interface SideTool {
@@ -72,7 +72,7 @@ export default defineComponent({
 
               switch (node.attrs?.text.text) {
                 case 'Button': {
-                  return createX6PcFormNode({
+                  return createPcNode({
                     attrs: {
                       id: nextId,
                       name: 'Button',
@@ -87,7 +87,7 @@ export default defineComponent({
                 }
 
                 case 'Container': {
-                  return createX6PcFormNode({
+                  return createPcNode({
                     attrs: {
                       id: nextId,
                       name: 'Container',
