@@ -1,8 +1,8 @@
 import { Cell, Graph, JQuery } from '@antv/x6';
-import { computed, defineComponent, onMounted, PropType, Ref, ref, ShallowRef, shallowRef } from 'vue';
+import { computed, defineComponent, h, onMounted, PropType, Ref, ref, ShallowRef, shallowRef } from 'vue';
 import { PcDrawer } from '../../drawer';
 import { createMockPcCanvas } from './mock';
-import { createX6PcFormNode, PcNode } from './node';
+import { createPcNode, PcNode } from './node';
 import { getCellRecProp, getSelectionRectangle, PcCell } from './utils';
 
 import { DeleteFilled } from '@element-plus/icons-vue';
@@ -121,7 +121,7 @@ export default defineComponent({
 
         chain(props.drawer).setGraph(graph).setCanvas(canvas);
 
-        const nodes = canvas.children?.map(child => createX6PcFormNode(child));
+        const nodes = canvas.children?.map(child => createPcNode(child));
 
         if (nodes) {
           graph.addNodes(nodes);
@@ -183,28 +183,17 @@ export default defineComponent({
           props.drawer.updateElemData(cell.data.id, {
             offsetX: x,
             offsetY: y
-          })
+          });
         });
 
-        graph.history.on('undo', ({ cmds }) => {
-          for (const cmd of cmds) {
-            if (cmd.data.id && cmd.event === 'cell:change:data' && isChangingData(cmd.data)) {
-              props.drawer.updateElemData(cmd.data.id, cmd.data.prev.data);
-            }
-          }
+        graph.on('node:resized', ({ cell }) => {
+          const { width, height } = cell.size();
 
-          console.log('on undo', cmds);
-        });
-
-        graph.history.on('redo', ({ cmds }) => {
-          for (const cmd of cmds) {
-            if (cmd.data.id && cmd.event === 'cell:change:data' && isChangingData(cmd.data)) {
-              props.drawer.updateElemData(cmd.data.id, cmd.data.next.data);
-            }
-          }
-
-          console.log('on redo', cmds);
-        });
+          props.drawer.updateElemData(cell.data.id, {
+            width: width,
+            height: height
+          });
+        })
       }
     });
 
@@ -212,13 +201,13 @@ export default defineComponent({
       if (selectedCells.value.length) {
         return (
           <>
-            <v-contextmenu-item onClick={() => copyNodes(props.drawer.graph)}>
+            <v-contextmenu-item onClick={() => copyNodes(props.drawer)}>
               copy
             </v-contextmenu-item>
             <v-contextmenu-item onClick={() => cutNodes(props.drawer.graph)}>
               cut
             </v-contextmenu-item>
-            <v-contextmenu-item onClick={() => pasteNodes(contextmenuEvent.value, parent.value, props.drawer.graph)}>
+            <v-contextmenu-item onClick={() => pasteNodes(contextmenuEvent.value, parent.value, props.drawer)}>
               paste
             </v-contextmenu-item>
             <v-contextmenu-item type="danger" icon={<DeleteFilled />} onClick={() => removeNode(props.drawer.graph)}>
@@ -229,7 +218,7 @@ export default defineComponent({
       }
 
       return (
-        <v-contextmenu-item onClick={() => pasteNodes(contextmenuEvent.value, undefined, props.drawer.graph)}>
+        <v-contextmenu-item onClick={() => pasteNodes(contextmenuEvent.value, undefined, props.drawer)}>
           paste
         </v-contextmenu-item>
       );

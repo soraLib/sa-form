@@ -7,9 +7,9 @@ import { PcRecord, PcRecordStore } from './record';
 
 import { findNode, findTreeNode, setObjectValues } from 'sugar-sajs';
 import { cloneDeep, pick } from 'lodash-es';
-import { PcNode } from './layout/workspace/node';
 import { getCellRecProp } from './layout/workspace/utils';
 import { setGraphSelected } from '../utils/element';
+import { PcClipBoard } from './clipboard';
 
 export const NEED_UPDATE_GRAPH_PROPERTIES: (keyof PcElementAttributes)[] = ['offsetX', 'offsetY', 'width', 'height'];
 
@@ -18,12 +18,14 @@ export class PcDrawer implements BasicDrawer {
   type: DrawerType;
   canvas: PcElement;
   history: BasicRecordStore;
+  clipboard: PcClipBoard;
   selected: BasicElement[] = [];
   graph: Graph | undefined;
 
   constructor(config: Partial<PcElement> & {attrs: {}}) {
     this.type = 'PcForm';
     this.history = new PcRecordStore();
+    this.clipboard = new PcClipBoard();
     this.canvas = new PcElement({
       parent: undefined,
       children: [],

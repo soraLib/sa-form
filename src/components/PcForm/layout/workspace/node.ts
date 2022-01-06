@@ -6,13 +6,13 @@ export interface PcNode extends Node {
   data: PcElement['attrs'];
 }
 
-export function createX6PcFormNode(element: PcElement): PcNode {
+export function createPcNode(element: PcElement): PcNode {
   const baseNodeConfig = Object.assign({
     id: element.attrs.id,
     x: element.attrs.offsetX,
     y: element.attrs.offsetY,
     width: element.attrs.width,
-    height: element.attrs.height
+    height: element.attrs.height,
   }, { data: element.attrs });
 
   switch (element.attrs.type) {
