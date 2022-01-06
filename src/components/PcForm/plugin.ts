@@ -37,5 +37,4 @@ export function pcPluginValueChange<T extends keyof PcElementAttributes>(key: T,
   });
 
   drawer.updateElemData(seleceted, { [key]: value });
-  drawer.addRecord(record);
 }
