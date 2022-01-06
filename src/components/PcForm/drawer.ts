@@ -9,6 +9,7 @@ import { findNode, findTreeNode, setObjectValues } from 'sugar-sajs';
 import { cloneDeep, pick } from 'lodash-es';
 import { PcNode } from './layout/workspace/node';
 import { getCellRecProp } from './layout/workspace/utils';
+import { setGraphSelected } from '../utils/element';
 
 export const NEED_UPDATE_GRAPH_PROPERTIES: (keyof PcElementAttributes)[] = ['offsetX', 'offsetY', 'width', 'height'];
 
@@ -58,6 +59,8 @@ export class PcDrawer implements BasicDrawer {
   setSelected(element: PcElement): PcElement;
   setSelected(elements: PcElement[]): PcElement[];
   setSelected(arg?: string | string[] | PcElement | PcElement[]) {
+    if(!this.graph) return;
+
     if (!arguments.length || (Array.isArray(arg) && !arg.length)) {
       this.selected = [this.canvas];
 
@@ -68,7 +71,10 @@ export class PcDrawer implements BasicDrawer {
 
     if (typeof arg === 'string') {
       const node = findTreeNode(this.canvas.children, node => node.attrs.id === arg);
-      if (node) this.selected = [node];
+      if (node) {
+        this.selected = [node];
+        setGraphSelected(arg, this.graph);
+      }
 
       return node;
     }
@@ -84,7 +90,8 @@ export class PcDrawer implements BasicDrawer {
           selected.push(item);
         }
       }
-
+      
+      setGraphSelected(selected.map(item => item.attrs.id), this.graph);
       this.selected = selected;
 
       return selected;
@@ -92,6 +99,7 @@ export class PcDrawer implements BasicDrawer {
 
     if (typeof arg === 'object') {
       this.selected = [arg];
+      setGraphSelected(arg.attrs.id, this.graph);
 
       return arg;
     }
@@ -152,6 +160,8 @@ export class PcDrawer implements BasicDrawer {
       }
     }
 
+    this.setSelected(prevRecord.data.map(data => data.id));
+
     this.history.index -= 1;
   }
 
@@ -164,8 +174,8 @@ export class PcDrawer implements BasicDrawer {
       return;
     }
 
-     // TODO: ADD, DELETE, MOVE
-     for(const data of nextRecord.data) {
+    // TODO: ADD, DELETE, MOVE
+    for(const data of nextRecord.data) {
       const element = findNode(this.canvas, node => node.attrs.id === data.id);
         
       if(element) {
@@ -173,6 +183,8 @@ export class PcDrawer implements BasicDrawer {
         nodeDataChangeHook(this.graph!.getCellById(data.id), data.next);
       }
     }
+
+    this.setSelected(nextRecord.data.map(data => data.id));
 
     this.history.index += 1;
   }
