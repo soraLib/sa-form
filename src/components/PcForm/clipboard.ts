@@ -40,7 +40,7 @@ export class PcClipBoard implements BasicClipBoard {
     if(!parentElement) return;
 
     const newPasteElements = this.clips.elements.map(ele => {
-      let paste = new PcElement({ ...ele, parent: parentElement });
+      const paste = new PcElement({ ...ele, parent: parentElement });
 
       if(options?.nodeProps) {
         setObjectValues(paste.attrs, options.nodeProps(ele));
@@ -61,7 +61,8 @@ export class PcClipBoard implements BasicClipBoard {
   
       parentCell.setChildren(cells);
     }
-
+    
+    console.log('cells', cells)
     drawer.graph.addNodes(cells);
   }
 }

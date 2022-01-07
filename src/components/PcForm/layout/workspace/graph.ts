@@ -1,30 +1,46 @@
 import { Cell, Graph, JQuery } from '@antv/x6';
+import { cloneDeep } from 'lodash-es';
+import { findTreeNode } from 'sugar-sajs';
 import { ElementType } from '../../../element';
+import { BasicRecordType } from '../../../record';
 import { getNextId } from '../../../utils/element';
 import { PcDrawer } from '../../drawer';
+import { PcRecord } from '../../record';
 import { getSelectionRectangle, PcCell } from './utils';
 
 /** remove graph nodes */
-export function removeNode(graph?: Graph, arg?: Cell | string) {
-  if (!graph) return;
-
-  let id: string;
+export function removeNodes(drawer?: PcDrawer, arg?: Cell[] | string[]) {
+  if (!drawer?.graph) return;
 
   if (arg) {
-    if (typeof arg === 'object') {
-      id = arg.toJSON().id!;
-    } else {
-      id = arg;
+    let ids: string[] = [];
+
+    for(const item of arg) {
+      if (typeof item === 'object') {
+        ids.push(item.toJSON().id!);
+      } else {
+        ids.push(item);
+      }
     }
 
-    return graph.removeNode(id);
+    const elements = ids.map(id => findTreeNode(drawer.canvas.children!, node => node.attrs.id === id));
+
+    const record = new PcRecord({
+      type: BasicRecordType.Delete,
+      time: new Date(),
+      data: elements.map(element => ({
+        prev: cloneDeep(element)
+      }))
+    });
+
+    drawer.addRecord(record);
+
+    return drawer.graph.removeCells(ids);
   }
 
-  const selected = graph.getSelectedCells();
+  const selected = drawer.graph.getSelectedCells();
   if (selected.length) {
-    for (const cell of selected) {
-      removeNode(graph, cell);
-    }
+    removeNodes(drawer, selected);
   }
 }
 
@@ -43,8 +59,6 @@ export function pasteNodes(e: JQuery.ContextMenuEvent, parent: PcCell | undefine
 
   const rect = getSelectionRectangle(drawer.clipboard.clips.elements);
 
-  console.log('rect',rect);
-
   const offsetX = rect.x - e.offsetX;
   const offsetY = rect.y - e.offsetY;
 
@@ -53,8 +67,6 @@ export function pasteNodes(e: JQuery.ContextMenuEvent, parent: PcCell | undefine
     offsetX: ele.attrs.offsetX - offsetX,
     offsetY: ele.attrs.offsetY - offsetY
   })});
-
-  console.log('pastes', pastes)
 
   if(pastes) {
     drawer.graph.cleanSelection();

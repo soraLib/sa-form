@@ -1,14 +1,9 @@
-import { BasicRecord, BasicRecordStore, BasicRecordType } from '../record';
-import { PcElementAttributes } from './element';
+import { BasicRecord, BasicRecordDataList, BasicRecordStore, BasicRecordType } from '../record';
 
 export class PcRecord implements BasicRecord {
   type: BasicRecordType;
   time: Date;
-  data: {
-    id: string;
-    prev: Partial<PcElementAttributes>;
-    next: Partial<PcElementAttributes>;
-  }[];
+  data: BasicRecordDataList;
 
   constructor(config: PcRecord) {
     this.time = config.time;
@@ -22,6 +17,7 @@ export class PcRecordStore implements BasicRecordStore {
   index: number = -1;
   max: number;
   recording: boolean;
+  lastOperatedIds: string[] = [];
 
   constructor(config?: Partial<Pick<PcRecordStore, 'max' | 'recording'>>) {
     this.max = config?.max ?? 20;
