@@ -49,20 +49,16 @@ export class PcClipBoard implements BasicClipBoard {
       return paste;
     });
 
-    console.log('newPasteElements', newPasteElements)
-
     const cells = newPasteElements.map(ele => createPcNode(ele));
     const parentCell = parent ? drawer.graph.getCellById(parentElement.attrs.id) : undefined;
 
     if(parentCell) {
       for(const cell of cells) {
         cell.setParent(parentCell);
+        parentCell.addChild(cell);
       }
-  
-      parentCell.setChildren(cells);
     }
     
-    console.log('cells', cells)
     drawer.graph.addNodes(cells);
   }
 }
