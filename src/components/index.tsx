@@ -41,7 +41,7 @@ export default defineComponent({
 
         <main class="mt-1 flex flex-grow">
           <aside>
-            <SaFormSidebar options={layout.side} drawer={layout.drawer} class="bg-slate-500 h-full" />
+            <SaFormSidebar stencil={layout.side} drawer={layout.drawer} class="bg-slate-500 h-full" />
           </aside>
 
           <main class="flex-grow justify-center bg-slate-500 mx-1 overflow-auto">

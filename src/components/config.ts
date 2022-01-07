@@ -1,11 +1,11 @@
 import { BasicDrawer, DrawerType } from './drawer';
 import { HeaderTool } from './layout/header';
-import { SideTool } from './layout/sidebar';
+import { SideStencil } from './layout/sidebar';
 import { PcDrawer } from './PcForm/drawer';
 import { DefineComponent, PropType } from 'vue';
 
 import { PcHeaderOptions } from './PcForm/layout/header';
-import { PcSideOptions } from './PcForm/layout/side';
+import { PcSideStencil } from './PcForm/layout/side';
 import PcWorkspace from './PcForm/layout/workspace';
 import { ElementType } from './element';
 import { SaPluginLayout } from './Plugin';
@@ -24,7 +24,7 @@ const createPcFormConfig = () => ({
     }
   }),
   header: PcHeaderOptions,
-  side: PcSideOptions,
+  side: PcSideStencil,
   workspace: PcWorkspace,
   controller: {
     plugins: PcPlugin,
@@ -41,7 +41,7 @@ export type ILayout = {
   [key in DrawerType]: () => {
     drawer: BasicDrawer;
     header: HeaderTool[];
-    side: SideTool[];
+    side: SideStencil;
     workspace: DefineComponent<{
       drawer: {
         required: true,

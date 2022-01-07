@@ -1,25 +1,24 @@
-import { Addon } from '@antv/x6';
-import { Shape } from '@antv/x6';
-import { computed, defineComponent, PropType, Ref, ref, VNode, watch } from 'vue';
+import { Addon, Node } from '@antv/x6';
+import { computed, defineComponent, PropType, Ref, ref, watch } from 'vue';
 import { BasicDrawer } from '../../drawer';
-import { ElementType } from '../../element';
-import { createPcNode } from '../../PcForm/layout/workspace/node';
-import { getNextId } from '../../utils/element';
 
-export interface SideTool {
-  /** icon title on dom */
-  title: string;
-  /** icon */
-  icon: VNode;
-}
+export type SideStencil = (drawer: any /** TODO: */) => {
+  groups: Addon.Stencil.Group[];
+  getDragNode: (node: Node, drawer: BasicDrawer) => Node;
+  getDropNode: (node: Node, drawer: BasicDrawer) => Node;
+  nodes: {
+    /** TODO: node keys */
+    [key in ReturnType<SideStencil>['groups'][number]['name']]: Node[];
+  };
+};
 
 export default defineComponent({
   name: 'CoFormLayoutSidebar',
 
   props: {
-    options: {
-      required: true,
-      type: Array as PropType<SideTool[]>
+    stencil: {
+      // required: true,
+      type: Function as PropType<SideStencil>
     },
     drawer: {
       required: true,
@@ -35,9 +34,8 @@ export default defineComponent({
     watch(
       () => graph.value,
       () => {
-        console.log('GRAPH CHANGE');
-        if (graph.value && !stencil) {
-          console.log(graph.value, refStencil.value);
+        if (graph.value && !stencil && props.stencil) {
+          const stencilProp = props.stencil(props.drawer);
 
           stencil = new Addon.Stencil({
             title: 'Components',
@@ -54,85 +52,18 @@ export default defineComponent({
             collapsable: true,
             stencilGraphWidth: 208,
             stencilGraphHeight: 180,
-            groups: [
-              {
-                name: 'group1',
-                title: 'Group(Collapsable)'
-              },
-              {
-                name: 'group2',
-                title: 'Group',
-                collapsable: false
-              }
-            ],
-
-            getDragNode(node) {
-              const nextId = props.drawer.getNextId();
-              const parent = props.drawer.canvas;
-
-              switch (node.attrs?.text.text) {
-                case 'Button': {
-                  return createPcNode({
-                    attrs: {
-                      id: nextId,
-                      name: 'Button',
-                      width: 80,
-                      height: 40,
-                      type: ElementType.Button,
-                      offsetX: 0,
-                      offsetY: 0
-                    },
-                    parent: parent
-                  });
-                }
-
-                case 'Container': {
-                  return createPcNode({
-                    attrs: {
-                      id: nextId,
-                      name: 'Container',
-                      width: 200,
-                      height: 100,
-                      type: ElementType.Container,
-                      offsetX: 0,
-                      offsetY: 0
-                    },
-                    parent: parent
-                  });
-                }
-
-                default: {
-                  console.error('[Sa error]: unexpected drag node', node);
-                }
-              }
-
-              return node;
-            }
-          });
-
-          const r = new Shape.Rect({
-            width: 80,
-            height: 40,
-            attrs: {
-              rect: { fill: '#31D0C6', stroke: '#4B4A67', strokeWidth: 1 },
-              text: { text: 'Button', fill: 'white' }
-            }
-          });
-
-          const c = new Shape.Rect({
-            width: 80,
-            height: 40,
-            attrs: {
-              rect: { fill: '#31D0C6', stroke: '#4B4A67', strokeWidth: 1 },
-              text: { text: 'Container', fill: 'white' }
-            }
+            groups: stencilProp.groups,
+            getDragNode: (node) => stencilProp.getDragNode(node, props.drawer),
+            getDropNode: (node) => stencilProp.getDropNode(node, props.drawer)
           });
 
           refStencil.value?.appendChild(stencil.container);
 
-          stencil.load([r], 'group1');
-          stencil.load([c], 'group2');
-        }});
+          for(const group of stencilProp.groups) {
+            stencil.load(stencilProp.nodes[group.name], group.name);
+          }
+        }
+      });
 
     return {
       graph,

@@ -210,6 +210,8 @@ function nodeDataChangeHook(drawer: PcDrawer, id: string, data: Partial<PcElemen
 
   const cell = drawer.graph.getCellById(id);
 
+  console.log('nodeDataChangeHook', cell, id);
+
   if(cell) {
     const prop = getCellRecProp(cell);
 
