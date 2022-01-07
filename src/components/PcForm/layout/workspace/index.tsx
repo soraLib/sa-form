@@ -6,7 +6,7 @@ import { createPcNode, PcNode } from './node';
 import { getCellRecProp, getSelectionRectangle, PcCell } from './utils';
 
 import { DeleteFilled } from '@element-plus/icons-vue';
-import { copyNodes, cutNodes, pasteNodes, removeNode } from './graph';
+import { copyNodes, cutNodes, pasteNodes, removeNodes } from './graph';
 import { chain } from 'sugar-sajs';
 import { PcElement } from '../../element';
 import { createElementByCell } from '../../../utils/element';
@@ -165,11 +165,14 @@ export default defineComponent({
         });
 
         graph.on('node:added', ({ cell }) => {
-          console.log('added', cell);
+          // set cell position
+          const position = cell.getProp<{x: number; y: number}>('position');
+          cell.data.offsetX = position.x;
+          cell.data.offsetY = position.y;
 
-          const addedNode = createElementByCell(cell, PcElement);
+          const addedNode = createElementByCell(cell, PcElement, props.drawer);
 
-          props.drawer.addChild(addedNode); // TODO: set parent
+          props.drawer.addChild(addedNode);
         });
 
         graph.on('node:moved', ({ cell }) => {
@@ -205,7 +208,7 @@ export default defineComponent({
             <v-contextmenu-item onClick={() => pasteNodes(contextmenuEvent.value, parent.value, props.drawer)}>
               paste
             </v-contextmenu-item>
-            <v-contextmenu-item type="danger" icon={<DeleteFilled />} onClick={() => removeNode(props.drawer.graph)}>
+            <v-contextmenu-item type="danger" icon={<DeleteFilled />} onClick={() => removeNodes(props.drawer)}>
               delete
             </v-contextmenu-item>
           </>

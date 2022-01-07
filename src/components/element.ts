@@ -29,6 +29,7 @@ export interface BasicElementAttributes {
 
 /** basic element */
 export interface BasicElement {
+  [key: string]: any;
   parent: BasicElement | undefined;
   children?: BasicElement[];
   attrs: BasicElementAttributes;
