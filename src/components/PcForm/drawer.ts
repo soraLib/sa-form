@@ -81,6 +81,34 @@ export class PcDrawer implements BasicDrawer {
     return parent;
   }
 
+   /** add children and return their parent */
+  addChildren(children: PcElement[], parent?: PcElement): PcElement;
+  addChildren(children: PcElement[], parent?: string): PcElement;
+  addChildren(children: PcElement[], arg?: string | PcElement): PcElement {
+    const parent = (typeof arg === 'string' ? findTreeNode(this.canvas.children!, node => node.attrs.id === arg) : arg) ?? this.canvas;
+    
+    for(const child of children) {
+      addDrawerNode(this, child);
+    }
+
+    // skip add record when it's undo or redo
+    if(!children.some(child => this.history.lastOperatedIds.includes(child.attrs.id))) {
+      const record = new PcRecord({
+        type: BasicRecordType.Add,
+        time: new Date,
+        data: children.map(child => ({
+          next: {
+            ...cloneDeep(child),
+          }
+        }))
+      });
+  
+      this.addRecord(record);
+    }
+
+    return parent;
+  }
+
   setSelected(): PcElement | undefined;
   setSelected(id: string): PcElement | undefined;
   setSelected(ids: string[]): PcElement[];

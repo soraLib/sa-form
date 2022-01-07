@@ -60,5 +60,6 @@ export class PcClipBoard implements BasicClipBoard {
     }
     
     drawer.graph.addNodes(cells);
+    drawer.addChildren(newPasteElements);
   }
 }
