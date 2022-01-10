@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash-es';
 import { BasicElement, BasicElementAttributes } from '../element';
 
 export interface PcElementAttributes extends BasicElementAttributes {
@@ -16,7 +17,7 @@ export class PcElement implements IPcElement {
 
   constructor(config: IPcElement) {
     this.parent = config.parent;
-    this.attrs = config.attrs;
+    this.attrs = cloneDeep(config.attrs);
     if (config.children) this.children = config.children;
   }
 }
