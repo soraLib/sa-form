@@ -228,6 +228,8 @@ export class PcDrawer implements BasicDrawer {
           nodeDataChangeHook(this, data.id, data.prev);
         }
       }
+
+      this.setSelected(prevRecord.data.map(data => data.id));
     } else {
       if(prevRecord.type === BasicRecordType.Add) {
         this.history.lastOperatedIds = prevRecord.data.map(data => data.next!.attrs.id);
@@ -243,9 +245,9 @@ export class PcDrawer implements BasicDrawer {
           addDrawerNode(this, data.prev);
         }
       }
-    }
 
-    // this.setSelected(prevRecord.data.map(data => data.id));
+      this.setSelected(this.history.lastOperatedIds);
+    }
 
     this.history.index -= 1;
   }
@@ -270,6 +272,8 @@ export class PcDrawer implements BasicDrawer {
           nodeDataChangeHook(this, data.id, data.next);
         }
       }
+
+      this.setSelected(nextRecord.data.map(data => data.id));
     } else if(isCDRecordData(nextRecord.data)) {
       if(nextRecord.type === BasicRecordType.Add) {
         this.history.lastOperatedIds = nextRecord.data.map(data => data.next!.attrs.id);
@@ -286,9 +290,10 @@ export class PcDrawer implements BasicDrawer {
           removeDrawerNode(this, data.prev?.attrs?.id);
         }
       }
+
+      this.setSelected(this.history.lastOperatedIds);
     }
 
-    // this.setSelected(nextRecord.data.map(data => data.id));
 
     this.history.index += 1;
   }
