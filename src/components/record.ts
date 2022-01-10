@@ -27,18 +27,29 @@ export type CDRecordData = {
 export type BasicRecordData = CDRecordData | URecordData;
 
 /** is update record data */
-export function isURecordData(data: BasicRecordDataList): data is URecordDataList {
-  return Reflect.has(data[0], 'id');
+export function isURecordData(data: BasicRecordData): data is URecordData {
+  return Reflect.has(data, 'id');
 }
 
 /** is create or delete record data */
-export function isCDRecordData(data: BasicRecordDataList): data is CDRecordDataList {
-  return !Reflect.has(data[0], 'id');
+export function isCDRecordData(data: BasicRecordData): data is CDRecordData {
+  return !Reflect.has(data, 'id');
 }
 
 export type CDRecordDataList = CDRecordData[];
 export type URecordDataList = URecordData[];
 export type BasicRecordDataList = CDRecordDataList | URecordDataList;
+
+/** is update record data list */
+export function isURecordDataList(data: BasicRecordDataList): data is URecordDataList {
+  return Reflect.has(data[0], 'id');
+}
+
+/** is create or delete record data list */
+export function isCDRecordDataList(data: BasicRecordDataList): data is CDRecordDataList {
+  return !Reflect.has(data[0], 'id');
+}
+
 export interface BasicRecord {
   /** record type */
   type: BasicRecordType;

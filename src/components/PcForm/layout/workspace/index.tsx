@@ -1,4 +1,4 @@
-import { Cell, Graph, JQuery } from '@antv/x6';
+import { Cell, Graph, JQuery, Node } from '@antv/x6';
 import { computed, defineComponent, h, onMounted, PropType, Ref, ref, ShallowRef, shallowRef } from 'vue';
 import { PcDrawer } from '../../drawer';
 import { createMockPcCanvas } from './mock';
@@ -8,8 +8,6 @@ import { getCellRecProp, getSelectionRectangle, PcCell } from './utils';
 import { DeleteFilled } from '@element-plus/icons-vue';
 import { copyNodes, cutNodes, pasteNodes, removeNodes } from './graph';
 import { chain } from 'sugar-sajs';
-import { PcElement } from '../../element';
-import { createElementByCell } from '../../../utils/element';
 
 export default defineComponent({
   name: 'SaPcFormRender',
@@ -164,13 +162,38 @@ export default defineComponent({
           } 
         });
 
-        graph.on('node:moved', ({ cell }) => {
-          const { x, y } = cell.position();
+        let movedCells: Node<Node.Properties>[] = [];
 
-          props.drawer.updateElemData(cell.data.id, {
-            offsetX: x,
-            offsetY: y
-          });
+        graph.on('node:moved', ({ cell }) => {
+          if (props.drawer.selected.length > 1 && props.drawer.selected.some(el => el.attrs.id === cell.id)) { // move selected cells
+            movedCells.push(cell);
+
+            if (movedCells.length === props.drawer.selected.length) { // update elements data at last in order to create one record only
+              props.drawer.updateElemsData(
+                movedCells.map(cell => {
+                  const { x, y } = cell.position();
+
+                  return {
+                    id: cell.id,
+                    data: {
+                      offsetX: x,
+                      offsetY: y
+                    }
+                  };
+                })
+              );
+
+              movedCells = [];
+            }
+          } else { // move single unselected cell
+            const { x, y } = cell.position();
+            props.drawer.updateElemData(cell.id, {
+              offsetX: x,
+              offsetY: y
+            });
+
+            props.drawer.setSelected(cell.id);
+          }
         });
 
         graph.on('node:resized', ({ cell }) => {
