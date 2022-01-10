@@ -37,7 +37,11 @@ export class PcClipBoard implements BasicClipBoard {
 
     const parentElement = findNode(drawer.canvas, n => n.attrs.id === parent);
 
-    if(!parentElement) return;
+    if(!parentElement) {
+      console.warn('[Sa warn]: can not paste in undefined parent.');
+
+      return;
+    };
 
     const newPasteElements = this.clips.elements.map(ele => {
       const paste = new PcElement({ ...ele, parent: parentElement });
@@ -59,7 +63,9 @@ export class PcClipBoard implements BasicClipBoard {
       }
     }
     
+    drawer.addChildren(newPasteElements, parent);
     drawer.graph.addNodes(cells);
-    drawer.addChildren(newPasteElements);
+
+    return newPasteElements;
   }
 }

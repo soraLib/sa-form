@@ -52,7 +52,8 @@ export const createMockPcCanvas: () => PcElement = () => {
       height: 200,
       offsetX: 50,
       offsetY: 300
-    }
+    },
+    children: []
   });
 
   canvas.children?.push(...[child1, child2, child3]);

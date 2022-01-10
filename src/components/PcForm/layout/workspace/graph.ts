@@ -3,7 +3,6 @@ import { cloneDeep } from 'lodash-es';
 import { findTreeNode } from 'sugar-sajs';
 import { ElementType } from '../../../element';
 import { BasicRecordType } from '../../../record';
-import { getNextId } from '../../../utils/element';
 import { PcDrawer } from '../../drawer';
 import { PcRecord } from '../../record';
 import { getSelectionRectangle, PcCell } from './utils';
