@@ -294,7 +294,6 @@ export class PcDrawer implements BasicDrawer {
       this.setSelected(this.history.lastOperatedIds);
     }
 
-
     this.history.index += 1;
   }
 }

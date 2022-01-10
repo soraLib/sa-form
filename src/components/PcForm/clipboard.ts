@@ -3,6 +3,7 @@ import { findNode, setObjectValues } from "sugar-sajs";
 import { BasicClipBoard } from "../clipboard";
 import { PcDrawer } from "./drawer";
 import { PcElement } from "./element";
+import { removeNodes } from "./layout/workspace/graph";
 import { createPcNode } from "./layout/workspace/node";
 
 export class PcClipBoard implements BasicClipBoard {
@@ -22,11 +23,13 @@ export class PcClipBoard implements BasicClipBoard {
     };
   }
 
-  cut(drawer: PcDrawer, options?: { useLocalStorage?: boolean }) {
+  cut(drawer: PcDrawer, options?: { useLocalStorage?: boolean, deep?: boolean }) {
     this.clips = {
       elements: cloneDeep(drawer.selected), // TODO: options
       type: 'cut'
     };
+
+    removeNodes(drawer);
   }
 
   paste(drawer: PcDrawer, parent = drawer.canvas.attrs.id, options?: {

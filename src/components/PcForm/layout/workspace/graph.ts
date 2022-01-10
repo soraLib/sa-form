@@ -1,6 +1,6 @@
-import { Cell, Graph, JQuery } from '@antv/x6';
+import { Cell, JQuery } from '@antv/x6';
 import { cloneDeep } from 'lodash-es';
-import { findTreeNode } from 'sugar-sajs';
+import { Array as SaArray, findTreeNode } from 'sugar-sajs';
 import { ElementType } from '../../../element';
 import { BasicRecordType } from '../../../record';
 import { PcDrawer } from '../../drawer';
@@ -22,7 +22,7 @@ export function removeNodes(drawer?: PcDrawer, arg?: Cell[] | string[]) {
       }
     }
 
-    const elements = ids.map(id => findTreeNode(drawer.canvas.children!, node => node.attrs.id === id));
+    const elements = ids.map(id => findTreeNode(drawer.canvas.children!, node => node.attrs.id === id)!);
 
     const record = new PcRecord({
       type: BasicRecordType.Delete,
@@ -34,7 +34,15 @@ export function removeNodes(drawer?: PcDrawer, arg?: Cell[] | string[]) {
 
     drawer.addRecord(record);
 
-    return drawer.graph.removeCells(ids);
+    drawer.graph.removeCells(ids);
+
+    for(const element of elements) {
+      if(element.parent?.children) {
+        SaArray.remove(element.parent.children, child => child.attrs.id === element.attrs.id);
+      }
+    }
+
+    return elements;
   }
 
   const selected = drawer.graph.getSelectedCells();
@@ -46,6 +54,11 @@ export function removeNodes(drawer?: PcDrawer, arg?: Cell[] | string[]) {
 /** copy graph nodes */
 export function copyNodes(drawer: PcDrawer) {
   drawer.clipboard.copy(drawer, { deep: true, useLocalStorage: true });
+}
+
+/** cut graph nodes */
+export function cutNodes(drawer: PcDrawer) {
+  drawer.clipboard.cut(drawer, { deep: true, useLocalStorage: true });
 }
 
 /** paste graph nodes */
@@ -71,12 +84,4 @@ export function pasteNodes(e: JQuery.ContextMenuEvent, parent: PcCell | undefine
     drawer.graph.cleanSelection();
     drawer.graph.select(pastes?.map(p => p.attrs.id));
   }
-}
-
-/** cut graph nodes */
-export function cutNodes(graph?: Graph) {
-  if (!graph) return;
-
-  const selected = graph.getSelectedCells();
-  graph.cut(selected, { deep: true, useLocalStorage: true });
 }
