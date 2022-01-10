@@ -6,6 +6,7 @@ export type SideStencil = (drawer: any /** TODO: */) => {
   groups: Addon.Stencil.Group[];
   getDragNode: (node: Node, drawer: BasicDrawer) => Node;
   getDropNode: (node: Node, drawer: BasicDrawer) => Node;
+  validateNode: (node: Node, drawer: BasicDrawer) => boolean;
   nodes: {
     /** TODO: node keys */
     [key in ReturnType<SideStencil>['groups'][number]['name']]: Node[];
@@ -17,7 +18,6 @@ export default defineComponent({
 
   props: {
     stencil: {
-      // required: true,
       type: Function as PropType<SideStencil>
     },
     drawer: {
@@ -54,7 +54,8 @@ export default defineComponent({
             stencilGraphHeight: 180,
             groups: stencilProp.groups,
             getDragNode: (node) => stencilProp.getDragNode(node, props.drawer),
-            getDropNode: (node) => stencilProp.getDropNode(node, props.drawer)
+            getDropNode: (node) => stencilProp.getDropNode(node, props.drawer),
+            validateNode: (node) => stencilProp.validateNode(node, props.drawer)
           });
 
           refStencil.value?.appendChild(stencil.container);

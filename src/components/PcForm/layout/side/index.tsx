@@ -1,7 +1,7 @@
 import { Shape } from '@antv/x6';
 import { SideStencil } from '../../../layout/sidebar';
 import { PcDrawer } from '../../drawer';
-import { getPcDragNode, getPcDropNode } from './drag';
+import { getPcDragNode, getPcDropNode, pcValidateNode } from './drag';
 
 export const PcSideStencil: SideStencil = (drawer: PcDrawer) => ({
   groups: [
@@ -10,6 +10,7 @@ export const PcSideStencil: SideStencil = (drawer: PcDrawer) => ({
   ],
   getDragNode: (node) => getPcDragNode(node, drawer),
   getDropNode: (node) => getPcDropNode(node, drawer),
+  validateNode: (node) => pcValidateNode(node, drawer),
   nodes: {
     Normal: [
       new Shape.Rect({

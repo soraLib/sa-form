@@ -1,7 +1,5 @@
 import { BasicElement, BasicElementAttributes } from './element';
 
-import { DeepPartial } from 'sugar-sajs';
-
 export enum BasicRecordType {
   /** add element */
   Add,
@@ -60,8 +58,6 @@ export interface BasicRecordStore {
   max: number;
   /** is recording opened */
   recording: boolean;
-  /** last operated ids, cleaned every time when create new record */
-  lastOperatedIds: string[];
 
   getPrevRecord(): BasicRecord | undefined;
   getNextRecord(): BasicRecord | undefined;
