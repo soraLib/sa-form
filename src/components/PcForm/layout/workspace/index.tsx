@@ -202,7 +202,7 @@ export default defineComponent({
             <v-contextmenu-item onClick={() => copyNodes(props.drawer)}>
               copy
             </v-contextmenu-item>
-            <v-contextmenu-item onClick={() => cutNodes(props.drawer.graph)}>
+            <v-contextmenu-item onClick={() => cutNodes(props.drawer)}>
               cut
             </v-contextmenu-item>
             <v-contextmenu-item onClick={() => pasteNodes(contextmenuEvent.value, parent.value, props.drawer)}>
