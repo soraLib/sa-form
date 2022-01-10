@@ -86,7 +86,7 @@ export class PcDrawer implements BasicDrawer {
   addChildren(children: PcElement[], parent?: string): PcElement;
   addChildren(children: PcElement[], arg?: string | PcElement): PcElement {
     const parent = (typeof arg === 'string' ? findTreeNode(this.canvas.children!, node => node.attrs.id === arg) : arg) ?? this.canvas;
-    
+
     for(const child of children) {
       addDrawerNode(this, child);
     }
@@ -117,16 +117,22 @@ export class PcDrawer implements BasicDrawer {
   setSelected(arg?: string | string[] | PcElement | PcElement[]) {
     if(!this.graph) return;
 
+    console.log('set selected', this.selected, arg);
+
     if (!arguments.length || (Array.isArray(arg) && !arg.length)) {
       this.selected = [this.canvas];
 
       return this.canvas;
     }
 
+    console.log('---', this.canvas)
+
     if (!this.canvas.children) return;
 
     if (typeof arg === 'string') {
       const node = findNode(this.canvas, node => node.attrs.id === arg);
+      console.log('node', node)
+
       if (node) {
         this.selected = [node];
         setGraphSelected(arg, this.graph);
