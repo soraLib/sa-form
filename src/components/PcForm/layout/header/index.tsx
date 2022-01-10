@@ -3,10 +3,10 @@ import { PcDrawer } from '../../drawer';
 
 export const PcHeaderOptions: HeaderTool[] = [{
   title: 'undo',
-  icon: <span>undo</span>,
+  icon: <i class="iconfont iconchexiao1"></i>,
   click: (drawer: PcDrawer) => drawer.undo()
 }, {
   title: 'redo',
-  icon: <span>redo</span>,
+  icon: <i class="iconfont iconhuifu1"></i>,
   click: (drawer: PcDrawer) => drawer.redo()
 }];

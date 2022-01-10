@@ -6,6 +6,9 @@
     margin-right: 4px;
     overflow: hidden;
     user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     &:last-child {
       margin-right: 0;
@@ -13,6 +16,10 @@
 
     &:hover {
       background: #fff;
+    }
+
+    &:active {
+      transform: translateY(.5px);
     }
   }
 }
