@@ -17,7 +17,6 @@ export class PcRecordStore implements BasicRecordStore {
   index: number = -1;
   max: number;
   recording: boolean;
-  lastOperatedIds: string[] = [];
 
   constructor(config?: Partial<Pick<PcRecordStore, 'max' | 'recording'>>) {
     this.max = config?.max ?? 20;

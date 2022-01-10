@@ -1,7 +1,7 @@
 import { Cell, Graph } from '@antv/x6';
 import { BasicDrawer, DrawerType } from '../drawer';
 import { BasicElement } from '../element';
-import { BasicRecordStore, BasicRecordType, isCDRecordData, isURecordData } from '../record';
+import { BasicRecordStore, BasicRecordType, isCDRecordDataList, isURecordData, isURecordDataList } from '../record';
 import { PcElement, PcElementAttributes } from './element';
 import { PcRecord, PcRecordStore } from './record';
 
@@ -14,13 +14,20 @@ import { createPcNode } from './layout/workspace/node';
 
 export const NEED_UPDATE_GRAPH_PROPERTIES: (keyof PcElementAttributes)[] = ['offsetX', 'offsetY', 'width', 'height'];
 
+type IdUpdateData = { id: string, data: Partial<PcElement['attrs']> };
+type ElUpdateData = { element: PcElement, data: Partial<PcElement['attrs']> };
+
+function isIdUpdateData(data: IdUpdateData | ElUpdateData): data is IdUpdateData {
+  return Reflect.has(data, 'id');
+}
+
 /** pc drawer */
 export class PcDrawer implements BasicDrawer {
   type: DrawerType;
   canvas: PcElement;
   history: BasicRecordStore;
   clipboard: PcClipBoard;
-  selected: BasicElement[] = [];
+  selected: PcElement[] = [];
   graph: Graph | undefined;
   nextId: string;
 
@@ -160,29 +167,61 @@ export class PcDrawer implements BasicDrawer {
     }
   }
 
-  updateElemData(id: string, data: Partial<PcElement['attrs']>): PcElement | undefined;
-  updateElemData(element: PcElement, data: Partial<PcElement['attrs']>): PcElement | undefined;
-  updateElemData(arg: string | PcElement, data: Partial<PcElement['attrs']>) {
+  updateElemData(id: string, data: Partial<PcElement['attrs']>, needRecord?: boolean): PcElement | undefined;
+  updateElemData(element: PcElement, data: Partial<PcElement['attrs']>, needRecord?: boolean): PcElement | undefined;
+  updateElemData(arg: string | PcElement, data: Partial<PcElement['attrs']>, needRecord = true) {
+    if(!arg) return;
+
     const element = typeof arg === 'string' ? findNode(this.canvas, node => node.attrs.id === arg) : arg;
 
     if (!element) return undefined;
 
-    const record = new PcRecord({
-      type: BasicRecordType.Attr,
-      time: new Date(),
-      data: [{
-        id: element.attrs.id,
-        prev: cloneDeep(pick(element.attrs, Object.keys(data))),
-        next: cloneDeep(data)
-      }]
-    });
+    if(needRecord) {
+      const record = new PcRecord({
+        type: BasicRecordType.Attr,
+        time: new Date(),
+        data: [{
+          id: element.attrs.id,
+          prev: cloneDeep(pick(element.attrs, Object.keys(data))),
+          next: cloneDeep(data)
+        }]
+      });
+  
+      this.addRecord(record);
+    }
 
-    this.addRecord(record);
     nodeDataChangeHook(this, element.attrs.id, data);
 
     setObjectValues(element.attrs, data);
 
     return element;
+  }
+
+  updateElemsData(data: IdUpdateData[]): PcElement[] | undefined;
+  updateElemsData(data: ElUpdateData[]): PcElement[] | undefined;
+  updateElemsData(arg: IdUpdateData[] | ElUpdateData[]) {
+    const batch = arg.map(data => ({
+      el: isIdUpdateData(data) ? findNode(this.canvas, node => node.attrs.id === data.id)! : data.element,
+      data: data.data
+    }));
+
+    const record = new PcRecord({
+      type: BasicRecordType.Attr,
+      time: new Date(),
+      data: batch.map(u => ({
+        id: u.el.attrs.id,
+        prev: cloneDeep(pick(u.el.attrs, Object.keys(u.data))),
+        next: cloneDeep(u.data)
+      }))
+    });
+
+    this.addRecord(record);
+
+    for(const update of batch) {
+      this.updateElemData(update.el, update.data, false);
+    }
+
+    return batch.map(u => u.el);
   }
 
   /** add history record */
@@ -210,7 +249,7 @@ export class PcDrawer implements BasicDrawer {
 
     console.log('prev record', prevRecord, this.history);
     
-    if(isURecordData(prevRecord.data)) {
+    if(isURecordDataList(prevRecord.data)) {
       for(const data of prevRecord.data) {
         const element = findNode(this.canvas, node => node.attrs.id === data.id);
 
@@ -251,7 +290,7 @@ export class PcDrawer implements BasicDrawer {
       return;
     }
 
-    if(isURecordData(nextRecord.data)) {
+    if(isURecordDataList(nextRecord.data)) {
       for(const data of nextRecord.data) {
         const element = findNode(this.canvas, node => node.attrs.id === data.id);
         
@@ -262,7 +301,7 @@ export class PcDrawer implements BasicDrawer {
       }
 
       this.setSelected(nextRecord.data.map(data => data.id));
-    } else if(isCDRecordData(nextRecord.data)) {
+    } else if(isCDRecordDataList(nextRecord.data)) {
       for(const data of nextRecord.data) {
         if(nextRecord.type === BasicRecordType.Add) {
           // ADD
