@@ -1,5 +1,7 @@
 import { ElementType } from "../../../element";
+import { createElementByCell } from "../../../utils/element";
 import { PcDrawer } from "../../drawer";
+import { PcElement } from "../../element";
 import { createPcNode, PcNode } from "../workspace/node";
 
 export function getPcDragNode(node: PcNode, drawer: PcDrawer): PcNode {
@@ -8,6 +10,19 @@ export function getPcDragNode(node: PcNode, drawer: PcDrawer): PcNode {
 
 export function getPcDropNode(node: PcNode, drawer: PcDrawer): PcNode {
   return getPcStencilNode(node, drawer);
+}
+
+export function pcValidateNode(node: PcNode, drawer: PcDrawer): boolean {
+  // create record
+  const position = node.getProp<{x: number; y: number}>('position');
+  node.data.offsetX = position.x;
+  node.data.offsetY = position.y;
+
+  const addedNode = createElementByCell(node, PcElement, drawer);
+
+  drawer.addChild(addedNode);
+
+  return true;
 }
 
 function getPcStencilNode(node: PcNode, drawer: PcDrawer): PcNode {

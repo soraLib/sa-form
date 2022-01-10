@@ -64,19 +64,17 @@ export class PcDrawer implements BasicDrawer {
     addDrawerNode(this, child);
 
     // skip add record when it's undo or redo
-    if(!this.history.lastOperatedIds.includes(child.attrs.id)) {
-      const record = new PcRecord({
-        type: BasicRecordType.Add,
-        time: new Date,
-        data: [{
-          next: {
-            ...cloneDeep(child),
-          }
-        }]
-      });
-  
-      this.addRecord(record);
-    }
+    const record = new PcRecord({
+      type: BasicRecordType.Add,
+      time: new Date,
+      data: [{
+        next: {
+          ...cloneDeep(child),
+        }
+      }]
+    });
+
+    this.addRecord(record);
 
     return parent;
   }
@@ -92,19 +90,17 @@ export class PcDrawer implements BasicDrawer {
     }
 
     // skip add record when it's undo or redo
-    if(!children.some(child => this.history.lastOperatedIds.includes(child.attrs.id))) {
-      const record = new PcRecord({
-        type: BasicRecordType.Add,
-        time: new Date,
-        data: children.map(child => ({
-          next: {
-            ...cloneDeep(child),
-          }
-        }))
-      });
-  
-      this.addRecord(record);
-    }
+    const record = new PcRecord({
+      type: BasicRecordType.Add,
+      time: new Date,
+      data: children.map(child => ({
+        next: {
+          ...cloneDeep(child),
+        }
+      }))
+    });
+
+    this.addRecord(record);
 
     return parent;
   }
@@ -197,7 +193,6 @@ export class PcDrawer implements BasicDrawer {
 
     this.history.records.push(record);
     this.history.index += 1;
-    this.history.lastOperatedIds = [];
   }
 
   undo() {
@@ -214,7 +209,6 @@ export class PcDrawer implements BasicDrawer {
     console.log('prev record', prevRecord, this.history);
     
     if(isURecordData(prevRecord.data)) {
-      this.history.lastOperatedIds = prevRecord.data.map(data => data.id);
       for(const data of prevRecord.data) {
         const element = findNode(this.canvas, node => node.attrs.id === data.id);
 
@@ -226,11 +220,6 @@ export class PcDrawer implements BasicDrawer {
 
       this.setSelected(prevRecord.data.map(data => data.id));
     } else {
-      if(prevRecord.type === BasicRecordType.Add) {
-        this.history.lastOperatedIds = prevRecord.data.map(data => data.next!.attrs.id);
-      } else {
-        this.history.lastOperatedIds = prevRecord.data.map(data => data.prev!.attrs.id);
-      }
       for(const data of prevRecord.data) {
         if(prevRecord.type === BasicRecordType.Add) {
           // DELETE
@@ -240,8 +229,12 @@ export class PcDrawer implements BasicDrawer {
           addDrawerNode(this, data.prev);
         }
       }
-
-      this.setSelected(this.history.lastOperatedIds);
+      
+      if(prevRecord.type === BasicRecordType.Add) {
+        this.setSelected(prevRecord.data.map(data => data.next!.attrs.id));
+      } else {
+        this.setSelected(prevRecord.data.map(data => data.prev!.attrs.id));
+      }
     }
 
     this.history.index -= 1;
@@ -257,8 +250,6 @@ export class PcDrawer implements BasicDrawer {
     }
 
     if(isURecordData(nextRecord.data)) {
-      this.history.lastOperatedIds = nextRecord.data.map(data => data.id);
-
       for(const data of nextRecord.data) {
         const element = findNode(this.canvas, node => node.attrs.id === data.id);
         
@@ -270,12 +261,6 @@ export class PcDrawer implements BasicDrawer {
 
       this.setSelected(nextRecord.data.map(data => data.id));
     } else if(isCDRecordData(nextRecord.data)) {
-      if(nextRecord.type === BasicRecordType.Add) {
-        this.history.lastOperatedIds = nextRecord.data.map(data => data.next!.attrs.id);
-      } else {
-        this.history.lastOperatedIds = nextRecord.data.map(data => data.prev!.attrs.id);
-      }
-
       for(const data of nextRecord.data) {
         if(nextRecord.type === BasicRecordType.Add) {
           // ADD
@@ -286,7 +271,11 @@ export class PcDrawer implements BasicDrawer {
         }
       }
 
-      this.setSelected(this.history.lastOperatedIds);
+      if(nextRecord.type === BasicRecordType.Add) {
+        this.setSelected(nextRecord.data.map(data => data.next!.attrs.id));
+      } else {
+        this.setSelected(nextRecord.data.map(data => data.prev!.attrs.id));
+      }
     }
 
     this.history.index += 1;

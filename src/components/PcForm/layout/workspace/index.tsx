@@ -164,17 +164,6 @@ export default defineComponent({
           } 
         });
 
-        graph.on('node:added', ({ cell }) => {
-          // set cell position
-          const position = cell.getProp<{x: number; y: number}>('position');
-          cell.data.offsetX = position.x;
-          cell.data.offsetY = position.y;
-
-          const addedNode = createElementByCell(cell, PcElement, props.drawer);
-
-          props.drawer.addChild(addedNode);
-        });
-
         graph.on('node:moved', ({ cell }) => {
           const { x, y } = cell.position();
 
