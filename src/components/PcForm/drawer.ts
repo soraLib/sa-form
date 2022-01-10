@@ -75,6 +75,7 @@ export class PcDrawer implements BasicDrawer {
     });
 
     this.addRecord(record);
+    this.setSelected(child);
 
     return parent;
   }
@@ -101,6 +102,7 @@ export class PcDrawer implements BasicDrawer {
     });
 
     this.addRecord(record);
+    this.setSelected(children);
 
     return parent;
   }
