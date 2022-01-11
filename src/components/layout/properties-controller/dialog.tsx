@@ -1,6 +1,6 @@
 import { defineComponent, PropType } from 'vue';
 import { BasicDrawer } from '../../drawer';
-import { SaPlugin } from '../../Plugin';
+import { SaPlugin } from '../../plugin';
 
 export default defineComponent({
   name: 'SaFormControllerDialogLayout',

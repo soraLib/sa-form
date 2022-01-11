@@ -1,4 +1,4 @@
-import { SaPluginType } from '../../Plugin';
+import { SaPluginType } from '../../plugin';
 
 export const SelectPlugins = {
   'select-options': {
