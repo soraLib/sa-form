@@ -10,7 +10,7 @@ export const PcPlugin: SaPluginLayout = {
       BasicPlugins['widget-id'],
       BasicPlugins['widget-name'],
       BasicPlugins['widget-width'],
-      BasicPlugins['widget-height'],
+      BasicPlugins['widget-height']
     ]
   },
   [ElementType.Container]: {
@@ -20,7 +20,7 @@ export const PcPlugin: SaPluginLayout = {
       BasicPlugins['widget-width'],
       BasicPlugins['widget-height'],
       BasicPlugins['widget-offsetX'],
-      BasicPlugins['widget-offsetY'],
+      BasicPlugins['widget-offsetY']
     ]
   },
   [ElementType.Button]: {
@@ -30,7 +30,7 @@ export const PcPlugin: SaPluginLayout = {
       BasicPlugins['widget-width'],
       BasicPlugins['widget-height'],
       BasicPlugins['widget-offsetX'],
-      BasicPlugins['widget-offsetY'],
+      BasicPlugins['widget-offsetY']
     ]
   },
   [ElementType.Select]: {
@@ -42,7 +42,7 @@ export const PcPlugin: SaPluginLayout = {
       BasicPlugins['widget-offsetX'],
       BasicPlugins['widget-offsetY'],
       SelectPlugins['select-options']
-    ],
+    ]
   }
 };
 

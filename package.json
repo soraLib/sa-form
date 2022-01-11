@@ -6,7 +6,8 @@
     "dev": "vite",
     "build": "vite build",
     "build:doc": "cross-env BUILD_ENV=doc vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint --fix --ext .ts,.tsx ."
   },
   "dependencies": {
     "@antv/x6": "^1.29.0",

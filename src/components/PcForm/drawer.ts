@@ -54,7 +54,6 @@ export class PcDrawer implements BasicDrawer {
     this.graph = graph;
   }
 
-
   getNextId() {
     const nextId = this.nextId;
     this.nextId = String(Number(nextId) + 1);
@@ -67,7 +66,7 @@ export class PcDrawer implements BasicDrawer {
   addChild(child: PcElement, parent?: string): PcElement;
   addChild(child: PcElement, arg?: string | PcElement): PcElement {
     const parent = (typeof arg === 'string' ? findTreeNode(this.canvas.children!, node => node.attrs.id === arg) : arg) ?? this.canvas;
-    
+
     addDrawerNode(this, child);
 
     // skip add record when it's undo or redo
@@ -76,7 +75,7 @@ export class PcDrawer implements BasicDrawer {
       time: new Date,
       data: [{
         next: {
-          ...cloneDeep(child),
+          ...cloneDeep(child)
         }
       }]
     });
@@ -87,13 +86,13 @@ export class PcDrawer implements BasicDrawer {
     return parent;
   }
 
-   /** add children and return their parent */
+  /** add children and return their parent */
   addChildren(children: PcElement[], parent?: PcElement): PcElement;
   addChildren(children: PcElement[], parent?: string): PcElement;
   addChildren(children: PcElement[], arg?: string | PcElement): PcElement {
     const parent = (typeof arg === 'string' ? findTreeNode(this.canvas.children!, node => node.attrs.id === arg) : arg) ?? this.canvas;
 
-    for(const child of children) {
+    for (const child of children) {
       addDrawerNode(this, child);
     }
 
@@ -103,7 +102,7 @@ export class PcDrawer implements BasicDrawer {
       time: new Date,
       data: children.map(child => ({
         next: {
-          ...cloneDeep(child),
+          ...cloneDeep(child)
         }
       }))
     });
@@ -120,7 +119,7 @@ export class PcDrawer implements BasicDrawer {
   setSelected(element: PcElement): PcElement;
   setSelected(elements: PcElement[]): PcElement[];
   setSelected(arg?: string | string[] | PcElement | PcElement[]) {
-    if(!this.graph) return;
+    if (!this.graph) return;
 
     if (!arguments.length || (Array.isArray(arg) && !arg.length)) {
       this.selected = [this.canvas];
@@ -152,7 +151,7 @@ export class PcDrawer implements BasicDrawer {
           selected.push(item);
         }
       }
-      
+
       setGraphSelected(selected.map(item => item.attrs.id), this.graph);
       this.selected = selected;
 
@@ -170,13 +169,13 @@ export class PcDrawer implements BasicDrawer {
   updateElemData(id: string, data: Partial<PcElement['attrs']>, needRecord?: boolean): PcElement | undefined;
   updateElemData(element: PcElement, data: Partial<PcElement['attrs']>, needRecord?: boolean): PcElement | undefined;
   updateElemData(arg: string | PcElement, data: Partial<PcElement['attrs']>, needRecord = true) {
-    if(!arg) return;
+    if (!arg) return;
 
     const element = typeof arg === 'string' ? findNode(this.canvas, node => node.attrs.id === arg) : arg;
 
     if (!element) return undefined;
 
-    if(needRecord) {
+    if (needRecord) {
       const record = new PcRecord({
         type: BasicRecordType.Attr,
         time: new Date(),
@@ -186,7 +185,7 @@ export class PcDrawer implements BasicDrawer {
           next: cloneDeep(data)
         }]
       });
-  
+
       this.addRecord(record);
     }
 
@@ -217,7 +216,7 @@ export class PcDrawer implements BasicDrawer {
 
     this.addRecord(record);
 
-    for(const update of batch) {
+    for (const update of batch) {
       this.updateElemData(update.el, update.data, false);
     }
 
@@ -228,7 +227,7 @@ export class PcDrawer implements BasicDrawer {
   addRecord(record: PcRecord) {
     console.log('[Sa info]: New record has been added.', record);
 
-    if(this.history.index && this.history.records.length > this.history.index + 1) {
+    if (this.history.index && this.history.records.length > this.history.index + 1) {
       this.history.records.splice(this.history.index + 1);
     }
 
@@ -237,23 +236,23 @@ export class PcDrawer implements BasicDrawer {
   }
 
   undo() {
-    if(!this.graph) return;
+    if (!this.graph) return;
 
     const prevRecord = this.history.getPrevRecord();
 
-    if(!prevRecord) {
+    if (!prevRecord) {
       console.warn('[Sa warn]: None previous record in history.');
 
       return;
     }
 
     console.log('prev record', prevRecord, this.history);
-    
-    if(isURecordDataList(prevRecord.data)) {
-      for(const data of prevRecord.data) {
+
+    if (isURecordDataList(prevRecord.data)) {
+      for (const data of prevRecord.data) {
         const element = findNode(this.canvas, node => node.attrs.id === data.id);
 
-        if(element) {
+        if (element) {
           setObjectValues(element.attrs, data.prev);
           nodeDataChangeHook(this, data.id, data.prev);
         }
@@ -261,17 +260,17 @@ export class PcDrawer implements BasicDrawer {
 
       this.setSelected(prevRecord.data.map(data => data.id));
     } else {
-      for(const data of prevRecord.data) {
-        if(prevRecord.type === BasicRecordType.Add) {
+      for (const data of prevRecord.data) {
+        if (prevRecord.type === BasicRecordType.Add) {
           // DELETE
           removeDrawerNode(this, data.next?.attrs?.id);
-        } else if(prevRecord.type === BasicRecordType.Delete) {
+        } else if (prevRecord.type === BasicRecordType.Delete) {
           // ADD
           addDrawerNode(this, data.prev);
         }
       }
-      
-      if(prevRecord.type === BasicRecordType.Add) {
+
+      if (prevRecord.type === BasicRecordType.Add) {
         this.setSelected(prevRecord.data.map(data => data.next!.attrs.id));
       } else {
         this.setSelected(prevRecord.data.map(data => data.prev!.attrs.id));
@@ -284,35 +283,35 @@ export class PcDrawer implements BasicDrawer {
   redo() {
     const nextRecord = this.history.getNextRecord();
 
-    if(!nextRecord) {
-      console.warn('[Sa warn]: None next record in history.')
+    if (!nextRecord) {
+      console.warn('[Sa warn]: None next record in history.');
 
       return;
     }
 
-    if(isURecordDataList(nextRecord.data)) {
-      for(const data of nextRecord.data) {
+    if (isURecordDataList(nextRecord.data)) {
+      for (const data of nextRecord.data) {
         const element = findNode(this.canvas, node => node.attrs.id === data.id);
-        
-        if(element) {
+
+        if (element) {
           setObjectValues(element.attrs, data.next);
           nodeDataChangeHook(this, data.id, data.next);
         }
       }
 
       this.setSelected(nextRecord.data.map(data => data.id));
-    } else if(isCDRecordDataList(nextRecord.data)) {
-      for(const data of nextRecord.data) {
-        if(nextRecord.type === BasicRecordType.Add) {
+    } else if (isCDRecordDataList(nextRecord.data)) {
+      for (const data of nextRecord.data) {
+        if (nextRecord.type === BasicRecordType.Add) {
           // ADD
           addDrawerNode(this, data.next);
-        } else if(nextRecord.type === BasicRecordType.Delete) {
+        } else if (nextRecord.type === BasicRecordType.Delete) {
           // DELETE
           removeDrawerNode(this, data.prev?.attrs?.id);
         }
       }
 
-      if(nextRecord.type === BasicRecordType.Add) {
+      if (nextRecord.type === BasicRecordType.Add) {
         this.setSelected(nextRecord.data.map(data => data.next!.attrs.id));
       } else {
         this.setSelected(nextRecord.data.map(data => data.prev!.attrs.id));
@@ -325,11 +324,11 @@ export class PcDrawer implements BasicDrawer {
 
 /** update cell or graph after data change */
 function nodeDataChangeHook(drawer: PcDrawer, id: string, data: Partial<PcElementAttributes>) {
-  if(!drawer.graph) return;
+  if (!drawer.graph) return;
 
   const cell = drawer.graph.getCellById(id);
 
-  if(cell) {
+  if (cell) {
     const prop = getCellRecProp(cell);
 
     cell.setProp({
@@ -353,25 +352,25 @@ function nodeDataChangeHook(drawer: PcDrawer, id: string, data: Partial<PcElemen
 
 /** add graph and canvas node */
 function addDrawerNode(drawer: PcDrawer, element?: PcElement) {
-  if(!drawer.graph || !drawer.canvas.children || !element) return;
+  if (!drawer.graph || !drawer.canvas.children || !element) return;
 
   const hasCell = drawer.graph.hasCell(element.attrs.id);
-  
-  if(element.parent) {
-    if(!hasCell) {
+
+  if (element.parent) {
+    if (!hasCell) {
       const x6Node = createPcNode(element);
       drawer.graph.addCell(x6Node);
 
-      // bind x6 cells' paternity 
+      // bind x6 cells' paternity
       const x6Parent = drawer.graph.getCellById(element.parent.attrs.id);
-      if(x6Parent) {
+      if (x6Parent) {
         x6Parent.addChild(x6Node);
       }
     }
 
-    // bind drawer canvas elements' paternity 
+    // bind drawer canvas elements' paternity
     const drawerParent = findNode(drawer.canvas, node => node.attrs.id === element.parent?.attrs.id);
-    if(drawerParent) {
+    if (drawerParent) {
       drawerParent.children?.push(element);
       element.parent = drawerParent;
     }
@@ -380,11 +379,11 @@ function addDrawerNode(drawer: PcDrawer, element?: PcElement) {
 
 /** remove graph and canvas node */
 function removeDrawerNode(drawer: PcDrawer, id?: string) {
-  if(!drawer.graph || !drawer.canvas.children || !id) return;
+  if (!drawer.graph || !drawer.canvas.children || !id) return;
 
   const element = findNode(drawer.canvas, node => node.attrs.id === id);
 
-  if(element && drawer.canvas.children) {
+  if (element && drawer.canvas.children) {
     drawer.graph.removeCell(element.attrs.id);
     removeTreeNode(drawer.canvas.children, node => node.attrs.id === element.attrs.id);
   }

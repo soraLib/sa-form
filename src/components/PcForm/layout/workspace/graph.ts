@@ -12,9 +12,9 @@ export function removeNodes(drawer?: PcDrawer, arg?: Cell[] | string[]) {
   if (!drawer?.graph) return;
 
   if (arg) {
-    let ids: string[] = [];
+    const ids: string[] = [];
 
-    for(const item of arg) {
+    for (const item of arg) {
       if (typeof item === 'object') {
         ids.push(item.toJSON().id!);
       } else {
@@ -36,8 +36,8 @@ export function removeNodes(drawer?: PcDrawer, arg?: Cell[] | string[]) {
 
     drawer.graph.removeCells(ids);
 
-    for(const element of elements) {
-      if(element.parent?.children) {
+    for (const element of elements) {
+      if (element.parent?.children) {
         SaArray.remove(element.parent.children, child => child.attrs.id === element.attrs.id);
       }
     }

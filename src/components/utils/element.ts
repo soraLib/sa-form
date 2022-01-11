@@ -62,14 +62,14 @@ export function setGraphSelected(arg: string | string[], graph: Graph) {
   const ids = Array.isArray(arg) ? arg : [arg];
   const preSelected = graph.getSelectedCells().filter(cell => !ids.includes(cell.data.id));
 
-  for(const id of ids) {
-    if(!graph.isSelected(id)) {
+  for (const id of ids) {
+    if (!graph.isSelected(id)) {
       graph.select(id);
     }
   }
 
   // unselect other selected cells
-  for(const cell of preSelected) {
+  for (const cell of preSelected) {
     graph.unselect(cell);
   }
 }

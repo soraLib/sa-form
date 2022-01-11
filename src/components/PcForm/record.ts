@@ -24,13 +24,13 @@ export class PcRecordStore implements BasicRecordStore {
   }
 
   getPrevRecord() {
-    if(this.index < 0) return;
+    if (this.index < 0) return;
 
     return this.records[this.index];
   }
 
   getNextRecord() {
-    if(this.index >= this.records.length - 1) return;
+    if (this.index >= this.records.length - 1) return;
 
     return this.records[this.index + 1];
   }

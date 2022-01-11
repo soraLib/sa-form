@@ -159,7 +159,7 @@ export default defineComponent({
             graph.disableSnapline();
           } else {
             graph.enableSnapline();
-          } 
+          }
         });
 
         let movedCells: Node<Node.Properties>[] = [];
@@ -203,7 +203,7 @@ export default defineComponent({
             width: width,
             height: height
           });
-        })
+        });
       }
     });
 

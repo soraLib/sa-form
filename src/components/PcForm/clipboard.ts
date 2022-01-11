@@ -1,10 +1,10 @@
-import { cloneDeep } from "lodash-es";
-import { findNode, setObjectValues } from "sugar-sajs";
-import { BasicClipBoard } from "../clipboard";
-import { PcDrawer } from "./drawer";
-import { PcElement } from "./element";
-import { removeNodes } from "./layout/workspace/graph";
-import { createPcNode } from "./layout/workspace/node";
+import { cloneDeep } from 'lodash-es';
+import { findNode, setObjectValues } from 'sugar-sajs';
+import { BasicClipBoard } from '../clipboard';
+import { PcDrawer } from './drawer';
+import { PcElement } from './element';
+import { removeNodes } from './layout/workspace/graph';
+import { createPcNode } from './layout/workspace/node';
 
 export class PcClipBoard implements BasicClipBoard {
   clips: {
@@ -13,7 +13,7 @@ export class PcClipBoard implements BasicClipBoard {
   } | undefined = undefined;
 
   isEmpty(clip = this.clips): clip is undefined {
-    return !this.clips?.elements.length; 
+    return !this.clips?.elements.length;
   }
 
   copy(drawer: PcDrawer, options?: { useLocalStorage?: boolean, deep?: boolean }) {
@@ -36,20 +36,20 @@ export class PcClipBoard implements BasicClipBoard {
     nodeProps?: (element: PcElement) => Partial<PcElement['attrs']>;
     deep?: boolean;
   }): PcElement[] | undefined {
-    if(this.isEmpty(this.clips) || !drawer.graph) return;
+    if (this.isEmpty(this.clips) || !drawer.graph) return;
 
     const parentElement = findNode(drawer.canvas, n => n.attrs.id === parent);
 
-    if(!parentElement) {
+    if (!parentElement) {
       console.warn('[Sa warn]: can not paste in undefined parent.');
 
       return;
-    };
+    }
 
     const newPasteElements = this.clips.elements.map(ele => {
       const paste = new PcElement({ ...ele, parent: parentElement });
 
-      if(options?.nodeProps) {
+      if (options?.nodeProps) {
         setObjectValues(paste.attrs, options.nodeProps(ele));
       }
 
@@ -59,13 +59,13 @@ export class PcClipBoard implements BasicClipBoard {
     const cells = newPasteElements.map(ele => createPcNode(ele));
     const parentCell = parent ? drawer.graph.getCellById(parentElement.attrs.id) : undefined;
 
-    if(parentCell) {
-      for(const cell of cells) {
+    if (parentCell) {
+      for (const cell of cells) {
         cell.setParent(parentCell);
         parentCell.addChild(cell);
       }
     }
-    
+
     drawer.addChildren(newPasteElements, parent);
     drawer.graph.addNodes(cells);
 
