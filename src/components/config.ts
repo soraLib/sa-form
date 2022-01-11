@@ -8,7 +8,7 @@ import { PcHeaderOptions } from './PcForm/layout/header';
 import { PcSideStencil } from './PcForm/layout/side';
 import PcWorkspace from './PcForm/layout/workspace';
 import { ElementType } from './element';
-import { SaPlugin, SaPluginLayout } from './Plugin';
+import { SaPlugin, SaPluginLayout } from './plugin';
 import { PcPlugin, pcPluginValueChange } from './PcForm/plugin';
 const PcComponents = import.meta.glob('./PcForm/controller/*/index.tsx');
 
