@@ -4,6 +4,8 @@ export enum ElementType {
   Canvas = 1,
   /** pc form button */
   Button,
+  /** pc form select */
+  Select,
   /** pc form container */
   Container,
   /** extra element type */

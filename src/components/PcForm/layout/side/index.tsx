@@ -21,6 +21,15 @@ export const PcSideStencil: SideStencil = (drawer: PcDrawer) => ({
           text: { text: 'Button', fill: 'white' }
         },
         data: { name: 'Button' }
+      }),
+      new Shape.Rect({
+        width: 80,
+        height: 40,
+        attrs: {
+          rect: { fill: '#31D0C6', stroke: '#4B4A67', strokeWidth: 1 },
+          text: { text: 'Select', fill: 'white' }
+        },
+        data: { name: 'Select' }
       })
     ],
     Container: [
@@ -35,4 +44,4 @@ export const PcSideStencil: SideStencil = (drawer: PcDrawer) => ({
       })
     ]
   }
-})
+});

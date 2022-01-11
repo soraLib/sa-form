@@ -1,8 +1,8 @@
-import { ElementType } from "../../../element";
-import { createElementByCell } from "../../../utils/element";
-import { PcDrawer } from "../../drawer";
-import { PcElement } from "../../element";
-import { createPcNode, PcNode } from "../workspace/node";
+import { ElementType } from '../../../element';
+import { createElementByCell } from '../../../utils/element';
+import { PcDrawer } from '../../drawer';
+import { PcElement } from '../../element';
+import { createPcNode, PcNode } from '../workspace/node';
 
 export function getPcDragNode(node: PcNode, drawer: PcDrawer): PcNode {
   return getPcStencilNode(node, drawer);
@@ -29,6 +29,8 @@ function getPcStencilNode(node: PcNode, drawer: PcDrawer): PcNode {
   const nextId = drawer.getNextId();
   const parent = drawer.canvas;
 
+  console.log(node);
+
   switch (node.data.name) {
     case 'Button': {
       return createPcNode({
@@ -38,6 +40,21 @@ function getPcStencilNode(node: PcNode, drawer: PcDrawer): PcNode {
           width: 80,
           height: 40,
           type: ElementType.Button,
+          offsetX: 0,
+          offsetY: 0
+        },
+        parent: parent
+      });
+    }
+
+    case 'Select': {
+      return createPcNode({
+        attrs: {
+          id: nextId,
+          name: 'Select',
+          width: 80,
+          height: 40,
+          type: ElementType.Select,
           offsetX: 0,
           offsetY: 0
         },

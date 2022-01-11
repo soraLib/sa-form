@@ -1,4 +1,4 @@
-import { ElementType } from "./element";
+import { ElementType } from './element';
 
 /** property controller type */
 export enum SaPluginType {
@@ -11,9 +11,15 @@ export enum SaPluginType {
 }
 
 export interface SaPlugin {
+  /** plugin label */
   label: string;
+  /** plugin attribute, related to element's attr */
   attr: string;
-  component: SaPluginType;
+  /** plugin display type */
+  type: SaPluginType;
+  /** dialog component name, needed when SaPlugin type is `Dialog` */
+  dialog?: string;
+  /** plugin disable option */
   disabled?: boolean;
 }
 
@@ -21,36 +27,35 @@ export const BasicPlugins = {
   'widget-id': {
     label: 'id',
     attr: 'id',
-    component: SaPluginType.Input,
+    type: SaPluginType.Input,
     disabled: true
   },
   'widget-name': {
     label: 'name',
     attr: 'name',
-    component: SaPluginType.Input
+    type: SaPluginType.Input
   },
   'widget-width': {
     label: 'width',
     attr: 'width',
-    component: SaPluginType.Number
+    type: SaPluginType.Number
   },
   'widget-height': {
     label: 'height',
     attr: 'height',
-    component: SaPluginType.Number
+    type: SaPluginType.Number
   },
   'widget-offsetX': {
     label: 'x',
     attr: 'offsetX',
-    component: SaPluginType.Number
+    type: SaPluginType.Number
   },
   'widget-offsetY': {
     label: 'y',
     attr: 'offsetY',
-    component: SaPluginType.Number
+    type: SaPluginType.Number
   }
 } as const;
-
 
 export type SaPluginLayout = {
   [key in ElementType]?: {
