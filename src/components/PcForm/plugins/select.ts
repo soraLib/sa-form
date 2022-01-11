@@ -5,7 +5,10 @@ export const SelectPlugins = {
     label: 'options',
     attr: 'options',
     type: SaPluginType.Dialog,
-    dialog: 'widget-options',
+    dialog: {
+      component: 'widget-options',
+      title: 'select-options'
+    },
     disabled: true
   }
 } as const;

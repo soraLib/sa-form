@@ -30,7 +30,7 @@ function createPlugin(plu: SaPlugin, drawer: BasicDrawer, controller: SaControll
     }
 
     case SaPluginType.Dialog: {
-      return <SaDialog drawer={drawer} plugin={plu} />;
+      return <SaDialog drawer={drawer} plugin={plu} controller={controller} />;
     }
 
     default: {
@@ -65,8 +65,6 @@ export default defineComponent({
   setup(props) {
     const Plugin = computed(() => createPlugin(props.plugin, props.drawer, props.controller));
 
-    return () => (
-      <div>{Plugin.value}</div>
-    );
+    return () => Plugin.value;
   }
 });

@@ -17,8 +17,13 @@ export interface SaPlugin {
   attr: string;
   /** plugin display type */
   type: SaPluginType;
-  /** dialog component name, needed when SaPlugin type is `Dialog` */
-  dialog?: string;
+  /** dialog component settings, needed when SaPlugin type is `Dialog` */
+  dialog?: {
+    /** component name */
+    component: string;
+    /** dialog title, set plugin label in default */
+    title?: string;
+  }
   /** plugin disable option */
   disabled?: boolean;
 }
