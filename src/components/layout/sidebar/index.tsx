@@ -60,7 +60,7 @@ export default defineComponent({
 
           refStencil.value?.appendChild(stencil.container);
 
-          for(const group of stencilProp.groups) {
+          for (const group of stencilProp.groups) {
             stencil.load(stencilProp.nodes[group.name], group.name);
           }
         }
@@ -68,8 +68,7 @@ export default defineComponent({
 
     return {
       graph,
-      refStencil,
-      stencil
+      refStencil
     };
   },
 

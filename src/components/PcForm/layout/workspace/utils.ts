@@ -43,7 +43,7 @@ export function getSelectionRectangle(cells: Cell[] | PcElement[]): Rectangle.Re
 }
 
 export function getCellRecProp(cell: PcCell | PcElement) {
-  if(cell instanceof PcElement) {
+  if (cell instanceof PcElement) {
     return {
       position: { x: cell.attrs.offsetX, y: cell.attrs.offsetY },
       size: { width: cell.attrs.width, height: cell.attrs.height }

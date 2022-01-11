@@ -5,6 +5,7 @@ import { ElInput, ElInputNumber } from 'element-plus';
 import { BasicDrawer } from '../../drawer';
 import { BasicElement, BasicElementAttributes } from '../../element';
 import { SaController } from '../../config';
+import SaDialog from './dialog';
 
 function handlePluginValueChange(plu: SaPlugin, value: unknown, drawer: BasicDrawer, valueChange: SaController['valueChange']) {
   valueChange(plu.attr, value, drawer);
@@ -18,9 +19,7 @@ function createPlugin(plu: SaPlugin, drawer: BasicDrawer, controller: SaControll
     modelValue = selected?.attrs[plu.attr];
   }
 
-  if(modelValue === undefined) return <span></span>;
-
-  switch (plu.component) {
+  switch (plu.type) {
     case SaPluginType.Input: {
       // TODO: emit on change not on input
       return <ElInput modelValue={modelValue} onInput={(v) => handlePluginValueChange(plu, v, drawer, controller.valueChange)} disabled={plu.disabled ?? false} />;
@@ -30,10 +29,15 @@ function createPlugin(plu: SaPlugin, drawer: BasicDrawer, controller: SaControll
       return <ElInputNumber controls={false} modelValue={modelValue} onInput={(v) => handlePluginValueChange(plu, v, drawer, controller.valueChange)} disabled={plu.disabled ?? false} />;
     }
 
-    default:
-      console.error(`[Sa error]: unexpected plugin type ${plu.component}.`);
+    case SaPluginType.Dialog: {
+      return <SaDialog drawer={drawer} plugin={plu} />;
+    }
 
-      return <span>{plu.label}</span>;
+    default: {
+      console.error(`[Sa error]: Unexpected plugin type ${plu.type}.`);
+
+      return <span class="bg-red-700 w-full block text-center">{plu.type}</span>;
+    }
   }
 }
 

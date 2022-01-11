@@ -1,5 +1,5 @@
-import { BasicDrawer } from "./drawer";
-import { BasicElement } from "./element";
+import { BasicDrawer } from './drawer';
+import { BasicElement } from './element';
 
 export declare interface BasicClipBoard {
   clips: {

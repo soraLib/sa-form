@@ -2,6 +2,7 @@ import { ElementType } from '../element';
 import { BasicPlugins, SaPluginLayout } from '../plugin';
 import { PcDrawer } from './drawer';
 import { PcElementAttributes } from './element';
+import { SelectPlugins } from './plugins/select';
 
 export const PcPlugin: SaPluginLayout = {
   [ElementType.Canvas]: {
@@ -9,7 +10,7 @@ export const PcPlugin: SaPluginLayout = {
       BasicPlugins['widget-id'],
       BasicPlugins['widget-name'],
       BasicPlugins['widget-width'],
-      BasicPlugins['widget-height'],
+      BasicPlugins['widget-height']
     ]
   },
   [ElementType.Container]: {
@@ -19,7 +20,7 @@ export const PcPlugin: SaPluginLayout = {
       BasicPlugins['widget-width'],
       BasicPlugins['widget-height'],
       BasicPlugins['widget-offsetX'],
-      BasicPlugins['widget-offsetY'],
+      BasicPlugins['widget-offsetY']
     ]
   },
   [ElementType.Button]: {
@@ -29,7 +30,18 @@ export const PcPlugin: SaPluginLayout = {
       BasicPlugins['widget-width'],
       BasicPlugins['widget-height'],
       BasicPlugins['widget-offsetX'],
+      BasicPlugins['widget-offsetY']
+    ]
+  },
+  [ElementType.Select]: {
+    basic: [
+      BasicPlugins['widget-id'],
+      BasicPlugins['widget-name'],
+      BasicPlugins['widget-width'],
+      BasicPlugins['widget-height'],
+      BasicPlugins['widget-offsetX'],
       BasicPlugins['widget-offsetY'],
+      SelectPlugins['select-options']
     ]
   }
 };
