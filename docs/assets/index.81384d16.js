@@ -1,0 +1,1 @@
+import{d as r,b as t}from"./vendor.2ee8eecb.js";var n=r({name:"widget-options",props:{drawer:{required:!0,type:Object},plugin:{required:!0,type:Object}},setup(e){return()=>t("div",null,[e.plugin.label])}});export{n as default};
