@@ -8,8 +8,9 @@ import { PcHeaderOptions } from './PcForm/layout/header';
 import { PcSideStencil } from './PcForm/layout/side';
 import PcWorkspace from './PcForm/layout/workspace';
 import { ElementType } from './element';
-import { SaPluginLayout } from './Plugin';
+import { SaPlugin, SaPluginLayout } from './Plugin';
 import { PcPlugin, pcPluginValueChange } from './PcForm/plugin';
+const PcComponents = import.meta.glob('./PcForm/controller/*/index.tsx');
 
 const createPcFormConfig = () => ({
   drawer: new PcDrawer({
@@ -28,13 +29,17 @@ const createPcFormConfig = () => ({
   workspace: PcWorkspace,
   controller: {
     plugins: PcPlugin,
-    valueChange: pcPluginValueChange
+    valueChange: pcPluginValueChange,
+    components: PcComponents
   }
 });
 
 export type SaController = {
   plugins: SaPluginLayout,
   valueChange: Function;
+  components: {
+    [key: NonNullable<SaPlugin['dialog']>['component']]: () => Promise<any>
+  }
 }
 
 export type ILayout = {

@@ -32,5 +32,20 @@
     .el-input {
       line-height: inherit;
     }
+
+    .el-button {
+      line-height: inherit;
+      height: inherit;
+      padding: 0;
+      width: 100%;
+      min-height: unset;
+      border-radius: 0;
+      background: inherit;
+      background-color: var(--el-input-bg-color,var(--el-color-white));
+    }
+
+    .dialog-container {
+      line-height: inherit;
+    }
   }
 }
