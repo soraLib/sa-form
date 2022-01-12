@@ -22,15 +22,15 @@ function createPlugin(plu: SaPlugin, drawer: BasicDrawer, controller: SaControll
   switch (plu.type) {
     case SaPluginType.Input: {
       // TODO: emit on change not on input
-      return <ElInput modelValue={modelValue} onInput={(v) => handlePluginValueChange(plu, v, drawer, controller.valueChange)} disabled={plu.disabled ?? false} />;
+      return <ElInput class="sa-plugin" modelValue={modelValue} onInput={(v) => handlePluginValueChange(plu, v, drawer, controller.valueChange)} disabled={plu.disabled ?? false} />;
     }
 
     case SaPluginType.Number: {
-      return <ElInputNumber controls={false} modelValue={modelValue} onInput={(v) => handlePluginValueChange(plu, v, drawer, controller.valueChange)} disabled={plu.disabled ?? false} />;
+      return <ElInputNumber class="sa-plugin" controls={false} modelValue={modelValue} onInput={(v) => handlePluginValueChange(plu, v, drawer, controller.valueChange)} disabled={plu.disabled ?? false} />;
     }
 
     case SaPluginType.Dialog: {
-      return <SaDialog drawer={drawer} plugin={plu} controller={controller} />;
+      return <SaDialog class="sa-plugin" drawer={drawer} plugin={plu} controller={controller} />;
     }
 
     default: {
