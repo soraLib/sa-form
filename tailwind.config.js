@@ -3,5 +3,8 @@ module.exports = {
   theme: {
     extend: {}
   },
-  plugins: []
+  plugins: [],
+  corePlugins: {
+    preflight: false
+  }
 };

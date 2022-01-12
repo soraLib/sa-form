@@ -1,5 +1,5 @@
 import { ElButton, ElDialog } from 'element-plus';
-import { DefineComponent, defineComponent, h, PropType, Ref, ref, shallowRef } from 'vue';
+import { computed, DefineComponent, defineComponent, h, PropType, Ref, ref, shallowRef } from 'vue';
 import { SaController } from '../../config';
 import { BasicDrawer } from '../../drawer';
 import { SaPlugin } from '../../plugin';
@@ -48,21 +48,50 @@ export default defineComponent({
       }
     }
 
+    const child = computed(() => asyncCompo.value ?
+      h(asyncCompo.value, { drawer: props.drawer, plugin: props.plugin })
+      : '');
+
+    function handleConfirm() {
+      const childExpose = (child.value as any)?.component.exposed;
+
+      if (!childExpose?.update) {
+        console.error(`[Sa error]: Plugin ${props.plugin.dialog?.component} doesn't have expose update function.`);
+
+        return;
+      }
+
+      const { update } = childExpose;
+      try {
+        const value = update();
+        console.log('update value', value);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
     return () => (
       <div class="dialog-container">
         <ElButton onClick={() => dialogVisible.value = true}>set</ElButton>
 
         {
-          asyncCompo.value ?
-            <ElDialog
-              title={props.plugin.dialog?.title ?? props.plugin.label}
-              modelValue={dialogVisible.value}
-              closeOnClickModal={false}
-              onClose={() => dialogVisible.value = false}
-            >
-              {h(asyncCompo.value, { drawer: props.drawer, plugin: props.plugin })}
-            </ElDialog>
-            : ''
+          <ElDialog
+            title={props.plugin.dialog?.title ?? props.plugin.label}
+            modelValue={dialogVisible.value}
+            closeOnClickModal={false}
+            onClose={() => dialogVisible.value = false}
+
+            v-slots={{
+              footer: () => (
+                <div>
+                  <ElButton type="default" onClick={() => dialogVisible.value = false}>cancel</ElButton>
+                  <ElButton type="primary" onClick={handleConfirm}>submit</ElButton>
+                </div>
+              )
+            }}
+          >
+            { child.value }
+          </ElDialog>
         }
       </div>
     );
