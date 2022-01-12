@@ -56,7 +56,8 @@ function getPcStencilNode(node: PcNode, drawer: PcDrawer): PcNode {
           height: 40,
           type: ElementType.Select,
           offsetX: 0,
-          offsetY: 0
+          offsetY: 0,
+          options: [{ name: 'default' }]
         },
         parent: parent
       });

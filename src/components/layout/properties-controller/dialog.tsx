@@ -1,8 +1,9 @@
-import { ElButton, ElDialog } from 'element-plus';
-import { computed, DefineComponent, defineComponent, h, PropType, Ref, ref, shallowRef } from 'vue';
+import { ElButton, ElDialog, ElInput } from 'element-plus';
+import { computed, DefineComponent, defineComponent, h, nextTick, PropType, Ref, ref, shallowRef, watch } from 'vue';
 import { SaController } from '../../config';
 import { BasicDrawer } from '../../drawer';
 import { SaPlugin } from '../../plugin';
+import { getPluginValue } from '../../utils/plugin';
 
 export default defineComponent({
   name: 'SaFormControllerDialogLayout',
@@ -64,14 +65,23 @@ export default defineComponent({
       const { update } = childExpose;
       try {
         const value = update();
-        console.log('update value', value);
+
+        props.drawer.updateElemData(props.drawer.selected[0], {
+          [props.plugin.attr]: value
+        });
       } catch (err) {
         console.error(err);
       }
+
+      dialogVisible.value = false;
     }
 
     return () => (
       <div class="dialog-container">
+        { props.plugin.dialog?.filter ?
+          <ElInput modelValue={
+            props.plugin.dialog.filter(getPluginValue(props.drawer, props.plugin))} disabled /> : '' }
+
         <ElButton onClick={() => dialogVisible.value = true}>set</ElButton>
 
         {

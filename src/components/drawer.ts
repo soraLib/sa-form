@@ -26,4 +26,6 @@ export interface BasicDrawer {
   graph: Graph | undefined;
 
   getNextId(): string;
+  updateElemData(id: string, data: Partial<BasicElement['attrs']>, needRecord?: boolean): BasicElement | undefined;
+  updateElemData(element: BasicElement, data: Partial<BasicElement['attrs']>, needRecord?: boolean): BasicElement | undefined;
 }

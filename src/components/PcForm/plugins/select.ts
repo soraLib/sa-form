@@ -7,7 +7,8 @@ export const SelectPlugins = {
     type: SaPluginType.Dialog,
     dialog: {
       component: 'widget-options',
-      title: 'select-options'
+      title: 'select-options',
+      filter: (value: { name: string }[]) => value.map(item => item.name).join(';')
     },
     disabled: true
   }
