@@ -13,6 +13,7 @@ export enum ElementType {
 
 /** basic element attributes */
 export interface BasicElementAttributes {
+  [key: string]: any;
   /** element type */
   type: ElementType;
   /** unique id */

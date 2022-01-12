@@ -35,7 +35,6 @@
       }
 
       & > .el-button {
-        line-height: inherit;
         height: inherit;
         padding: 0;
         width: 100%;
@@ -45,9 +44,22 @@
         background-color: var(--el-input-bg-color,var(--el-color-white));
       }
 
-      .dialog-container {
+      &.dialog-container {
         line-height: inherit;
+        display: flex;
+
+        &:first-child {
+          flex-grow: 1;
+        }
+
+        & > .el-button {
+          width: 120px;
+        }
       }
     }
+  }
+
+  .controller-item-plugin {
+    flex-grow: 1;
   }
 }

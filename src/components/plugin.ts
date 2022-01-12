@@ -23,6 +23,8 @@ export interface SaPlugin {
     component: string;
     /** dialog title, set plugin label in default */
     title?: string;
+    /** value filter for display format data */
+    filter?: (value: any) => string;
   }
   /** plugin disable option */
   disabled?: boolean;
