@@ -49,13 +49,13 @@ export default defineComponent({
       selectOptions.push({ name: '' });
     }
 
-    function upRow({ $index }: Scope) {
+    function moveUp({ $index }: Scope) {
       if ($index) {
         SaArray.swap(selectOptions, $index, $index - 1);
       }
     }
 
-    function downRow({ $index }: Scope) {
+    function moveDown({ $index }: Scope) {
       if ($index < selectOptions.length - 1) {
         SaArray.swap(selectOptions, $index, $index + 1);
       }
@@ -84,10 +84,10 @@ export default defineComponent({
         }} />
 
         <ElTableColumn label="operations" width="280" v-slots={{
-          default: (scope: any) => <>
-            <ElButton class="button" type="primary" plain size="mini" onClick={() => upRow(scope)}>up</ElButton>
-            <ElButton class="button" type="primary" plain size="mini" onClick={() => downRow(scope)}>down</ElButton>
-            <ElButton class="button" type="danger" plain size="mini" onClick={() => deleteRow(scope)}>delete</ElButton>
+          default: (scope: Scope) => <>
+            <ElButton type="primary" plain size="mini" onClick={() => moveUp(scope)}>up</ElButton>
+            <ElButton type="primary" plain size="mini" onClick={() => moveDown(scope)}>down</ElButton>
+            <ElButton type="danger" plain size="mini" onClick={() => deleteRow(scope)}>delete</ElButton>
           </>
         }}/>
       </ElTable>
