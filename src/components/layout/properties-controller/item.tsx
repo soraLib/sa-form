@@ -3,9 +3,10 @@ import { SaPlugin, SaPluginType } from '../../plugin';
 
 import { ElInput, ElInputNumber } from 'element-plus';
 import { BasicDrawer } from '../../drawer';
-import { BasicElement, BasicElementAttributes } from '../../element';
 import { SaController } from '../../config';
 import SaDialog from './dialog';
+
+import { isElementAttribute } from '../../utils//element';
 
 function handlePluginValueChange(plu: SaPlugin, value: unknown, drawer: BasicDrawer, valueChange: SaController['valueChange']) {
   valueChange(plu.attr, value, drawer);
@@ -40,11 +41,6 @@ function createPlugin(plu: SaPlugin, drawer: BasicDrawer, controller: SaControll
     }
   }
 }
-
-function isElementAttribute(attr: string, elem: BasicElement): attr is keyof BasicElementAttributes {
-  return Reflect.has(elem.attrs, attr);
-}
-
 export default defineComponent({
   name: 'ControllerItem',
   props: {

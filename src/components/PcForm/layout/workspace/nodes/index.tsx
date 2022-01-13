@@ -8,7 +8,7 @@ export interface PcNode extends Node {
   data: PcElement['attrs'];
 }
 
-export function createPcNode(element: PcElement): PcNode {
+export function createPcNode(element: PcElement) {
   const baseNodeConfig = Object.assign({
     id: element.attrs.id,
     x: element.attrs.offsetX,
@@ -33,9 +33,7 @@ export function createPcNode(element: PcElement): PcNode {
         ...baseNodeConfig,
         shape: 'vue-shape',
         component: {
-          render() {
-            return <PcSelect />;
-          }
+          render: () => <PcSelect />
         }
       });
     }

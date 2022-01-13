@@ -1,7 +1,7 @@
 import { Cell, Graph } from '@antv/x6';
 import { findNode } from 'sugar-sajs';
 import { BasicDrawer } from '../drawer';
-import { BasicElement } from '../element';
+import { BasicElement, BasicElementAttributes } from '../element';
 
 /**
  * return next unique id
@@ -50,7 +50,7 @@ export function createElementByCell(cell: Cell, Con: new (config: BasicElement) 
 
   return new Con({
     attrs: cell.data,
-    parent: { ... (parentId ? findNode(canvas, node => node.attrs.id === parentId) ?? canvas : canvas) },
+    parent: { ... (parentId ? findNode(canvas as any /** TODO: */, node => node.attrs.id === parentId) ?? canvas : canvas) },
     children: [] // TODO:
   });
 }
@@ -72,4 +72,8 @@ export function setGraphSelected(arg: string | string[], graph: Graph) {
   for (const cell of preSelected) {
     graph.unselect(cell);
   }
+}
+
+export function isElementAttribute(attr: string, elem: BasicElement): attr is keyof BasicElementAttributes {
+  return Reflect.has(elem.attrs, attr);
 }

@@ -6,8 +6,10 @@ export interface PcSelectAttributes {
   options?: { name: string }[];
 }
 
-export interface PcElementAttributes extends BasicElementAttributes {
+export type PcElementAttributes = BasicElementAttributes & PcSelectAttributes;
 
+export function isPcElementAttribute(attr: string, elem: PcElement): attr is keyof PcElementAttributes {
+  return Reflect.has(elem.attrs, attr);
 }
 
 export interface IPcElement extends BasicElement {
@@ -18,7 +20,7 @@ export class PcElement implements IPcElement {
   [key: string | number]: any;
   parent: PcElement | undefined;
   children?: PcElement[];
-  attrs: PcElementAttributes & PcSelectAttributes;
+  attrs: PcElementAttributes;
 
   constructor(config: IPcElement) {
     this.parent = config.parent;
