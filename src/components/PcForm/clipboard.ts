@@ -4,7 +4,7 @@ import { BasicClipBoard } from '../clipboard';
 import { PcDrawer } from './drawer';
 import { PcElement } from './element';
 import { removeNodes } from './layout/workspace/graph';
-import { createPcNode } from './layout/workspace/node';
+import { createPcNode } from './layout/workspace/nodes';
 
 export class PcClipBoard implements BasicClipBoard {
   clips: {

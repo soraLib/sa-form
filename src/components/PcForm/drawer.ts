@@ -10,7 +10,7 @@ import { cloneDeep, pick } from 'lodash-es';
 import { getCellRecProp } from './layout/workspace/utils';
 import { getNextId, setGraphSelected } from '../utils/element';
 import { PcClipBoard } from './clipboard';
-import { createPcNode } from './layout/workspace/node';
+import { createPcNode } from './layout/workspace/nodes';
 
 export const NEED_UPDATE_GRAPH_PROPERTIES: (keyof PcElementAttributes)[] = ['offsetX', 'offsetY', 'width', 'height'];
 
