@@ -7,6 +7,7 @@ import { ElButton, ElIcon, ElInput, ElTable, ElTableColumn } from 'element-plus'
 import './index.scss';
 import { Array as SaArray } from 'sugar-sajs';
 import { cloneDeep } from 'lodash-es';
+import { isPcElementAttribute } from '../../element';
 
 export default defineComponent({
   name: 'widget-options',
@@ -32,7 +33,9 @@ export default defineComponent({
 
     const selectOptions: Ref<Option[]> = ref([]);
 
-    selectOptions.value = cloneDeep(props.drawer.selected[0].attrs[props.plugin.attr]);
+    if (isPcElementAttribute(props.plugin.attr, props.drawer.selected[0]) && props.plugin.attr === 'options') {
+      selectOptions.value = cloneDeep(props.drawer.selected[0].attrs[props.plugin.attr]!);
+    }
 
     const expose = {
       update() {

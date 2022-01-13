@@ -13,7 +13,6 @@ export enum ElementType {
 
 /** basic element attributes */
 export interface BasicElementAttributes {
-  [key: string]: any;
   /** element type */
   type: ElementType;
   /** unique id */
@@ -32,7 +31,6 @@ export interface BasicElementAttributes {
 
 /** basic element */
 export interface BasicElement {
-  [key: string]: any;
   parent: BasicElement | undefined;
   children?: BasicElement[];
   attrs: BasicElementAttributes;

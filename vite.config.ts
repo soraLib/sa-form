@@ -8,14 +8,16 @@ export default defineConfig({
   build: {
     outDir: process.env.BUILD_ENV === 'doc' ? 'docs' : 'dist'
   },
-  alias: [
-    {
-      find: '@antv/x6',
-      replacement: '@antv/x6/lib'
-    },
-    {
-      find: '@antv/x6-vue-shape',
-      replacement: '@antv/x6-vue-shape/lib'
-    }
-  ]
+  resolve: {
+    alias: [
+      {
+        find: '@antv/x6',
+        replacement: '@antv/x6/lib'
+      },
+      {
+        find: '@antv/x6-vue-shape',
+        replacement: '@antv/x6-vue-shape/lib'
+      }
+    ]
+  }
 });
