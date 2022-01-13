@@ -1,13 +1,13 @@
 import { ElOption, ElSelect } from 'element-plus';
 import { defineComponent, inject, ref } from 'vue';
-import { PcNodeInjectionKey } from '../provide';
+import { PcNode } from '..';
 
 import './select.scss';
 
 export default defineComponent({
   name: 'SaFormPcSelect',
   setup() {
-    const getNode = inject(PcNodeInjectionKey);
+    const getNode = inject('getNode') as () => PcNode;
 
     const node = getNode?.();
 
