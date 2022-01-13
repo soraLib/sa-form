@@ -1,6 +1,6 @@
 
 <template>
-  <div class="w-3/5 mx-auto h-full">
+  <div class="w-3/5 mx-auto h-full" style="min-width: calc(472px + 0.5rem);">
     <SaForm id="1" type="PcForm" class="h-1/2" />
   </div>
 </template>
@@ -17,6 +17,10 @@ import SaForm from './components/index';
   text-align: center;
   color: #2c3e50;
   height: 100vh;
-  padding: 24px 0;
+}
+
+body {
+  padding: 0;
+  margin: 0;
 }
 </style>

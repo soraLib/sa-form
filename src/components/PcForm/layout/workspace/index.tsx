@@ -2,7 +2,7 @@ import { Cell, Graph, JQuery, Node } from '@antv/x6';
 import { computed, defineComponent, h, onMounted, PropType, Ref, ref, ShallowRef, shallowRef } from 'vue';
 import { PcDrawer } from '../../drawer';
 import { createMockPcCanvas } from './mock';
-import { createPcNode, PcNode } from './node';
+import { createPcNode, PcNode } from './nodes';
 import { getCellRecProp, getSelectionRectangle, PcCell } from './utils';
 
 import { DeleteFilled } from '@element-plus/icons-vue';

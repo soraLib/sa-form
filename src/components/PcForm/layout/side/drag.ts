@@ -2,7 +2,7 @@ import { ElementType } from '../../../element';
 import { createElementByCell } from '../../../utils/element';
 import { PcDrawer } from '../../drawer';
 import { PcElement } from '../../element';
-import { createPcNode, PcNode } from '../workspace/node';
+import { createPcNode, PcNode } from '../workspace/nodes';
 
 export function getPcDragNode(node: PcNode, drawer: PcDrawer): PcNode {
   return getPcStencilNode(node, drawer);

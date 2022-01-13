@@ -1,6 +1,8 @@
 import { Node, Shape } from '@antv/x6';
-import { ElementType } from '../../../element';
-import { PcElement } from '../../element';
+import { VueShape } from '@antv/x6-vue-shape';
+import { ElementType } from '../../../../element';
+import { PcElement } from '../../../element';
+import PcSelect from './components/select';
 
 export interface PcNode extends Node {
   data: PcElement['attrs'];
@@ -27,11 +29,13 @@ export function createPcNode(element: PcElement): PcNode {
     }
 
     case ElementType.Select: {
-      return new Shape.Rect({
+      return new VueShape({
         ...baseNodeConfig,
-        attrs: {
-          rect: { fill: '#31D0C6', stroke: '#4B4A67', strokeWidth: 1 },
-          text: { text: ElementType[element.attrs.type], fill: 'white' }
+        shape: 'vue-shape',
+        component: {
+          render() {
+            return <PcSelect />;
+          }
         }
       });
     }
