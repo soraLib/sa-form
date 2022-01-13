@@ -246,8 +246,6 @@ export class PcDrawer implements BasicDrawer {
       return;
     }
 
-    console.log('prev record', prevRecord, this.history);
-
     if (isURecordDataList(prevRecord.data)) {
       for (const data of prevRecord.data) {
         const element = findNode(this.canvas, node => node.attrs.id === data.id);
@@ -341,6 +339,8 @@ function nodeDataChangeHook(drawer: PcDrawer, id: string, data: Partial<PcElemen
         height: data['height'] ?? prop.size.height
       }
     });
+
+    cell.updateData(data);
   } else {
     // set canvas data
     drawer.graph.size.resize(

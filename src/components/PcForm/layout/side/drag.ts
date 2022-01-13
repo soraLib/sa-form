@@ -29,8 +29,6 @@ function getPcStencilNode(node: PcNode, drawer: PcDrawer): PcNode {
   const nextId = drawer.getNextId();
   const parent = drawer.canvas;
 
-  console.log(node);
-
   switch (node.data.name) {
     case 'Button': {
       return createPcNode({

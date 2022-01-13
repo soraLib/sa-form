@@ -36,7 +36,7 @@ export default defineComponent({
 
     const expose = {
       update() {
-        return selectOptions;
+        return selectOptions.value;
       }
     };
 
