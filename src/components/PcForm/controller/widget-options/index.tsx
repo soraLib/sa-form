@@ -1,13 +1,14 @@
-import { defineComponent, PropType, Ref, ref } from 'vue';
+import { computed, defineComponent, onMounted, PropType, Ref, ref } from 'vue';
 import { SaPlugin } from '../../../plugin';
 import { PcDrawer } from '../../drawer';
 import { Plus } from '@element-plus/icons-vue';
-import { ElButton, ElIcon, ElInput, ElTable, ElTableColumn } from 'element-plus';
+import { ElButton, ElIcon, ElInput, ElTable, ElTableColumn, rowProps } from 'element-plus';
 
 import './index.scss';
 import { Array as SaArray } from 'sugar-sajs';
 import { cloneDeep } from 'lodash-es';
 import { isPcElementAttribute } from '../../element';
+import Sortable from 'sortablejs';
 
 export default defineComponent({
   name: 'widget-options',
@@ -22,6 +23,8 @@ export default defineComponent({
     }
   },
   setup(props, ctx) {
+    const table: Ref<null | any> = ref(null);
+
     interface Option {
       name: string;
     }
@@ -32,6 +35,7 @@ export default defineComponent({
     }
 
     const selectOptions: Ref<Option[]> = ref([]);
+    const tableData = computed(() => selectOptions.value);
 
     if (isPcElementAttribute(props.plugin.attr, props.drawer.selected[0]) && props.plugin.attr === 'options') {
       selectOptions.value = cloneDeep(props.drawer.selected[0].attrs[props.plugin.attr]!);
@@ -51,21 +55,28 @@ export default defineComponent({
       selectOptions.value.push({ name: '' });
     }
 
-    function moveUp({ $index }: Scope) {
-      if ($index) {
-        SaArray.swap(selectOptions.value, $index, $index - 1);
-      }
-    }
-
-    function moveDown({ $index }: Scope) {
-      if ($index < selectOptions.value.length - 1) {
-        SaArray.swap(selectOptions.value, $index, $index + 1);
-      }
-    }
-
     function deleteRow({ $index }: Scope) {
       SaArray.remove(selectOptions.value, $index);
     }
+
+    onMounted(() => {
+      const child = table.value.$el?.children[2]?.children[0]?.children[1];
+
+      if (child)
+
+        Sortable.create(child, {
+          delay: 100,
+          sort: !0,
+          forceFallback: !0,
+          scrollSensitivity: 100,
+          animation: 150,
+          onEnd: function({ newIndex, oldIndex }) {
+            if (newIndex === undefined || oldIndex === undefined) return;
+
+            SaArray.swap(selectOptions.value, oldIndex, newIndex);
+          }
+        });
+    });
 
     return () => <section class="widget-options">
       <header>
@@ -75,9 +86,11 @@ export default defineComponent({
       </header>
 
       <ElTable
-        data={selectOptions.value}
+        ref={table}
+        data={tableData.value}
         max-height="500px"
         border
+        rowKey={row => row.name}
         header-cell-style={{ 'text-align': 'center', 'background': '#eef1f6' }}
         cell-style={{ 'text-align': 'center', 'padding': 0 }}>
 
@@ -87,8 +100,6 @@ export default defineComponent({
 
         <ElTableColumn label="operations" width="280" v-slots={{
           default: (scope: Scope) => <>
-            <ElButton type="primary" plain size="mini" onClick={() => moveUp(scope)}>up</ElButton>
-            <ElButton type="primary" plain size="mini" onClick={() => moveDown(scope)}>down</ElButton>
             <ElButton type="danger" plain size="mini" onClick={() => deleteRow(scope)}>delete</ElButton>
           </>
         }}/>

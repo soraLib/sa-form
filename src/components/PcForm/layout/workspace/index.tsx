@@ -105,10 +105,6 @@ export default defineComponent({
                 height: canvas.attrs.height
               };
             }
-          },
-          clipboard: {
-            enabled: true,
-            useLocalStorage: true
           }
         });
 
@@ -119,8 +115,6 @@ export default defineComponent({
         if (nodes) {
           graph.addNodes(nodes);
         }
-
-        graph.enableHistory();
 
         graph.on('blank:mousedown', () => {
           graph.cleanSelection();
