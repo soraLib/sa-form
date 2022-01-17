@@ -1,4 +1,5 @@
 import { ElButton, ElDialog, ElInput } from 'element-plus';
+import { cloneDeep, isEqual } from 'lodash-es';
 import { computed, DefineComponent, defineComponent, h, nextTick, PropType, Ref, ref, shallowRef, watch } from 'vue';
 import { SaController } from '../../config';
 import { BasicDrawer } from '../../drawer';
@@ -66,9 +67,12 @@ export default defineComponent({
       try {
         const value = update();
 
-        props.drawer.updateElemData(props.drawer.selected[0], {
-          [props.plugin.attr]: value
-        });
+        /** create record when value update */
+        if (!isEqual(value, getPluginValue(props.drawer, props.plugin))) {
+          props.drawer.updateElemData(props.drawer.selected[0], {
+            [props.plugin.attr]: cloneDeep(value)
+          });
+        }
       } catch (err) {
         console.error(err);
       }
