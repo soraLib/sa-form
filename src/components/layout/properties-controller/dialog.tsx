@@ -84,25 +84,29 @@ export default defineComponent({
 
         <ElButton onClick={() => dialogVisible.value = true}>set</ElButton>
 
-        {
-          <ElDialog
-            title={props.plugin.dialog?.title ?? props.plugin.label}
-            modelValue={dialogVisible.value}
-            closeOnClickModal={false}
-            onClose={() => dialogVisible.value = false}
+        <div v-dialog-drag>
+          {
+            <ElDialog
+              title={props.plugin.dialog?.title ?? props.plugin.label}
+              modelValue={dialogVisible.value}
+              closeOnClickModal={false}
+              onClose={() => dialogVisible.value = false}
+              modal={false}
 
-            v-slots={{
-              footer: () => (
-                <div>
-                  <ElButton type="default" onClick={() => dialogVisible.value = false}>cancel</ElButton>
-                  <ElButton type="primary" onClick={handleConfirm}>submit</ElButton>
-                </div>
-              )
-            }}
-          >
-            { child.value }
-          </ElDialog>
-        }
+              v-slots={{
+                footer: () => (
+                  <div>
+                    <ElButton type="default" onClick={() => dialogVisible.value = false}>cancel</ElButton>
+                    <ElButton type="primary" onClick={handleConfirm}>submit</ElButton>
+                  </div>
+                )
+              }}
+            >
+              { child.value }
+            </ElDialog>
+          }
+        </div>
+
       </div>
     );
   }

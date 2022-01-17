@@ -8,7 +8,10 @@ import './assets/iconfont.css';
 
 import contextmenu from './components/VContextmenu/index';
 
+import dialogDrag from './directives/dialog-drag';
+
 const app = createApp(App);
 app.use(contextmenu);
+app.use(dialogDrag, { containment: true });
 
 app.mount('#app');
