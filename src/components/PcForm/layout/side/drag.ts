@@ -18,9 +18,11 @@ export function pcValidateNode(node: PcNode, drawer: PcDrawer): boolean {
   node.data.offsetX = position.x;
   node.data.offsetY = position.y;
 
-  const addedNode = createElementByCell(node, PcElement, drawer);
+  setTimeout(() => {
+    const addedNode = createElementByCell(node, PcElement, drawer);
 
-  drawer.addChild(addedNode);
+    drawer.addChild(addedNode, node.parent?.id);
+  }, 0);
 
   return true;
 }

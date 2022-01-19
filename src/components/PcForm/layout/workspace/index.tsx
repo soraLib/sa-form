@@ -8,6 +8,7 @@ import { getCellRecProp, getSelectionRectangle, PcCell } from './utils';
 import { DeleteFilled } from '@element-plus/icons-vue';
 import { copyNodes, cutNodes, pasteNodes, removeNodes } from './graph';
 import { chain } from 'sugar-sajs';
+import { ElementType } from '../../../element';
 
 export default defineComponent({
   name: 'SaPcFormRender',
@@ -56,8 +57,21 @@ export default defineComponent({
             enabled: true,
             multiple: true,
             rubberband: true,
-            movable: true,
-            showEdgeSelectionBox: true
+            movable: true
+          },
+          embedding: {
+            enabled: true,
+            validate: ({ parent, child }) => {
+              if (child.parent === parent) {
+                return true;
+              }
+
+              if (parent.data.type === ElementType.Container && !graph.hasCell(child)) {
+                return true;
+              }
+
+              return false;
+            }
           },
           resizing: true,
           translating: {
