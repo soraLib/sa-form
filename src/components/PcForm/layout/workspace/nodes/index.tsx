@@ -8,6 +8,7 @@ export interface PcNode extends Node {
   data: PcElement['attrs'];
 }
 
+/** create pc x6 node */
 export function createPcNode(element: PcElement) {
   const baseNodeConfig = Object.assign({
     id: element.attrs.id,
