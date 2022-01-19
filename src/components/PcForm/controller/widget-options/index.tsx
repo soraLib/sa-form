@@ -26,6 +26,7 @@ export default defineComponent({
     const table: Ref<null | any> = ref(null);
 
     interface Option {
+      id: string;
       name: string;
     }
 
@@ -38,7 +39,10 @@ export default defineComponent({
     const tableData = computed(() => selectOptions.value);
 
     if (isPcElementAttribute(props.plugin.attr, props.drawer.selected[0]) && props.plugin.attr === 'options') {
-      selectOptions.value = cloneDeep(props.drawer.selected[0].attrs[props.plugin.attr]!);
+      selectOptions.value = props.drawer.selected[0].attrs[props.plugin.attr]!.map((option, index) => ({
+        name: option.name,
+        id: String(index)
+      }));
     }
 
     const expose = {
@@ -52,7 +56,7 @@ export default defineComponent({
     });
 
     function addRow() {
-      selectOptions.value.push({ name: '' });
+      selectOptions.value.push({ name: '', id: new Date().toTimeString() });
     }
 
     function deleteRow({ $index }: Scope) {
@@ -90,7 +94,7 @@ export default defineComponent({
         data={tableData.value}
         max-height="500px"
         border
-        rowKey={row => row.name}
+        rowKey={row => row.id}
         header-cell-style={{ 'text-align': 'center', 'background': '#eef1f6' }}
         cell-style={{ 'text-align': 'center', 'padding': 0 }}>
 
