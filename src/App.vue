@@ -1,12 +1,12 @@
 
 <template>
   <div class="w-3/5 mx-auto h-full" style="min-width: calc(472px + 0.5rem);">
-    <SaFormX6 id="1" type="PcForm" class="h-1/2" />
+    <SaForm id="1" type="PcForm" class="h-1/2" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import SaFormX6 from './SaFormX6/index';
+import SaForm from './SaForm/index';
 </script>
 
 <style>

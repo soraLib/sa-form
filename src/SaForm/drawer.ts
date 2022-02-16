@@ -22,8 +22,6 @@ export interface BasicDrawer {
   history: BasicRecordStore;
   /** current selected elements */
   selected: BasicElement[];
-  /** drawer x6 graph instance */
-  graph: Graph | undefined;
 
   getNextId(): string;
   updateElemData(id: string, data: Partial<BasicElement['attrs']>, needRecord?: boolean): BasicElement | undefined;
