@@ -31,7 +31,7 @@ export interface BasicElementAttributes {
 
 /** basic element */
 export interface BasicElement {
-  parent: BasicElement | undefined;
+  parent?: BasicElement;
   children?: BasicElement[];
   attrs: BasicElementAttributes;
 }
