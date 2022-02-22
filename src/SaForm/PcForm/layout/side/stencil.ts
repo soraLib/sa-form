@@ -59,7 +59,8 @@ export const NativePcSideStencil: NativeStencil = (drawer: PcDrawer) => ({
         type: ElementType.Button,
         name: 'Button',
         width: 80,
-        height: 40
+        height: 40,
+        background: '#eee'
       }
     }]
   }

@@ -1,3 +1,5 @@
+import { CSSProperties } from 'vue';
+
 /** element types */ // TODO: split pc types
 export enum ElementType {
   /** pc form canvas */
@@ -27,6 +29,10 @@ export interface BasicElementAttributes {
   width: number;
   /** element height `px` */
   height: number;
+  /** element background */
+  background?: CSSProperties['background'];
+  /** element display name */
+  display?: string;
 }
 
 /** basic element */

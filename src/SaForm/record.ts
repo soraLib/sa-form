@@ -5,8 +5,6 @@ export enum BasicRecordType {
   Add,
   /** delete element */
   Delete,
-  /** move element */
-  Move,
   /** modify element attribute */
   Attr,
 }

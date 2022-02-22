@@ -1,3 +1,13 @@
 .sa-form-side {
-  
+
+  .native-item {
+    color: rgb(238, 238, 238);
+
+    &:hover {
+      outline: 1px solid rgb(145, 145, 145);
+      box-sizing: border-box;
+      background-size: 26px 26px;
+      background: rgba(0, 0, 0, 20%);
+    }
+  }
 }

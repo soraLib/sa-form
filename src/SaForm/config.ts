@@ -23,7 +23,8 @@ const createPcFormConfig = (display: SaFormDisplay) => ({
       height: 600,
       offsetX: 0,
       offsetY: 0
-    }
+    },
+    display
   }),
   header: PcHeaderOptions,
   side: getPcSideStencil(display),

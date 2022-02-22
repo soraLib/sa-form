@@ -7,6 +7,8 @@ import { BasicElement, ElementType } from '../../element';
 
 import NativeItem from './native';
 
+import './index.scss';
+
 // x6 stencil config
 export type SideStencil = (drawer: any /** TODO: */) => {
   groups: Addon.Stencil.Group[];
@@ -128,7 +130,7 @@ export default defineComponent({
 
   render() {
     return (
-      <div class={`sa-form-side flex flex-col justify-start p-1 relative ${this.display === 'x6' && 'w-52'}`}>
+      <div class={`sa-form-side flex flex-col justify-start p-1 box-border relative ${this.display === 'x6' && 'w-52'}`}>
         {
           this.display === 'x6'
             ? <div ref="refStencil" />

@@ -1,5 +1,6 @@
 import { defineComponent, PropType } from 'vue';
-import { NativeItem, NativeStencil } from '.';
+import { NativeItem } from '.';
+import { setDataTransfer } from '../../utils/drag';
 
 export default defineComponent({
   name: 'NativeSidebarItem',
@@ -12,9 +13,19 @@ export default defineComponent({
   setup(props) {
     const iconClass = `iconfont ${props.item.icon}`;
 
+    function onDragstart(event: DragEvent) {
+      setDataTransfer(event, 'effectAllowed', 'copy', false);
+      event.dataTransfer?.setData('element', JSON.stringify(props.item.attrs));
+    }
+
     return () => (
-      <div class="p-1" title={props.item.title ?? props.item.attrs.name}>
-        <i class={`${iconClass}`} style={{ fontSize: '40px' }}></i>
+      <div
+        class="native-item p-1 cursor-move"
+        title={props.item.title ?? props.item.attrs.name}
+        draggable
+        onDragstart={onDragstart}
+      >
+        <i class={`${iconClass}`} style={{ fontSize: '30px' }}></i>
       </div>
     );
   }
