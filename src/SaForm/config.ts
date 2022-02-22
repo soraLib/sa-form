@@ -1,18 +1,19 @@
 import { BasicDrawer, DrawerType } from './drawer';
 import { HeaderTool } from './layout/header';
-import { SideStencil } from './layout/sidebar';
+import { NativeStencil, SideStencil } from './layout/sidebar';
 import { PcDrawer } from './PcForm/drawer';
 import { DefineComponent, PropType } from 'vue';
 
 import { PcHeaderOptions } from './PcForm/layout/header';
-import { PcSideStencil } from './PcForm/layout/side';
+import { getPcSideStencil } from './PcForm/layout/side';
 import PcWorkspace from './PcForm/layout/workspace';
 import { ElementType } from './element';
 import { SaPlugin, SaPluginLayout } from './plugin';
 import { PcPlugin, pcPluginValueChange } from './PcForm/plugin';
+import { SaFormDisplay } from '.';
 const PcComponents = import.meta.glob('./PcForm/controller/*/index.tsx');
 
-const createPcFormConfig = () => ({
+const createPcFormConfig = (display: SaFormDisplay) => ({
   drawer: new PcDrawer({
     attrs: {
       type: ElementType.Canvas,
@@ -22,10 +23,11 @@ const createPcFormConfig = () => ({
       height: 600,
       offsetX: 0,
       offsetY: 0
-    }
+    },
+    display
   }),
   header: PcHeaderOptions,
-  side: PcSideStencil,
+  side: getPcSideStencil(display),
   workspace: PcWorkspace,
   controller: {
     plugins: PcPlugin,
@@ -43,10 +45,10 @@ export type SaController = {
 }
 
 export type ILayout = {
-  [key in DrawerType]: () => {
+  [key in DrawerType]: (display: SaFormDisplay) => {
     drawer: BasicDrawer;
     header: HeaderTool[];
-    side: SideStencil;
+    side: SideStencil | NativeStencil;
     workspace: DefineComponent<{
       drawer: {
         required: true,
@@ -58,5 +60,5 @@ export type ILayout = {
 }
 
 export const LAYOUTS: ILayout = {
-  'PcForm': () => createPcFormConfig()
+  'PcForm': (display: SaFormDisplay) => createPcFormConfig(display)
 };

@@ -6,6 +6,7 @@ Low-code form component, pc and app mode are both support.
 
 ## TODO
 
-- [ ] Pc form
+- [ ] Pc X6 form
+- [ ] Pc Native form
 - [ ] Flow form
 - [ ] App form
