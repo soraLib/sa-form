@@ -1,5 +1,6 @@
 import { Cell, Graph } from '@antv/x6';
 import { findNode } from 'sugar-sajs';
+import { SaFormDisplay } from '..';
 import { BasicDrawer } from '../drawer';
 import { BasicElement, BasicElementAttributes } from '../element';
 
@@ -76,4 +77,8 @@ export function setGraphSelected(arg: string | string[], graph: Graph) {
 
 export function isElementAttribute(attr: string, elem: BasicElement): attr is keyof BasicElementAttributes {
   return Reflect.has(elem.attrs, attr);
+}
+
+export function isGraphExisted(graph: Graph | undefined, display: SaFormDisplay): graph is Graph {
+  return graph !== undefined && display === 'x6';
 }

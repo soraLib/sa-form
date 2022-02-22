@@ -7,6 +7,9 @@ import { PcCell } from './utils';
 import { DeleteFilled } from '@element-plus/icons-vue';
 import { copyNodes, cutNodes, pasteNodes, removeNodes } from './graph';
 import { createX6Graph } from './graph/x6';
+import { SaFormDisplay } from '../../..';
+
+import NativeWorkspace from './graph/native';
 
 export default defineComponent({
   name: 'SaPcFormRender',
@@ -14,6 +17,9 @@ export default defineComponent({
     drawer: {
       required: true,
       type: Object as PropType<PcDrawer>
+    },
+    display: {
+      type: String as PropType<SaFormDisplay>
     }
   },
 
@@ -29,9 +35,15 @@ export default defineComponent({
       if (workspace.value) {
         const canvas = createMockPcCanvas();
 
-        console.log('create graph', canvas);
+        console.log('create canvas', canvas);
 
-        createX6Graph(workspace.value, canvas, props.drawer);
+        if (props.display === 'x6') {
+          return createX6Graph(workspace.value, canvas, props.drawer);
+        }
+
+        if (props.display === 'native') {
+          props.drawer.setCanvas(canvas);
+        }
       }
     });
 
@@ -73,7 +85,7 @@ export default defineComponent({
   render() {
     return (
       <div>
-        <div ref="workspace"></div>
+        { this.display === 'native' ? <NativeWorkspace ref="workspace" drawer={this.drawer} /> : <div ref="workspace" />}
 
         <v-contextmenu ref="contextmenu">
           {this.graphContextmenu}

@@ -8,9 +8,10 @@ import { PcRecord, PcRecordStore } from './record';
 import { findNode, findTreeNode, removeTreeNode, setObjectValues } from 'sugar-sajs';
 import { cloneDeep, pick } from 'lodash-es';
 import { getCellRecProp } from './layout/workspace/utils';
-import { getNextId, setGraphSelected } from '../utils/element';
+import { getNextId, isGraphExisted, setGraphSelected } from '../utils/element';
 import { PcClipBoard } from './clipboard';
 import { createPcNode } from './layout/workspace/nodes';
+import { SaFormDisplay } from '..';
 
 export const NEED_UPDATE_GRAPH_PROPERTIES: (keyof PcElementAttributes)[] = ['offsetX', 'offsetY', 'width', 'height'];
 
@@ -30,12 +31,14 @@ export class PcDrawer implements BasicDrawer {
   selected: PcElement[] = [];
   graph: Graph | undefined;
   nextId: string;
+  display: SaFormDisplay;
 
-  constructor(config: Partial<PcElement> & {attrs: {}}) {
+  constructor(config: Partial<PcElement> & {attrs: {}, display: SaFormDisplay}) {
     this.type = 'PcForm';
     this.history = new PcRecordStore();
     this.clipboard = new PcClipBoard();
     this.nextId = '1';
+    this.display = config.display;
     this.canvas = new PcElement({
       parent: undefined,
       children: [],
@@ -119,8 +122,6 @@ export class PcDrawer implements BasicDrawer {
   setSelected(element: PcElement): PcElement;
   setSelected(elements: PcElement[]): PcElement[];
   setSelected(arg?: string | string[] | PcElement | PcElement[]) {
-    if (!this.graph) return;
-
     if (!arguments.length || (Array.isArray(arg) && !arg.length)) {
       this.selected = [this.canvas];
 
@@ -134,7 +135,8 @@ export class PcDrawer implements BasicDrawer {
 
       if (node) {
         this.selected = [node];
-        setGraphSelected(arg, this.graph);
+
+        if (isGraphExisted(this.graph, this.display)) setGraphSelected(arg, this.graph);
       }
 
       return node;
@@ -152,7 +154,7 @@ export class PcDrawer implements BasicDrawer {
         }
       }
 
-      setGraphSelected(selected.map(item => item.attrs.id), this.graph);
+      if (isGraphExisted(this.graph, this.display)) setGraphSelected(selected.map(item => item.attrs.id), this.graph);
       this.selected = selected;
 
       return selected;
@@ -160,7 +162,7 @@ export class PcDrawer implements BasicDrawer {
 
     if (typeof arg === 'object') {
       this.selected = [arg];
-      setGraphSelected(arg.attrs.id, this.graph);
+      if (isGraphExisted(this.graph, this.display)) setGraphSelected(arg.attrs.id, this.graph);
 
       return arg;
     }
@@ -236,8 +238,6 @@ export class PcDrawer implements BasicDrawer {
   }
 
   undo() {
-    if (!this.graph) return;
-
     const prevRecord = this.history.getPrevRecord();
 
     if (!prevRecord) {
@@ -352,19 +352,21 @@ function nodeDataChangeHook(drawer: PcDrawer, id: string, data: Partial<PcElemen
 
 /** add graph and canvas node */
 function addDrawerNode(drawer: PcDrawer, element?: PcElement) {
-  if (!drawer.graph || !drawer.canvas.children || !element) return;
-
-  const hasCell = drawer.graph.hasCell(element.attrs.id);
+  if (!drawer.canvas.children || !element) return;
 
   if (element.parent) {
-    if (!hasCell) {
-      const x6Node = createPcNode(element);
-      drawer.graph.addCell(x6Node);
+    if (drawer.graph && drawer.display === 'x6') {
+      const hasCell = drawer.graph.hasCell(element.attrs.id);
 
-      // bind x6 cells' paternity
-      const x6Parent = drawer.graph.getCellById(element.parent.attrs.id);
-      if (x6Parent) {
-        x6Parent.addChild(x6Node);
+      if (!hasCell) {
+        const x6Node = createPcNode(element);
+        drawer.graph.addCell(x6Node);
+
+        // bind x6 cells' paternity
+        const x6Parent = drawer.graph.getCellById(element.parent.attrs.id);
+        if (x6Parent) {
+          x6Parent.addChild(x6Node);
+        }
       }
     }
 
@@ -379,12 +381,12 @@ function addDrawerNode(drawer: PcDrawer, element?: PcElement) {
 
 /** remove graph and canvas node */
 function removeDrawerNode(drawer: PcDrawer, id?: string) {
-  if (!drawer.graph || !drawer.canvas.children || !id) return;
+  if (!drawer.canvas.children || !id) return;
 
   const element = findNode(drawer.canvas, node => node.attrs.id === id);
 
   if (element && drawer.canvas.children) {
-    drawer.graph.removeCell(element.attrs.id);
+    drawer.display === 'x6' && drawer.graph?.removeCell(element.attrs.id);
     removeTreeNode(drawer.canvas.children, node => node.attrs.id === element.attrs.id);
   }
 }

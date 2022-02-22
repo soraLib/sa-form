@@ -25,7 +25,8 @@ export const createMockPcCanvas: () => PcElement = () => {
       width: 80,
       height: 40,
       offsetX: 200,
-      offsetY: 100
+      offsetY: 100,
+      background: '#eee'
     }
   });
 
@@ -38,7 +39,8 @@ export const createMockPcCanvas: () => PcElement = () => {
       width: 80,
       height: 40,
       offsetX: 150,
-      offsetY: 200
+      offsetY: 200,
+      background: '#eee'
     }
   });
 
@@ -51,7 +53,8 @@ export const createMockPcCanvas: () => PcElement = () => {
       width: 400,
       height: 200,
       offsetX: 50,
-      offsetY: 300
+      offsetY: 300,
+      background: '#eee'
     },
     children: []
   });

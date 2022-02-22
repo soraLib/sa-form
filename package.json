@@ -16,7 +16,7 @@
     "element-plus": "^1.2.0-beta.6",
     "lodash-es": "^4.17.21",
     "sortablejs": "^1.14.0",
-    "sugar-sajs": "^1.0.0-pre.18",
+    "sugar-sajs": "^1.0.0-pre.25",
     "vue": "^3.2.26"
   },
   "devDependencies": {

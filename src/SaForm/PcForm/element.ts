@@ -18,7 +18,7 @@ export interface IPcElement extends BasicElement {
 
 export class PcElement implements IPcElement {
   [key: string | number]: any;
-  parent: PcElement | undefined;
+  parent?: PcElement;
   children?: PcElement[];
   attrs: PcElementAttributes;
 

@@ -1,0 +1,58 @@
+.native-element {
+  @apply select-none;
+  position: absolute;
+  cursor: default;
+
+  &:active {
+    cursor: move;
+  }
+
+  .vdr {
+    box-sizing: border-box;
+  }
+  .vdr.inactive {
+    display: none;
+  }
+  .vdr.active:before {
+    content: '';
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    outline: 1px dashed red;
+  }
+  .vdr-stick {
+    width: 6px;
+    height: 6px;
+    box-sizing: border-box;
+    position: absolute;
+    font-size: 1px;
+    background: #ffffff;
+    border: 1px solid #6c6c6c;
+    z-index: 100;
+  }
+
+  .vdr-stick-tl,
+  .vdr-stick-br {
+    cursor: nwse-resize;
+  }
+  .vdr-stick-tm,
+  .vdr-stick-bm {
+    left: 50%;
+    cursor: ns-resize;
+  }
+  .vdr-stick-tr,
+  .vdr-stick-bl {
+    cursor: nesw-resize;
+  }
+  .vdr-stick-ml,
+  .vdr-stick-mr {
+    top: 50%;
+    cursor: ew-resize;
+  }
+  .vdr-stick.not-resizable {
+    display: none;
+  }
+}
