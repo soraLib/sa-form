@@ -20,8 +20,8 @@
     }
 
     .sa-plugin {
-      & > .el-input > input, & > input {
-        height: 26px;
+      & > .el-input, & > .el-color-picker > .el-color-picker__trigger {
+        height: 30px;
         border-radius: 0;
       }
 

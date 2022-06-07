@@ -82,9 +82,9 @@ export default defineComponent({
 
     return () => (
       <div class="dialog-container">
-        { props.plugin.dialog?.filter ?
+        { props.plugin?.filter ?
           <ElInput modelValue={
-            props.plugin.dialog.filter(getPluginValue(props.drawer, props.plugin))} disabled /> : '' }
+            props.plugin.filter(getPluginValue(props.drawer, props.plugin))} disabled /> : '' }
 
         <ElButton onClick={() => dialogVisible.value = true}>set</ElButton>
 

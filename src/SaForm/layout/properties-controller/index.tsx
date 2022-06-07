@@ -41,7 +41,7 @@ export default defineComponent({
           plugin.value ?
             plugin.value.basic?.map((item =>
               <div class="controller-item">
-                <div class="controller-item-label">{item.label}</div>
+                <div class="controller-item-label" title={item.title}>{item.label}</div>
                 <div class="controller-item-plugin">
                   <PluginItem plugin={item} drawer={props.drawer} controller={props.controller} />
                 </div>
