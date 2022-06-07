@@ -17,15 +17,17 @@ export interface SaPlugin {
   attr: string;
   /** plugin display type */
   type: SaPluginType;
+  /** plugin full name, used on DOM's title */
+  title?: string;
   /** dialog component settings, needed when SaPlugin type is `Dialog` */
   dialog?: {
     /** component name */
     component: string;
     /** dialog title, set plugin label in default */
     title?: string;
-    /** value filter for display format data */
-    filter?: (value: any) => string;
   }
+  /** value filter for display format data */
+  filter?: (value: any) => string;
   /** plugin disable option */
   disabled?: boolean;
 }
@@ -61,6 +63,12 @@ export const BasicPlugins = {
     label: 'y',
     attr: 'offsetY',
     type: SaPluginType.Number
+  },
+  'widget-background': {
+    label: 'BGD',
+    title: 'background',
+    attr: 'background',
+    type: SaPluginType.Color
   }
 } as const;
 

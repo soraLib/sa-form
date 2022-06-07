@@ -1,7 +1,7 @@
 import { computed, defineComponent, PropType, VNode } from 'vue';
 import { SaPlugin, SaPluginType } from '../../plugin';
 
-import { ElInput, ElInputNumber } from 'element-plus';
+import { ElColorPicker, ElInput, ElInputNumber } from 'element-plus';
 import { BasicDrawer } from '../../drawer';
 import { SaController } from '../../config';
 import SaDialog from './dialog';
@@ -32,6 +32,13 @@ function createPlugin(plu: SaPlugin, drawer: BasicDrawer, controller: SaControll
 
     case SaPluginType.Dialog: {
       return <SaDialog class="sa-plugin" drawer={drawer} plugin={plu} controller={controller} />;
+    }
+
+    case SaPluginType.Color: {
+      return <div class="flex sa-plugin">
+        <ElInput disabled modelValue={modelValue}></ElInput>
+        <ElColorPicker modelValue={modelValue} onChange={(v) => handlePluginValueChange(plu, v, drawer, controller.valueChange)} disabled={plu.disabled ?? false}  />
+      </div>;
     }
 
     default: {

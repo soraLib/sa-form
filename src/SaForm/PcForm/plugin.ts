@@ -20,7 +20,8 @@ export const PcPlugin: SaPluginLayout = {
       BasicPlugins['widget-width'],
       BasicPlugins['widget-height'],
       BasicPlugins['widget-offsetX'],
-      BasicPlugins['widget-offsetY']
+      BasicPlugins['widget-offsetY'],
+      BasicPlugins['widget-background']
     ]
   },
   [ElementType.Button]: {
@@ -30,7 +31,8 @@ export const PcPlugin: SaPluginLayout = {
       BasicPlugins['widget-width'],
       BasicPlugins['widget-height'],
       BasicPlugins['widget-offsetX'],
-      BasicPlugins['widget-offsetY']
+      BasicPlugins['widget-offsetY'],
+      BasicPlugins['widget-background']
     ]
   },
   [ElementType.Select]: {
