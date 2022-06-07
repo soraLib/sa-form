@@ -1,7 +1,7 @@
-import { App } from 'vue';
+import { Plugin } from 'vue';
 
-export default {
-  install: function(app: App, options?: { containment?: boolean }) {
+const dialogDrag: Plugin = {
+  install: function(app, options?: { containment?: boolean }) {
     const containment = options?.containment ? true : false ?? false;
 
     const getViewportSize = function() {
@@ -67,3 +67,5 @@ export default {
     });
   }
 };
+
+export default dialogDrag;
