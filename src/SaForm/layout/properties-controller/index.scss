@@ -22,7 +22,6 @@
     .sa-plugin {
       & > .el-input, & > .el-color-picker > .el-color-picker__trigger {
         height: 30px;
-        border-radius: 0;
       }
 
       &.el-input-number {
@@ -55,6 +54,13 @@
         & > .el-button {
           width: 120px;
         }
+      }
+
+      &.el-input > .el-input__wrapper,
+      & > .el-input > .el-input__wrapper,
+      & > .el-color-picker > .el-color-picker__trigger,
+      & > .el-input-number > .el-input__wrapper {
+        border-radius: 0;
       }
     }
   }
