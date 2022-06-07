@@ -1,11 +1,6 @@
-import { Cell, Rectangle } from '@antv/x6';
 import { PcElement } from '../../element';
 
-export interface PcCell extends Cell {
-  data: PcElement['attrs'];
-}
-
-export function getSelectionRectangle(cells: Cell[] | PcElement[]): Rectangle.RectangleLike {
+export function getSelectionRectangle(cells: PcElement[]) {
   const prop = getCellRecProp(cells[0]);
 
   let minOffsetX = prop.position.x;
@@ -42,16 +37,9 @@ export function getSelectionRectangle(cells: Cell[] | PcElement[]): Rectangle.Re
   };
 }
 
-export function getCellRecProp(cell: PcCell | PcElement) {
-  if (cell instanceof PcElement) {
-    return {
-      position: { x: cell.attrs.offsetX, y: cell.attrs.offsetY },
-      size: { width: cell.attrs.width, height: cell.attrs.height }
-    };
-  }
-
+export function getCellRecProp(cell: PcElement) {
   return {
-    position: cell.getProp<{x: number; y: number}>('position'),
-    size: cell.getProp<{width: number; height: number}>('size')
+    position: { x: cell.attrs.offsetX, y: cell.attrs.offsetY },
+    size: { width: cell.attrs.width, height: cell.attrs.height }
   };
 }

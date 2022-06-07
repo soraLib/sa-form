@@ -2,11 +2,10 @@ import { computed, defineComponent, onMounted, PropType, Ref, ref } from 'vue';
 import { SaPlugin } from '../../../plugin';
 import { PcDrawer } from '../../drawer';
 import { Plus } from '@element-plus/icons-vue';
-import { ElButton, ElIcon, ElInput, ElTable, ElTableColumn, rowProps } from 'element-plus';
+import { ElButton, ElIcon, ElInput, ElTable, ElTableColumn } from 'element-plus';
 
 import './index.scss';
 import { Array as SaArray } from 'sugar-sajs';
-import { cloneDeep } from 'lodash-es';
 import { isPcElementAttribute } from '../../element';
 import Sortable from 'sortablejs';
 
@@ -104,7 +103,7 @@ export default defineComponent({
 
         <ElTableColumn label="operations" width="280" v-slots={{
           default: (scope: Scope) => <>
-            <ElButton type="danger" plain size="mini" onClick={() => deleteRow(scope)}>delete</ElButton>
+            <ElButton type="danger" plain onClick={() => deleteRow(scope)}>delete</ElButton>
           </>
         }}/>
       </ElTable>

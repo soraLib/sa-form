@@ -1,4 +1,4 @@
-import { App } from 'vue';
+import { Plugin } from 'vue';
 
 import directive from './directive';
 
@@ -8,9 +8,8 @@ import ContextmenuDivider from './components/ContextmenuDivider';
 import ContextmenuSubmenu from './components/ContextmenuSubmenu';
 import ContextmenuGroup from './components/ContextmenuGroup';
 
-const install = (app: App): void => {
+const install: Plugin = (app) => {
   app.directive('contextmenu', directive);
-
   app.component(Contextmenu.name, Contextmenu);
   app.component(ContextmenuItem.name, ContextmenuItem);
   app.component(ContextmenuDivider.name, ContextmenuDivider);
