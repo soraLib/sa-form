@@ -1,4 +1,3 @@
-import { Graph } from '@antv/x6';
 import { BasicElement } from './element';
 import { BasicRecordStore } from './record';
 
@@ -22,10 +21,8 @@ export interface BasicDrawer {
   history: BasicRecordStore;
   /** current selected elements */
   selected: BasicElement[];
-  /** drawer x6 graph instance, used in X6 mode */
-  graph?: Graph;
-  /** div container, used in Native mode */
-  nativeGraph?: HTMLDivElement;
+  /** div container */
+  containter?: HTMLDivElement;
 
   getNextId(): string;
   updateElemData(id: string, data: Partial<BasicElement['attrs']>, needRecord?: boolean): BasicElement | undefined;
