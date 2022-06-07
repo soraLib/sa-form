@@ -3,8 +3,6 @@ import { findNode, setObjectValues } from 'sugar-sajs';
 import { BasicClipBoard } from '../clipboard';
 import { PcDrawer } from './drawer';
 import { PcElement } from './element';
-import { removeNodes } from './layout/workspace/graph';
-import { createPcNode } from './layout/workspace/nodes';
 
 export class PcClipBoard implements BasicClipBoard {
   clips: {
@@ -28,15 +26,13 @@ export class PcClipBoard implements BasicClipBoard {
       elements: cloneDeep(drawer.selected), // TODO: options
       type: 'cut'
     };
-
-    removeNodes(drawer);
   }
 
   paste(drawer: PcDrawer, parent = drawer.canvas.attrs.id, options?: {
     nodeProps?: (element: PcElement) => Partial<PcElement['attrs']>;
     deep?: boolean;
   }): PcElement[] | undefined {
-    if (this.isEmpty(this.clips) || !drawer.graph) return;
+    if (this.isEmpty(this.clips)) return;
 
     const parentElement = findNode(drawer.canvas, n => n.attrs.id === parent);
 
@@ -56,18 +52,7 @@ export class PcClipBoard implements BasicClipBoard {
       return paste;
     });
 
-    const cells = newPasteElements.map(ele => createPcNode(ele));
-    const parentCell = parent ? drawer.graph.getCellById(parentElement.attrs.id) : undefined;
-
-    if (parentCell) {
-      for (const cell of cells) {
-        cell.setParent(parentCell);
-        parentCell.addChild(cell);
-      }
-    }
-
     drawer.addChildren(newPasteElements, parent);
-    drawer.graph.addNodes(cells);
 
     return newPasteElements;
   }

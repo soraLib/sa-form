@@ -1,15 +1,11 @@
-import { Cell, JQuery } from '@antv/x6';
-import { computed, defineComponent, h, onMounted, PropType, Ref, ref, ShallowRef, shallowRef } from 'vue';
+import { computed, defineComponent, onMounted, PropType, Ref, ref, ShallowRef, shallowRef } from 'vue';
 import { PcDrawer } from '../../drawer';
 import { createMockPcCanvas } from './mock';
-import { PcCell } from './utils';
 
 import { DeleteFilled } from '@element-plus/icons-vue';
-import { copyNodes, cutNodes, pasteNodes, removeNodes } from './graph';
-import { createX6Graph } from './graph/x6';
-import { SaFormDisplay } from '../../..';
 
 import NativeWorkspace from './graph/native';
+import { ElementType } from '../../../element';
 
 export default defineComponent({
   name: 'SaPcFormRender',
@@ -17,9 +13,6 @@ export default defineComponent({
     drawer: {
       required: true,
       type: Object as PropType<PcDrawer>
-    },
-    display: {
-      type: String as PropType<SaFormDisplay>
     }
   },
 
@@ -27,48 +20,39 @@ export default defineComponent({
     const workspace: Ref<HTMLDivElement | null> = ref(null);
     // TODO: contentmenu type
     const contextmenu: Ref<any | null> = ref(null);
-    const selectedCells: Ref<PcCell[]> = ref([]);
-    const contextmenuEvent: ShallowRef<JQuery.ContextMenuEvent | undefined> = shallowRef();
-    const parent: ShallowRef<Cell | undefined> = shallowRef();
+    // const contextmenuEvent: ShallowRef<JQuery.ContextMenuEvent | undefined> = shallowRef();
 
     onMounted(() => {
       if (workspace.value) {
         const canvas = createMockPcCanvas();
 
         console.log('create canvas', canvas);
-
-        if (props.display === 'x6') {
-          return createX6Graph(workspace.value, canvas, props.drawer);
-        }
-
-        if (props.display === 'native') {
-          props.drawer.setCanvas(canvas);
-        }
+        props.drawer.setCanvas(canvas);
       }
     });
 
     const graphContextmenu = computed(() => {
-      if (selectedCells.value.length) { // TODO:
+      if (props.drawer.selected[0]?.attrs.type !== ElementType.Canvas) {
         return (
           <>
-            <v-contextmenu-item onClick={() => copyNodes(props.drawer)}>
+            <v-contextmenu-item onClick={() => props.drawer.clipboard.copy(props.drawer)}>
               copy
             </v-contextmenu-item>
-            <v-contextmenu-item onClick={() => cutNodes(props.drawer)}>
+            <v-contextmenu-item onClick={() => props.drawer.clipboard.cut(props.drawer)}>
               cut
             </v-contextmenu-item>
-            <v-contextmenu-item onClick={() => pasteNodes(contextmenuEvent.value, parent.value, props.drawer)}>
+            <v-contextmenu-item disabled={props.drawer.clipboard.isEmpty()} onClick={() => props.drawer.clipboard.paste(props.drawer)}>
               paste
             </v-contextmenu-item>
-            <v-contextmenu-item type="danger" icon={<DeleteFilled />} onClick={() => removeNodes(props.drawer)}>
+            {/* <v-contextmenu-item type="danger" icon={<DeleteFilled />} onClick={props.drawer}>
               delete
-            </v-contextmenu-item>
+            </v-contextmenu-item> */}
           </>
         );
       }
 
       return (
-        <v-contextmenu-item onClick={() => pasteNodes(contextmenuEvent.value, undefined, props.drawer)}>
+        <v-contextmenu-item disabled={props.drawer.clipboard.isEmpty()} onClick={() => props.drawer.clipboard.paste(props.drawer)}>
           paste
         </v-contextmenu-item>
       );
@@ -77,7 +61,6 @@ export default defineComponent({
     return {
       workspace,
       contextmenu,
-      selectedCells,
       graphContextmenu
     };
   },
@@ -85,7 +68,7 @@ export default defineComponent({
   render() {
     return (
       <div>
-        { this.display === 'native' ? <NativeWorkspace ref="workspace" drawer={this.drawer} /> : <div ref="workspace" />}
+        <NativeWorkspace ref="workspace" drawer={this.drawer} v-contextmenu:contextmenu />
 
         <v-contextmenu ref="contextmenu">
           {this.graphContextmenu}

@@ -1,19 +1,12 @@
-import { Cell, Graph } from '@antv/x6';
 import { BasicDrawer, DrawerType } from '../drawer';
-import { BasicElement } from '../element';
 import { BasicRecordStore, BasicRecordType, isCDRecordDataList, isURecordData, isURecordDataList } from '../record';
-import { PcElement, PcElementAttributes } from './element';
+import { PcElement } from './element';
 import { PcRecord, PcRecordStore } from './record';
 
 import { findNode, findTreeNode, removeTreeNode, setObjectValues } from 'sugar-sajs';
 import { cloneDeep, pick } from 'lodash-es';
-import { getCellRecProp } from './layout/workspace/utils';
-import { getNextId, isGraphExisted, setGraphSelected } from '../utils/element';
+import { getNextId } from '../utils/element';
 import { PcClipBoard } from './clipboard';
-import { createPcNode } from './layout/workspace/nodes';
-import { SaFormDisplay } from '..';
-
-export const NEED_UPDATE_GRAPH_PROPERTIES: (keyof PcElementAttributes)[] = ['offsetX', 'offsetY', 'width', 'height'];
 
 type IdUpdateData = { id: string, data: Partial<PcElement['attrs']> };
 type ElUpdateData = { element: PcElement, data: Partial<PcElement['attrs']> };
@@ -29,16 +22,13 @@ export class PcDrawer implements BasicDrawer {
   history: BasicRecordStore;
   clipboard: PcClipBoard;
   selected: PcElement[] = [];
-  graph: Graph | undefined;
   nextId: string;
-  display: SaFormDisplay;
 
-  constructor(config: Partial<PcElement> & {attrs: {}, display: SaFormDisplay}) {
+  constructor(config: Partial<PcElement> & { attrs: {} }) {
     this.type = 'PcForm';
     this.history = new PcRecordStore();
     this.clipboard = new PcClipBoard();
     this.nextId = '1';
-    this.display = config.display;
     this.canvas = new PcElement({
       parent: undefined,
       children: [],
@@ -51,10 +41,6 @@ export class PcDrawer implements BasicDrawer {
     this.selected = [canvas];
 
     this.nextId = getNextId(canvas);
-  }
-
-  setGraph(graph: Graph) {
-    this.graph = graph;
   }
 
   getNextId() {
@@ -135,8 +121,6 @@ export class PcDrawer implements BasicDrawer {
 
       if (node) {
         this.selected = [node];
-
-        if (isGraphExisted(this.graph, this.display)) setGraphSelected(arg, this.graph);
       }
 
       return node;
@@ -154,7 +138,6 @@ export class PcDrawer implements BasicDrawer {
         }
       }
 
-      if (isGraphExisted(this.graph, this.display)) setGraphSelected(selected.map(item => item.attrs.id), this.graph);
       this.selected = selected;
 
       return selected;
@@ -162,7 +145,6 @@ export class PcDrawer implements BasicDrawer {
 
     if (typeof arg === 'object') {
       this.selected = [arg];
-      if (isGraphExisted(this.graph, this.display)) setGraphSelected(arg.attrs.id, this.graph);
 
       return arg;
     }
@@ -190,8 +172,6 @@ export class PcDrawer implements BasicDrawer {
 
       this.addRecord(record);
     }
-
-    nodeDataChangeHook(this, element.attrs.id, data);
 
     setObjectValues(element.attrs, data);
 
@@ -252,7 +232,6 @@ export class PcDrawer implements BasicDrawer {
 
         if (element) {
           setObjectValues(element.attrs, data.prev);
-          nodeDataChangeHook(this, data.id, data.prev);
         }
       }
 
@@ -293,7 +272,6 @@ export class PcDrawer implements BasicDrawer {
 
         if (element) {
           setObjectValues(element.attrs, data.next);
-          nodeDataChangeHook(this, data.id, data.next);
         }
       }
 
@@ -320,56 +298,11 @@ export class PcDrawer implements BasicDrawer {
   }
 }
 
-/** update cell or graph after data change */
-function nodeDataChangeHook(drawer: PcDrawer, id: string, data: Partial<PcElementAttributes>) {
-  if (!drawer.graph) return;
-
-  const cell = drawer.graph.getCellById(id);
-
-  if (cell) {
-    const prop = getCellRecProp(cell);
-
-    cell.setProp({
-      position: {
-        x: data['offsetX'] ?? prop.position.x,
-        y: data['offsetY'] ?? prop.position.y
-      },
-      size: {
-        width: data['width'] ?? prop.size.width,
-        height: data['height'] ?? prop.size.height
-      }
-    });
-
-    cell.updateData(data);
-  } else {
-    // set canvas data
-    drawer.graph.size.resize(
-      data['width'] ?? drawer.canvas.attrs.width,
-      data['height'] ?? drawer.canvas.attrs.height
-    );
-  }
-}
-
-/** add graph and canvas node */
+/** add canvas node */
 function addDrawerNode(drawer: PcDrawer, element?: PcElement) {
   if (!drawer.canvas.children || !element) return;
 
   if (element.parent) {
-    if (drawer.graph && drawer.display === 'x6') {
-      const hasCell = drawer.graph.hasCell(element.attrs.id);
-
-      if (!hasCell) {
-        const x6Node = createPcNode(element);
-        drawer.graph.addCell(x6Node);
-
-        // bind x6 cells' paternity
-        const x6Parent = drawer.graph.getCellById(element.parent.attrs.id);
-        if (x6Parent) {
-          x6Parent.addChild(x6Node);
-        }
-      }
-    }
-
     // bind drawer canvas elements' paternity
     const drawerParent = findNode(drawer.canvas, node => node.attrs.id === element.parent?.attrs.id);
     if (drawerParent) {
@@ -379,14 +312,13 @@ function addDrawerNode(drawer: PcDrawer, element?: PcElement) {
   }
 }
 
-/** remove graph and canvas node */
+/** remove canvas node */
 function removeDrawerNode(drawer: PcDrawer, id?: string) {
   if (!drawer.canvas.children || !id) return;
 
   const element = findNode(drawer.canvas, node => node.attrs.id === id);
 
   if (element && drawer.canvas.children) {
-    drawer.display === 'x6' && drawer.graph?.removeCell(element.attrs.id);
     removeTreeNode(drawer.canvas.children, node => node.attrs.id === element.attrs.id);
   }
 }
