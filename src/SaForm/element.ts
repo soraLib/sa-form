@@ -1,4 +1,4 @@
-import { CSSProperties } from 'vue';
+import { CSSProperties } from 'vue'
 
 /** element types */ // TODO: split pc types
 export enum ElementType {
@@ -16,28 +16,28 @@ export enum ElementType {
 /** basic element attributes */
 export interface BasicElementAttributes {
   /** element type */
-  type: ElementType;
+  type: ElementType
   /** unique id */
-  id: string;
+  id: string
   /** unique name */
-  name: string;
+  name: string
   /** offset X to parent element */
-  offsetX: number;
+  x: number
   /** offset Y to parent element */
-  offsetY: number;
+  y: number
   /** element width `px` */
-  width: number;
+  width: number
   /** element height `px` */
-  height: number;
+  height: number
   /** element background */
-  background?: CSSProperties['background'];
+  background?: CSSProperties['background']
   /** element display name */
-  display?: string;
+  display?: string
 }
 
 /** basic element */
 export interface BasicElement {
-  parent?: BasicElement;
-  children?: BasicElement[];
-  attrs: BasicElementAttributes;
+  parent?: BasicElement
+  children?: BasicElement[]
+  attrs: BasicElementAttributes
 }

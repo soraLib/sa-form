@@ -1,4 +1,4 @@
-import { SaPluginType } from '../../plugin';
+import { SaPluginType } from '../../plugin'
 
 export const SelectPlugins = {
   'select-options': {
@@ -12,4 +12,4 @@ export const SelectPlugins = {
     disabled: true,
     filter: (value: { name: string }[]) => value.map(item => item.name).join(';')
   }
-} as const;
+} as const

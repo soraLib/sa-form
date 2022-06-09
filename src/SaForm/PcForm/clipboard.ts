@@ -1,59 +1,59 @@
-import { cloneDeep } from 'lodash-es';
-import { findNode, setObjectValues } from 'sugar-sajs';
-import { BasicClipBoard } from '../clipboard';
-import { PcDrawer } from './drawer';
-import { PcElement } from './element';
+import { cloneDeep } from 'lodash-es'
+import { findNode, setObjectValues } from 'sugar-sajs'
+import { BasicClipBoard } from '../clipboard'
+import { PcGraph } from './graph'
+import { PcElement } from './element'
 
 export class PcClipBoard implements BasicClipBoard {
   clips: {
-    elements: PcElement[];
-    type: 'cut' | 'copy';
-  } | undefined = undefined;
+    elements: PcElement[]
+    type: 'cut' | 'copy'
+  } | undefined = undefined
 
   isEmpty(clip = this.clips): clip is undefined {
-    return !this.clips?.elements.length;
+    return !this.clips?.elements.length
   }
 
-  copy(drawer: PcDrawer, options?: { useLocalStorage?: boolean, deep?: boolean }) {
+  copy(graph: PcGraph, options?: { useLocalStorage?: boolean, deep?: boolean }) {
     this.clips = {
-      elements: cloneDeep(drawer.selected), // TODO: options
+      elements: cloneDeep(graph.selected), // TODO: options
       type: 'copy'
-    };
+    }
   }
 
-  cut(drawer: PcDrawer, options?: { useLocalStorage?: boolean, deep?: boolean }) {
+  cut(graph: PcGraph, options?: { useLocalStorage?: boolean, deep?: boolean }) {
     this.clips = {
-      elements: cloneDeep(drawer.selected), // TODO: options
+      elements: cloneDeep(graph.selected), // TODO: options
       type: 'cut'
-    };
+    }
   }
 
-  paste(drawer: PcDrawer, parent = drawer.canvas.attrs.id, options?: {
-    nodeProps?: (element: PcElement) => Partial<PcElement['attrs']>;
-    deep?: boolean;
+  paste(graph: PcGraph, parent = graph.canvas.attrs.id, options?: {
+    nodeProps?: (element: PcElement) => Partial<PcElement['attrs']>
+    deep?: boolean
   }): PcElement[] | undefined {
-    if (this.isEmpty(this.clips)) return;
+    if (this.isEmpty(this.clips)) return
 
-    const parentElement = findNode(drawer.canvas, n => n.attrs.id === parent);
+    const parentElement = findNode(graph.canvas, n => n.attrs.id === parent)
 
     if (!parentElement) {
-      console.warn('[Sa warn]: can not paste in undefined parent.');
+      console.warn('[Sa warn]: can not paste in undefined parent.')
 
-      return;
+      return
     }
 
     const newPasteElements = this.clips.elements.map(ele => {
-      const paste = new PcElement({ ...ele, parent: parentElement });
+      const paste = new PcElement({ ...ele, parent: parentElement })
 
       if (options?.nodeProps) {
-        setObjectValues(paste.attrs, options.nodeProps(ele));
+        setObjectValues(paste.attrs, options.nodeProps(ele))
       }
 
-      return paste;
-    });
+      return paste
+    })
 
-    drawer.addChildren(newPasteElements, parent);
+    graph.addChildren(newPasteElements, parent)
 
-    return newPasteElements;
+    return newPasteElements
   }
 }

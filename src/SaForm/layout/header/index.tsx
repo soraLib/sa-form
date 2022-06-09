@@ -1,7 +1,7 @@
-import { defineComponent, h, PropType, VNode } from 'vue';
-import { BasicDrawer } from '../../drawer';
-import { PcDrawer } from '../../PcForm/drawer';
-import './index.scss';
+import { defineComponent, h, PropType, VNode } from 'vue'
+import { BasicGraph } from '../../graph'
+import { PcGraph } from '../../PcForm/graph'
+import './index.scss'
 
 export interface HeaderTool {
   /** icon title on dom */
@@ -11,7 +11,7 @@ export interface HeaderTool {
   /** icon */
   icon: VNode;
   /** icon click callback */
-  click: (drawer: any /** TODO: */, e: Event) => void;
+  click: (graph: any /** TODO: */, e: Event) => void;
 }
 
 export default defineComponent({
@@ -21,9 +21,9 @@ export default defineComponent({
       required: true,
       type: Array as PropType<HeaderTool[]>
     },
-    drawer: {
+    graph: {
       required: true,
-      type: Object as PropType<BasicDrawer>
+      type: Object as PropType<BasicGraph>
     }
   },
 
@@ -33,7 +33,7 @@ export default defineComponent({
         this.options.map(tool =>
           <span
             class="header-tool"
-            onClick={(e) => tool.click(this.drawer, e)}
+            onClick={(e) => tool.click(this.graph, e)}
             title={tool.title}
             style={{
               width: tool.width ? `${tool.width}px` : '30px',
@@ -44,6 +44,6 @@ export default defineComponent({
           </span>
         )
       }
-    </div>;
+    </div>
   }
-});
+})

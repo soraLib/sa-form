@@ -1,0 +1,21 @@
+.graph-snapline {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  display: none;
+  border-width: 1px;
+  border-style: solid;
+  border-color: green;
+  opacity: 0.7;
+  &.visible {
+    display: block;
+  }
+
+  &.row {
+    width: 100%;
+  }
+  &.col {
+    height: 100%;
+  }
+}

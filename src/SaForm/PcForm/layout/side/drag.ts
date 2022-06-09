@@ -1,19 +1,19 @@
-import { ElementType } from '../../../element';
-import { PcDrawer } from '../../drawer';
-import { PcElement } from '../../element';
-import { createPcNode, PcNode } from '../workspace/nodes';
+import { ElementType } from '../../../element'
+import { PcGraph } from '../../graph'
+import { PcElement } from '../../element'
+import { createPcNode, PcNode } from '../workspace/nodes'
 
-export function getPcDragNode(node: PcNode, drawer: PcDrawer): PcNode {
-  return getPcStencilNode(node, drawer);
+export function getPcDragNode(node: PcNode, graph: PcGraph): PcNode {
+  return getPcStencilNode(node, graph)
 }
 
-export function getPcDropNode(node: PcNode, drawer: PcDrawer): PcNode {
-  return getPcStencilNode(node, drawer);
+export function getPcDropNode(node: PcNode, graph: PcGraph): PcNode {
+  return getPcStencilNode(node, graph)
 }
 
-function getPcStencilNode(node: PcNode, drawer: PcDrawer): PcNode {
-  const nextId = drawer.getNextId();
-  const parent = drawer.canvas;
+function getPcStencilNode(node: PcNode, graph: PcGraph): PcNode {
+  const nextId = graph.getNextId()
+  const parent = graph.canvas
 
   switch (node.data.name) {
     case 'Button': {
@@ -24,11 +24,11 @@ function getPcStencilNode(node: PcNode, drawer: PcDrawer): PcNode {
           width: 80,
           height: 40,
           type: ElementType.Button,
-          offsetX: 0,
-          offsetY: 0
+          x: 0,
+          y: 0
         },
         parent: parent
-      });
+      })
     }
 
     case 'Select': {
@@ -39,12 +39,12 @@ function getPcStencilNode(node: PcNode, drawer: PcDrawer): PcNode {
           width: 80,
           height: 40,
           type: ElementType.Select,
-          offsetX: 0,
-          offsetY: 0,
+          x: 0,
+          y: 0,
           options: [{ name: 'default' }]
         },
         parent: parent
-      });
+      })
     }
 
     case 'Container': {
@@ -55,17 +55,17 @@ function getPcStencilNode(node: PcNode, drawer: PcDrawer): PcNode {
           width: 200,
           height: 100,
           type: ElementType.Container,
-          offsetX: 0,
-          offsetY: 0
+          x: 0,
+          y: 0
         },
         parent: parent
-      });
+      })
     }
 
     default: {
-      console.error('[Sa error]: unexpected drag node', node);
+      console.error('[Sa error]: unexpected drag node', node)
     }
   }
 
-  return node;
+  return node
 }

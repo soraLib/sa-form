@@ -1,7 +1,7 @@
-import { ElIcon } from 'element-plus';
-import { computed, defineComponent, inject, PropType, ref, VNode } from 'vue';
+import { ElIcon } from 'element-plus'
+import { computed, defineComponent, inject, PropType, ref, VNode } from 'vue'
 
-import { CLASSES } from '../constants';
+import { CLASSES } from '../constants'
 
 const ContextmenuItem = defineComponent({
   name: 'VContextmenuItem',
@@ -28,39 +28,39 @@ const ContextmenuItem = defineComponent({
   emits: ['click', 'mouseenter', 'mouseleave'],
 
   setup(props, { emit }) {
-    const rootHide = inject<() => void>('hide');
+    const rootHide = inject<() => void>('hide')
 
-    const hover = ref(false);
+    const hover = ref(false)
     const classes = computed(() => ({
       [CLASSES.contextmenuItem]: true,
       [CLASSES.contextmenuItemDisabled]: props.disabled,
       [CLASSES.contextmenuItemHover]: hover.value,
       [CLASSES.contextmenuItemDanger]: props.type === 'danger'
-    }));
+    }))
 
     const handleClick = (evt: Event) => {
-      if (props.disabled) return;
+      if (props.disabled) return
 
-      emit('click', evt);
+      emit('click', evt)
 
-      props.hideOnClick && rootHide?.();
-    };
+      props.hideOnClick && rootHide?.()
+    }
 
     const handleMouseenter = (evt: Event) => {
-      if (props.disabled) return;
+      if (props.disabled) return
 
-      hover.value = true;
+      hover.value = true
 
-      emit('mouseenter', evt);
-    };
+      emit('mouseenter', evt)
+    }
 
     const handleMouseleave = (evt: Event) => {
-      if (props.disabled) return;
+      if (props.disabled) return
 
-      hover.value = false;
+      hover.value = false
 
-      emit('mouseleave', evt);
-    };
+      emit('mouseleave', evt)
+    }
 
     return {
       classes,
@@ -68,11 +68,11 @@ const ContextmenuItem = defineComponent({
       handleClick,
       handleMouseenter,
       handleMouseleave
-    };
+    }
   },
 
   render() {
-    const Icon = this.icon;
+    const Icon = this.icon
 
     return (
       <li
@@ -84,8 +84,8 @@ const ContextmenuItem = defineComponent({
         {Icon ? <ElIcon class="mr-1 leading-0">{Icon}</ElIcon> : <span style={{ width: '18px'}}></span>}
         {this.$slots.default?.()}
       </li>
-    );
+    )
   }
-});
+})
 
-export default ContextmenuItem;
+export default ContextmenuItem

@@ -1,12 +1,12 @@
-import { HeaderTool } from '../../../layout/header';
-import { PcDrawer } from '../../drawer';
+import { HeaderTool } from '../../../layout/header'
+import { PcGraph } from '../../graph'
 
 export const PcHeaderOptions: HeaderTool[] = [{
   title: 'undo',
   icon: <i class="iconfont iconchexiao1"></i>,
-  click: (drawer: PcDrawer) => drawer.undo()
+  click: (graph: PcGraph) => graph.undo()
 }, {
   title: 'redo',
   icon: <i class="iconfont iconhuifu1"></i>,
-  click: (drawer: PcDrawer) => drawer.redo()
-}];
+  click: (graph: PcGraph) => graph.redo()
+}]

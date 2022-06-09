@@ -1,8 +1,8 @@
-import { ElementType } from '../../../element';
-import { NativeStencil } from '../../../layout/sidebar';
-import { PcDrawer } from '../../drawer';
+import { ElementType } from '../../../element'
+import { NativeStencil } from '../../../layout/sidebar'
+import { PcGraph } from '../../graph'
 
-export const NativePcSideStencil: NativeStencil = (drawer: PcDrawer) => ({
+export const NativePcSideStencil: NativeStencil = (graph: PcGraph) => ({
   groups: [
     { name: 'Normal', collapsable: true },
     { name: 'Container', collapsable: true }
@@ -19,4 +19,4 @@ export const NativePcSideStencil: NativeStencil = (drawer: PcDrawer) => ({
       }
     }]
   }
-});
+})

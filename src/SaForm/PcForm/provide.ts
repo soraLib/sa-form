@@ -1,4 +1,4 @@
-import { InjectionKey } from 'vue';
-import { PcDrawer } from './drawer';
+import { InjectionKey } from 'vue'
+import { PcGraph } from './graph'
 
-export const PcDrawerInjectionKey: InjectionKey<PcDrawer> = Symbol('pc-drawer');
+export const PcGraphInjectionKey: InjectionKey<PcGraph> = Symbol('pc-graph')

@@ -1,18 +1,18 @@
-import { computed, defineComponent, PropType } from 'vue';
-import { BasicDrawer } from '../../drawer';
+import { computed, defineComponent, PropType } from 'vue'
+import { BasicGraph } from '../../graph'
 
-import PluginItem from './item';
+import PluginItem from './item'
 
-import './index.scss';
-import { SaController } from '../../config';
-import { ElementType } from '../../element';
+import './index.scss'
+import { SaController } from '../../config'
+import { ElementType } from '../../element'
 
 export default defineComponent({
   name: 'SaFormLayoutController',
   props: {
-    drawer: {
+    graph: {
       required: true,
-      type: Object as PropType<BasicDrawer>
+      type: Object as PropType<BasicGraph>
     },
     controller: {
       required: true,
@@ -22,18 +22,18 @@ export default defineComponent({
 
   setup(props) {
     const plugin = computed(() => {
-      const type = props.drawer.selected[0]?.attrs.type;
+      const type = props.graph.selected[0]?.attrs.type
 
       if (type) {
         if (props.controller.plugins[type]) {
-          return props.controller.plugins[type];
+          return props.controller.plugins[type]
         }
 
-        console.warn(`[Sa warn]: Plugins not found in type ${ElementType[type]}.`);
+        console.warn(`[Sa warn]: Plugins not found in type ${ElementType[type]}.`)
       }
 
-      return undefined;
-    });
+      return undefined
+    })
 
     return () => (
       <div class="controller-container">
@@ -43,11 +43,11 @@ export default defineComponent({
               <div class="controller-item">
                 <div class="controller-item-label" title={item.title}>{item.label}</div>
                 <div class="controller-item-plugin">
-                  <PluginItem plugin={item} drawer={props.drawer} controller={props.controller} />
+                  <PluginItem plugin={item} graph={props.graph} controller={props.controller} />
                 </div>
               </div>
             )) : ''
         }</div>
-    );
+    )
   }
-});
+})

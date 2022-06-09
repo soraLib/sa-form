@@ -1,5 +1,5 @@
-import { ElementType } from '../../../element';
-import { PcElement } from '../../element';
+import { ElementType } from '../../../element'
+import { PcElement } from '../../element'
 
 export const createMockPcCanvas: () => PcElement = () => {
   const canvas = new PcElement({
@@ -11,10 +11,10 @@ export const createMockPcCanvas: () => PcElement = () => {
       name: 'mock pc form',
       width: 800,
       height: 600,
-      offsetX: 0,
-      offsetY: 0
+      x: 0,
+      y: 0
     }
-  });
+  })
 
   const child1 = new PcElement({
     parent: canvas,
@@ -24,11 +24,11 @@ export const createMockPcCanvas: () => PcElement = () => {
       name: 'mock button 1',
       width: 80,
       height: 40,
-      offsetX: 200,
-      offsetY: 100,
+      x: 200,
+      y: 100,
       background: '#eee'
     }
-  });
+  })
 
   const child2 = new PcElement({
     parent: canvas,
@@ -38,11 +38,11 @@ export const createMockPcCanvas: () => PcElement = () => {
       name: 'mock button 2',
       width: 80,
       height: 40,
-      offsetX: 150,
-      offsetY: 200,
-      background: '#eee'
+      x: 150,
+      y: 200,
+      background: '#000'
     }
-  });
+  })
 
   const child3 = new PcElement({
     parent: canvas,
@@ -52,14 +52,14 @@ export const createMockPcCanvas: () => PcElement = () => {
       name: 'mock container',
       width: 400,
       height: 200,
-      offsetX: 50,
-      offsetY: 300,
-      background: '#eee'
+      x: 50,
+      y: 300,
+      background: '#964B4B'
     },
     children: []
-  });
+  })
 
-  canvas.children?.push(...[child1, child2, child3]);
+  canvas.children?.push(...[child1, child2, child3])
 
-  return canvas;
-};
+  return canvas
+}
