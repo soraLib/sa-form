@@ -1,73 +1,73 @@
-import { Directive, DirectiveBinding, isRef } from 'vue';
+import { Directive, DirectiveBinding, isRef } from 'vue'
 
-import { TriggerEventType } from './types';
+import { TriggerEventType } from './types'
 interface ContextmenuDirectiveValue {
-  trigger?: TriggerEventType | TriggerEventType[];
+  trigger?: TriggerEventType | TriggerEventType[]
 }
 
 interface ContextmenuDirectiveEl extends Element {
-  $contextmenuKey?: string;
+  $contextmenuKey?: string
 }
-type ContextmenuDirectiveBinding = DirectiveBinding<ContextmenuDirectiveValue>;
+type ContextmenuDirectiveBinding = DirectiveBinding<ContextmenuDirectiveValue>
 
-// FIXME
-type ContextmenuRef = any;
+// FIXME:
+type ContextmenuRef = any
 
 const bind = (
   el: ContextmenuDirectiveEl,
   binding: ContextmenuDirectiveBinding
 ): void => {
-  const contextmenuKey = binding.arg || <string>binding.value;
+  const contextmenuKey = binding.arg || <string>binding.value
 
   if (!contextmenuKey) {
-    console.error('参数有误');
+    console.error('参数有误')
 
-    return;
+    return
   }
 
-  const contextmenuOptions = binding.value;
+  const contextmenuOptions = binding.value
   const contextmenuRef: ContextmenuRef = isRef(contextmenuKey)
     ? contextmenuKey.value
-    : binding.instance?.$refs[contextmenuKey];
+    : binding.instance?.$refs[contextmenuKey]
 
   if (!contextmenuRef) {
-    console.error(`没有找到 ${contextmenuKey} 对应的实例`);
+    console.error(`没有找到 ${contextmenuKey} 对应的实例`)
 
-    return;
+    return
   }
 
   if (typeof contextmenuRef.addReference !== 'function') {
-    console.error(`${contextmenuKey} 对应的实例不是 VContextmenu`);
+    console.error(`${contextmenuKey} 对应的实例不是 VContextmenu`)
 
-    return;
+    return
   }
 
-  el.$contextmenuKey = contextmenuKey;
+  el.$contextmenuKey = contextmenuKey
 
-  contextmenuRef.addReference(el, contextmenuOptions);
-};
+  contextmenuRef.addReference(el, contextmenuOptions)
+}
 
 const unbind = (
   el: ContextmenuDirectiveEl,
   binding: ContextmenuDirectiveBinding
 ): void => {
-  const contextmenuKey = el.$contextmenuKey;
+  const contextmenuKey = el.$contextmenuKey
 
-  if (!contextmenuKey) return;
+  if (!contextmenuKey) return
 
   const contextmenuRef: ContextmenuRef =
-    binding.instance?.$refs[contextmenuKey];
+    binding.instance?.$refs[contextmenuKey]
 
-  contextmenuRef?.removeReference(el);
-};
+  contextmenuRef?.removeReference(el)
+}
 
 const rebind = (
   el: ContextmenuDirectiveEl,
   binding: ContextmenuDirectiveBinding
 ): void => {
-  unbind(el, binding);
-  bind(el, binding);
-};
+  unbind(el, binding)
+  bind(el, binding)
+}
 
 const contextmenuDirective: Directive<
   ContextmenuDirectiveEl,
@@ -76,6 +76,6 @@ const contextmenuDirective: Directive<
   mounted: bind,
   updated: rebind,
   beforeUnmount: unbind
-};
+}
 
-export default contextmenuDirective;
+export default contextmenuDirective

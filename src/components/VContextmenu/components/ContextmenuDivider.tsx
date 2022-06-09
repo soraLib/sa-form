@@ -1,13 +1,13 @@
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue'
 
-import { CLASSES } from '../constants';
+import { CLASSES } from '../constants'
 
 const ContextmenuDivider = defineComponent({
   name: 'VContextmenuDivider',
 
   render() {
-    return <li class={CLASSES.contextmenuDivider} />;
+    return <li class={CLASSES.contextmenuDivider} />
   }
-});
+})
 
-export default ContextmenuDivider;
+export default ContextmenuDivider

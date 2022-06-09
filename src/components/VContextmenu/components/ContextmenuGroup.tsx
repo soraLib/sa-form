@@ -1,6 +1,6 @@
-import { computed, defineComponent, CSSProperties } from 'vue';
+import { computed, defineComponent, CSSProperties } from 'vue'
 
-import { CLASSES } from '../constants';
+import { CLASSES } from '../constants'
 
 const ContextmenuGroup = defineComponent({
   name: 'VContextmenuGroup',
@@ -18,7 +18,7 @@ const ContextmenuGroup = defineComponent({
 
   setup(props) {
     const style = computed(() => {
-      if (!props.maxWidth) return;
+      if (!props.maxWidth) return
 
       return {
         'max-width':
@@ -26,21 +26,21 @@ const ContextmenuGroup = defineComponent({
             ? `${props.maxWidth}px`
             : props.maxWidth,
         'overflow-x': 'auto'
-      } as CSSProperties;
-    });
+      } as CSSProperties
+    })
 
     return {
       style
-    };
+    }
   },
 
   methods: {
     renderTitle() {
-      const content = this.$slots.title?.() || this.title;
+      const content = this.$slots.title?.() || this.title
 
       return content ? (
         <div class={CLASSES.contextmenuGroupTitle}>{content}</div>
-      ) : null;
+      ) : null
     }
   },
 
@@ -53,8 +53,8 @@ const ContextmenuGroup = defineComponent({
           {this.$slots.default?.()}
         </ul>
       </li>
-    );
+    )
   }
-});
+})
 
-export default ContextmenuGroup;
+export default ContextmenuGroup

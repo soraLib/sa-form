@@ -1,48 +1,48 @@
-import { findNode } from 'sugar-sajs';
-import { BasicDrawer } from '../drawer';
-import { BasicElement, BasicElementAttributes } from '../element';
+import { findNode } from 'sugar-sajs'
+import { BasicGraph } from '../graph'
+import { BasicElement, BasicElementAttributes } from '../element'
 
 /**
  * return next unique id
  */
 export function getNextId(element: BasicElement): string {
-  const nextId = getMaxId(element);
-  const nextIdNumber = Number(nextId);
+  const nextId = getMaxId(element)
+  const nextIdNumber = Number(nextId)
 
-  return nextIdNumber ? (nextIdNumber + 1).toString() : '1';
+  return nextIdNumber ? (nextIdNumber + 1).toString() : '1'
 
   function getMaxId(element: BasicElement): string {
-    const nextId = element.attrs.id;
-    let childId = '';
+    const nextId = element.attrs.id
+    let childId = ''
 
     if (element.children?.length) {
       for (const child of element.children) {
-        const childNextId = getMaxId(child);
+        const childNextId = getMaxId(child)
 
-        const childIdNumber = Number(childId);
-        const childNextIdNumber = Number(childNextId);
+        const childIdNumber = Number(childId)
+        const childNextIdNumber = Number(childNextId)
 
         if (childIdNumber && childNextIdNumber) {
-          childId = Math.max(childIdNumber, childNextIdNumber).toString();
+          childId = Math.max(childIdNumber, childNextIdNumber).toString()
         }
 
-        if (childNextIdNumber) childId = childNextId;
+        if (childNextIdNumber) childId = childNextId
       }
     }
 
-    const childIdNumber = Number(childId);
-    const nextIdNumber = Number(nextId);
+    const childIdNumber = Number(childId)
+    const nextIdNumber = Number(nextId)
 
     if (childIdNumber && nextIdNumber) {
-      return Math.max(childIdNumber, nextIdNumber).toString();
+      return Math.max(childIdNumber, nextIdNumber).toString()
     }
 
-    if (childIdNumber) return childId;
+    if (childIdNumber) return childId
 
-    return nextId;
+    return nextId
   }
 }
 
 export function isElementAttribute(attr: string, elem: BasicElement): attr is keyof BasicElementAttributes {
-  return Reflect.has(elem.attrs, attr);
+  return Reflect.has(elem.attrs, attr)
 }

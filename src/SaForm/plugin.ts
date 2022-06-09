@@ -1,4 +1,4 @@
-import { ElementType } from './element';
+import { ElementType } from './element'
 
 /** property controller type */
 export enum SaPluginType {
@@ -12,24 +12,24 @@ export enum SaPluginType {
 
 export interface SaPlugin {
   /** plugin label */
-  label: string;
+  label: string
   /** plugin attribute, related to element's attr */
-  attr: string;
+  attr: string
   /** plugin display type */
-  type: SaPluginType;
+  type: SaPluginType
   /** plugin full name, used on DOM's title */
-  title?: string;
+  title?: string
   /** dialog component settings, needed when SaPlugin type is `Dialog` */
   dialog?: {
     /** component name */
-    component: string;
+    component: string
     /** dialog title, set plugin label in default */
-    title?: string;
+    title?: string
   }
   /** value filter for display format data */
-  filter?: (value: any) => string;
+  filter?: (value: any) => string
   /** plugin disable option */
-  disabled?: boolean;
+  disabled?: boolean
 }
 
 export const BasicPlugins = {
@@ -54,14 +54,14 @@ export const BasicPlugins = {
     attr: 'height',
     type: SaPluginType.Number
   },
-  'widget-offsetX': {
+  'widget-x': {
     label: 'x',
-    attr: 'offsetX',
+    attr: 'x',
     type: SaPluginType.Number
   },
-  'widget-offsetY': {
+  'widget-y': {
     label: 'y',
-    attr: 'offsetY',
+    attr: 'y',
     type: SaPluginType.Number
   },
   'widget-background': {
@@ -70,11 +70,11 @@ export const BasicPlugins = {
     attr: 'background',
     type: SaPluginType.Color
   }
-} as const;
+} as const
 
 export type SaPluginLayout = {
   [key in ElementType]?: {
-    basic?: SaPlugin[];
-    extend?: SaPlugin[];
+    basic?: SaPlugin[]
+    extend?: SaPlugin[]
   }
 }

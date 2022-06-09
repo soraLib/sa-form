@@ -1,8 +1,8 @@
-import { ElementType } from '../element';
-import { BasicPlugins, SaPluginLayout } from '../plugin';
-import { PcDrawer } from './drawer';
-import { PcElementAttributes } from './element';
-import { SelectPlugins } from './plugins/select';
+import { ElementType } from '../element'
+import { BasicPlugins, SaPluginLayout } from '../plugin'
+import { PcGraph } from './graph'
+import { PcElementAttributes } from './element'
+import { SelectPlugins } from './plugins/select'
 
 export const PcPlugin: SaPluginLayout = {
   [ElementType.Canvas]: {
@@ -19,8 +19,8 @@ export const PcPlugin: SaPluginLayout = {
       BasicPlugins['widget-name'],
       BasicPlugins['widget-width'],
       BasicPlugins['widget-height'],
-      BasicPlugins['widget-offsetX'],
-      BasicPlugins['widget-offsetY'],
+      BasicPlugins['widget-x'],
+      BasicPlugins['widget-y'],
       BasicPlugins['widget-background']
     ]
   },
@@ -30,8 +30,8 @@ export const PcPlugin: SaPluginLayout = {
       BasicPlugins['widget-name'],
       BasicPlugins['widget-width'],
       BasicPlugins['widget-height'],
-      BasicPlugins['widget-offsetX'],
-      BasicPlugins['widget-offsetY'],
+      BasicPlugins['widget-x'],
+      BasicPlugins['widget-y'],
       BasicPlugins['widget-background']
     ]
   },
@@ -41,17 +41,17 @@ export const PcPlugin: SaPluginLayout = {
       BasicPlugins['widget-name'],
       BasicPlugins['widget-width'],
       BasicPlugins['widget-height'],
-      BasicPlugins['widget-offsetX'],
-      BasicPlugins['widget-offsetY'],
+      BasicPlugins['widget-x'],
+      BasicPlugins['widget-y'],
       SelectPlugins['select-options']
     ]
   }
-};
+}
 
-export function pcPluginValueChange<T extends keyof PcElementAttributes>(key: T, value: PcElementAttributes[T], drawer: PcDrawer) {
-  const seleceted = drawer.selected[0];
+export function pcPluginValueChange<T extends keyof PcElementAttributes>(key: T, value: PcElementAttributes[T], graph: PcGraph) {
+  const seleceted = graph.selected[0]
 
-  if (!seleceted) return;
+  if (!seleceted) return
 
-  drawer.updateElemData(seleceted, { [key]: value });
+  graph.updateElemData(seleceted, { [key]: value })
 }

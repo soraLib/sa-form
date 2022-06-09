@@ -1,6 +1,6 @@
-import { defineComponent } from 'vue';
+import { defineComponent } from 'vue'
 
-import { CLASSES } from '../constants';
+import { CLASSES } from '../constants'
 
 const ContextmenuIcon = defineComponent({
   name: 'VContextmenuIcon',
@@ -20,8 +20,8 @@ const ContextmenuIcon = defineComponent({
           `${CLASSES.contextmenuIcon}-${this.name}`
         ]}
       />
-    );
+    )
   }
-});
+})
 
-export default ContextmenuIcon;
+export default ContextmenuIcon

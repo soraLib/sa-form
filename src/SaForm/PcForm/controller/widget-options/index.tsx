@@ -1,20 +1,20 @@
-import { computed, defineComponent, onMounted, PropType, Ref, ref } from 'vue';
-import { SaPlugin } from '../../../plugin';
-import { PcDrawer } from '../../drawer';
-import { Plus } from '@element-plus/icons-vue';
-import { ElButton, ElIcon, ElInput, ElTable, ElTableColumn } from 'element-plus';
+import { computed, defineComponent, onMounted, PropType, Ref, ref } from 'vue'
+import { SaPlugin } from '../../../plugin'
+import { PcGraph } from '../../graph'
+import { Plus } from '@element-plus/icons-vue'
+import { ElButton, ElIcon, ElInput, ElTable, ElTableColumn } from 'element-plus'
 
-import './index.scss';
-import { Array as SaArray } from 'sugar-sajs';
-import { isPcElementAttribute } from '../../element';
-import Sortable from 'sortablejs';
+import './index.scss'
+import { Array as SaArray } from 'sugar-sajs'
+import { isPcElementAttribute } from '../../element'
+import Sortable from 'sortablejs'
 
 export default defineComponent({
   name: 'widget-options',
   props: {
-    drawer: {
+    graph: {
       required: true,
-      type: Object as PropType<PcDrawer>
+      type: Object as PropType<PcGraph>
     },
     plugin: {
       required: true,
@@ -22,48 +22,48 @@ export default defineComponent({
     }
   },
   setup(props, ctx) {
-    const table: Ref<null | any> = ref(null);
+    const table: Ref<null | any> = ref<any>(null)
 
     interface Option {
-      id: string;
-      name: string;
+      id: string
+      name: string
     }
 
     interface Scope {
-      $index: number;
-      row: Option;
+      $index: number
+      row: Option
     }
 
-    const selectOptions: Ref<Option[]> = ref([]);
-    const tableData = computed(() => selectOptions.value);
+    const selectOptions: Ref<Option[]> = ref([])
+    const tableData = computed(() => selectOptions.value)
 
-    if (isPcElementAttribute(props.plugin.attr, props.drawer.selected[0]) && props.plugin.attr === 'options') {
-      selectOptions.value = props.drawer.selected[0].attrs[props.plugin.attr]!.map((option, index) => ({
+    if (isPcElementAttribute(props.plugin.attr, props.graph.selected[0]) && props.plugin.attr === 'options') {
+      selectOptions.value = props.graph.selected[0].attrs[props.plugin.attr]!.map((option, index) => ({
         name: option.name,
         id: String(index)
-      }));
+      }))
     }
 
     const expose = {
       update() {
-        return selectOptions.value;
+        return selectOptions.value
       }
-    };
+    }
 
     ctx.expose({
       ...expose
-    });
+    })
 
     function addRow() {
-      selectOptions.value.push({ name: '', id: new Date().toTimeString() });
+      selectOptions.value.push({ name: '', id: new Date().toTimeString() })
     }
 
     function deleteRow({ $index }: Scope) {
-      SaArray.remove(selectOptions.value, $index);
+      SaArray.remove(selectOptions.value, $index)
     }
 
     onMounted(() => {
-      const child = table.value.$el?.children[2]?.children[0]?.children[1];
+      const child = table.value.$el?.children[2]?.children[0]?.children[1]
 
       if (child)
 
@@ -74,12 +74,12 @@ export default defineComponent({
           scrollSensitivity: 100,
           animation: 150,
           onEnd: function({ newIndex, oldIndex }) {
-            if (newIndex === undefined || oldIndex === undefined) return;
+            if (newIndex === undefined || oldIndex === undefined) return
 
-            SaArray.swap(selectOptions.value, oldIndex, newIndex);
+            SaArray.swap(selectOptions.value, oldIndex, newIndex)
           }
-        });
-    });
+        })
+    })
 
     return () => <section class="widget-options">
       <header>
@@ -107,6 +107,6 @@ export default defineComponent({
           </>
         }}/>
       </ElTable>
-    </section>;
+    </section>
   }
-});
+})
