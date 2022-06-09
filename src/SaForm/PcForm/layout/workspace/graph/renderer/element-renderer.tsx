@@ -1,7 +1,7 @@
 import { CSSProperties, defineComponent, PropType } from 'vue'
 import { PcGraph } from '../../../../graph'
 import { PcElement } from '../../../../element'
-import { useElementStyle } from './hooks/usestyle'
+import { useElementStyle } from './hooks/useStyle'
 
 import ElementRenderer from './element-renderer'
 
