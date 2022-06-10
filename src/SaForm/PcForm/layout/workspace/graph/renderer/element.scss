@@ -59,11 +59,11 @@
   }
   
   &:not(.graph):hover {
-    border: 2px dashed var(--st-c-brand);
+    border: 2px dashed var(--c-brand);
     z-index: 99;
   }
   &.selected:not(.graph) {
-    border: 2px solid var(--st-c-brand);
+    border: 2px solid var(--c-brand);
     z-index: 99;
   }
 }

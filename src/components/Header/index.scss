@@ -1,0 +1,93 @@
+.nav-bar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  height: 3.6rem;
+  box-sizing: border-box;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--c-divider);
+  padding: 0.7rem 1.5rem 0.7rem 4rem;
+  background-color: var(--c-bg);
+
+  .nav-bar-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--c-text);
+    vertical-align: center;
+    white-space: nowrap;
+    margin-right: 2rem;
+  }
+  
+  .nav-bar-title {
+    text-decoration: none;
+  }
+  
+  .title {
+    line-height: 2rem;
+    vertical-align: middle;
+  }
+}
+
+.nav-bar.no-toggle-btn {
+  padding-left: 1.5rem;
+}
+
+.nav-bar.root {
+  border-color: transparent;
+  background-color: var(--c-bg-semi);
+}
+
+@media (min-width: 780px) {
+  .nav-bar {
+    padding: 0.7rem 0.8rem 0.7rem 1.5rem;
+  }
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+.nav {
+  display: none;
+}
+
+@media (min-width: 780px) {
+  .nav {
+    display: flex;
+  }
+  .navbar__dark-mode {
+    display: none;
+  }
+}
+
+.nav-icons {
+  display: grid;
+  grid-template-columns: repeat(2, 40px);
+  grid-column-gap: 0.5rem;
+  padding: 2px 0 0;
+  align-items: center;
+  border-bottom: 0;
+  margin-left: 12px;
+
+  .item {
+    width: 40px;
+    height: 40px;
+
+    .icon-button {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      color: var(--c-text);
+
+      svg {
+        margin: auto;
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+}
+
