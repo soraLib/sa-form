@@ -20,29 +20,6 @@
     }
 
     .sa-plugin {
-      & > .el-input, & > .el-color-picker > .el-color-picker__trigger {
-        height: 30px;
-      }
-
-      &.el-input-number {
-        width: 100%;
-        line-height: inherit;
-      }
-
-      & > .el-input {
-        line-height: inherit;
-      }
-
-      & > .el-button {
-        height: inherit;
-        padding: 0;
-        width: 100%;
-        min-height: unset;
-        border-radius: 0;
-        background: inherit;
-        background-color: var(--el-input-bg-color,var(--el-color-white));
-      }
-
       &.dialog-container {
         line-height: inherit;
         display: flex;
@@ -50,17 +27,6 @@
         &:first-child {
           flex-grow: 1;
         }
-
-        & > .el-button {
-          width: 120px;
-        }
-      }
-
-      &.el-input > .el-input__wrapper,
-      & > .el-input > .el-input__wrapper,
-      & > .el-color-picker > .el-color-picker__trigger,
-      & > .el-input-number > .el-input__wrapper {
-        border-radius: 0;
       }
     }
   }

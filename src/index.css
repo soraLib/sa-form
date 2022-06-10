@@ -98,6 +98,10 @@
   --c-brand-highlight: var(--c-brand-dark);
 }
 
+:root {
+  --el-color-primary: var(--c-brand);
+}
+
 .dark {
   --c-bg: var(--c-black);
   --c-bg-soft: var(--c-black-soft);

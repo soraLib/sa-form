@@ -1,4 +1,4 @@
-import { ElIcon } from 'element-plus'
+import { NIcon } from 'naive-ui'
 import { computed, defineComponent, inject, PropType, ref, VNode } from 'vue'
 
 import { CLASSES } from '../constants'
@@ -81,7 +81,7 @@ const ContextmenuItem = defineComponent({
         onMouseenter={this.handleMouseenter}
         onMouseleave={this.handleMouseleave}
       >
-        {Icon ? <ElIcon class="mr-1 leading-0">{Icon}</ElIcon> : <span style={{ width: '18px'}}></span>}
+        {Icon ? <NIcon class="mr-1 leading-0">{Icon}</NIcon> : <span style={{ width: '18px'}}></span>}
         {this.$slots.default?.()}
       </li>
     )

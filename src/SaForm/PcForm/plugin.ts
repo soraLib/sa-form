@@ -10,7 +10,8 @@ export const PcPlugin: SaPluginLayout = {
       BasicPlugins['widget-id'],
       BasicPlugins['widget-name'],
       BasicPlugins['widget-width'],
-      BasicPlugins['widget-height']
+      BasicPlugins['widget-height'],
+      BasicPlugins['widget-background']
     ]
   },
   [ElementType.Container]: {

@@ -8,8 +8,9 @@ import { ILayout, LAYOUTS } from './config'
 import SaFormHeader from './layout/header'
 import SaFormSidebar from './layout/sidebar'
 import SaFormController from './layout/properties-controller'
+import SaFormFooter from './layout/footer'
 
-import { ElScrollbar } from 'element-plus'
+import { NScrollbar } from 'naive-ui'
 
 import './styles/index.scss'
 
@@ -32,9 +33,9 @@ export default defineComponent({
     return () => (
       <section class="flex flex-col">
         <header>
-          <ElScrollbar>
+          <NScrollbar>
             <SaFormHeader options={layout.header} graph={layout.graph} class="sa-bg" />
-          </ElScrollbar>
+          </NScrollbar>
         </header>
 
         <main class="mt-1 flex flex-grow">
@@ -44,6 +45,7 @@ export default defineComponent({
 
           <main class="flex-grow justify-center sa-bg mx-1 overflow-auto">
             <SaFormWorkspace graph={layout.graph} />
+            <SaFormFooter graph={layout.graph} />
           </main>
 
           <aside class="w-64 sa-bg shrink-0">
