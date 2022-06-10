@@ -26,7 +26,7 @@ export const createMockPcCanvas: () => PcElement = () => {
       height: 40,
       x: 200,
       y: 100,
-      background: '#eee'
+      background: '#50DA58'
     }
   })
 
@@ -53,7 +53,7 @@ export const createMockPcCanvas: () => PcElement = () => {
       height: 200,
       x: 50,
       y: 300,
-      background: '#952667'
+      background: '#EFAE46'
     },
     children: []
   })
