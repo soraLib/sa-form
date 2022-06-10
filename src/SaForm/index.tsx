@@ -11,6 +11,8 @@ import SaFormController from './layout/properties-controller'
 
 import { ElScrollbar } from 'element-plus'
 
+import './styles/index.scss'
+
 export default defineComponent({
   props: {
     type: {
@@ -31,20 +33,20 @@ export default defineComponent({
       <section class="flex flex-col">
         <header>
           <ElScrollbar>
-            <SaFormHeader options={layout.header} graph={layout.graph} class="bg-slate-500" />
+            <SaFormHeader options={layout.header} graph={layout.graph} class="sa-bg" />
           </ElScrollbar>
         </header>
 
         <main class="mt-1 flex flex-grow">
           <aside>
-            <SaFormSidebar stencil={layout.side} graph={layout.graph} class="bg-slate-500 h-full" />
+            <SaFormSidebar stencil={layout.side} graph={layout.graph} class="sa-bg h-full" />
           </aside>
 
-          <main class="flex-grow justify-center bg-slate-500 mx-1 overflow-auto">
+          <main class="flex-grow justify-center sa-bg mx-1 overflow-auto">
             <SaFormWorkspace graph={layout.graph} />
           </main>
 
-          <aside class="w-64 bg-slate-500 shrink-0">
+          <aside class="w-64 sa-bg shrink-0">
             <SaFormController graph={layout.graph} controller={layout.controller} />
           </aside>
         </main>
