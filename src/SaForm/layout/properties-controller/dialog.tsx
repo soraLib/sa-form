@@ -1,6 +1,6 @@
-import { ElButton, ElDialog, ElInput } from 'element-plus'
+import { NButton, NModal, NInput } from 'naive-ui'
 import { cloneDeep, isEqual } from 'lodash-es'
-import { computed, DefineComponent, defineComponent, h, nextTick, PropType, Ref, ref, shallowRef, watch } from 'vue'
+import { computed, DefineComponent, defineComponent, h, PropType, Ref, ref, shallowRef } from 'vue'
 import { SaController } from '../../config'
 import { BasicGraph } from '../../graph'
 import { SaPlugin } from '../../plugin'
@@ -83,33 +83,30 @@ export default defineComponent({
     return () => (
       <div class="dialog-container">
         { props.plugin?.filter ?
-          <ElInput modelValue={
+          <NInput value={
             props.plugin.filter(getPluginValue(props.graph, props.plugin))} disabled /> : '' }
 
-        <ElButton onClick={() => dialogVisible.value = true}>set</ElButton>
+        <NButton onClick={() => dialogVisible.value = true}>set</NButton>
 
-        <div v-dialog-drag>
-          {
-            <ElDialog
-              title={props.plugin.dialog?.title ?? props.plugin.label}
-              modelValue={dialogVisible.value}
-              closeOnClickModal={false}
-              onClose={() => dialogVisible.value = false}
-              modal={false}
+        {
+          <NModal
+            title={props.plugin.dialog?.title ?? props.plugin.label}
+            show={dialogVisible.value}
+            mask-closable={false}
+            onClose={() => dialogVisible.value = false}
 
-              v-slots={{
-                footer: () => (
-                  <div>
-                    <ElButton type="default" onClick={() => dialogVisible.value = false}>cancel</ElButton>
-                    <ElButton type="primary" onClick={handleConfirm}>submit</ElButton>
-                  </div>
-                )
-              }}
-            >
-              { child.value }
-            </ElDialog>
-          }
-        </div>
+            v-slots={{
+              action: () => (
+                <div>
+                  <NButton type="default" onClick={() => dialogVisible.value = false}>cancel</NButton>
+                  <NButton type="primary" onClick={handleConfirm}>submit</NButton>
+                </div>
+              )
+            }}
+          >
+            { child.value }
+          </NModal>
+        }
 
       </div>
     )

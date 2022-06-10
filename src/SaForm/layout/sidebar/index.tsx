@@ -1,7 +1,7 @@
 import { PartialOptional } from 'sugar-sajs'
 import { computed, defineComponent, PropType, Ref, ref, watch } from 'vue'
 import { BasicGraph } from '../../graph'
-import { BasicElement, ElementType } from '../../element'
+import { BasicElement } from '../../element'
 
 import NativeItem from './native'
 

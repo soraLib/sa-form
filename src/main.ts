@@ -1,15 +1,17 @@
 import { createApp } from 'vue'
-import App from './App.vue'
+import Provider from './AppProvider.vue'
 
 import './components/VContextmenu/themes/default/index.scss'
-import 'element-plus/dist/index.css'
-// import 'element-plus/theme-chalk/dark/css-vars.css'; TODO: dark mode
 import './index.css'
 import './assets/iconfont.css'
 
+const meta = document.createElement('meta')
+meta.name = 'naive-ui-style'
+document.head.appendChild(meta)
+
 import contextmenu from './components/VContextmenu/index'
 
-const app = createApp(App)
+const app = createApp(Provider)
 app.use(contextmenu)
 
 app.mount('#app')

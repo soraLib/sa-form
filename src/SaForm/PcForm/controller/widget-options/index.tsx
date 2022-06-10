@@ -2,7 +2,7 @@ import { computed, defineComponent, onMounted, PropType, Ref, ref } from 'vue'
 import { SaPlugin } from '../../../plugin'
 import { PcGraph } from '../../graph'
 import { Plus } from '@element-plus/icons-vue'
-import { ElButton, ElIcon, ElInput, ElTable, ElTableColumn } from 'element-plus'
+import { NButton, NIcon, NInput, NTable } from 'naive-ui'
 
 import './index.scss'
 import { Array as SaArray } from 'sugar-sajs'
@@ -83,12 +83,12 @@ export default defineComponent({
 
     return () => <section class="widget-options">
       <header>
-        <ElButton type="primary" size="small" class="text-sm" icon={<ElIcon><Plus /></ElIcon>} onClick={addRow}>add select option</ElButton>
+        {/* <NButton type="primary" size="small" class="text-sm" icon={<ElIcon><Plus /></ElIcon>} onClick={addRow}>add select option</NButton> */}
 
         <p class="text-gray-500 font-bold">please add one select option at least.</p>
       </header>
 
-      <ElTable
+      {/* TODO: naive table <ElTable
         ref={table}
         data={tableData.value}
         max-height="500px"
@@ -103,10 +103,10 @@ export default defineComponent({
 
         <ElTableColumn label="operations" width="280" v-slots={{
           default: (scope: Scope) => <>
-            <ElButton type="danger" plain onClick={() => deleteRow(scope)}>delete</ElButton>
+            <NButton type="danger" plain onClick={() => deleteRow(scope)}>delete</NButton>
           </>
         }}/>
-      </ElTable>
+      </ElTable> */}
     </section>
   }
 })

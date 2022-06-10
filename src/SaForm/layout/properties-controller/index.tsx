@@ -39,6 +39,7 @@ export default defineComponent({
       <div class="controller-container">
         {
           plugin.value ?
+            // TODO: more classifications
             plugin.value.basic?.map((item =>
               <div class="controller-item">
                 <div class="controller-item-label" title={item.title}>{item.label}</div>

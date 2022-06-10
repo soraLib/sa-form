@@ -20,12 +20,12 @@ export default defineComponent({
 
     return () => (
       <div
-        class="native-item p-1 cursor-move"
+        class="native-item"
         title={props.item.title ?? props.item.attrs.name}
         draggable
         onDragstart={onDragstart}
       >
-        <i class={`${iconClass}`} style={{ fontSize: '30px' }}></i>
+        <i class={`${iconClass}`}></i>
       </div>
     )
   }

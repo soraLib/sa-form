@@ -2,7 +2,7 @@
 <template>
   <div class="mx-auto h-full flex">
     <SaHeader />
-    <SaForm id="1" type="PcForm" class="h-3/4 m-auto" />
+    <SaForm id="1" type="PcForm" class="m-auto" />
   </div>
 </template>
 
@@ -13,7 +13,7 @@ import SaForm from './SaForm/index'
 </script>
 
 <style>
-#app {
+#app-inner-container {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

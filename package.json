@@ -10,9 +10,8 @@
     "lint": "eslint --fix --ext .ts,.tsx ."
   },
   "dependencies": {
-    "@element-plus/icons-vue": "^2.0.4",
-    "element-plus": "^2.2.4",
     "lodash-es": "^4.17.21",
+    "naive-ui": "^2.30.3",
     "sortablejs": "^1.15.0",
     "sugar-sajs": "1.0.0-pre.29",
     "vue": "^3.2.37"
