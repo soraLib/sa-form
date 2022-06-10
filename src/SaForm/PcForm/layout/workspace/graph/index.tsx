@@ -43,8 +43,8 @@ export default defineComponent({
         attrs: {
           ...attrs,
           id: props.graph.getNextId(),
-          x: event.x,
-          y: event.y
+          x: event.offsetX,
+          y: event.offsetY
         }
       })
 
