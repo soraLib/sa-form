@@ -18,10 +18,6 @@ export default defineComponent({
     // work on single selected element only.
     const isComputed = computed(() => props.graph.isDrag && props.graph.selected.length === 1)
     const selected = computed(() => props.graph.selected[0])
-    const selectedPosition = computed(() => ({
-      x: selected.value?.attrs.x ?? 0,
-      y: selected.value?.attrs.y ?? 0
-    }))
 
     const line = reactive({
       lines: ['rt', 'rc', 'rb', 'cl', 'cc', 'cr'],
@@ -33,7 +29,7 @@ export default defineComponent({
     }, 200)
 
     watch(
-      () => props.graph.mousePosition,
+      () => props.graph.mousePosition, // TODO: snap on element resizing
       () => {
         if (!isComputed.value) return
 

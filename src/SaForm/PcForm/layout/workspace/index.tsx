@@ -71,7 +71,7 @@ export default defineComponent({
     return (
       // TODO: graph scroll and resize container
       /** graph wrapper */
-      <div class="relative" style={{
+      <div class="relative overflow-hidden" style={{
         width: `${this.graph.canvas.attrs.width}px`,
         height: `${this.graph.canvas.attrs.height}px`
       }}>

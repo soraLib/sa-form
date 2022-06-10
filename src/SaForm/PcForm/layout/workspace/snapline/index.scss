@@ -6,7 +6,7 @@
   display: none;
   border-width: 1px;
   border-style: solid;
-  border-color: green;
+  border-color: var(--st-c-brand);
   opacity: 0.7;
   &.visible {
     display: block;

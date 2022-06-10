@@ -2,6 +2,8 @@
   @apply select-none;
   position: absolute;
   cursor: default;
+  box-sizing: border-box;
+  border: 2px solid rgba(0, 0, 0, 0);
 
   &:active {
     cursor: move;
@@ -54,5 +56,14 @@
   }
   .vdr-stick.not-resizable {
     display: none;
+  }
+  
+  &:not(.graph):hover {
+    border: 2px dashed var(--st-c-brand);
+    z-index: 99;
+  }
+  &.selected:not(.graph) {
+    border: 2px solid var(--st-c-brand);
+    z-index: 99;
   }
 }

@@ -7,6 +7,7 @@ import ElementRenderer from './element-renderer'
 
 import './element.scss'
 import { useElementDrag, useElementStickReszie } from './hooks/useDrag'
+import { useClazs } from '../../../../../utils/class'
 
 type First<T extends string> = T extends `${infer S1}${infer S2}` ? S1 : never
 type Last<T extends string> = T extends `${infer S1}${infer S2}` ? S2 : never
@@ -58,13 +59,17 @@ export default defineComponent({
     return () => (
       <div
         id={props.element.attrs.id}
-        class="native-element"
+        class={useClazs(
+          'native-element', {
+            selected: props.graph.selected.some(e => e.attrs.id === props.element.attrs.id),
+            graph: props.graph.canvas.attrs.id === props.element.attrs.id
+          })}
         style={useElementStyle(props.element)}
         onMousedown={(e) => useElementDrag(e, props.element, props.graph)}
       >
 
         {
-          /* resizer, only active in graph */
+          /* resizer */
           props.element.parent && isFirstSelected() && (
             <div class="vdr">
               {
