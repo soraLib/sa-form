@@ -35,12 +35,11 @@ export const createMockPcCanvas: () => PcElement = () => {
     attrs: {
       type: ElementType.Button,
       id: '3',
-      name: 'mock button 2',
+      name: 'transparent button',
       width: 80,
       height: 40,
       x: 150,
-      y: 200,
-      background: '#000'
+      y: 200
     }
   })
 
@@ -54,7 +53,7 @@ export const createMockPcCanvas: () => PcElement = () => {
       height: 200,
       x: 50,
       y: 300,
-      background: '#964B4B'
+      background: '#952667'
     },
     children: []
   })

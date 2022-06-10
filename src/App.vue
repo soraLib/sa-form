@@ -1,6 +1,6 @@
 
 <template>
-  <div class="w-3/5 mx-auto h-full flex" style="min-width: calc(472px + 0.5rem);">
+  <div class="mx-auto h-full flex">
     <SaHeader />
     <SaForm id="1" type="PcForm" class="h-3/4 m-auto" />
   </div>
@@ -18,11 +18,12 @@ import SaForm from './SaForm/index'
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
   height: 100vh;
-  width: 100vh;
+  width: 100vw;
   padding-top: 3.6rem;
   box-sizing: border-box;
+  background-color: var(--c-bg-mute);
+  color: var(--c-text);
 }
 
 body {
