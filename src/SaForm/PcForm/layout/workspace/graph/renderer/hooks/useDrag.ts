@@ -18,9 +18,7 @@ interface MoveStatus {
  * Drag element in graph.
  */
 export const useElementDrag = (event: MouseEvent, element: PcElement, graph: PcGraph) => {
-  graph.setSelected(element)
-
-  if (!element.parent) return // skip resize canvas
+  if (!element.parent) return graph.setSelected() // skip resize canvas
 
   const status: MoveStatus = {
     _mouseStartX: 0,
@@ -31,18 +29,17 @@ export const useElementDrag = (event: MouseEvent, element: PcElement, graph: PcG
 
   event.stopPropagation()
 
-  const moveCb = (event: MouseEvent) => {
-    graph.setMouse({ x: event.screenX, y: event.screenY })
-    elementMove(status, event)
-  }
-
-  graph.setDrag(true)
   status._mouseStartX = event.screenX
   status._mouseStartY = event.screenY
   status._elemStartX = element.attrs.x
   status._elemStartY = element.attrs.y
 
   const MOVE_START_TIME = new Date()
+
+  const moveCb = (event: MouseEvent) => {
+    graph.setMouse({ x: event.screenX, y: event.screenY })
+    elementMove(status, event)
+  }
 
   document.addEventListener('mousemove', moveCb)
   document.addEventListener('mouseup', () => {
@@ -51,6 +48,9 @@ export const useElementDrag = (event: MouseEvent, element: PcElement, graph: PcG
   }, { once: true })
 
   const elementMove = (status: MoveStatus, event: MouseEvent) => {
+    graph.setSelected(element)
+    graph.setDrag(true)
+
     // move distance
     const moveX = event.screenX - status._mouseStartX
     const moveY = event.screenY - status._mouseStartY
@@ -102,6 +102,7 @@ export const useElementDrag = (event: MouseEvent, element: PcElement, graph: PcG
 
     graph.setMouse()
     graph.setDrag(false)
+    graph.setSelected(element)
   }
 }
 
