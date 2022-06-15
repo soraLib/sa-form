@@ -78,6 +78,7 @@ export class PcGraph implements BasicGraph {
       type: BasicRecordType.Add,
       time: new Date,
       data: [{
+        name: child.attrs.name,
         next: {
           ...cloneDeep(child)
         }
@@ -105,6 +106,7 @@ export class PcGraph implements BasicGraph {
       type: BasicRecordType.Add,
       time: new Date,
       data: children.map(child => ({
+        name: child.attrs.name,
         next: {
           ...cloneDeep(child)
         }
@@ -180,6 +182,7 @@ export class PcGraph implements BasicGraph {
         time: new Date(),
         data: [{
           id: element.attrs.id,
+          name: element.attrs.name,
           prev: cloneDeep(pick(element.attrs, Object.keys(data))),
           next: cloneDeep(data)
         }]
@@ -206,6 +209,7 @@ export class PcGraph implements BasicGraph {
       time: new Date(),
       data: batch.map(u => ({
         id: u.el.attrs.id,
+        name: u.el.attrs.name,
         prev: cloneDeep(pick(u.el.attrs, Object.keys(u.data))),
         next: cloneDeep(u.data)
       }))
@@ -310,6 +314,21 @@ export class PcGraph implements BasicGraph {
     }
 
     this.history.index += 1
+  }
+
+  historyTo(to: number): void
+  historyTo(to: PcRecord): void
+  historyTo(to: number | PcRecord) {
+    if (typeof to !== 'number') to = this.history.records.indexOf(to)
+
+    const index = this.history.index
+    if (to === index || to > this.history.records.length || to < 0) return
+
+    const distance = Math.abs(to - index)
+    const action = to < index ? this.undo : this.redo
+    for (let i = 0; i < distance; i++) {
+      action.call(this)
+    }
   }
 }
 
