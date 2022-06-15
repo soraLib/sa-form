@@ -12,18 +12,31 @@
     width: 200px;
   
     color: var(--c-text);
-  
     .history {
       padding: 0.4rem 0.75rem;
       cursor: pointer;
+      display: flex;
       
       > .type {
         font-weight: bold;
+        min-width: 32px;
+        display: inline-block;
+        margin-right: 8px;
+        position: relative;
+
+        &::after {
+          content: ":";
+          position: absolute;
+          right: 0;
+        }
       }
   
       > .name {
-        margin-left: 1rem;
-        text-align: end;
+        flex-grow: 1;
+        text-align: start;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
       }
   
       &:hover {
