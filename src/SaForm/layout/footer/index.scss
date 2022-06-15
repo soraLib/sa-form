@@ -1,0 +1,45 @@
+.sa-form-footer {
+}
+
+.history-popover {
+  padding: 0 !important;
+
+  .history-container {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    min-width: 10rem;
+    width: 200px;
+  
+    color: var(--c-text);
+  
+    .history {
+      padding: 0.4rem 0.75rem;
+      cursor: pointer;
+      
+      > .type {
+        font-weight: bold;
+      }
+  
+      > .name {
+        margin-left: 1rem;
+        text-align: end;
+      }
+  
+      &:hover {
+        background-color: var(--c-option-active);
+      }
+
+      &.active {
+        color: var(--c-brand);
+      }
+    }
+  
+    > .empty {
+      width: 200px;
+      padding: 2rem 2rem;
+      color: var(--c-text-mute);
+      cursor: default;
+    }
+  }
+}

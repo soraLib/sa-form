@@ -1,4 +1,5 @@
 import { BasicElement, BasicElementAttributes } from './element'
+import { BasicGraph } from './graph'
 
 export enum BasicRecordType {
   /** add element */
@@ -9,28 +10,35 @@ export enum BasicRecordType {
   Attr,
 }
 
+interface BasicRecordData {
+  /**
+   * name for history display
+   */
+  name: BasicElementAttributes['name']
+}
+
 /** update record data */
-export type URecordData = {
+export interface URecordData extends BasicRecordData {
   id: string
   prev: Partial<BasicElementAttributes>
   next: Partial<BasicElementAttributes>
 }
 
 /** create or delete record data */
-export type CDRecordData = {
+export interface CDRecordData extends BasicRecordData {
   prev?: BasicElement
   next?: BasicElement
 }
 
-export type BasicRecordData = CDRecordData | URecordData
+export type RecordData = CDRecordData | URecordData
 
 /** is update record data */
-export function isURecordData(data: BasicRecordData): data is URecordData {
+export function isURecordData(data: RecordData): data is URecordData {
   return Reflect.has(data, 'id')
 }
 
 /** is create or delete record data */
-export function isCDRecordData(data: BasicRecordData): data is CDRecordData {
+export function isCDRecordData(data: RecordData): data is CDRecordData {
   return !Reflect.has(data, 'id')
 }
 
@@ -67,7 +75,7 @@ export interface BasicRecordStore {
   max: number
   /** is recording opened */
   recording: boolean
-
+  /** slide timeline to */
   getPrevRecord(): BasicRecord | undefined
   getNextRecord(): BasicRecord | undefined
 }

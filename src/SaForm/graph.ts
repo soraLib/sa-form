@@ -1,5 +1,5 @@
 import { BasicElement } from './element'
-import { BasicRecordStore } from './record'
+import { BasicRecordStore, BasicRecord } from './record'
 
 export type GraphType =
   /** pc form */
@@ -38,4 +38,6 @@ export interface BasicGraph {
   getNextId(): string
   updateElemData(id: string, data: Partial<BasicElement['attrs']>, needRecord?: boolean): BasicElement | undefined
   updateElemData(element: BasicElement, data: Partial<BasicElement['attrs']>, needRecord?: boolean): BasicElement | undefined
+  historyTo(to: number): void
+  historyTo(to: BasicRecord): void
 }
