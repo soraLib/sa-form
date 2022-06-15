@@ -1,4 +1,5 @@
 import { BasicRecord, BasicRecordDataList, BasicRecordStore, BasicRecordType } from '../record'
+import { PcGraph } from './graph'
 
 export class PcRecord implements BasicRecord {
   type: BasicRecordType

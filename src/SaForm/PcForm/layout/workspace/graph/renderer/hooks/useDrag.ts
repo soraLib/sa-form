@@ -82,6 +82,7 @@ export const useElementDrag = (event: MouseEvent, element: PcElement, graph: PcG
           type: BasicRecordType.Attr,
           data: [{
             id: element.attrs.id,
+            name: element.attrs.name,
             prev: {
               x: status._elemStartX,
               y: status._elemStartY
@@ -199,6 +200,7 @@ export const useElementStickReszie = (event: MouseEvent, stick: typeof sticks[nu
       type: BasicRecordType.Attr,
       data: [{
         id: element.attrs.id,
+        name: element.attrs.name,
         prev: {
           width: origin.width,
           height: origin.height
