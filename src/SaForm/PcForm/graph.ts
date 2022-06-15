@@ -41,6 +41,11 @@ export class PcGraph implements BasicGraph {
       children: [],
       attrs: config.attrs
     })
+    this.addRecord(new PcRecord({
+      type: BasicRecordType.Init,
+      time: new Date(),
+      data: []
+    }))
   }
 
   setCanvas(canvas: PcElement) {
@@ -239,7 +244,7 @@ export class PcGraph implements BasicGraph {
   undo() {
     const prevRecord = this.history.getPrevRecord()
 
-    if (!prevRecord) {
+    if (!prevRecord || prevRecord.type === BasicRecordType.Init) {
       console.warn('[Sa warn]: None previous record in history.')
 
       return
@@ -320,6 +325,8 @@ export class PcGraph implements BasicGraph {
   historyTo(to: PcRecord): void
   historyTo(to: number | PcRecord) {
     if (typeof to !== 'number') to = this.history.records.indexOf(to)
+
+    console.log()
 
     const index = this.history.index
     if (to === index || to > this.history.records.length || to < 0) return

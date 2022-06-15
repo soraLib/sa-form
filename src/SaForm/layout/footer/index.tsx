@@ -28,17 +28,17 @@ export default defineComponent({
             trigger: () => <NButton type="primary">history</NButton>,
             default: () => <NScrollbar style={{ maxHeight: '400px' }}>
               <ol class="history-container">{
-                recordsRef.value.length ? recordsRef.value.map((record, index) =>
-                  <li
-                    class={ useClazs('history', {
-                      active: currentRef.value === index
-                    })}
-                    onClick={() => props.graph.historyTo(record)}
-                  >
-                    <span class="type">{BasicRecordType[record.type]}:</span>
-                    <span class="name">{record.data.map(d => d.name).join(', ')}</span>
-                  </li>
-                )
+                recordsRef.value.length ?
+                  recordsRef.value.map((record, index) =>
+                    <li
+                      class={ useClazs('history', {
+                        active: currentRef.value === index
+                      })}
+                      onClick={() => props.graph.historyTo(record)}
+                    >
+                      <span class="type">{BasicRecordType[record.type]}</span>
+                      <span class="name">{record.data.map(d => d.name).join(', ') || 'graph'}</span>
+                    </li>)
                   : <div class="empty">empty history record</div>
               }</ol>
             </NScrollbar>

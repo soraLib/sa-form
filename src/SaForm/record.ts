@@ -1,7 +1,8 @@
 import { BasicElement, BasicElementAttributes } from './element'
-import { BasicGraph } from './graph'
 
 export enum BasicRecordType {
+  /** init graph */
+  Init,
   /** add element */
   Add,
   /** delete element */
