@@ -1,4 +1,4 @@
-import { PcElement } from '../../../element'
+import { PcElement, PcElementAttributes } from '../../../element'
 
 interface RowResult { lineY: number; triggerY: number }
 interface ColResult { lineX: number; triggerX: number }
@@ -103,7 +103,7 @@ const directions: Record<
 const threshold = 10
 const isSorption = (a: number, b: number) => Math.abs(a - b) <= threshold
 
-const calcLines = (target: PcElement, compares: PcElement[]) => {
+const calcLines = (target: PcElement, compares: PcElement[], { deepOffsetX, deepOffsetY }: { deepOffsetX: number, deepOffsetY: number }) => {
   const x = target.attrs.x
   const y = target.attrs.y
 
@@ -130,7 +130,7 @@ const calcLines = (target: PcElement, compares: PcElement[]) => {
         }
 
         if (!sorption.row || target.attrs.y === triggerY) {
-          snaplines.set(`r${direct.name[0]}`, { y: lineY })
+          snaplines.set(`r${direct.name[0]}`, { y: lineY + deepOffsetY })
         }
       }
     }
@@ -147,7 +147,7 @@ const calcLines = (target: PcElement, compares: PcElement[]) => {
         }
 
         if (!sorption.col || target.attrs.x === triggerX) {
-          snaplines.set(`c${direct.name[0]}`, { x: lineX })
+          snaplines.set(`c${direct.name[0]}`, { x: lineX + deepOffsetX })
         }
       }
     }
@@ -162,5 +162,13 @@ export const getSnaplines = (
 ) => {
   const _compares = compares ?? element.parent?.children ?? []
 
-  return calcLines(element, _compares)
+  const deepOffsetX = useDeepOffset('x', element.parent)
+  const deepOffsetY = useDeepOffset('y', element.parent)
+
+  return calcLines(element, _compares, { deepOffsetX, deepOffsetY })
 }
+
+const useDeepOffset = (attr: keyof Pick<PcElementAttributes, 'x' | 'y'>, element?: PcElement): number =>
+  element ?
+    (element.parent ? useDeepOffset(attr, element.parent) : 0) + element.attrs[attr]
+    : 0
