@@ -85,6 +85,7 @@ export default defineComponent({
           )
         }
 
+        {/* TODO: specific display styles */}
         {props.element.parent && props.element.attrs.name}
 
         {
