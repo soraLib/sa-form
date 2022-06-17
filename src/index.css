@@ -72,6 +72,7 @@
 :root {
   --c-bg: var(--c-white);
   --c-bg-soft: var(--c-white-soft);
+  --c-bg-dark: var(--c-black);
   --c-bg-mute: var(--c-white-mute);
   --c-bg-ground: var(--c-gray);
   --c-bg-ground-soft: var(--c-gray-light-1);

@@ -1,6 +1,17 @@
-
 .sa-bg {
   background-color: var(--c-bg-soft);
+}
+
+.workspace-bg {
+  background-image: linear-gradient(var(--c-bg) 14px, transparent 0), linear-gradient(90deg, transparent 14px, var(--c-bg-dark) 0);
+  background-color: var(--c-bg);
+  background-size: 15px 15px, 15px 15px;
+  box-sizing: border-box;
+  padding: 4px;
+  
+  .workspace {
+    box-shadow: 0 0 2px var(--c-divider);
+  }
 }
 
 .dark {

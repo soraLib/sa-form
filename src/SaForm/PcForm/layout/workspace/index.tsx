@@ -2,8 +2,6 @@ import { computed, defineComponent, onMounted, PropType, Ref, ref, ShallowRef, s
 import { PcGraph } from '../../graph'
 import { createMockPcCanvas } from './mock'
 
-import { DeleteFilled } from '@element-plus/icons-vue'
-
 import Workspace from './graph'
 import Snapline from './snapline'
 
@@ -71,7 +69,7 @@ export default defineComponent({
     return (
       // TODO: graph scroll and resize container
       /** graph wrapper */
-      <div class="relative overflow-hidden" style={{
+      <div class="relative" style={{
         width: `${this.graph.canvas.attrs.width}px`,
         height: `${this.graph.canvas.attrs.height}px`
       }}>
