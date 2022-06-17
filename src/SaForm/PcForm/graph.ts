@@ -326,8 +326,6 @@ export class PcGraph implements BasicGraph {
   historyTo(to: number | PcRecord) {
     if (typeof to !== 'number') to = this.history.records.indexOf(to)
 
-    console.log()
-
     const index = this.history.index
     if (to === index || to > this.history.records.length || to < 0) return
 

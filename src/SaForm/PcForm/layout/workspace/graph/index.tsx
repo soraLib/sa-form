@@ -59,7 +59,7 @@ export default defineComponent({
   render() {
     return (
       <div
-        class="bg-slate-100 w-fit relative"
+        class="w-full h-full relative"
         onDrop={this.onDrop}
         onDragover={this.onDragover}
       >

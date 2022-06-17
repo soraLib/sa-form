@@ -43,8 +43,10 @@ export default defineComponent({
             <SaFormSidebar stencil={layout.side} graph={layout.graph} class="sa-bg h-full" />
           </aside>
 
-          <main class="flex-grow justify-center sa-bg mx-1 overflow-auto">
-            <SaFormWorkspace graph={layout.graph} />
+          <main class="flex-grow justify-center sa-bg mx-1">
+            <section class="workspace-bg">
+              <SaFormWorkspace class="workspace" graph={layout.graph} />
+            </section>
             <SaFormFooter graph={layout.graph} />
           </main>
 

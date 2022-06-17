@@ -2,7 +2,10 @@
 <template>
   <div class="mx-auto h-full flex">
     <SaHeader />
-    <SaForm id="1" type="PcForm" class="m-auto" />
+
+    <div class="m-auto w-4/5 h-4/5">
+      <SaForm id="1" type="PcForm"  />
+    </div>
   </div>
 </template>
 
