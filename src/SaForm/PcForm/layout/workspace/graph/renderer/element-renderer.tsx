@@ -89,8 +89,9 @@ export default defineComponent({
 
         {
           props.element.children?.length
-          && props.element.children.map(ele =>
-            <ElementRenderer graph={props.graph} element={ele} />)
+            ? props.element.children.map(ele =>
+              <ElementRenderer graph={props.graph} element={ele} />)
+            : undefined
         }
       </div >
     )
