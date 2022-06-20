@@ -1,12 +1,7 @@
 .native-element {
   @apply select-none;
   position: absolute;
-  cursor: default;
   box-sizing: border-box;
-
-  &:active {
-    cursor: move;
-  }
 
   .vdr {
     box-sizing: border-box;

@@ -1,4 +1,4 @@
-import { computed, defineComponent, onMounted, PropType, Ref, ref, ShallowRef, shallowRef } from 'vue'
+import { computed, defineComponent, onMounted, onUnmounted, PropType, Ref, ref, ShallowRef, shallowRef } from 'vue'
 import { PcGraph } from '../../graph'
 import { createMockPcCanvas } from './mock'
 
@@ -17,10 +17,10 @@ export default defineComponent({
   },
 
   setup(props) {
-    const workspace: Ref<HTMLDivElement | null> = ref(null)
-    // TODO: contentmenu type
-    const contextmenu: Ref<any | null> = ref(null)
-    // const contextmenuEvent: ShallowRef<JQuery.ContextMenuEvent | undefined> = shallowRef()
+    const workspace: Ref<typeof Workspace | null> = ref(null)
+    const contextmenuEvent: ShallowRef<Event | undefined> = shallowRef()
+
+    const setContextmenuEvent = (event: Event) => contextmenuEvent.value = event
 
     onMounted(() => {
       if (workspace.value) {
@@ -28,6 +28,14 @@ export default defineComponent({
 
         console.log('create canvas', canvas)
         props.graph.setCanvas(canvas)
+
+        workspace.value.$el.addEventListener('contextmenu', setContextmenuEvent)
+      }
+    })
+
+    onUnmounted(() => {
+      if (workspace.value) {
+        workspace.value.$el.removeEventListener('contextmenu', setContextmenuEvent)
       }
     })
 
@@ -60,7 +68,6 @@ export default defineComponent({
 
     return {
       workspace,
-      contextmenu,
       graphContextmenu
     }
   },

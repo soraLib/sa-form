@@ -37,7 +37,7 @@ export class PcClipBoard implements BasicClipBoard {
     const parentElement = findNode(graph.canvas, n => n.attrs.id === parent)
 
     if (!parentElement) {
-      console.warn('[Sa warn]: can not paste in undefined parent.')
+      console.warn('[Sa warn]: can not paste without parent element.')
 
       return
     }

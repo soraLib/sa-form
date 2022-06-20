@@ -1,4 +1,4 @@
-import { CSSProperties, defineComponent, PropType } from 'vue'
+import { CSSProperties, defineComponent, PropType, computed } from 'vue'
 import { PcGraph } from '../../../../graph'
 import { PcElement } from '../../../../element'
 import { useElementStyle } from './hooks/useStyle'
@@ -6,8 +6,9 @@ import { useElementStyle } from './hooks/useStyle'
 import ElementRenderer from './element-renderer'
 
 import './element.scss'
-import { useElementDrag, useElementStickReszie } from './hooks/useDrag'
+import { useElementHandler } from './hooks/useDrag'
 import { useClazs } from '../../../../../utils/class'
+import { useElementStickReszie } from './hooks/useResize'
 
 type First<T extends string> = T extends `${infer S1}${infer S2}` ? S1 : never
 type Last<T extends string> = T extends `${infer S1}${infer S2}` ? S2 : never
@@ -52,9 +53,9 @@ export default defineComponent({
   },
 
   setup(props) {
-    function isFirstSelected() {
-      return props.graph.selected[0] === props.element
-    }
+    const isOnlySelection = computed(() =>
+      props.graph.selected.length === 1 && props.graph.selected[0] === props.element
+    )
 
     return () => (
       <div
@@ -65,12 +66,12 @@ export default defineComponent({
             graph: props.graph.canvas.attrs.id === props.element.attrs.id
           })}
         style={useElementStyle(props.element)}
-        onMousedown={(e) => useElementDrag(e, props.element, props.graph)}
+        onMousedown={(e) => useElementHandler(e, props.element, props.graph)}
       >
 
         {
           /* resizer */
-          props.element.parent && isFirstSelected() && (
+          props.element.parent && isOnlySelection.value && (
             <div class="vdr">
               {
                 sticks.map(stick =>
