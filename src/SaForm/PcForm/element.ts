@@ -16,7 +16,7 @@ export interface IPcElement extends BasicElement {
 
 }
 
-export const containerElements = [ElementType.Container]
+export const containerElements = [ElementType.Canvas, ElementType.Container]
 
 export class PcElement implements IPcElement {
   [key: string | number]: any
