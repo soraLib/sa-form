@@ -2,7 +2,7 @@ import { findNode } from 'sugar-sajs'
 import { defineComponent, PropType, computed, CSSProperties, h } from 'vue'
 import { setDataTransfer } from '../../../../utils/drag'
 import { PcGraph } from '../../../graph'
-import { PcElement } from '../../../element'
+import { PcElement, containerElements } from '../../../element'
 
 import ElementRenderer from './renderer/element-renderer'
 import { useClazs } from '../../../../utils/class'
@@ -36,6 +36,8 @@ export default defineComponent({
 
       const targetId = dropTarget.id
       const parent = findNode(props.graph.canvas, (el) => el.attrs.id === targetId)
+
+      if (!parent || !containerElements.includes(parent?.attrs.type)) return
 
       const attrs = JSON.parse(elementMessage)
 

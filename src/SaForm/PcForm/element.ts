@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash-es'
-import { BasicElement, BasicElementAttributes } from '../element'
+import { BasicElement, BasicElementAttributes, ElementType } from '../element'
 
 export interface PcSelectAttributes {
   /** select options */
@@ -15,6 +15,8 @@ export function isPcElementAttribute(attr: string, elem: PcElement): attr is key
 export interface IPcElement extends BasicElement {
 
 }
+
+export const containerElements = [ElementType.Container]
 
 export class PcElement implements IPcElement {
   [key: string | number]: any
