@@ -33,9 +33,7 @@ export default defineComponent({
     return () => (
       <section class="flex flex-col">
         <header>
-          <NScrollbar>
-            <SaFormHeader options={layout.header} graph={layout.graph} class="sa-bg" />
-          </NScrollbar>
+          <SaFormHeader options={layout.header} graph={layout.graph} class="sa-bg" />
         </header>
 
         <main class="mt-1 flex flex-grow">

@@ -1,10 +1,11 @@
 import { findNode } from 'sugar-sajs'
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, PropType, computed, CSSProperties, h } from 'vue'
 import { setDataTransfer } from '../../../../utils/drag'
 import { PcGraph } from '../../../graph'
 import { PcElement } from '../../../element'
 
 import ElementRenderer from './renderer/element-renderer'
+import { useClazs } from '../../../../utils/class'
 
 export default defineComponent({
   name: 'NativeWorkspace',
@@ -51,19 +52,40 @@ export default defineComponent({
       props.graph.addChild(dropElement, parent)
     }
 
-    return {
-      onDrop,
-      onDragover
-    }
-  },
-  render() {
-    return (
+    const selectionBoxStyle = computed<CSSProperties>(() => {
+      const { left, top, width, height } = props.graph.selectionBox
+
+      return {
+        position: 'absolute',
+        display: props.graph.isSelect ? 'block' : 'none',
+        'z-index': 1000,
+        border: '1px solid var(--c-brand)',
+        background: '#B5CBEC',
+        opacity: 0.3,
+        left: `${left}px`,
+        top: `${top}px`,
+        width: `${width}px`,
+        height: `${height}px`
+      }
+    })
+
+    return () => (
       <div
-        class="w-full h-full relative"
-        onDrop={this.onDrop}
-        onDragover={this.onDragover}
+        class={useClazs(
+          'w-full',
+          'h-full',
+          'relative',
+          {
+            'cursor-move':  props.graph.isDrag
+          }
+        )}
+        onDrop={onDrop}
+        onDragover={onDragover}
       >
-        <ElementRenderer graph={this.graph} element={this.graph.canvas} />
+        <ElementRenderer graph={props.graph} element={props.graph.canvas} />
+
+        {/* selection box */}
+        <div style={selectionBoxStyle.value}></div>
       </div>
     )
   }

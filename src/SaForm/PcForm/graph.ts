@@ -15,6 +15,13 @@ function isIdUpdateData(data: IdUpdateData | ElUpdateData): data is IdUpdateData
   return Reflect.has(data, 'id')
 }
 
+export interface SelectionBox {
+  left: number
+  top: number
+  width: number
+  height: number
+}
+
 /** pc graph */
 export class PcGraph implements BasicGraph {
   type: GraphType
@@ -29,6 +36,13 @@ export class PcGraph implements BasicGraph {
     startY: 0,
     x: 0,
     y: 0
+  }
+  isSelect = false
+  selectionBox = {
+    left: 0,
+    top: 0,
+    width: 0,
+    height: 0
   }
 
   constructor(config: Partial<PcElement> & { attrs: {} }) {
@@ -61,6 +75,14 @@ export class PcGraph implements BasicGraph {
 
   setMouse(pos: Partial<MousePosition> = { x: 0, y: 0, startX: 0, startY: 0 }) {
     setObjectValues(this.mousePosition, pos)
+  }
+
+  setSelect(isSelect: boolean) {
+    this.isSelect = isSelect
+  }
+
+  setSelectionBox(box: Partial<SelectionBox> = { left: 0, top: 0, width: 0, height: 0 }) {
+    setObjectValues(this.selectionBox, box)
   }
 
   getNextId() {
