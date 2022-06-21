@@ -14,26 +14,24 @@ export default defineComponent({
     }
   },
   setup(props) {
-    // TODO: multi selected elements
-    // work on single selected element only.
-    const isComputed = computed(() => props.graph.isDrag && props.graph.selected.length === 1)
-    const selected = computed(() => props.graph.selected[0])
+    const isDragRef = computed(() => props.graph.isDrag)
+    const selected = computed(() => props.graph.selected)
 
     const line = reactive({
       lines: ['rt', 'rc', 'rb', 'cl', 'cc', 'cr'],
       snaplines: new Map<string, Snapline>()
     })
 
-    const handleSnap = throttle(() => {
+    const useSnap = throttle(() => {
       line.snaplines = getSnaplines(selected.value)
     }, 200)
 
     watch(
       () => props.graph.mousePosition, // TODO: snap on element resizing
       () => {
-        if (!isComputed.value) return
+        if (!isDragRef.value) return
 
-        handleSnap()
+        useSnap()
       },
       { deep: true }
     )
@@ -49,7 +47,7 @@ export default defineComponent({
 
     return () => <div>
       {
-        isComputed.value && line.lines.map(l =>
+        isDragRef.value && line.lines.map(l =>
           <div
             key={l}
             class={useLineClass(l)}
