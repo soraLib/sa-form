@@ -16,8 +16,8 @@ function isIdUpdateData(data: IdUpdateData | ElUpdateData): data is IdUpdateData
 }
 
 export interface SelectionBox {
-  left: number
-  top: number
+  x: number
+  y: number
   width: number
   height: number
 }
@@ -39,8 +39,8 @@ export class PcGraph implements BasicGraph {
   }
   isSelect = false
   selectionBox = {
-    left: 0,
-    top: 0,
+    x: 0,
+    y: 0,
     width: 0,
     height: 0
   }
@@ -81,7 +81,7 @@ export class PcGraph implements BasicGraph {
     this.isSelect = isSelect
   }
 
-  setSelectionBox(box: Partial<SelectionBox> = { left: 0, top: 0, width: 0, height: 0 }) {
+  setSelectionBox(box: Partial<SelectionBox> = { x: 0, y: 0, width: 0, height: 0 }) {
     setObjectValues(this.selectionBox, box)
   }
 
@@ -223,26 +223,28 @@ export class PcGraph implements BasicGraph {
     return element
   }
 
-  updateElemsData(data: IdUpdateData[]): PcElement[] | undefined
-  updateElemsData(data: ElUpdateData[]): PcElement[] | undefined
-  updateElemsData(arg: IdUpdateData[] | ElUpdateData[]) {
+  updateElemsData(data: IdUpdateData[], needRecord?: boolean): PcElement[] | undefined
+  updateElemsData(data: ElUpdateData[], needRecord?: boolean): PcElement[] | undefined
+  updateElemsData(arg: IdUpdateData[] | ElUpdateData[], needRecord?: boolean) {
     const batch = arg.map(data => ({
       el: isIdUpdateData(data) ? findNode(this.canvas, node => node.attrs.id === data.id)! : data.element,
       data: data.data
     }))
 
-    const record = new PcRecord({
-      type: BasicRecordType.Attr,
-      time: new Date(),
-      data: batch.map(u => ({
-        id: u.el.attrs.id,
-        name: u.el.attrs.name,
-        prev: cloneDeep(pick(u.el.attrs, Object.keys(u.data))),
-        next: cloneDeep(u.data)
-      }))
-    })
+    if (needRecord) {
+      const record = new PcRecord({
+        type: BasicRecordType.Attr,
+        time: new Date(),
+        data: batch.map(u => ({
+          id: u.el.attrs.id,
+          name: u.el.attrs.name,
+          prev: cloneDeep(pick(u.el.attrs, Object.keys(u.data))),
+          next: cloneDeep(u.data)
+        }))
+      })
 
-    this.addRecord(record)
+      this.addRecord(record)
+    }
 
     for (const update of batch) {
       this.updateElemData(update.el, update.data, false)
