@@ -55,7 +55,7 @@ export default defineComponent({
     }
 
     const selectionBoxStyle = computed<CSSProperties>(() => {
-      const { left, top, width, height } = props.graph.selectionBox
+      const { x, y, width, height } = props.graph.selectionBox
 
       return {
         position: 'absolute',
@@ -64,8 +64,8 @@ export default defineComponent({
         border: '1px solid var(--c-brand)',
         background: '#B5CBEC',
         opacity: 0.3,
-        left: `${left}px`,
-        top: `${top}px`,
+        left: `${x}px`,
+        top: `${y}px`,
         width: `${width}px`,
         height: `${height}px`
       }
