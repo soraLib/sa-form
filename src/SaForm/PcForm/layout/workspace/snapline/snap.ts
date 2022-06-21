@@ -1,4 +1,5 @@
 import { PcElement, PcElementAttributes } from '../../../element'
+import { getRectangle, Rect } from '../graph/renderer/utils/rectangle'
 
 interface RowResult { lineY: number; triggerY: number }
 interface ColResult { lineX: number; triggerX: number }
@@ -13,7 +14,7 @@ const directions: Record<
     name: string;
     calc(
       compare: PcElement,
-      target: PcElement
+      target: Rect
     ):
       | ColResult
       | RowResult;
@@ -31,7 +32,7 @@ const directions: Record<
       name: 'bt',
       calc: (compare, target) => ({
         lineY: compare.attrs.y,
-        triggerY: compare.attrs.y - target.attrs.height
+        triggerY: compare.attrs.y - target.height
       })
     },
     {
@@ -41,7 +42,7 @@ const directions: Record<
         triggerY:
           compare.attrs.y +
           compare.attrs.height / 2 -
-          target.attrs.height / 2
+          target.height / 2
       })
     },
     {
@@ -56,7 +57,7 @@ const directions: Record<
       calc: (compare, target) => ({
         lineY: compare.attrs.y + compare.attrs.height,
         triggerY:
-          compare.attrs.y + compare.attrs.height - target.attrs.height
+          compare.attrs.y + compare.attrs.height - target.height
       })
     }
   ],
@@ -79,21 +80,21 @@ const directions: Record<
       name: 'cc',
       calc: (compare, target) => ({
         lineX: compare.attrs.x + compare.attrs.width / 2,
-        triggerX: compare.attrs.x + compare.attrs.width / 2 - target.attrs.width / 2
+        triggerX: compare.attrs.x + compare.attrs.width / 2 - target.width / 2
       })
     },
     {
       name: 'rr',
       calc: (compare, target) => ({
         lineX: compare.attrs.x + compare.attrs.width,
-        triggerX: compare.attrs.x + compare.attrs.width - target.attrs.width
+        triggerX: compare.attrs.x + compare.attrs.width - target.width
       })
     },
     {
       name: 'rl',
       calc: (compare, target) => ({
         lineX: compare.attrs.x,
-        triggerX: compare.attrs.x - target.attrs.width
+        triggerX: compare.attrs.x - target.width
       })
     }
   ]
@@ -103,9 +104,9 @@ const directions: Record<
 const threshold = 10
 const isSorption = (a: number, b: number) => Math.abs(a - b) <= threshold
 
-const calcLines = (target: PcElement, compares: PcElement[], { deepOffsetX, deepOffsetY }: { deepOffsetX: number, deepOffsetY: number }) => {
-  const x = target.attrs.x
-  const y = target.attrs.y
+const calcLines = (targets: PcElement[], compares: PcElement[], { deepOffsetX, deepOffsetY }: { deepOffsetX: number, deepOffsetY: number }) => {
+  const rect = getRectangle(targets)
+  const rectIdSet = new Set(targets.map(t => t.attrs.id))
 
   const snaplines = new Map<string, Snapline>()
   const sorption = {
@@ -115,21 +116,25 @@ const calcLines = (target: PcElement, compares: PcElement[], { deepOffsetX, deep
 
   for (const compare of compares) {
     // skip self compare
-    if (compare.attrs.id === target.attrs.id) continue
+    if (rectIdSet.has(compare.attrs.id)) continue
 
     // row snaplines
     for (const direct of directions.row) {
-      const result = direct.calc(compare, target)
+      const result = direct.calc(compare, rect)
       const { lineY, triggerY } = result as RowResult
 
-      if (isSorption(y, triggerY)) {
+      if (isSorption(rect.y, triggerY)) {
 
         if (!sorption.row) {
-          target.attrs.y = triggerY
+          const moveY = triggerY - rect.y
+          for (const elem of targets) {
+            elem.attrs.y += moveY
+          }
+          rect.y = triggerY
           sorption.row = true
         }
 
-        if (!sorption.row || target.attrs.y === triggerY) {
+        if (!sorption.row || rect.y === triggerY) {
           snaplines.set(`r${direct.name[0]}`, { y: lineY + deepOffsetY })
         }
       }
@@ -137,16 +142,20 @@ const calcLines = (target: PcElement, compares: PcElement[], { deepOffsetX, deep
 
     // column snaplines
     for (const direct of directions.col) {
-      const result = direct.calc(compare, target)
+      const result = direct.calc(compare, rect)
       const { lineX, triggerX } = result as ColResult
 
-      if (isSorption(x, triggerX)) {
+      if (isSorption(rect.x, triggerX)) {
         if (!sorption.col) {
-          target.attrs.x = triggerX
+          const moveX = triggerX - rect.x
+          for (const elem of targets) {
+            elem.attrs.x += moveX
+          }
+          rect.x = triggerX
           sorption.col = true
         }
 
-        if (!sorption.col || target.attrs.x === triggerX) {
+        if (!sorption.col || rect.x === triggerX) {
           snaplines.set(`c${direct.name[0]}`, { x: lineX + deepOffsetX })
         }
       }
@@ -157,18 +166,21 @@ const calcLines = (target: PcElement, compares: PcElement[], { deepOffsetX, deep
 }
 
 export const getSnaplines = (
-  element: PcElement,
+  elements: PcElement[],
   compares?: PcElement[]
-) => {
-  const _compares = compares ?? element.parent?.children ?? []
+): Map<string, Snapline> => {
+  if (!elements.length) return new Map()
 
-  const deepOffsetX = useDeepOffset('x', element.parent)
-  const deepOffsetY = useDeepOffset('y', element.parent)
+  const parent = elements[0].parent
+  const _compares = compares ?? parent?.children ?? []
 
-  return calcLines(element, _compares, { deepOffsetX, deepOffsetY })
+  const deepOffsetX = getDeepOffset('x', parent)
+  const deepOffsetY = getDeepOffset('y', parent)
+
+  return calcLines(elements, _compares, { deepOffsetX, deepOffsetY })
 }
 
-const useDeepOffset = (attr: keyof Pick<PcElementAttributes, 'x' | 'y'>, element?: PcElement): number =>
+const getDeepOffset = (attr: keyof Pick<PcElementAttributes, 'x' | 'y'>, element?: PcElement): number =>
   element ?
-    (element.parent ? useDeepOffset(attr, element.parent) : 0) + element.attrs[attr]
+    (element.parent ? getDeepOffset(attr, element.parent) : 0) + element.attrs[attr]
     : 0
