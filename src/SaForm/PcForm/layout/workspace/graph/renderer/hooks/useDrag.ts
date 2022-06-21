@@ -2,22 +2,38 @@ import { BasicRecordType } from '../../../../../../record'
 import { PcElement } from '../../../../../element'
 import { PcGraph } from '../../../../../graph'
 import { PcRecord } from '../../../../../record'
+import { getRectangle } from '../utils/rectangle'
 import { useElementSelect } from './useSelect'
 
-interface DragStatus {
-  _mouseStartX: number
-  _mouseStartY: number
-  _elemStartX: number
-  _elemStartY: number
+/** select element or take it at the ahead of the selected */
+export const selectOrAhead = (element: PcElement, graph: PcGraph) => {
+  const find = graph.selected.find(ele => ele === element)
+
+  if (find) {
+    return graph.setSelected([element ,...graph.selected.filter(ele => ele !== element)])
+  }
+
+  return graph.setSelected([element])
+}
+
+interface DragPositon {
+  _startX: number
+  _startY: number
 }
 
 const useElementDrag = (event: MouseEvent, element: PcElement, graph: PcGraph) => {
-  const status: DragStatus = {
-    _mouseStartX: event.screenX,
-    _mouseStartY: event.screenY,
-    _elemStartX: element.attrs.x,
-    _elemStartY: element.attrs.y
+  selectOrAhead(element, graph)
+  const rect = getRectangle(graph.selected)
+
+  const mousePos: DragPositon = {
+    _startX: event.screenX,
+    _startY: event.screenY
   }
+  const rectPos: DragPositon = {
+    _startX: rect.x,
+    _startY: rect.y
+  }
+  const elemsPos: DragPositon[] = graph.selected.map((ele) => ({ _startX: ele.attrs.x, _startY: ele.attrs.y }))
 
   const MOVE_START_TIME = new Date()
 
@@ -33,31 +49,39 @@ const useElementDrag = (event: MouseEvent, element: PcElement, graph: PcGraph) =
   }, { once: true })
 
   const elementMove = (event: MouseEvent) => {
-    graph.setSelected(element)
     graph.setDrag(true)
+    const rect = getRectangle(graph.selected)
 
     // move distance
-    const moveX = event.screenX - status._mouseStartX
-    const moveY = event.screenY - status._mouseStartY
+    const moveX = event.screenX - mousePos._startX
+    const moveY = event.screenY - mousePos._startY
 
-    const finalX = status._elemStartX + moveX
-    const finalY = status._elemStartY + moveY
+    const finalX = rectPos._startX + moveX
+    const finalY = rectPos._startY + moveY
 
-    // Limits the offset of the element to ensure its always inside the parent element.
-    graph.updateElemData(element, {
-      x: finalX < 0 ? 0
-        : finalX + element.attrs.width > element.parent!.attrs.width
-          ? element.parent!.attrs.width - element.attrs.width : finalX,
-      y : finalY < 0 ? 0
-        : finalY + element.attrs.height > element.parent!.attrs.height
-          ? element.parent!.attrs.height - element.attrs.height : finalY
-    }, false)
+    // Limits the offset of the elements to ensure its always inside the parent element.
+    const finalMoveX = finalX + rect.width > element.parent!.attrs.width
+      ? element.parent!.attrs.width - rect.width - rectPos._startX : finalX < 0 ? -rectPos._startX : moveX
+    const finalMoveY = finalY + rect.height > element.parent!.attrs.height
+      ? element.parent!.attrs.height - rect.height - rectPos._startY : finalY < 0 ? -rectPos._startY : moveY
+
+    graph.updateElemsData(
+      graph.selected.map((ele, i) => ({
+        element: ele,
+        data: {
+          x: elemsPos[i]._startX + finalMoveX,
+          y :  elemsPos[i]._startY + finalMoveY
+        }
+      }))
+    )
   }
   const elementMoveEnd = () => {
     const MOVE_END_TIME = new Date()
     const duration = MOVE_END_TIME.getTime() - MOVE_START_TIME.getTime()
-    const moveX = element.attrs.x - status._elemStartX
-    const moveY = element.attrs.y - status._elemStartY
+    const rect = getRectangle(graph.selected)
+
+    const moveX = rect.x - rectPos._startX
+    const moveY = rect.y - rectPos._startY
 
     // skip when not move
     if (moveX || moveY) {
@@ -65,30 +89,34 @@ const useElementDrag = (event: MouseEvent, element: PcElement, graph: PcGraph) =
         graph.addRecord(new PcRecord({
           time: new Date(),
           type: BasicRecordType.Attr,
-          data: [{
-            id: element.attrs.id,
-            name: element.attrs.name,
+          data: graph.selected.map((ele, i) => ({
+            id: ele.attrs.id,
+            name: ele.attrs.name,
             prev: {
-              x: status._elemStartX,
-              y: status._elemStartY
+              x: elemsPos[i]._startX,
+              y: elemsPos[i]._startY
             },
             next: {
-              x: element.attrs.x,
-              y: element.attrs.y
+              x: ele.attrs.x,
+              y: ele.attrs.y
             }
-          }]
+          }))
         }))
       } else {
-        graph.updateElemData(element, {
-          x: status._elemStartX,
-          y : status._elemStartY
-        }, false)
+        graph.updateElemsData(graph.selected.map((ele, i) => ({
+          element: ele,
+          data: {
+            x: elemsPos[i]._startX,
+            y :  elemsPos[i]._startY
+          }
+        })))
       }
+    } else {
+      graph.setSelected(element)
     }
 
     graph.setDrag(false)
     graph.setMouse()
-    graph.setSelected(element)
   }
 }
 
