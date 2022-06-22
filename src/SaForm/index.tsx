@@ -31,18 +31,18 @@ export default defineComponent({
     const SaFormWorkspace = layout.workspace
 
     return () => (
-      <section class="flex flex-col">
+      <section class="flex flex-col h-full">
         <header>
           <SaFormHeader options={layout.header} graph={layout.graph} class="sa-bg" />
         </header>
 
-        <main class="mt-1 flex flex-grow">
+        <main class="mt-1 flex flex-grow h-full">
           <aside>
             <SaFormSidebar stencil={layout.side} graph={layout.graph} class="sa-bg h-full" />
           </aside>
 
-          <main class="flex-grow justify-center sa-bg mx-1">
-            <section class="workspace-bg">
+          <main class="justify-center sa-bg mx-1 flex flex-col grow">
+            <section class="workspace-bg overflow-auto grow">
               <SaFormWorkspace class="workspace" graph={layout.graph} />
             </section>
             <SaFormFooter graph={layout.graph} />
