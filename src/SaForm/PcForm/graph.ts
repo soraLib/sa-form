@@ -32,7 +32,7 @@ export class PcGraph implements BasicGraph {
   clipboard: PcClipBoard
   selected: PcElement[] = []
   nextId: string
-  isDrag = false
+  isDragging = false
   mousePosition = {
     startX: 0,
     startY: 0,
@@ -73,12 +73,20 @@ export class PcGraph implements BasicGraph {
     this.nextId = getNextId(canvas)
   }
 
-  setDrag(isDrag: boolean) {
-    this.isDrag = isDrag
+  setDragging(isDragging: boolean) {
+    this.isDragging = isDragging
   }
 
   setMouse(pos: Partial<MousePosition> = { x: 0, y: 0, startX: 0, startY: 0 }) {
     setObjectValues(this.mousePosition, pos)
+  }
+
+  setResizing(isResizing: boolean) {
+    this.isResizing = isResizing
+  }
+
+  setResizeStick(stick: Stick | '' = '') {
+    this.resizeStick = stick
   }
 
   setSelect(isSelect: boolean) {

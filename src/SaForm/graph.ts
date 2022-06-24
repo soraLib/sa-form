@@ -30,10 +30,6 @@ export interface BasicGraph {
   selected: BasicElement[]
   /** div container */
   containter?: HTMLDivElement
-  /** is dragging tag */
-  isDrag: boolean
-  /** mouse position */
-  mousePosition: MousePosition
 
   getNextId(): string
   updateElemData(id: string, data: Partial<BasicElement['attrs']>, needRecord?: boolean): BasicElement | undefined

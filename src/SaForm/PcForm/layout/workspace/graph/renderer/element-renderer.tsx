@@ -27,13 +27,16 @@ const styleMapping = {
   }
 } as const
 
+export const firstOfStick = (stick: Stick) => stick[0] as First<Stick>
+export const lastOfStick = (stick: Stick) => stick[1] as Last<Stick>
+
 function vdrStick(stick: Stick) {
   const stickStyle: CSSProperties = {
     width: `${stickSize}px`,
     height: `${stickSize}px`
   }
-  stickStyle[styleMapping.y[stick[0] as First<Stick>]] = `${stickSize / -2}px`
-  stickStyle[styleMapping.x[stick[1] as Last<Stick>]] = `${stickSize / -2}px`
+  stickStyle[styleMapping.y[firstOfStick(stick)]] = `${stickSize / -2}px`
+  stickStyle[styleMapping.x[lastOfStick(stick)]] = `${stickSize / -2}px`
 
   return stickStyle
 }

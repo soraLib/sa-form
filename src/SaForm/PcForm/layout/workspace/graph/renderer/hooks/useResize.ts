@@ -7,6 +7,7 @@ import { getRectangle } from '../utils/rectangle'
 
 export const useElementStickReszie = (event: MouseEvent, stick: Stick, element: PcElement, graph: PcGraph) => {
   event.stopPropagation()
+  graph.setResizeStick(stick)
 
   // stick origin data
   const origin = {
@@ -19,6 +20,9 @@ export const useElementStickReszie = (event: MouseEvent, stick: Stick, element: 
   }
 
   const stickMove = (event: MouseEvent) => {
+    graph.setResizing(true)
+    graph.setMouse({ x: event.screenX, y: event.screenY })
+
     let deltaX = event.screenX - origin.mouseX
     let deltaY = event.screenY - origin.mouseY
     let x = origin.x
@@ -124,6 +128,8 @@ export const useElementStickReszie = (event: MouseEvent, stick: Stick, element: 
     })
 
     graph.addRecord(record)
+    graph.setResizing(false)
+    graph.setResizeStick()
     removeStickMoveListener()
   }
   const addStickMoveListener = () => {

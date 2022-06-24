@@ -49,7 +49,7 @@ const useElementDrag = (event: MouseEvent, element: PcElement, graph: PcGraph) =
   }, { once: true })
 
   const elementMove = (event: MouseEvent) => {
-    graph.setDrag(true)
+    graph.setDragging(true)
     const rect = getRectangle(graph.selected)
 
     // move distance
@@ -115,7 +115,7 @@ const useElementDrag = (event: MouseEvent, element: PcElement, graph: PcGraph) =
       graph.setSelected(element)
     }
 
-    graph.setDrag(false)
+    graph.setDragging(false)
     graph.setMouse()
   }
 }
