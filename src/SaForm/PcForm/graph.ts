@@ -22,6 +22,8 @@ export interface SelectionBox {
   height: number
 }
 
+export type Stick = 'tl' | 'tm' | 'tr' | 'mr' | 'br' | 'bm' | 'bl' | 'ml'
+
 /** pc graph */
 export class PcGraph implements BasicGraph {
   type: GraphType
@@ -30,13 +32,15 @@ export class PcGraph implements BasicGraph {
   clipboard: PcClipBoard
   selected: PcElement[] = []
   nextId: string
-  isDrag = false
+  isDragging = false
   mousePosition = {
     startX: 0,
     startY: 0,
     x: 0,
     y: 0
   }
+  isResizing = false
+  resizeStick: Stick | '' = ''
   isSelect = false
   selectionBox = {
     x: 0,
@@ -69,12 +73,20 @@ export class PcGraph implements BasicGraph {
     this.nextId = getNextId(canvas)
   }
 
-  setDrag(isDrag: boolean) {
-    this.isDrag = isDrag
+  setDragging(isDragging: boolean) {
+    this.isDragging = isDragging
   }
 
   setMouse(pos: Partial<MousePosition> = { x: 0, y: 0, startX: 0, startY: 0 }) {
     setObjectValues(this.mousePosition, pos)
+  }
+
+  setResizing(isResizing: boolean) {
+    this.isResizing = isResizing
+  }
+
+  setResizeStick(stick: Stick | '' = '') {
+    this.resizeStick = stick
   }
 
   setSelect(isSelect: boolean) {

@@ -1,98 +1,109 @@
-import { setObjectValues } from 'sugar-sajs'
 import { ElementType } from '../../../../../../element'
 import { BasicRecordType } from '../../../../../../record'
 import { PcElement } from '../../../../../element'
-import { PcGraph } from '../../../../../graph'
+import { PcGraph, Stick } from '../../../../../graph'
 import { PcRecord } from '../../../../../record'
-import { getSelectionRectangle } from '../../../utils'
-import { sticks } from '../element-renderer'
+import { getRectangle } from '../utils/rectangle'
 
-export const useElementStickReszie = (event: MouseEvent, stick: typeof sticks[number], element: PcElement, graph: PcGraph) => {
+export const useElementStickReszie = (event: MouseEvent, stick: Stick, element: PcElement, graph: PcGraph) => {
+  event.stopPropagation()
+  graph.setResizeStick(stick)
+
   // stick origin data
   const origin = {
-    mouseX: 0,
-    mouseY: 0,
-    width: 0,
-    height: 0,
-    x: 0,
-    y: 0
+    mouseX: event.screenX,
+    mouseY: event.screenY,
+    width: element.attrs.width,
+    height: element.attrs.height,
+    x: element.attrs.x,
+    y: element.attrs.y
   }
 
-  const stickDown = (event: MouseEvent) => {
-    origin.mouseX = event.pageX
-    origin.mouseY = event.pageY
-    origin.width = element.attrs.width
-    origin.height = element.attrs.height
-    origin.x = element.attrs.x
-    origin.y = element.attrs.y
-
-    addStickMoveListener()
-    event.stopPropagation()
-  }
   const stickMove = (event: MouseEvent) => {
-    const delta = {
-      x: (origin.mouseX - event.pageX),
-      y: (origin.mouseY - event.pageY)
+    graph.setResizing(true)
+    graph.setMouse({ x: event.screenX, y: event.screenY })
+
+    let deltaX = event.screenX - origin.mouseX
+    let deltaY = event.screenY - origin.mouseY
+    let x = origin.x
+    let y = origin.y
+
+    const rect = getRectangle(element.children ?? [])
+    const rectWidth = rect.x + rect.width
+    const rectHeight = rect.y + rect.height
+
+    const limitDeltaY = (deltaY: number): number => {
+      if (origin.height + deltaY - rectHeight < 0 && deltaY < 0) {
+        deltaY = rectHeight - origin.height
+      }
+
+      return deltaY
+    }
+    const limitDeltaX = (deltaX: number): number => {
+      if (origin.width + deltaX - rectWidth < 0 && deltaX < 0) {
+        deltaX = rectWidth - origin.width
+      }
+
+      return deltaX
     }
 
     switch (stick[0]) {
-      case 'b':
-        delta.y = -delta.y
-        break
-
-      case 't': {
-        const nextOffsetY = origin.y - delta.y
-        if (nextOffsetY < 0 || (!element.attrs.height && delta.y < 0)) {
-          return
-        }
-        element.attrs.y = nextOffsetY
-
+      case 'b': {
+        deltaY = limitDeltaY(deltaY)
         break
       }
 
-      case 'm':
-        delta.y = 0
+      case 't': {
+        deltaY = -deltaY
+        deltaY = limitDeltaY(deltaY)
+        if (origin.y - deltaY < 0) {
+          deltaY = origin.y
+        }
+        y -= deltaY
         break
+      }
+
+      case 'm': {
+        deltaY = 0
+        break
+      }
     }
 
     switch (stick[1]) {
-      case 'r':
-        delta.x = -delta.x
-
+      case 'r': {
+        deltaX = limitDeltaX(deltaX)
         break
+      }
 
       case 'l': {
-        const nextOffsetX = origin.x - delta.x
-        if (nextOffsetX < 0 || (!element.attrs.width && delta.x < 0)) {
-          return
+        deltaX = -deltaX
+        deltaX = limitDeltaX(deltaX)
+        if (origin.x - deltaX < 0) {
+          deltaX = origin.x
         }
-        element.attrs.x = nextOffsetX
+        x -= deltaX
         break
       }
 
       case 'm':
-        delta.x = 0
+        deltaX = 0
         break
     }
 
-    element.attrs.width = origin.width + delta.x
-    element.attrs.height = origin.height + delta.y
+    let width = origin.width + deltaX
+    let height = origin.height + deltaY
 
-    element.attrs.width = element.attrs.width < 0 ? 0 : element.attrs.width
-    element.attrs.height = element.attrs.height < 0 ? 0 : element.attrs.height
+    const maxWidth = element.parent!.attrs.width - x
+    const maxHeight = element.parent!.attrs.height - y
+    width = width > maxWidth ? maxWidth : width
+    height = height > maxHeight ? maxHeight : height
 
-    const maxWidth = element.parent!.attrs.width - element.attrs.x
-    const maxHeight = element.parent!.attrs.height - element.attrs.y
-
-    if (element.type === ElementType.Container && element.children?.length) {
-      const rect = getSelectionRectangle(element.children)
-
-      element.attrs.width = element.attrs.width > rect.width + rect.x ? element.attrs.width : rect.width + rect.x
-      element.attrs.height = element.attrs.height > rect.height + rect.y ? element.attrs.height : rect.height + rect.y
-    } else {
-      element.attrs.width = element.attrs.width > maxWidth ? maxWidth : element.attrs.width
-      element.attrs.height = element.attrs.height > maxHeight ? maxHeight : element.attrs.height
-    }
+    graph.updateElemData(element, {
+      x,
+      y,
+      width,
+      height
+    }, false)
   }
   const stickUp = () => {
     const record = new PcRecord({
@@ -103,24 +114,22 @@ export const useElementStickReszie = (event: MouseEvent, stick: typeof sticks[nu
         name: element.attrs.name,
         prev: {
           width: origin.width,
-          height: origin.height
+          height: origin.height,
+          x: origin.x,
+          y: origin.y
         },
         next: {
           width: element.attrs.width,
-          height: element.attrs.height
+          height: element.attrs.height,
+          x: element.attrs.x,
+          y: element.attrs.y
         }
       }]
     })
 
     graph.addRecord(record)
-    setObjectValues(origin, {
-      mouseX: 0,
-      mouseY: 0,
-      width: 0,
-      height: 0,
-      x: 0,
-      y: 0
-    })
+    graph.setResizing(false)
+    graph.setResizeStick()
     removeStickMoveListener()
   }
   const addStickMoveListener = () => {
@@ -134,5 +143,5 @@ export const useElementStickReszie = (event: MouseEvent, stick: typeof sticks[nu
     document.documentElement.removeEventListener('mouseleave', stickUp)
   }
 
-  stickDown(event)
+  addStickMoveListener()
 }
