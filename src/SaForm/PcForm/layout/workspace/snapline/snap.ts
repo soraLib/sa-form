@@ -212,11 +212,7 @@ const calcResizeLines = (target: PcElement, compares: PcElement[], { deepOffsetX
           }
         }
 
-        if (
-          !sorption.row
-          || resized
-          || rect.y === triggerY
-        ) {
+        if (resized || rect.y === triggerY) {
           snaplines.set(`r${direct.name[0]}`, { y: lineY + deepOffsetY })
         }
       }
@@ -249,10 +245,7 @@ const calcResizeLines = (target: PcElement, compares: PcElement[], { deepOffsetX
           }
         }
 
-        if (
-          !sorption.col
-          || resized
-          || rect.x === triggerX
+        if (resized || rect.x === triggerX
         ) {
           snaplines.set(`c${direct.name[0]}`, { x: lineX + deepOffsetX })
         }
