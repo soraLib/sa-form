@@ -1,8 +1,11 @@
 import { PcElement, PcElementAttributes } from '../../../element'
 import { getRectangle, Rect } from '../graph/renderer/utils/rectangle'
+import { PcGraph } from '../../../graph'
+import { firstOfStick, lastOfStick } from '../graph/renderer/element-renderer'
 
 interface RowResult { lineY: number; triggerY: number }
 interface ColResult { lineX: number; triggerX: number }
+type CalcResult = RowResult | ColResult
 export interface Snapline {
   x?: number;
   y?: number;
@@ -11,13 +14,11 @@ export interface Snapline {
 const directions: Record<
   'row' | 'col',
   {
-    name: string;
-    calc(
+    name: string
+    calc: (
       compare: PcElement,
       target: Rect
-    ):
-      | ColResult
-      | RowResult;
+    ) => CalcResult
   }[]
 > = {
   row: [
@@ -104,7 +105,13 @@ const directions: Record<
 const threshold = 10
 const isSorption = (a: number, b: number) => Math.abs(a - b) <= threshold
 
-const calcLines = (targets: PcElement[], compares: PcElement[], { deepOffsetX, deepOffsetY }: { deepOffsetX: number, deepOffsetY: number }) => {
+export type SnapType = 'drag' | 'resize'
+interface CalcOption {
+  deepOffsetX: number
+  deepOffsetY: number
+  graph: PcGraph
+}
+const calcDragLines = (targets: PcElement[], compares: PcElement[], { deepOffsetX, deepOffsetY }: CalcOption) => {
   const rect = getRectangle(targets)
   const rectIdSet = new Set(targets.map(t => t.attrs.id))
 
@@ -124,7 +131,6 @@ const calcLines = (targets: PcElement[], compares: PcElement[], { deepOffsetX, d
       const { lineY, triggerY } = result as RowResult
 
       if (isSorption(rect.y, triggerY)) {
-
         if (!sorption.row) {
           const moveY = triggerY - rect.y
           for (const elem of targets) {
@@ -165,7 +171,101 @@ const calcLines = (targets: PcElement[], compares: PcElement[], { deepOffsetX, d
   return snaplines
 }
 
+const calcResizeLines = (target: PcElement, compares: PcElement[], { deepOffsetX, deepOffsetY, graph }: CalcOption) => {
+  const rect = getRectangle([target])
+
+  const snaplines = new Map<string, Snapline>()
+  const sorption = {
+    row: false,
+    col: false
+  }
+
+  for (const compare of compares) {
+    // skip self compare
+    if (compare === target) continue
+
+    // row snaplines
+    for (const direct of directions.row) {
+      // skip snap on cc
+      if (direct.name === 'cc') continue
+
+      const result = direct.calc(compare, rect)
+      const { lineY, triggerY } = result as RowResult
+
+      if (isSorption(rect.y, triggerY)) {
+        let resized = false
+
+        if (!sorption.row && graph.resizeStick) {
+          const stickY = firstOfStick(graph.resizeStick)
+
+          if (stickY === 't' && direct.name[0] === 't') {
+            target.attrs.height = target.attrs.height + target.attrs.y - lineY
+            target.attrs.y = lineY
+            sorption.row = true
+            resized = true
+          }
+
+          if (stickY === 'b' && direct.name[0] === 'b') {
+            target.attrs.height = lineY - target.attrs.y
+            sorption.row = true
+            resized = true
+          }
+        }
+
+        if (
+          !sorption.row
+          || resized
+          || rect.y === triggerY
+        ) {
+          snaplines.set(`r${direct.name[0]}`, { y: lineY + deepOffsetY })
+        }
+      }
+    }
+
+    // column snaplines
+    for (const direct of directions.col) {
+      // skip snap on cc
+      if (direct.name === 'cc') continue
+
+      const result = direct.calc(compare, rect)
+      const { lineX, triggerX } = result as ColResult
+
+      if (isSorption(rect.x, triggerX)) {
+        let resized = false
+        if (!sorption.col && graph.resizeStick) {
+          const stickX = lastOfStick(graph.resizeStick)
+
+          if (stickX === 'l' && direct.name[0] === 'l') {
+            target.attrs.width = target.attrs.width + target.attrs.x - lineX
+            target.attrs.x = lineX
+            sorption.row = true
+            resized = true
+          }
+
+          if (stickX === 'r' && direct.name[0] === 'r') {
+            target.attrs.width = lineX - target.attrs.x
+            sorption.row = true
+            resized = true
+          }
+        }
+
+        if (
+          !sorption.col
+          || resized
+          || rect.x === triggerX
+        ) {
+          snaplines.set(`c${direct.name[0]}`, { x: lineX + deepOffsetX })
+        }
+      }
+    }
+  }
+
+  return snaplines
+}
+
 export const getSnaplines = (
+  type: SnapType,
+  graph: PcGraph,
   elements: PcElement[],
   compares?: PcElement[]
 ): Map<string, Snapline> => {
@@ -176,8 +276,11 @@ export const getSnaplines = (
 
   const deepOffsetX = getDeepOffset('x', parent)
   const deepOffsetY = getDeepOffset('y', parent)
+  const optiopns = { deepOffsetX, deepOffsetY, graph }
 
-  return calcLines(elements, _compares, { deepOffsetX, deepOffsetY })
+  return type === 'drag'
+    ? calcDragLines(elements, _compares, optiopns)
+    : calcResizeLines(elements[0], _compares, optiopns)
 }
 
 const getDeepOffset = (attr: keyof Pick<PcElementAttributes, 'x' | 'y'>, element?: PcElement): number =>

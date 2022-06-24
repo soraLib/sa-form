@@ -1,5 +1,5 @@
 import { CSSProperties, defineComponent, PropType, computed } from 'vue'
-import { PcGraph } from '../../../../graph'
+import { PcGraph, Stick } from '../../../../graph'
 import { PcElement } from '../../../../element'
 import { useElementStyle } from './hooks/useStyle'
 
@@ -12,9 +12,8 @@ import { useElementStickReszie } from './hooks/useResize'
 
 type First<T extends string> = T extends `${infer S1}${infer S2}` ? S1 : never
 type Last<T extends string> = T extends `${infer S1}${infer S2}` ? S2 : never
-const stickSize = 8
-export const sticks = ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml'] as const
-const currentStick: [First<typeof sticks[number]>, Last<typeof sticks[number]>] | [] = []
+export const sticks: Stick[] = ['tl', 'tm', 'tr', 'mr', 'br', 'bm', 'bl', 'ml']
+const stickSize = sticks.length
 const styleMapping = {
   y: {
     t: 'top',
@@ -28,13 +27,16 @@ const styleMapping = {
   }
 } as const
 
-function vdrStick(stick: typeof sticks[number]) {
+export const firstOfStick = (stick: Stick) => stick[0] as First<Stick>
+export const lastOfStick = (stick: Stick) => stick[1] as Last<Stick>
+
+function vdrStick(stick: Stick) {
   const stickStyle: CSSProperties = {
     width: `${stickSize}px`,
     height: `${stickSize}px`
   }
-  stickStyle[styleMapping.y[stick[0] as First<typeof sticks[number]>]] = `${stickSize / -2}px`
-  stickStyle[styleMapping.x[stick[1] as Last<typeof sticks[number]>]] = `${stickSize / -2}px`
+  stickStyle[styleMapping.y[firstOfStick(stick)]] = `${stickSize / -2}px`
+  stickStyle[styleMapping.x[lastOfStick(stick)]] = `${stickSize / -2}px`
 
   return stickStyle
 }
