@@ -1,5 +1,4 @@
 import { BasicElement } from '../../../../../../element'
-import { PcElement } from '../../../../../element'
 
 export interface Rect {
   x: number
