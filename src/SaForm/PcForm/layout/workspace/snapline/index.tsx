@@ -4,6 +4,7 @@ import { PcGraph } from '../../../graph'
 import { getSnaplines, Snapline } from './snap'
 
 import './index.scss'
+import { useClazs } from '../../../../utils/class'
 
 export default defineComponent({
   name: 'SaPcFormSnapline',
@@ -36,21 +37,18 @@ export default defineComponent({
       { deep: true }
     )
 
-    const useLineClass = (item: string) => {
-      const classes: string[] = ['graph-snapline']
-
-      classes.push(item[0] === 'r' ? 'row' : 'col')
-      if (line.snaplines.has(item)) classes.push('visible')
-
-      return classes.join(' ')
-    }
-
     return () => <div>
       {
         isDragRef.value && line.lines.map(l =>
           <div
             key={l}
-            class={useLineClass(l)}
+            class={useClazs(
+              'graph-snapline',
+              l[0] === 'r' ? 'row' : 'col',
+              {
+                visible: line.snaplines.has(l)
+              }
+            )}
             style={{
               left: `${line.snaplines.get(l)?.x ?? 0}px`,
               top: `${line.snaplines.get(l)?.y ?? 0}px`

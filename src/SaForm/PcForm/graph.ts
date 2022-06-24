@@ -22,6 +22,8 @@ export interface SelectionBox {
   height: number
 }
 
+export type Stick = 'tl' | 'tm' | 'tr' | 'mr' | 'br' | 'bm' | 'bl' | 'ml'
+
 /** pc graph */
 export class PcGraph implements BasicGraph {
   type: GraphType
@@ -37,6 +39,8 @@ export class PcGraph implements BasicGraph {
     x: 0,
     y: 0
   }
+  isResizing = false
+  resizeStick: Stick | '' = ''
   isSelect = false
   selectionBox = {
     x: 0,
