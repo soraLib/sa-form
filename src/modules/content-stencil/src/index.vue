@@ -1,0 +1,1 @@
+<template>content stencil</template>

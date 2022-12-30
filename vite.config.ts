@@ -1,3 +1,4 @@
+import path from 'path'
 import { defineConfig } from 'vitest/config'
 import Vue from '@vitejs/plugin-vue'
 import VueJsx from '@vitejs/plugin-vue-jsx'
@@ -15,8 +16,8 @@ const pwaOptions: Partial<VitePWAOptions> = {
   base: '/',
   includeAssets: ['favicon.svg'],
   manifest: {
-    name: 'Sa Vue Template',
-    short_name: 'Sa Vue Template',
+    name: 'Sa Form',
+    short_name: 'Sa Form',
     theme_color: '#ffffff',
     icons: [
       {
@@ -71,6 +72,11 @@ export default defineConfig({
   // base: process.env.BASE_URL || 'https://github.com/',
   build: {
     sourcemap: process.env.SOURCE_MAP === 'true',
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    },
   },
   plugins: [
     Vue(),
