@@ -1,24 +1,37 @@
 {
   "compilerOptions": {
-    "target": "esnext",
+    "target": "ESNext",
     "useDefineForClassFields": true,
-    "module": "esnext",
-    "moduleResolution": "node",
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "strict": true,
     "jsx": "preserve",
     "sourceMap": true,
     "resolveJsonModule": true,
+    "isolatedModules": true,
     "esModuleInterop": true,
-    "lib": [
-      "esnext",
-      "dom"
-    ],
-    "types": ["vite/client"]
+    "lib": ["ESNext", "DOM", "WebWorker"],
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "types": [
+      "element-plus/global",
+      "vite-plugin-pwa/client",
+      "vite-plugin-pwa/info"
+    ]
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.d.ts",
     "src/**/*.tsx",
-    "src/**/*.vue"
-  ]
+    "src/**/*.vue",
+    "types/**/*.d.ts",
+    "auto-imports.d.ts",
+    "components.d.ts",
+    "packages/**/*.ts",
+    "internal/**/*.ts"
+  ],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -1,2 +1,9 @@
-/public
-/node_modules
+node_modules
+dist
+pnpm-lock.yaml
+CHANGELOG.en-US.md
+!.*
+docs/components.d.ts
+coverage
+ssr-testing/cases/*
+auto-imports.d.ts

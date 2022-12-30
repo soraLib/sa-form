@@ -1,36 +1,32 @@
-
-<template>
-  <div class="mx-auto h-full flex">
-    <SaHeader />
-
-    <div class="m-auto w-4/5 h-4/5">
-      <SaForm id="1" type="PcForm"  />
-    </div>
-  </div>
-</template>
-
-<script lang="ts" setup>
-import SaHeader from './components/Header'
-import SaForm from './SaForm/index'
-
+<script setup lang="ts">
+import ReloadPrompt from './ReloadPrompt.vue'
 </script>
 
-<style>
-#app-inner-container {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  height: 100vh;
-  width: 100vw;
-  padding-top: 3.6rem;
-  box-sizing: border-box;
-  background-color: var(--c-bg-mute);
-  color: var(--c-text);
+<template>
+  <div class="h-full w-full flex justify-center items-center">
+    <div>
+      <img
+        alt="Vue logo"
+        class="logo"
+        src="./assets/logo.svg"
+        width="125"
+        height="125"
+      />
+
+      <ElCard>Auto Import Test</ElCard>
+    </div>
+  </div>
+
+  <ReloadPrompt />
+</template>
+
+<style lang="scss" scoped>
+header {
+  line-height: 1.5;
 }
 
-body {
-  padding: 0;
-  margin: 0;
+.logo {
+  display: block;
+  margin: 0 auto 2rem;
 }
 </style>

@@ -1,11 +1,10 @@
 # Sa Form
 
-Low-code form component in `Vue3`.
-
-[Online Website](https://soralib.github.io/sa-form/).
+Low code form component written in `Vue3`.
 
 ## TODO
 
-- [ ] Pc Native form
-- [ ] Flow form
-- [ ] App form
+- [ ] PC Basic Form
+- [ ] Customizable Layouts
+- [ ] Historires Manager
+- [ ] Dark/Light Theme Mode

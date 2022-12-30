@@ -1,17 +1,6 @@
 import { createApp } from 'vue'
-import Provider from './AppProvider.vue'
+import App from './App.vue'
 
-import './components/VContextmenu/themes/default/index.scss'
-import './index.css'
-import './assets/iconfont.css'
+import './styles/main.css'
 
-const meta = document.createElement('meta')
-meta.name = 'naive-ui-style'
-document.head.appendChild(meta)
-
-import contextmenu from './components/VContextmenu/index'
-
-const app = createApp(Provider)
-app.use(contextmenu)
-
-app.mount('#app')
+createApp(App).mount('#app')

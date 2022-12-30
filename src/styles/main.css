@@ -1,0 +1,10 @@
+@import './base.css';
+
+/* for tailwindcss */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#app {
+  @apply w-screen h-screen;
+}

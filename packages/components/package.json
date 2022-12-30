@@ -1,0 +1,9 @@
+{
+  "name": "@sa/components",
+  "version": "0.0.1",
+  "description": "all components are settled here",
+  "peerDependencies": {
+    "vue": "^3.2.0"
+  },
+  "sideEffects": false
+}
