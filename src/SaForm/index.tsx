@@ -64,11 +64,11 @@ linear-gradient(90deg, #DEDEDEFF 1px, transparent 0)`,
             <SaFormSidebar stencil={layout.side} graph={layout.graph} class="sa-bg h-full" />
           </aside>
 
-          <main class="justify-center sa-bg mx-1 flex flex-col grow">
+          <main style={{ background: '#eaecee' }} class="justify-center sa-bg mx-1 flex flex-col grow">
             <section class="workspace-bg overflow-auto grow" >
               <SaFormWorkspace class="workspace" graph={layout.graph} style={gridStyle.value} />
             </section>
-            <SaFormFooter graph={layout.graph} />
+            <SaFormFooter class="sa-bg" graph={layout.graph} />
           </main>
 
           <aside class="w-64 sa-bg shrink-0">
