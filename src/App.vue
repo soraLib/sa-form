@@ -12,7 +12,6 @@
 <script lang="ts" setup>
 import SaHeader from './components/Header'
 import SaForm from './SaForm/index'
-
 </script>
 
 <style>
@@ -23,7 +22,6 @@ import SaForm from './SaForm/index'
   text-align: center;
   height: 100vh;
   width: 100vw;
-  padding-top: 3.6rem;
   box-sizing: border-box;
   background-color: var(--c-bg-mute);
   color: var(--c-text);
