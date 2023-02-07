@@ -1,5 +1,5 @@
 import { PartialOptional } from 'sugar-sajs'
-import { computed, defineComponent, PropType, Ref, ref, watch } from 'vue'
+import { computed, defineComponent, PropType, ref } from 'vue'
 import { BasicGraph } from '../../graph'
 import { BasicElement } from '../../element'
 
@@ -38,9 +38,9 @@ export default defineComponent({
   },
 
   setup(props) {
-    const refStencil: Ref<HTMLDivElement | null> = ref(null)
+    const refStencil = ref<HTMLDivElement | null>(null)
 
-    const nativeStencil: Ref<ReturnType<NativeStencil> | null> = ref(null)
+    const nativeStencil= ref<ReturnType<NativeStencil> | null>(null)
     const nativeStencilGroups = computed(() => {
       if (!nativeStencil.value) return null
 

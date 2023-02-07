@@ -5,7 +5,7 @@ import { PcGraph } from './PcForm/graph'
 import { DefineComponent, PropType } from 'vue'
 
 import { PcHeaderOptions } from './PcForm/layout/header'
-import { getPcSideStencil } from './PcForm/layout/side'
+import { getNativeSideStencil } from './PcForm/layout/side'
 import PcWorkspace from './PcForm/layout/workspace'
 import { ElementType } from './element'
 import { SaPlugin, SaPluginLayout } from './plugin'
@@ -25,7 +25,7 @@ const createPcFormConfig = () => ({
     }
   }),
   header: PcHeaderOptions,
-  side: getPcSideStencil(),
+  side: getNativeSideStencil(),
   workspace: PcWorkspace,
   controller: {
     plugins: PcPlugin,

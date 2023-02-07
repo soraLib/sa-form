@@ -21,7 +21,7 @@ const clazz = (...args: Clazz[]): string => {
 }
 
 /**
- * Build class
+ * Build classes
  */
 export const useClazs = (...args: Clazz[]): string => {
   const r = clazz(...args)

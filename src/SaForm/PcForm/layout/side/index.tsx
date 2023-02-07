@@ -1,3 +1,3 @@
 import { NativePcSideStencil } from './stencil'
 
-export const getPcSideStencil = () => NativePcSideStencil
+export const getNativeSideStencil = () => NativePcSideStencil

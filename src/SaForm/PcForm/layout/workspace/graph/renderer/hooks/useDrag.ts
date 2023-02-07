@@ -4,6 +4,7 @@ import { PcGraph } from '../../../../../graph'
 import { PcRecord } from '../../../../../record'
 import { getRectangle } from '../utils/rectangle'
 import { useElementSelect } from './useSelect'
+import { gridFloor } from './utils'
 
 /** select element or take it at the ahead of the selected */
 export const selectOrAhead = (element: PcElement, graph: PcGraph) => {
@@ -66,13 +67,24 @@ const useElementDrag = (event: MouseEvent, element: PcElement, graph: PcGraph) =
       ? element.parent!.attrs.height - rect.height - rectPos._startY : finalY < 0 ? -rectPos._startY : moveY
 
     graph.updateElemsData(
-      graph.selected.map((ele, i) => ({
-        element: ele,
-        data: {
-          x: elemsPos[i]._startX + finalMoveX,
-          y :  elemsPos[i]._startY + finalMoveY
+      graph.selected.map((ele, i) => {
+        let x = elemsPos[i]._startX + finalMoveX
+        let y = elemsPos[i]._startY + finalMoveY
+
+        // grid
+        if (graph.grid.enabled) {
+          x = gridFloor(x, graph.grid.size)
+          y = gridFloor(y, graph.grid.size)
         }
-      }))
+
+        return {
+          element: ele,
+          data: {
+            x,
+            y
+          }
+        }
+      })
     )
   }
   const elementMoveEnd = () => {
