@@ -78,7 +78,7 @@ export default defineComponent({
           'h-full',
           'relative',
           {
-            'cursor-move':  props.graph.isDrag
+            'cursor-move':  props.graph.isDragging
           }
         )}
         onDrop={onDrop}

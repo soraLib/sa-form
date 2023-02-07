@@ -7,6 +7,7 @@ import { findNode, findTreeNode, removeTreeNode, setObjectValues } from 'sugar-s
 import { cloneDeep, pick } from 'lodash-es'
 import { getNextId } from '../utils/element'
 import { PcClipBoard } from './clipboard'
+import { Events } from './events'
 
 type IdUpdateData = { id: string, data: Partial<PcElement['attrs']> }
 type ElUpdateData = { element: PcElement, data: Partial<PcElement['attrs']> }
@@ -25,7 +26,7 @@ export interface SelectionBox {
 export type Stick = 'tl' | 'tm' | 'tr' | 'mr' | 'br' | 'bm' | 'bl' | 'ml'
 
 /** pc graph */
-export class PcGraph implements BasicGraph {
+export class PcGraph extends Events implements BasicGraph {
   type: GraphType
   canvas: PcElement
   history: BasicRecordStore
@@ -48,8 +49,19 @@ export class PcGraph implements BasicGraph {
     width: 0,
     height: 0
   }
+  grid = { // TODO:
+    type: 'mesh',
+    size: 10,
+    enabled: true
+  } as const
+  snapline = { // TODO:
+    threshold: 10,
+    enabled: true
+  }
 
   constructor(config: Partial<PcElement> & { attrs: {} }) {
+    super()
+
     this.type = 'PcForm'
     this.history = new PcRecordStore()
     this.clipboard = new PcClipBoard()
@@ -374,7 +386,7 @@ export class PcGraph implements BasicGraph {
 }
 
 /** add canvas node */
-function addGraphNode(graph: PcGraph, element?: PcElement) {
+const addGraphNode = (graph: PcGraph, element?: PcElement) => {
   if (!graph.canvas.children || !element) return
 
   if (element.parent) {
@@ -386,9 +398,8 @@ function addGraphNode(graph: PcGraph, element?: PcElement) {
     }
   }
 }
-
 /** remove canvas node */
-function removeGraphNode(graph: PcGraph, id?: string) {
+const removeGraphNode = (graph: PcGraph, id?: string) => {
   if (!graph.canvas.children || !id) return
 
   const element = findNode(graph.canvas, node => node.attrs.id === id)

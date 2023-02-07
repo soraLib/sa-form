@@ -1,6 +1,6 @@
 /** sa-form entry */
 
-import { defineComponent, PropType, reactive } from 'vue'
+import { defineComponent, PropType, reactive, computed, CSSProperties } from 'vue'
 import { GraphType } from './graph'
 
 import { ILayout, LAYOUTS } from './config'
@@ -30,6 +30,29 @@ export default defineComponent({
 
     const SaFormWorkspace = layout.workspace
 
+    const gridStyle = computed<CSSProperties>(() => {
+      const grid = layout.graph.grid
+      if (!grid.enabled) return {}
+
+      if (grid.type === 'dot') return {
+        backgroundPositionX: '0.5px', // TODO: use canvas
+        backgroundPositionY: '0.5px',
+        backgroundImage: `linear-gradient(var(--c-bg) ${grid.size - 1}px, transparent 0), linear-gradient(90deg, transparent ${grid.size - 1}px, var(--c-bg-dark) 0)`,
+        backgroundSize: `${grid.size}px ${grid.size}px, ${grid.size}px ${grid.size}px`
+      }
+
+      // mesh
+      return {
+        backgroundPositionX: '-1px',
+        backgroundPositionY: '-1px',
+        backgroundImage: `linear-gradient(rgba(229,229,229,.5) 1px, transparent 0),
+linear-gradient(90deg, rgba(229,229,229,.5) 1px, transparent 0),
+linear-gradient(#DEDEDEFF 1px, transparent 0),
+linear-gradient(90deg, #DEDEDEFF 1px, transparent 0)`,
+        backgroundSize: `${grid.size}px ${grid.size}px, ${grid.size}px ${grid.size}px, ${grid.size * 5}px ${grid.size * 5}px, ${grid.size * 5}px ${grid.size * 5}px`
+      }
+    })
+
     return () => (
       <section class="flex flex-col h-full">
         <header>
@@ -42,8 +65,8 @@ export default defineComponent({
           </aside>
 
           <main class="justify-center sa-bg mx-1 flex flex-col grow">
-            <section class="workspace-bg overflow-auto grow">
-              <SaFormWorkspace class="workspace" graph={layout.graph} />
+            <section class="workspace-bg overflow-auto grow" >
+              <SaFormWorkspace class="workspace" graph={layout.graph} style={gridStyle.value} />
             </section>
             <SaFormFooter graph={layout.graph} />
           </main>

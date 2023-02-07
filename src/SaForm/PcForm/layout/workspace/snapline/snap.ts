@@ -101,9 +101,7 @@ const directions: Record<
   ]
 }
 
-// element adsorb distance (px)
-const threshold = 10
-const isSorption = (a: number, b: number) => Math.abs(a - b) <= threshold
+const isSorption = (a: number, b: number, threshold: number) => Math.abs(a - b) <= threshold
 
 export type SnapType = 'drag' | 'resize'
 interface CalcOption {
@@ -111,7 +109,7 @@ interface CalcOption {
   deepOffsetY: number
   graph: PcGraph
 }
-const calcDragLines = (targets: PcElement[], compares: PcElement[], { deepOffsetX, deepOffsetY }: CalcOption) => {
+const calcDragLines = (targets: PcElement[], compares: PcElement[], { deepOffsetX, deepOffsetY, graph }: CalcOption) => {
   const rect = getRectangle(targets)
   const rectIdSet = new Set(targets.map(t => t.attrs.id))
 
@@ -130,7 +128,7 @@ const calcDragLines = (targets: PcElement[], compares: PcElement[], { deepOffset
       const result = direct.calc(compare, rect)
       const { lineY, triggerY } = result as RowResult
 
-      if (isSorption(rect.y, triggerY)) {
+      if (isSorption(rect.y, triggerY, graph.snapline.threshold)) {
         if (!sorption.row) {
           const moveY = triggerY - rect.y
           for (const elem of targets) {
@@ -151,7 +149,7 @@ const calcDragLines = (targets: PcElement[], compares: PcElement[], { deepOffset
       const result = direct.calc(compare, rect)
       const { lineX, triggerX } = result as ColResult
 
-      if (isSorption(rect.x, triggerX)) {
+      if (isSorption(rect.x, triggerX, graph.snapline.threshold)) {
         if (!sorption.col) {
           const moveX = triggerX - rect.x
           for (const elem of targets) {
@@ -192,7 +190,7 @@ const calcResizeLines = (target: PcElement, compares: PcElement[], { deepOffsetX
       const result = direct.calc(compare, rect)
       const { lineY, triggerY } = result as RowResult
 
-      if (isSorption(rect.y, triggerY)) {
+      if (isSorption(rect.y, triggerY, graph.snapline.threshold)) {
         let resized = false
 
         if (!sorption.row && graph.resizeStick) {
@@ -226,7 +224,7 @@ const calcResizeLines = (target: PcElement, compares: PcElement[], { deepOffsetX
       const result = direct.calc(compare, rect)
       const { lineX, triggerX } = result as ColResult
 
-      if (isSorption(rect.x, triggerX)) {
+      if (isSorption(rect.x, triggerX, graph.snapline.threshold)) {
         let resized = false
         if (!sorption.col && graph.resizeStick) {
           const stickX = lastOfStick(graph.resizeStick)
