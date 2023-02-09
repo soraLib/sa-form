@@ -9,7 +9,7 @@ export const NativePcSideStencil: NativeStencil = (graph: PcGraph) => ({
   ],
   nodes: {
     Normal: [{
-      icon: 'iconanniu', // use svg
+      icon: 'iconanniu', // TODO: use svg
       attrs: {
         type: ElementType.Button,
         name: 'Button',
