@@ -24,7 +24,7 @@ export const createMockPcCanvas: () => PcElement = () => {
       type: ElementType.Button,
       name: 'mock button 1',
       width: 80,
-      height: 40,
+      height: 45,
       x: 200,
       y: 100,
       background: '#50DA58'

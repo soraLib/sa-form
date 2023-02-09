@@ -51,11 +51,11 @@ export class PcGraph extends Events implements BasicGraph {
   }
   grid = { // TODO:
     type: 'mesh',
-    size: 10,
+    size: 15,
     enabled: true
   } as const
   snapline = { // TODO:
-    threshold: 10,
+    threshold: 15,
     enabled: true
   }
 

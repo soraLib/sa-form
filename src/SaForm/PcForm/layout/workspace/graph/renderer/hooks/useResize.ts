@@ -4,6 +4,7 @@ import { PcElement } from '../../../../../element'
 import { PcGraph, Stick } from '../../../../../graph'
 import { PcRecord } from '../../../../../record'
 import { getRectangle } from '../utils/rectangle'
+import { gridFloor, useResizeOnGird } from './utils'
 
 export const useElementStickReszie = (event: MouseEvent, stick: Stick, element: PcElement, graph: PcGraph) => {
   event.stopPropagation()
@@ -97,6 +98,18 @@ export const useElementStickReszie = (event: MouseEvent, stick: Stick, element: 
     const maxHeight = element.parent!.attrs.height - y
     width = width > maxWidth ? maxWidth : width
     height = height > maxHeight ? maxHeight : height
+
+    // grid
+    if (graph.grid.enabled) {
+      const rect = useResizeOnGird({ x, y, width, height }, graph.grid.size, stick, {
+        x: deltaX,
+        y: deltaY
+      })
+      x = rect.x
+      y = rect.y
+      width = rect.width
+      height = rect.height
+    }
 
     graph.updateElemData(element, {
       x,
