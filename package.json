@@ -15,7 +15,7 @@
     "naive-ui": "^2.30.3",
     "sa-lambda": "^1.3.0",
     "sortablejs": "^1.15.0",
-    "sugar-sajs": "1.1.1",
+    "sugar-sajs": "1.1.6",
     "vue": "^3.2.37"
   },
   "devDependencies": {
