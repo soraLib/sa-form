@@ -6,6 +6,8 @@ import { PcElement, containerElements } from '../../../element'
 
 import ElementRenderer from './renderer/element-renderer'
 import { useClazs } from '../../../../utils/class'
+import { StencilAttrs } from '../../../../layout/sidebar/index'
+import { gridFloor } from './renderer/hooks/utils'
 
 export default defineComponent({
   name: 'NativeWorkspace',
@@ -39,15 +41,14 @@ export default defineComponent({
 
       if (!parent || !containerElements.includes(parent?.attrs.type)) return
 
-      const attrs = JSON.parse(elementMessage)
-
+      const attrs: StencilAttrs = JSON.parse(elementMessage)
       const dropElement = new PcElement({
         parent,
         attrs: {
           ...attrs,
           id: props.graph.getNextId(),
-          x: event.offsetX,
-          y: event.offsetY
+          x: gridFloor(event.offsetX - attrs.width / 2, props.graph.grid.size), // TODO:
+          y: gridFloor(event.offsetY - attrs.height / 2, props.graph.grid.size)
         }
       })
 

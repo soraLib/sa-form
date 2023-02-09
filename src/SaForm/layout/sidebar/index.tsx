@@ -7,7 +7,8 @@ import NativeItem from './native'
 
 import './index.scss'
 
-type NeededKeys = 'type' | 'name' | 'width' | 'height'
+export type StencilAttrKey = 'type' | 'name' | 'width' | 'height'
+export type StencilAttrs = PartialOptional<BasicElement['attrs'], Exclude<keyof BasicElement['attrs'], StencilAttrKey>>
 // native stencil config
 export type NativeStencil = (graph: any /** TODO: */) => {
   groups: { name: string }[]
@@ -15,7 +16,7 @@ export type NativeStencil = (graph: any /** TODO: */) => {
     [key in ReturnType<NativeStencil>['groups'][number]['name']]: ({
       icon: string
       title?: string
-      attrs: PartialOptional<BasicElement['attrs'], Exclude<keyof BasicElement['attrs'], NeededKeys>>
+      attrs: StencilAttrs
     })[]
   }
 }
@@ -40,7 +41,7 @@ export default defineComponent({
   setup(props) {
     const refStencil = ref<HTMLDivElement | null>(null)
 
-    const nativeStencil= ref<ReturnType<NativeStencil> | null>(null)
+    const nativeStencil = ref<ReturnType<NativeStencil> | null>(null)
     const nativeStencilGroups = computed(() => {
       if (!nativeStencil.value) return null
 
