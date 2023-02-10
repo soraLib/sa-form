@@ -3,9 +3,11 @@ import { computed, defineComponent, PropType, ref } from 'vue'
 import { BasicGraph } from '../../graph'
 import { BasicElement } from '../../element'
 
-import NativeItem from './native'
+import StencilGroup from './group'
 
 import './index.scss'
+import { NIcon, NInput } from 'naive-ui'
+import { FlashOutline } from '@vicons/ionicons5'
 
 export type StencilAttrKey = 'type' | 'name' | 'width' | 'height'
 export type StencilAttrs = PartialOptional<BasicElement['attrs'], Exclude<keyof BasicElement['attrs'], StencilAttrKey>>
@@ -22,7 +24,7 @@ export type NativeStencil = (graph: any /** TODO: */) => {
 }
 type Nodes = ReturnType<NativeStencil>['nodes']
 export type NativeItem = Nodes[keyof Nodes][number]
-type ComposedNativeStencil = ReturnType<NativeStencil>['groups'][number] & NativeItem
+export type ComposedNativeStencil = ReturnType<NativeStencil>['groups'][number] & NativeItem
 
 export default defineComponent({
   name: 'CoFormLayoutSidebar',
@@ -40,6 +42,10 @@ export default defineComponent({
 
   setup(props) {
     const refStencil = ref<HTMLDivElement | null>(null)
+    const stencilSearch = ref('')
+    const stencilSearchChange = (search: string) => {
+      stencilSearch.value = search
+    }
 
     const nativeStencil = ref<ReturnType<NativeStencil> | null>(null)
     const nativeStencilGroups = computed(() => {
@@ -55,23 +61,46 @@ export default defineComponent({
 
       return [...gMap]
     })
+    const filteredNativeStencilGroups = computed(() => {
+      if (!stencilSearch.value) return nativeStencilGroups.value
+
+      return nativeStencilGroups.value?.map((group): [string, ComposedNativeStencil[]] => (
+        [group[0], group[1].filter(item => {
+          return new RegExp(stencilSearch.value, 'i').test(item.attrs.name)
+        })])
+      )
+    })
 
     nativeStencil.value = (props.stencil as NativeStencil)(props.graph)
 
     return {
+      stencilSearch,
+      stencilSearchChange,
       refStencil,
       nativeStencil,
-      nativeStencilGroups
+      nativeStencilGroups,
+      filteredNativeStencilGroups
     }
   },
 
   render() {
     return (
       <div class={'sa-form-side flex flex-col justify-start p-1 box-border relative'}>
+        <NInput class="stencil-search"
+          showButton={false}
+          value={this.stencilSearch}
+          onUpdateValue={this.stencilSearchChange}
+          clearable
+          placeholder="请输入搜索内容"
+        >
+          {{
+            prefix: () => <NIcon component={FlashOutline} />
+          }}
+        </NInput>
+
         {
-          this.nativeStencilGroups?.map(group =>
-            group[1].map(item => <NativeItem item={item} />)
-          )
+          // groups
+          this.filteredNativeStencilGroups?.map(group => group[1].length && <StencilGroup group={group} />).filter(Boolean)
         }
       </div>
     )

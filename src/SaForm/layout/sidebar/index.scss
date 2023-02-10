@@ -1,5 +1,7 @@
 .sa-form-side {
   .native-item {
+    display: inline-flex;
+    width: fit-content;
     color: var(--c-text-1);
     box-sizing: border-box;
     padding: 0.25rem;
@@ -25,4 +27,44 @@
 
 .drag-ghost {
   right: 100%;
+}
+
+.stencil-search {
+  text-align: start;
+}
+.stencil-group {
+  border-bottom: 1px solid #dfe2e5;
+  padding: 10px 0;
+
+  .stencil-group__header {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    text-align: left;
+    font-weight: 700;
+    color: #212930;
+    padding: 4px 0 4px 4px;
+    height: 20px;
+    line-height: 20px;
+    box-sizing: border-box;
+
+    .caret {
+      transition: all 0.2s ease-in-out;
+    }
+  }
+
+  .stencil-group__content {
+    display: flex;
+    justify-content: flex-start;
+    padding: 10px 5px 0 12px;
+  }
+ 
+  &.collapsed {
+    .caret {
+      transform: rotate(-90deg);
+    }
+    .stencil-group__content {
+      display: none;
+    }
+  }
 }

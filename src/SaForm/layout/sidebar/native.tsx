@@ -1,6 +1,5 @@
 import { defineComponent, PropType } from 'vue'
 import { NativeItem } from '.'
-import { setDataTransfer } from '../../utils/drag'
 import { Stencil } from './stencil'
 
 export default defineComponent({
