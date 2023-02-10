@@ -4,6 +4,8 @@ import { CSSProperties } from 'vue'
 export enum ElementType {
   /** pc form canvas */
   Canvas = 1,
+  /** pc form text */
+  Text,
   /** pc form button */
   Button,
   /** pc form select */
