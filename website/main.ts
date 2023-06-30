@@ -1,8 +1,9 @@
 import { createApp } from 'vue'
 import Provider from './AppProvider.vue'
 
-import './index.css'
-import './assets/iconfont.css'
+import './styles/base.css'
+import './styles/var.scss'
+import './styles/iconfont.css'
 
 const meta = document.createElement('meta')
 meta.name = 'naive-ui-style'

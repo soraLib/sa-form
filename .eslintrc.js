@@ -34,6 +34,7 @@ module.exports = {
     'computed-property-spacing': [2, 'never'],
     'arrow-spacing': 'error',
 
-    'vue/no-multiple-template-root': 'off'
+    'vue/no-multiple-template-root': 'off',
+    'vue/multi-word-component-names': 'off'
   }
 }

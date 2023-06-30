@@ -1,21 +1,21 @@
 
 <template>
-  <div class="mx-auto h-full flex">
+  <div id="app" class="flex h-full mx-auto">
     <SaHeader />
 
-    <div class="m-auto w-4/5 h-4/5">
+    <div class="w-4/5 m-auto h-4/5">
       <SaForm id="1" type="PcForm"  />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import SaHeader from './components/Header'
-import SaForm from './SaForm/index'
+import SaHeader from './layout/Header/index.vue'
+import SaForm from '@/SaForm'
 </script>
 
-<style>
-#app-inner-container {
+<style lang="scss" scoped>
+#app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -27,8 +27,4 @@ import SaForm from './SaForm/index'
   color: var(--c-text);
 }
 
-body {
-  padding: 0;
-  margin: 0;
-}
 </style>
