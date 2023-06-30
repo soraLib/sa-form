@@ -10,8 +10,6 @@ import SaFormSidebar from './layout/sidebar'
 import SaFormController from './layout/properties-controller'
 import SaFormFooter from './layout/footer'
 
-import { NScrollbar } from 'naive-ui'
-
 import './styles/index.scss'
 
 export default defineComponent({
@@ -64,11 +62,11 @@ linear-gradient(90deg, #DEDEDEFF 1px, transparent 0)`,
             <SaFormSidebar stencil={layout.side} graph={layout.graph} class="sa-bg h-full" />
           </aside>
 
-          <main style={{ background: '#eaecee' }} class="overflow-auto sa-bg mx-1 flex item-center flex-col grow">
+          <main class="overflow-auto sa-bg mx-1 flex item-center flex-col grow">
             <section class="workspace-bg grow overflow-auto" >
               <SaFormWorkspace class="workspace" graph={layout.graph} style={gridStyle.value} />
             </section>
-            <SaFormFooter class="sa-bg " graph={layout.graph} />
+            <SaFormFooter class="sa-bg" graph={layout.graph} />
           </main>
 
           <aside class="w-64 sa-bg shrink-0">

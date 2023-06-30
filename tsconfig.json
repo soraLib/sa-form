@@ -13,12 +13,21 @@
       "esnext",
       "dom"
     ],
-    "types": ["vite/client"]
+    "paths": {
+      "/#/*": ["./types/*"],
+      "@/*": ["./src/*"]
+    },
+    "types": ["vite/client"],
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.d.ts",
     "src/**/*.tsx",
-    "src/**/*.vue"
+    "src/**/*.vue",
+    "website/**/*.ts",
+    "website/**/*.d.ts",
+    "website/**/*.tsx",
+    "website/**/*.vue",
+    "types/**/*.d.ts",
   ]
 }

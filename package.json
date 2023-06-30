@@ -1,7 +1,7 @@
 {
   "name": "sa-form",
   "version": "1.0.0-pre.0",
-  "description": "Low-code form component, flow and form are both available.",
+  "description": "Low-code form component.",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

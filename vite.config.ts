@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite'
+import path from 'path'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 
@@ -8,7 +9,10 @@ export default defineConfig({
   build: {
     outDir: process.env.BUILD_ENV === 'doc' ? 'docs' : 'dist'
   },
-  server: {
-    port: 8888
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+      '/#': path.resolve(__dirname, './types')
+    }
   }
 })

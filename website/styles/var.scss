@@ -1,6 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 :root {
   --c-white: #ffffff;
@@ -100,11 +97,7 @@
   --c-brand-highlight: var(--c-brand-dark);
 }
 
-:root {
-  --el-color-primary: var(--c-brand);
-}
-
-.dark {
+html.dark:root {
   --c-bg: var(--c-black);
   --c-bg-soft: var(--c-black-soft);
   --c-bg-mute: var(--c-black-mute);
@@ -112,10 +105,10 @@
   --c-divider-light: var(--c-divider-dark-2);
   --c-divider-inverse: var(--c-divider-light-1);
   --c-divider-inverse-light: var(--c-divider-light-2);
-  --c-text: var(--c-text)
-  --c-text-light: var(--c-text-light)
-  --c-text-lighter: var(--c-text-lighter)
-  --c-text: var(--c-text)
+  --c-text: var(--c-text);
+  --c-text-light: var(--c-text-light);
+  --c-text-lighter: var(--c-text-lighter);
+  --c-text: var(--c-text);
   --c-text-1: var(--c-text-dark-1);
   --c-text-2: var(--c-text-dark-2);
   --c-text-3: var(--c-text-dark-3);
