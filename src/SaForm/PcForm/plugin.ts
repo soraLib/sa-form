@@ -26,6 +26,17 @@ export const PcPlugin: SaPluginLayout = {
       BasicPlugins['widget-background'],
     ],
   },
+  [ElementType.Text]: {
+    basic: [
+      BasicPlugins['widget-id'],
+      BasicPlugins['widget-name'],
+      BasicPlugins['widget-width'],
+      BasicPlugins['widget-height'],
+      BasicPlugins['widget-x'],
+      BasicPlugins['widget-y'],
+      BasicPlugins['widget-background'],
+    ],
+  },
   [ElementType.Button]: {
     basic: [
       BasicPlugins['widget-id'],
