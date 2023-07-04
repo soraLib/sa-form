@@ -1,2 +1,7 @@
-/public
-/node_modules
+node_modules
+dist
+public
+pnpm-lock.yaml
+LICENSE
+!.*
+coverage
