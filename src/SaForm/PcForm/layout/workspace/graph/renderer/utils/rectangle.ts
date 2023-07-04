@@ -1,4 +1,4 @@
-import { BasicElement } from '../../../../../../element'
+import type { BasicElement } from '../../../../../../element'
 
 export interface Rect {
   x: number
@@ -11,11 +11,11 @@ export interface Rect {
 export const getRectangle = <A extends BasicElement>(elements: A[]): Rect => {
   if (!elements.length) return { x: 0, y: 0, width: 0, height: 0 }
 
-  let minX = Infinity
-  let maxX = -Infinity
+  let minX = Number.POSITIVE_INFINITY
+  let maxX = Number.NEGATIVE_INFINITY
 
-  let minY = Infinity
-  let maxY = -Infinity
+  let minY = Number.POSITIVE_INFINITY
+  let maxY = Number.NEGATIVE_INFINITY
 
   for (const element of elements) {
     if (element.attrs.x < minX) {
@@ -36,6 +36,6 @@ export const getRectangle = <A extends BasicElement>(elements: A[]): Rect => {
     x: minX,
     y: minY,
     width: maxX - minX,
-    height: maxY - minY
+    height: maxY - minY,
   }
 }

@@ -1,21 +1,21 @@
 import {
+  Teleport,
   computed,
   defineComponent,
-  watch,
-  ref,
-  reactive,
+  nextTick,
   onBeforeUnmount,
   provide,
-  Teleport,
-  PropType,
-  nextTick
+  reactive,
+  ref,
+  watch,
 } from 'vue'
 
 import { CLASSES } from '../constants'
-import {
+import type { PropType } from 'vue'
+import type {
+  ReferenceOptions,
   TriggerEventType,
   TriggerEventTypeOption,
-  ReferenceOptions
 } from '../types'
 
 interface ShowOptions {
@@ -30,7 +30,7 @@ interface AddReferenceOptions {
 const DEFAULT_REFERENCE_OPTIONS: {
   trigger: TriggerEventType[]
 } = {
-  trigger: ['contextmenu']
+  trigger: ['contextmenu'],
 }
 
 const Contextmenu = defineComponent({
@@ -39,20 +39,20 @@ const Contextmenu = defineComponent({
   props: {
     modelValue: {
       type: Boolean,
-      default: false
+      default: false,
     },
     autoAjustPlacement: {
       type: Boolean,
-      default: true
+      default: true,
     },
     disabled: {
       type: Boolean,
-      default: false
+      default: false,
     },
     teleport: {
       type: [String, Object] as PropType<string | Element>,
-      default: () => 'body'
-    }
+      default: () => 'body',
+    },
     // destroyOnHide: {
     //   type: Boolean,
     //   default: false,
@@ -72,7 +72,7 @@ const Contextmenu = defineComponent({
     const position = ref({ top: 0, left: 0 })
     const style = computed(() => ({
       top: `${position.value.top}px`,
-      left: `${position.value.left}px`
+      left: `${position.value.left}px`,
     }))
 
     const currentOptions = ref(null)
@@ -82,7 +82,7 @@ const Contextmenu = defineComponent({
         targetOptions?.autoAjustPlacement || props.autoAjustPlacement
       const targetPosition = {
         top: targetOptions?.top || 0,
-        left: targetOptions?.left || 0
+        left: targetOptions?.left || 0,
       }
 
       if (evt instanceof Event) {
@@ -170,7 +170,7 @@ const Contextmenu = defineComponent({
 
       references.set(el, {
         triggers,
-        handler
+        handler,
       })
     }
     const removeReference = (el: Element) => {
@@ -237,7 +237,7 @@ const Contextmenu = defineComponent({
 
       toggle,
       show,
-      hide
+      hide,
     }
   },
 
@@ -253,12 +253,12 @@ const Contextmenu = defineComponent({
           <ul class={CLASSES.contextmenuInner}>
             {this.$slots.default?.({
               triggerOptions: 'currentReferenceOptions',
-              options: 'currentOptions'
+              options: 'currentOptions',
             })}
           </ul>
         </div>
       )
-    }
+    },
   },
 
   render() {
@@ -269,7 +269,7 @@ const Contextmenu = defineComponent({
     ) : (
       this.renderContent()
     )
-  }
+  },
 })
 
 export default Contextmenu

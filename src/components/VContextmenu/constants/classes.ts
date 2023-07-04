@@ -20,7 +20,7 @@ const CLASSES = {
   contextmenuSubmenuMenusRight: 'v-contextmenu-submenu__menus--right', // 子菜单 Right
   contextmenuSubmenuMenusBottom: 'v-contextmenu-submenu__menus--bottom', // 子菜 Bottom单
   contextmenuSubmenuMenusLeft: 'v-contextmenu-submenu__menus--left', // 子菜单 Left
-  contextmenuSubmenuArrow: 'v-contextmenu-submenu__arrow' // 子菜单标题 icon
+  contextmenuSubmenuArrow: 'v-contextmenu-submenu__arrow', // 子菜单标题 icon
 }
 
 export default CLASSES

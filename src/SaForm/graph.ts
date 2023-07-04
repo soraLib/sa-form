@@ -1,15 +1,15 @@
-import { BasicElement } from './element'
-import { BasicRecordStore, BasicRecord } from './record'
+import type { BasicElement } from './element'
+import type { BasicRecord, BasicRecordStore } from './record'
 
 export type GraphType =
   /** pc form */
   'PcForm'
-  /** app form */
-  // 'AppForm' |
-  /** flow form */
-  // 'Flow' |
-  /** print form */
-  // 'Print'
+/** app form */
+// 'AppForm' |
+/** flow form */
+// 'Flow' |
+/** print form */
+// 'Print'
 
 export interface MousePosition {
   startX: number
@@ -43,8 +43,16 @@ export interface BasicGraph {
   snapline: Snapline
 
   getNextId(): string
-  updateElemData(id: string, data: Partial<BasicElement['attrs']>, needRecord?: boolean): BasicElement | undefined
-  updateElemData(element: BasicElement, data: Partial<BasicElement['attrs']>, needRecord?: boolean): BasicElement | undefined
+  updateElemData(
+    id: string,
+    data: Partial<BasicElement['attrs']>,
+    needRecord?: boolean
+  ): BasicElement | undefined
+  updateElemData(
+    element: BasicElement,
+    data: Partial<BasicElement['attrs']>,
+    needRecord?: boolean
+  ): BasicElement | undefined
   historyTo(to: number): void
   historyTo(to: BasicRecord): void
 }

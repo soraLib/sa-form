@@ -1,4 +1,4 @@
-import { InjectionKey } from 'vue'
-import { PcGraph } from './graph'
+import type { InjectionKey } from 'vue'
+import type { PcGraph } from './graph'
 
 export const PcGraphInjectionKey: InjectionKey<PcGraph> = Symbol('pc-graph')

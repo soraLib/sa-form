@@ -1,12 +1,16 @@
-import { Rect } from '../utils/rectangle'
-import { Stick } from '../../../../../graph'
+import type { Rect } from '../utils/rectangle'
+import type { Stick } from '../../../../../graph'
 
 export const gridFloor = (x: number, size: number) =>
   size * Math.floor(x / size)
-export const gridCeil = (x: number, size: number) =>
-  size * Math.ceil(x / size)
+export const gridCeil = (x: number, size: number) => size * Math.ceil(x / size)
 
-export const useResizeOnGird = (rect: Rect, size: number, stick: Stick, delta: { x: number, y: number }): Rect => {
+export const useResizeOnGird = (
+  rect: Rect,
+  size: number,
+  stick: Stick,
+  delta: { x: number; y: number }
+): Rect => {
   let { x, y, width, height } = { ...rect }
 
   switch (stick[0]) {
@@ -48,6 +52,9 @@ export const useResizeOnGird = (rect: Rect, size: number, stick: Stick, delta: {
   }
 
   return {
-    x, y, width, height
+    x,
+    y,
+    width,
+    height,
   }
 }

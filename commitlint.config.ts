@@ -20,7 +20,7 @@ const scopes = [
   'color',
   'border',
   'var',
-  'ssr'
+  'ssr',
 ]
 
 const gitStatus = execSync('git status --porcelain || true')
@@ -69,7 +69,7 @@ export default {
     'subject-case': [
       1,
       'never',
-      ['sentence-case', 'start-case', 'pascal-case', 'upper-case']
+      ['sentence-case', 'start-case', 'pascal-case', 'upper-case'],
     ],
     'subject-empty': [2, 'never'],
     'subject-full-stop': [2, 'never', '.'],
@@ -95,15 +95,15 @@ export default {
         'release',
         'style',
         'test',
-        'improvement'
-      ]
-    ]
+        'improvement',
+      ],
+    ],
   },
   prompt: {
     defaultScope: scopeComplete,
     customScopesAlign: !scopeComplete ? 'top' : 'bottom',
     defaultSubject: subjectComplete && `[${subjectComplete}] `,
     allowCustomIssuePrefixs: false,
-    allowEmptyIssuePrefixs: false
-  }
+    allowEmptyIssuePrefixs: false,
+  },
 }

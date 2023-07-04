@@ -1,8 +1,9 @@
 import { ElementType } from '../element'
-import { BasicPlugins, SaPluginLayout } from '../plugin'
-import { PcGraph } from './graph'
-import { PcElementAttributes } from './element'
+import { BasicPlugins } from '../plugin'
 import { SelectPlugins } from './plugins/select'
+import type { SaPluginLayout } from '../plugin'
+import type { PcGraph } from './graph'
+import type { PcElementAttributes } from './element'
 
 export const PcPlugin: SaPluginLayout = {
   [ElementType.Canvas]: {
@@ -11,8 +12,8 @@ export const PcPlugin: SaPluginLayout = {
       BasicPlugins['widget-name'],
       BasicPlugins['widget-width'],
       BasicPlugins['widget-height'],
-      BasicPlugins['widget-background']
-    ]
+      BasicPlugins['widget-background'],
+    ],
   },
   [ElementType.Container]: {
     basic: [
@@ -22,8 +23,8 @@ export const PcPlugin: SaPluginLayout = {
       BasicPlugins['widget-height'],
       BasicPlugins['widget-x'],
       BasicPlugins['widget-y'],
-      BasicPlugins['widget-background']
-    ]
+      BasicPlugins['widget-background'],
+    ],
   },
   [ElementType.Button]: {
     basic: [
@@ -33,8 +34,8 @@ export const PcPlugin: SaPluginLayout = {
       BasicPlugins['widget-height'],
       BasicPlugins['widget-x'],
       BasicPlugins['widget-y'],
-      BasicPlugins['widget-background']
-    ]
+      BasicPlugins['widget-background'],
+    ],
   },
   [ElementType.Select]: {
     basic: [
@@ -44,12 +45,16 @@ export const PcPlugin: SaPluginLayout = {
       BasicPlugins['widget-height'],
       BasicPlugins['widget-x'],
       BasicPlugins['widget-y'],
-      SelectPlugins['select-options']
-    ]
-  }
+      SelectPlugins['select-options'],
+    ],
+  },
 }
 
-export function pcPluginValueChange<T extends keyof PcElementAttributes>(key: T, value: PcElementAttributes[T], graph: PcGraph) {
+export function pcPluginValueChange<T extends keyof PcElementAttributes>(
+  key: T,
+  value: PcElementAttributes[T],
+  graph: PcGraph
+) {
   const seleceted = graph.selected[0]
 
   if (!seleceted) return

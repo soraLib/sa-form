@@ -1,107 +1,109 @@
-import { PcElement, PcElementAttributes } from '../../../element'
-import { getRectangle, Rect } from '../graph/renderer/utils/rectangle'
-import { PcGraph } from '../../../graph'
+import { getRectangle } from '../graph/renderer/utils/rectangle'
 import { firstOfStick, lastOfStick } from '../graph/renderer/element-renderer'
+import type { PcElement, PcElementAttributes } from '../../../element'
+import type { Rect } from '../graph/renderer/utils/rectangle'
+import type { PcGraph } from '../../../graph'
 
-interface RowResult { lineY: number; triggerY: number }
-interface ColResult { lineX: number; triggerX: number }
+interface RowResult {
+  lineY: number
+  triggerY: number
+}
+interface ColResult {
+  lineX: number
+  triggerX: number
+}
 type CalcResult = RowResult | ColResult
 export interface Snapline {
-  x?: number;
-  y?: number;
+  x?: number
+  y?: number
 }
 
 const directions: Record<
   'row' | 'col',
   {
     name: string
-    calc: (
-      compare: PcElement,
-      target: Rect
-    ) => CalcResult
+    calc: (compare: PcElement, target: Rect) => CalcResult
   }[]
 > = {
   row: [
     {
       name: 'tt',
-      calc: compare => ({
+      calc: (compare) => ({
         lineY: compare.attrs.y,
-        triggerY: compare.attrs.y
-      })
+        triggerY: compare.attrs.y,
+      }),
     },
     {
       name: 'bt',
       calc: (compare, target) => ({
         lineY: compare.attrs.y,
-        triggerY: compare.attrs.y - target.height
-      })
+        triggerY: compare.attrs.y - target.height,
+      }),
     },
     {
       name: 'cc',
       calc: (compare, target) => ({
         lineY: compare.attrs.y + compare.attrs.height / 2,
         triggerY:
-          compare.attrs.y +
-          compare.attrs.height / 2 -
-          target.height / 2
-      })
+          compare.attrs.y + compare.attrs.height / 2 - target.height / 2,
+      }),
     },
     {
       name: 'tb',
-      calc: compare => ({
+      calc: (compare) => ({
         lineY: compare.attrs.y + compare.attrs.height,
-        triggerY: compare.attrs.y + compare.attrs.height
-      })
+        triggerY: compare.attrs.y + compare.attrs.height,
+      }),
     },
     {
       name: 'bb',
       calc: (compare, target) => ({
         lineY: compare.attrs.y + compare.attrs.height,
-        triggerY:
-          compare.attrs.y + compare.attrs.height - target.height
-      })
-    }
+        triggerY: compare.attrs.y + compare.attrs.height - target.height,
+      }),
+    },
   ],
   col: [
     {
       name: 'll',
-      calc: compare => ({
+      calc: (compare) => ({
         lineX: compare.attrs.x,
-        triggerX: compare.attrs.x
-      })
+        triggerX: compare.attrs.x,
+      }),
     },
     {
       name: 'lr',
-      calc: compare => ({
+      calc: (compare) => ({
         lineX: compare.attrs.x + compare.attrs.width,
-        triggerX: compare.attrs.x + compare.attrs.width
-      })
+        triggerX: compare.attrs.x + compare.attrs.width,
+      }),
     },
     {
       name: 'cc',
       calc: (compare, target) => ({
         lineX: compare.attrs.x + compare.attrs.width / 2,
-        triggerX: compare.attrs.x + compare.attrs.width / 2 - target.width / 2
-      })
+        triggerX: compare.attrs.x + compare.attrs.width / 2 - target.width / 2,
+      }),
     },
     {
       name: 'rr',
       calc: (compare, target) => ({
         lineX: compare.attrs.x + compare.attrs.width,
-        triggerX: compare.attrs.x + compare.attrs.width - target.width
-      })
+        triggerX: compare.attrs.x + compare.attrs.width - target.width,
+      }),
     },
     {
       name: 'rl',
       calc: (compare, target) => ({
         lineX: compare.attrs.x,
-        triggerX: compare.attrs.x - target.width
-      })
-    }
-  ]
+        triggerX: compare.attrs.x - target.width,
+      }),
+    },
+  ],
 }
 
-const isSorption = (a: number, b: number, threshold: number) => Math.abs(a - b) <= threshold
+const isSorption = (a: number, b: number, threshold: number) =>
+  Math.abs(a - b) <= threshold
 
 export type SnapType = 'drag' | 'resize'
 interface CalcOption {
@@ -109,14 +111,18 @@ interface CalcOption {
   deepOffsetY: number
   graph: PcGraph
 }
-const calcDragLines = (targets: PcElement[], compares: PcElement[], { deepOffsetX, deepOffsetY, graph }: CalcOption) => {
+const calcDragLines = (
+  targets: PcElement[],
+  compares: PcElement[],
+  { deepOffsetX, deepOffsetY, graph }: CalcOption
+) => {
   const rect = getRectangle(targets)
-  const rectIdSet = new Set(targets.map(t => t.attrs.id))
+  const rectIdSet = new Set(targets.map((t) => t.attrs.id))
 
   const snaplines = new Map<string, Snapline>()
   const sorption = {
     row: false,
-    col: false
+    col: false,
   }
 
   for (const compare of compares) {
@@ -169,13 +175,17 @@ const calcDragLines = (targets: PcElement[], compares: PcElement[], { deepOffset
   return snaplines
 }
 
-const calcResizeLines = (target: PcElement, compares: PcElement[], { deepOffsetX, deepOffsetY, graph }: CalcOption) => {
+const calcResizeLines = (
+  target: PcElement,
+  compares: PcElement[],
+  { deepOffsetX, deepOffsetY, graph }: CalcOption
+) => {
   const rect = getRectangle([target])
 
   const snaplines = new Map<string, Snapline>()
   const sorption = {
     row: false,
-    col: false
+    col: false,
   }
 
   for (const compare of compares) {
@@ -243,8 +253,7 @@ const calcResizeLines = (target: PcElement, compares: PcElement[], { deepOffsetX
           }
         }
 
-        if (resized || rect.x === triggerX
-        ) {
+        if (resized || rect.x === triggerX) {
           snaplines.set(`c${direct.name[0]}`, { x: lineX + deepOffsetX })
         }
       }
@@ -274,7 +283,11 @@ export const getSnaplines = (
     : calcResizeLines(elements[0], _compares, optiopns)
 }
 
-const getDeepOffset = (attr: keyof Pick<PcElementAttributes, 'x' | 'y'>, element?: PcElement): number =>
-  element ?
-    (element.parent ? getDeepOffset(attr, element.parent) : 0) + element.attrs[attr]
+const getDeepOffset = (
+  attr: keyof Pick<PcElementAttributes, 'x' | 'y'>,
+  element?: PcElement
+): number =>
+  element
+    ? (element.parent ? getDeepOffset(attr, element.parent) : 0) +
+      element.attrs[attr]
     : 0

@@ -5,18 +5,19 @@ export type Clazz = string | Clazz[] | Record<string | number, boolean>
  */
 const clazz = (...args: Clazz[]): string => {
   return args
-    .filter(a => a)
-    .map(a => typeof a === 'string' ?
-      a :
-      a instanceof Array ?
-        clazz(...a) :
-        Object.entries(a)
-          .filter(([, v]) => v)
-          .map(([k]) => k)
-          .filter(i => i)
-          .join(' ')
+    .filter((a) => a)
+    .map((a) =>
+      typeof a === 'string'
+        ? a
+        : Array.isArray(a)
+        ? clazz(...a)
+        : Object.entries(a)
+            .filter(([, v]) => v)
+            .map(([k]) => k)
+            .filter((i) => i)
+            .join(' ')
     )
-    .filter(i => i)
+    .filter((i) => i)
     .join(' ')
 }
 

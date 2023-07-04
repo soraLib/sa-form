@@ -1,10 +1,9 @@
-
 <template>
   <div id="app" class="flex h-full mx-auto">
     <SaHeader />
 
     <div class="w-4/5 m-auto h-4/5">
-      <SaForm id="1" type="PcForm"  />
+      <SaForm id="1" type="PcForm" />
     </div>
   </div>
 </template>
@@ -26,5 +25,4 @@ import SaForm from '@/SaForm'
   background-color: var(--c-bg-mute);
   color: var(--c-text);
 }
-
 </style>

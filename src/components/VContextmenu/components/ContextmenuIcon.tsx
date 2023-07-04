@@ -8,8 +8,8 @@ const ContextmenuIcon = defineComponent({
   props: {
     name: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
 
   render() {
@@ -17,11 +17,11 @@ const ContextmenuIcon = defineComponent({
       <i
         class={[
           CLASSES.contextmenuIcon,
-          `${CLASSES.contextmenuIcon}-${this.name}`
+          `${CLASSES.contextmenuIcon}-${this.name}`,
         ]}
       />
     )
-  }
+  },
 })
 
 export default ContextmenuIcon
