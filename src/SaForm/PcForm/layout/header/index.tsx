@@ -1,5 +1,6 @@
 import { alignElements } from '../../acitons/align'
 import { equalElementsSize } from '../../acitons/size'
+import { connectElements } from '../../acitons/connect'
 import type { HeaderTool } from '../../../layout/header'
 import type { PcGraph } from '../../graph'
 
@@ -63,5 +64,17 @@ export const PcHeaderOptions: HeaderTool[] = [
     title: 'Equal Size',
     icon: <i class="iconfont icondengdaxiao" />,
     click: (graph: PcGraph) => equalElementsSize('size', graph),
+    divider: true,
+  },
+  // connect
+  {
+    title: 'Connect Horizontally',
+    icon: <i class="iconfont iconhenglian" />,
+    click: (graph: PcGraph) => connectElements('horizontal', graph),
+  },
+  {
+    title: 'Connect Vertically',
+    icon: <i class="iconfont iconzonglian" />,
+    click: (graph: PcGraph) => connectElements('vertical', graph),
   },
 ]

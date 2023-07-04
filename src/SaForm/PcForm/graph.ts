@@ -20,8 +20,11 @@ import { Events } from './events'
 import type { BasicRecordStore } from '../record'
 import type { BasicGraph, GraphType, MousePosition } from '../graph'
 
-type IdUpdateData = { id: string; data: Partial<PcElement['attrs']> }
-type ElUpdateData = { element: PcElement; data: Partial<PcElement['attrs']> }
+export type IdUpdateData = { id: string; data: Partial<PcElement['attrs']> }
+export type ElUpdateData = {
+  element: PcElement
+  data: Partial<PcElement['attrs']>
+}
 
 function isIdUpdateData(
   data: IdUpdateData | ElUpdateData
