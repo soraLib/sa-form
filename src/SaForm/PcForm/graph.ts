@@ -1,18 +1,31 @@
-import { BasicGraph, GraphType, MousePosition } from '../graph'
-import { BasicRecordStore, BasicRecordType, isCDRecordDataList, isURecordData, isURecordDataList } from '../record'
+import {
+  findNode,
+  findTreeNode,
+  removeTreeNode,
+  setObjectValues,
+} from 'sugar-sajs'
+import { cloneDeep, pick } from 'lodash-es'
+import {
+  BasicRecordType,
+  isCDRecordDataList,
+  isURecordData,
+  isURecordDataList,
+} from '../record'
+import { getNextId } from '../utils/element'
 import { PcElement } from './element'
 import { PcRecord, PcRecordStore } from './record'
 
-import { findNode, findTreeNode, removeTreeNode, setObjectValues } from 'sugar-sajs'
-import { cloneDeep, pick } from 'lodash-es'
-import { getNextId } from '../utils/element'
 import { PcClipBoard } from './clipboard'
 import { Events } from './events'
+import type { BasicRecordStore } from '../record'
+import type { BasicGraph, GraphType, MousePosition } from '../graph'
 
-type IdUpdateData = { id: string, data: Partial<PcElement['attrs']> }
-type ElUpdateData = { element: PcElement, data: Partial<PcElement['attrs']> }
+type IdUpdateData = { id: string; data: Partial<PcElement['attrs']> }
+type ElUpdateData = { element: PcElement; data: Partial<PcElement['attrs']> }
 
-function isIdUpdateData(data: IdUpdateData | ElUpdateData): data is IdUpdateData {
+function isIdUpdateData(
+  data: IdUpdateData | ElUpdateData
+): data is IdUpdateData {
   return Reflect.has(data, 'id')
 }
 
@@ -38,7 +51,7 @@ export class PcGraph extends Events implements BasicGraph {
     startX: 0,
     startY: 0,
     x: 0,
-    y: 0
+    y: 0,
   }
   isResizing = false
   resizeStick: Stick | '' = ''
@@ -47,19 +60,21 @@ export class PcGraph extends Events implements BasicGraph {
     x: 0,
     y: 0,
     width: 0,
-    height: 0
+    height: 0,
   }
-  grid = { // TODO:
+  grid = {
+    // TODO:
     type: 'mesh',
     size: 15,
-    enabled: true
+    enabled: true,
   } as const
-  snapline = { // TODO:
+  snapline = {
+    // TODO:
     threshold: 15,
-    enabled: true
+    enabled: true,
   }
 
-  constructor(config: Partial<PcElement> & { attrs: {} }) {
+  constructor(config: Partial<PcElement> & { attrs: Record<string, any> }) {
     super()
 
     this.type = 'PcForm'
@@ -69,13 +84,15 @@ export class PcGraph extends Events implements BasicGraph {
     this.canvas = new PcElement({
       parent: undefined,
       children: [],
-      attrs: config.attrs
+      attrs: config.attrs,
     })
-    this.addRecord(new PcRecord({
-      type: BasicRecordType.Init,
-      time: new Date(),
-      data: []
-    }))
+    this.addRecord(
+      new PcRecord({
+        type: BasicRecordType.Init,
+        time: new Date(),
+        data: [],
+      })
+    )
   }
 
   setCanvas(canvas: PcElement) {
@@ -105,7 +122,9 @@ export class PcGraph extends Events implements BasicGraph {
     this.isSelect = isSelect
   }
 
-  setSelectionBox(box: Partial<SelectionBox> = { x: 0, y: 0, width: 0, height: 0 }) {
+  setSelectionBox(
+    box: Partial<SelectionBox> = { x: 0, y: 0, width: 0, height: 0 }
+  ) {
     setObjectValues(this.selectionBox, box)
   }
 
@@ -120,20 +139,25 @@ export class PcGraph extends Events implements BasicGraph {
   addChild(child: PcElement, parent?: PcElement): PcElement
   addChild(child: PcElement, parent?: string): PcElement
   addChild(child: PcElement, arg?: string | PcElement): PcElement {
-    const parent = (typeof arg === 'string' ? findTreeNode(this.canvas.children!, node => node.attrs.id === arg) : arg) ?? this.canvas
+    const parent =
+      (typeof arg === 'string'
+        ? findTreeNode(this.canvas.children!, (node) => node.attrs.id === arg)
+        : arg) ?? this.canvas
 
     addGraphNode(this, child)
 
     // skip add record when it's undo or redo
     const record = new PcRecord({
       type: BasicRecordType.Add,
-      time: new Date,
-      data: [{
-        name: child.attrs.name,
-        next: {
-          ...cloneDeep(child)
-        }
-      }]
+      time: new Date(),
+      data: [
+        {
+          name: child.attrs.name,
+          next: {
+            ...cloneDeep(child),
+          },
+        },
+      ],
     })
 
     this.addRecord(record)
@@ -146,7 +170,10 @@ export class PcGraph extends Events implements BasicGraph {
   addChildren(children: PcElement[], parent?: PcElement): PcElement
   addChildren(children: PcElement[], parent?: string): PcElement
   addChildren(children: PcElement[], arg?: string | PcElement): PcElement {
-    const parent = (typeof arg === 'string' ? findTreeNode(this.canvas.children!, node => node.attrs.id === arg) : arg) ?? this.canvas
+    const parent =
+      (typeof arg === 'string'
+        ? findTreeNode(this.canvas.children!, (node) => node.attrs.id === arg)
+        : arg) ?? this.canvas
 
     for (const child of children) {
       addGraphNode(this, child)
@@ -155,13 +182,13 @@ export class PcGraph extends Events implements BasicGraph {
     // skip add record when it's undo or redo
     const record = new PcRecord({
       type: BasicRecordType.Add,
-      time: new Date,
-      data: children.map(child => ({
+      time: new Date(),
+      data: children.map((child) => ({
         name: child.attrs.name,
         next: {
-          ...cloneDeep(child)
-        }
-      }))
+          ...cloneDeep(child),
+        },
+      })),
     })
 
     this.addRecord(record)
@@ -185,7 +212,7 @@ export class PcGraph extends Events implements BasicGraph {
     if (!this.canvas.children) return
 
     if (typeof arg === 'string') {
-      const node = findNode(this.canvas, node => node.attrs.id === arg)
+      const node = findNode(this.canvas, (node) => node.attrs.id === arg)
 
       if (node) {
         this.selected = [node]
@@ -199,7 +226,7 @@ export class PcGraph extends Events implements BasicGraph {
 
       for (const item of arg) {
         if (typeof item === 'string') {
-          const node = findNode(this.canvas, node => node.attrs.id === item)
+          const node = findNode(this.canvas, (node) => node.attrs.id === item)
           if (node) selected.push(node)
         } else {
           selected.push(item)
@@ -218,12 +245,27 @@ export class PcGraph extends Events implements BasicGraph {
     }
   }
 
-  updateElemData(id: string, data: Partial<PcElement['attrs']>, needRecord?: boolean): PcElement | undefined
-  updateElemData(element: PcElement, data: Partial<PcElement['attrs']>, needRecord?: boolean): PcElement | undefined
-  updateElemData(arg: string | PcElement, data: Partial<PcElement['attrs']>, needRecord = true) {
+  updateElemData(
+    id: string,
+    data: Partial<PcElement['attrs']>,
+    needRecord?: boolean
+  ): PcElement | undefined
+  updateElemData(
+    element: PcElement,
+    data: Partial<PcElement['attrs']>,
+    needRecord?: boolean
+  ): PcElement | undefined
+  updateElemData(
+    arg: string | PcElement,
+    data: Partial<PcElement['attrs']>,
+    needRecord = true
+  ) {
     if (!arg) return
 
-    const element = typeof arg === 'string' ? findNode(this.canvas, node => node.attrs.id === arg) : arg
+    const element =
+      typeof arg === 'string'
+        ? findNode(this.canvas, (node) => node.attrs.id === arg)
+        : arg
 
     if (!element) return undefined
 
@@ -231,12 +273,14 @@ export class PcGraph extends Events implements BasicGraph {
       const record = new PcRecord({
         type: BasicRecordType.Attr,
         time: new Date(),
-        data: [{
-          id: element.attrs.id,
-          name: element.attrs.name,
-          prev: cloneDeep(pick(element.attrs, Object.keys(data))),
-          next: cloneDeep(data)
-        }]
+        data: [
+          {
+            id: element.attrs.id,
+            name: element.attrs.name,
+            prev: cloneDeep(pick(element.attrs, Object.keys(data))),
+            next: cloneDeep(data),
+          },
+        ],
       })
 
       this.addRecord(record)
@@ -247,24 +291,32 @@ export class PcGraph extends Events implements BasicGraph {
     return element
   }
 
-  updateElemsData(data: IdUpdateData[], needRecord?: boolean): PcElement[] | undefined
-  updateElemsData(data: ElUpdateData[], needRecord?: boolean): PcElement[] | undefined
-  updateElemsData(arg: IdUpdateData[] | ElUpdateData[], needRecord?: boolean) {
-    const batch = arg.map(data => ({
-      el: isIdUpdateData(data) ? findNode(this.canvas, node => node.attrs.id === data.id)! : data.element,
-      data: data.data
+  updateElemsData(
+    data: IdUpdateData[],
+    needRecord?: boolean
+  ): PcElement[] | undefined
+  updateElemsData(
+    data: ElUpdateData[],
+    needRecord?: boolean
+  ): PcElement[] | undefined
+  updateElemsData(arg: IdUpdateData[] | ElUpdateData[], needRecord = true) {
+    const batch = arg.map((data) => ({
+      el: isIdUpdateData(data)
+        ? findNode(this.canvas, (node) => node.attrs.id === data.id)!
+        : data.element,
+      data: data.data,
     }))
 
     if (needRecord) {
       const record = new PcRecord({
         type: BasicRecordType.Attr,
         time: new Date(),
-        data: batch.map(u => ({
+        data: batch.map((u) => ({
           id: u.el.attrs.id,
           name: u.el.attrs.name,
           prev: cloneDeep(pick(u.el.attrs, Object.keys(u.data))),
-          next: cloneDeep(u.data)
-        }))
+          next: cloneDeep(u.data),
+        })),
       })
 
       this.addRecord(record)
@@ -274,21 +326,23 @@ export class PcGraph extends Events implements BasicGraph {
       this.updateElemData(update.el, update.data, false)
     }
 
-    return batch.map(u => u.el)
+    return batch.map((u) => u.el)
   }
 
   /** add history record */
   addRecord(record: PcRecord) {
     console.log('[Sa info]: New record has been added.', record)
 
-    if (this.history.index && this.history.records.length > this.history.index + 1) {
+    if (
+      this.history.index &&
+      this.history.records.length > this.history.index + 1
+    ) {
       this.history.records.splice(this.history.index + 1)
     }
 
     this.history.records.push(record)
     this.history.index += 1
   }
-
   undo() {
     const prevRecord = this.history.getPrevRecord()
 
@@ -300,14 +354,17 @@ export class PcGraph extends Events implements BasicGraph {
 
     if (isURecordDataList(prevRecord.data)) {
       for (const data of prevRecord.data) {
-        const element = findNode(this.canvas, node => node.attrs.id === data.id)
+        const element = findNode(
+          this.canvas,
+          (node) => node.attrs.id === data.id
+        )
 
         if (element) {
           setObjectValues(element.attrs, data.prev)
         }
       }
 
-      this.setSelected(prevRecord.data.map(data => data.id))
+      this.setSelected(prevRecord.data.map((data) => data.id))
     } else {
       for (const data of prevRecord.data) {
         if (prevRecord.type === BasicRecordType.Add) {
@@ -320,9 +377,9 @@ export class PcGraph extends Events implements BasicGraph {
       }
 
       if (prevRecord.type === BasicRecordType.Add) {
-        this.setSelected(prevRecord.data.map(data => data.next!.attrs.id))
+        this.setSelected(prevRecord.data.map((data) => data.next!.attrs.id))
       } else {
-        this.setSelected(prevRecord.data.map(data => data.prev!.attrs.id))
+        this.setSelected(prevRecord.data.map((data) => data.prev!.attrs.id))
       }
     }
 
@@ -340,14 +397,17 @@ export class PcGraph extends Events implements BasicGraph {
 
     if (isURecordDataList(nextRecord.data)) {
       for (const data of nextRecord.data) {
-        const element = findNode(this.canvas, node => node.attrs.id === data.id)
+        const element = findNode(
+          this.canvas,
+          (node) => node.attrs.id === data.id
+        )
 
         if (element) {
           setObjectValues(element.attrs, data.next)
         }
       }
 
-      this.setSelected(nextRecord.data.map(data => data.id))
+      this.setSelected(nextRecord.data.map((data) => data.id))
     } else if (isCDRecordDataList(nextRecord.data)) {
       for (const data of nextRecord.data) {
         if (nextRecord.type === BasicRecordType.Add) {
@@ -360,9 +420,9 @@ export class PcGraph extends Events implements BasicGraph {
       }
 
       if (nextRecord.type === BasicRecordType.Add) {
-        this.setSelected(nextRecord.data.map(data => data.next!.attrs.id))
+        this.setSelected(nextRecord.data.map((data) => data.next!.attrs.id))
       } else {
-        this.setSelected(nextRecord.data.map(data => data.prev!.attrs.id))
+        this.setSelected(nextRecord.data.map((data) => data.prev!.attrs.id))
       }
     }
 
@@ -391,7 +451,10 @@ const addGraphNode = (graph: PcGraph, element?: PcElement) => {
 
   if (element.parent) {
     // bind graph canvas elements' paternity
-    const graphParent = findNode(graph.canvas, node => node.attrs.id === element.parent?.attrs.id)
+    const graphParent = findNode(
+      graph.canvas,
+      (node) => node.attrs.id === element.parent?.attrs.id
+    )
     if (graphParent) {
       graphParent.children?.push(element)
       element.parent = graphParent
@@ -402,9 +465,12 @@ const addGraphNode = (graph: PcGraph, element?: PcElement) => {
 const removeGraphNode = (graph: PcGraph, id?: string) => {
   if (!graph.canvas.children || !id) return
 
-  const element = findNode(graph.canvas, node => node.attrs.id === id)
+  const element = findNode(graph.canvas, (node) => node.attrs.id === id)
 
   if (element && graph.canvas.children) {
-    removeTreeNode(graph.canvas.children, node => node.attrs.id === element.attrs.id)
+    removeTreeNode(
+      graph.canvas.children,
+      (node) => node.attrs.id === element.attrs.id
+    )
   }
 }

@@ -1,6 +1,10 @@
 <template>
   <header class="navbar">
-    <a class="navbar-title" href="/sa-form/" aria-label="Sa Form, back to home`">
+    <a
+      class="navbar-title"
+      href="/sa-form/"
+      aria-label="Sa Form, back to home`"
+    >
       <h1>Sa Form</h1>
     </a>
 
@@ -40,6 +44,7 @@ import Github from './Github/index.vue'
 
   .navbar-title {
     font-size: 1rem;
+    line-height: 1rem;
     color: var(--c-text);
     text-decoration: none;
   }
@@ -60,4 +65,3 @@ import Github from './Github/index.vue'
   }
 }
 </style>
-
