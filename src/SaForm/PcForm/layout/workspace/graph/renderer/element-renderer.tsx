@@ -60,14 +60,20 @@ export default defineComponent({
         props.graph.selected.length === 1 &&
         props.graph.selected[0] === props.element
     )
+    const isReference = computed(
+      () =>
+        props.graph.selected.length > 1 &&
+        props.graph.selected[0] === props.element
+    )
 
     return () => (
       <div
         id={props.element.attrs.id}
         class={useClazs('native-element', {
-          selected: props.graph.selected.some(
+          'is-selected': props.graph.selected.some(
             (e) => e.attrs.id === props.element.attrs.id
           ),
+          'is-reference': isReference.value,
           graph: props.graph.canvas.attrs.id === props.element.attrs.id,
         })}
         style={useElementStyle(props.element)}
