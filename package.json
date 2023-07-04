@@ -1,6 +1,7 @@
 {
   "name": "sa-form",
   "version": "1.0.0-pre.0",
+  "packageManager": "pnpm@7.12.2",
   "description": "Low-code form component.",
   "workspaces": [
     "website/*",
