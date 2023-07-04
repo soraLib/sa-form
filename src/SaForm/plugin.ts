@@ -73,7 +73,7 @@ export const BasicPlugins = {
 } as const
 
 export type SaPluginLayout = {
-  [key in ElementType]?: {
+  [key in ElementType]: {
     basic?: SaPlugin[]
     extend?: SaPlugin[]
   }
