@@ -1,10 +1,10 @@
-export type EventArgs = { [key: string]: any }
-import {
-  RequiredKeys,
+import type {
   OmitByValue,
   OptionalKeys,
-  PickByValue
+  PickByValue,
+  RequiredKeys,
 } from 'utility-types'
+export type EventArgs = { [key: string]: any }
 export type EventNames<M extends EventArgs> = Extract<keyof M, string>
 
 export type Handler<Args> = Args extends null | undefined
@@ -18,7 +18,7 @@ export type AsyncBoolean = boolean | Promise<boolean>
  * Get union type of keys from `M` that value matching `any[]`.
  */
 export type NamesWithArrayArgs<M extends EventArgs> = RequiredKeys<
- PickByValue<M, any[]>
+  PickByValue<M, any[]>
 >
 export type NotArrayValueMap<M extends EventArgs> = OmitByValue<M, any[]>
 export type OptionalNormalNames<M extends EventArgs> = OptionalKeys<
@@ -38,12 +38,12 @@ export class Events<Args extends EventArgs = any> {
   on<Name extends EventNames<Args>>(
     name: Name,
     handler: Handler<Args[Name]>,
-    context?: any,
+    context?: any
   ): this
   on<Name extends UnknownNames<Args>>(
     name: Name,
     handler: Handler<any>,
-    context?: any,
+    context?: any
   ): this
   on<Name extends EventNames<Args>>(
     name: Name,
@@ -63,12 +63,10 @@ export class Events<Args extends EventArgs = any> {
     return this
   }
 
-  trigger<Name extends OptionalNormalNames<Args>>(
-    name: Name,
-  ): AsyncBoolean
+  trigger<Name extends OptionalNormalNames<Args>>(name: Name): AsyncBoolean
   trigger<Name extends RequiredNormalNames<Args>>(
     name: Name,
-    args: Args[Name],
+    args: Args[Name]
   ): AsyncBoolean
   trigger<Name extends NamesWithArrayArgs<Args>>(
     name: Name,
@@ -76,7 +74,7 @@ export class Events<Args extends EventArgs = any> {
   ): AsyncBoolean
   trigger<Name extends OtherNames<Args>>(
     name: Name,
-    args?: Args[Name],
+    args?: Args[Name]
   ): AsyncBoolean
   trigger<Name extends OtherNames<Args>>(
     name: Name,

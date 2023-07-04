@@ -1,14 +1,15 @@
-import { defineComponent, PropType } from 'vue'
-import { NativeItem } from '.'
+import { defineComponent } from 'vue'
 import { Stencil } from './stencil'
+import type { NativeItem } from '.'
+import type { PropType } from 'vue'
 
 export default defineComponent({
   name: 'NativeSidebarItem',
   props: {
     item: {
       required: true,
-      type: Object as PropType<NativeItem>
-    }
+      type: Object as PropType<NativeItem>,
+    },
   },
   setup(props) {
     const iconClass = `iconfont ${props.item.icon}`
@@ -27,5 +28,5 @@ export default defineComponent({
         <i class={`${iconClass}`}></i>
       </div>
     )
-  }
+  },
 })

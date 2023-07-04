@@ -1,25 +1,26 @@
-import { computed, defineComponent, onMounted, PropType, Ref, ref } from 'vue'
-import { SaPlugin } from '../../../plugin'
-import { PcGraph } from '../../graph'
+import { computed, defineComponent, onMounted, ref } from 'vue'
+import Sortable from 'sortablejs'
 import { Plus } from '@element-plus/icons-vue'
 import { NButton, NIcon, NInput, NTable } from 'naive-ui'
-
-import './index.scss'
 import { Array as SaArray } from 'sugar-sajs'
 import { isPcElementAttribute } from '../../element'
-import Sortable from 'sortablejs'
+import type { PropType, Ref } from 'vue'
+import type { SaPlugin } from '../../../plugin'
+import type { PcGraph } from '../../graph'
+
+import './index.scss'
 
 export default defineComponent({
-  name: 'widget-options',
+  name: 'WidgetOptions',
   props: {
     graph: {
       required: true,
-      type: Object as PropType<PcGraph>
+      type: Object as PropType<PcGraph>,
     },
     plugin: {
       required: true,
-      type: Object as PropType<SaPlugin>
-    }
+      type: Object as PropType<SaPlugin>,
+    },
   },
   setup(props, ctx) {
     const table: Ref<null | any> = ref<any>(null)
@@ -37,21 +38,26 @@ export default defineComponent({
     const selectOptions: Ref<Option[]> = ref([])
     const tableData = computed(() => selectOptions.value)
 
-    if (isPcElementAttribute(props.plugin.attr, props.graph.selected[0]) && props.plugin.attr === 'options') {
-      selectOptions.value = props.graph.selected[0].attrs[props.plugin.attr]!.map((option, index) => ({
+    if (
+      isPcElementAttribute(props.plugin.attr, props.graph.selected[0]) &&
+      props.plugin.attr === 'options'
+    ) {
+      selectOptions.value = props.graph.selected[0].attrs[
+        props.plugin.attr
+      ]!.map((option, index) => ({
         name: option.name,
-        id: String(index)
+        id: String(index),
       }))
     }
 
     const expose = {
       update() {
         return selectOptions.value
-      }
+      },
     }
 
     ctx.expose({
-      ...expose
+      ...expose,
     })
 
     function addRow() {
@@ -66,29 +72,31 @@ export default defineComponent({
       const child = table.value.$el?.children[2]?.children[0]?.children[1]
 
       if (child)
-
         Sortable.create(child, {
           delay: 100,
           sort: !0,
           forceFallback: !0,
           scrollSensitivity: 100,
           animation: 150,
-          onEnd: function({ newIndex, oldIndex }) {
+          onEnd({ newIndex, oldIndex }) {
             if (newIndex === undefined || oldIndex === undefined) return
 
             SaArray.swap(selectOptions.value, oldIndex, newIndex)
-          }
+          },
         })
     })
 
-    return () => <section class="widget-options">
-      <header>
-        {/* <NButton type="primary" size="small" class="text-sm" icon={<ElIcon><Plus /></ElIcon>} onClick={addRow}>add select option</NButton> */}
+    return () => (
+      <section class="widget-options">
+        <header>
+          {/* <NButton type="primary" size="small" class="text-sm" icon={<ElIcon><Plus /></ElIcon>} onClick={addRow}>add select option</NButton> */}
 
-        <p class="text-gray-500 font-bold">please add one select option at least.</p>
-      </header>
+          <p class="text-gray-500 font-bold">
+            please add one select option at least.
+          </p>
+        </header>
 
-      {/* TODO: naive table <ElTable
+        {/* TODO: naive table <ElTable
         ref={table}
         data={tableData.value}
         max-height="500px"
@@ -107,6 +115,7 @@ export default defineComponent({
           </>
         }}/>
       </ElTable> */}
-    </section>
-  }
+      </section>
+    )
+  },
 })

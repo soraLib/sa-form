@@ -1,19 +1,27 @@
-import { computed, defineComponent, onMounted, onUnmounted, PropType, Ref, ref, ShallowRef, shallowRef } from 'vue'
-import { PcGraph } from '../../graph'
+import {
+  ShallowRef,
+  computed,
+  defineComponent,
+  onMounted,
+  onUnmounted,
+  ref,
+  shallowRef,
+} from 'vue'
+import { ElementType } from '../../../element'
 import { createMockPcCanvas } from './mock'
 
 import Workspace from './graph'
 import Snapline from './snapline'
-
-import { ElementType } from '../../../element'
+import type { PcGraph } from '../../graph'
+import type { PropType, Ref } from 'vue'
 
 export default defineComponent({
   name: 'SaPcFormRender',
   props: {
     graph: {
       required: true,
-      type: Object as PropType<PcGraph>
-    }
+      type: Object as PropType<PcGraph>,
+    },
   },
 
   setup(props) {
@@ -66,7 +74,7 @@ export default defineComponent({
     // })
 
     return {
-      workspace
+      workspace,
       // graphContextmenu
     }
   },
@@ -75,10 +83,13 @@ export default defineComponent({
     return (
       // TODO: graph scroll and resize container
       /** graph wrapper */
-      <div class="relative" style={{
-        width: `${this.graph.canvas.attrs.width}px`,
-        height: `${this.graph.canvas.attrs.height}px`
-      }}>
+      <div
+        class="relative"
+        style={{
+          width: `${this.graph.canvas.attrs.width}px`,
+          height: `${this.graph.canvas.attrs.height}px`,
+        }}
+      >
         <Workspace ref="workspace" graph={this.graph} />
 
         <Snapline graph={this.graph} />
@@ -88,5 +99,5 @@ export default defineComponent({
         </v-contextmenu> */}
       </div>
     )
-  }
+  },
 })

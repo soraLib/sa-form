@@ -1,6 +1,7 @@
-import { Directive, DirectiveBinding, isRef } from 'vue'
+import { isRef } from 'vue'
+import type { Directive, DirectiveBinding } from 'vue'
 
-import { TriggerEventType } from './types'
+import type { TriggerEventType } from './types'
 interface ContextmenuDirectiveValue {
   trigger?: TriggerEventType | TriggerEventType[]
 }
@@ -55,8 +56,7 @@ const unbind = (
 
   if (!contextmenuKey) return
 
-  const contextmenuRef: ContextmenuRef =
-    binding.instance?.$refs[contextmenuKey]
+  const contextmenuRef: ContextmenuRef = binding.instance?.$refs[contextmenuKey]
 
   contextmenuRef?.removeReference(el)
 }
@@ -75,7 +75,7 @@ const contextmenuDirective: Directive<
 > = {
   mounted: bind,
   updated: rebind,
-  beforeUnmount: unbind
+  beforeUnmount: unbind,
 }
 
 export default contextmenuDirective

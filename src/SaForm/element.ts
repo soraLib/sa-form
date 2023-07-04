@@ -1,4 +1,4 @@
-import { CSSProperties } from 'vue'
+import type { CSSProperties } from 'vue'
 
 /** element types */ // TODO: split pc types
 export enum ElementType {

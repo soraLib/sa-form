@@ -7,7 +7,7 @@ const ContextmenuDivider = defineComponent({
 
   render() {
     return <li class={CLASSES.contextmenuDivider} />
-  }
+  },
 })
 
 export default ContextmenuDivider

@@ -1,6 +1,6 @@
-import { StencilAttrs } from '.'
 import { useEventListener } from '@vueuse/core'
 import { setDataTransfer } from '../../utils/drag'
+import type { StencilAttrs } from '.'
 
 export namespace Stencil {
   export const updatePosition = (target: HTMLElement, evt: MouseEvent) => {

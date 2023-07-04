@@ -1,12 +1,17 @@
 import { ElementType } from '../../../../../../element'
 import { BasicRecordType } from '../../../../../../record'
-import { PcElement } from '../../../../../element'
-import { PcGraph, Stick } from '../../../../../graph'
 import { PcRecord } from '../../../../../record'
 import { getRectangle } from '../utils/rectangle'
 import { gridFloor, useResizeOnGird } from './utils'
+import type { PcGraph, Stick } from '../../../../../graph'
+import type { PcElement } from '../../../../../element'
 
-export const useElementStickReszie = (event: MouseEvent, stick: Stick, element: PcElement, graph: PcGraph) => {
+export const useElementStickReszie = (
+  event: MouseEvent,
+  stick: Stick,
+  element: PcElement,
+  graph: PcGraph
+) => {
   event.stopPropagation()
   graph.setResizeStick(stick)
 
@@ -17,7 +22,7 @@ export const useElementStickReszie = (event: MouseEvent, stick: Stick, element: 
     width: element.attrs.width,
     height: element.attrs.height,
     x: element.attrs.x,
-    y: element.attrs.y
+    y: element.attrs.y,
   }
 
   const stickMove = (event: MouseEvent) => {
@@ -101,43 +106,54 @@ export const useElementStickReszie = (event: MouseEvent, stick: Stick, element: 
 
     // grid
     if (graph.grid.enabled) {
-      const rect = useResizeOnGird({ x, y, width, height }, graph.grid.size, stick, {
-        x: deltaX,
-        y: deltaY
-      })
+      const rect = useResizeOnGird(
+        { x, y, width, height },
+        graph.grid.size,
+        stick,
+        {
+          x: deltaX,
+          y: deltaY,
+        }
+      )
       x = rect.x
       y = rect.y
       width = rect.width
       height = rect.height
     }
 
-    graph.updateElemData(element, {
-      x,
-      y,
-      width,
-      height
-    }, false)
+    graph.updateElemData(
+      element,
+      {
+        x,
+        y,
+        width,
+        height,
+      },
+      false
+    )
   }
   const stickUp = () => {
     const record = new PcRecord({
       time: new Date(),
       type: BasicRecordType.Attr,
-      data: [{
-        id: element.attrs.id,
-        name: element.attrs.name,
-        prev: {
-          width: origin.width,
-          height: origin.height,
-          x: origin.x,
-          y: origin.y
+      data: [
+        {
+          id: element.attrs.id,
+          name: element.attrs.name,
+          prev: {
+            width: origin.width,
+            height: origin.height,
+            x: origin.x,
+            y: origin.y,
+          },
+          next: {
+            width: element.attrs.width,
+            height: element.attrs.height,
+            x: element.attrs.x,
+            y: element.attrs.y,
+          },
         },
-        next: {
-          width: element.attrs.width,
-          height: element.attrs.height,
-          x: element.attrs.x,
-          y: element.attrs.y
-        }
-      }]
+      ],
     })
 
     graph.addRecord(record)

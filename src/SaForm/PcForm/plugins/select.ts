@@ -7,9 +7,10 @@ export const SelectPlugins = {
     type: SaPluginType.Dialog,
     dialog: {
       component: 'widget-options',
-      title: 'select-options'
+      title: 'select-options',
     },
     disabled: true,
-    filter: (value: { name: string }[]) => value.map(item => item.name).join(';')
-  }
+    filter: (value: { name: string }[]) =>
+      value.map((item) => item.name).join(';'),
+  },
 } as const

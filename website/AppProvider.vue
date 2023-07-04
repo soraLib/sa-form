@@ -9,18 +9,24 @@
 </template>
 
 <script lang="ts" setup>
-import App from './App.vue'
-import { GlobalThemeOverrides, NLoadingBarProvider, NConfigProvider, NGlobalStyle } from 'naive-ui'
-import { darkTheme } from 'naive-ui'
 import { computed } from 'vue'
+import {
+  NConfigProvider,
+  NGlobalStyle,
+  NLoadingBarProvider,
+  darkTheme,
+} from 'naive-ui'
+
 import { useDark } from '@vueuse/core'
+import App from './App.vue'
+import type { GlobalThemeOverrides } from 'naive-ui'
 
 const isDark = useDark()
-const theme = computed(() => isDark.value ? darkTheme : undefined)
+const theme = computed(() => (isDark.value ? darkTheme : undefined))
 
 const themeOverrides: GlobalThemeOverrides = {
   common: {
-    primaryColor: '#18A058'
-  }
+    primaryColor: '#18A058',
+  },
 }
 </script>

@@ -4,11 +4,11 @@ import {
   defineComponent,
   // Transition,
   inject,
-  nextTick
+  nextTick,
 } from 'vue'
 
-import ContextmenuIcon from './ContextmenuIcon'
 import { CLASSES } from '../constants'
+import ContextmenuIcon from './ContextmenuIcon'
 
 const ContextmenuSubmenu = defineComponent({
   name: 'VContextmenuSubmenu',
@@ -16,12 +16,12 @@ const ContextmenuSubmenu = defineComponent({
   props: {
     title: {
       type: String,
-      required: true
+      required: true,
     },
     disabled: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   emits: ['mouseenter', 'mouseleave'],
@@ -43,7 +43,9 @@ const ContextmenuSubmenu = defineComponent({
 
         if (autoAjustPlacement) {
           const { target } = evt
-          const targetDimension = (target as HTMLElement).getBoundingClientRect()
+          const targetDimension = (
+            target as HTMLElement
+          ).getBoundingClientRect()
 
           if (!submenuRef.value) return
 
@@ -79,20 +81,18 @@ const ContextmenuSubmenu = defineComponent({
       [CLASSES.contextmenuItem]: true,
       [CLASSES.contextmenuSubmenuTitle]: true,
       [CLASSES.contextmenuItemHover]: hover.value,
-      [CLASSES.contextmenuItemDisabled]: props.disabled
+      [CLASSES.contextmenuItemDisabled]: props.disabled,
     }))
 
     const menusClasses = computed(() => ({
       [CLASSES.contextmenu]: true,
       [CLASSES.contextmenuSubmenuMenus]: true,
       [CLASSES.contextmenuSubmenuMenusTop]: placements.value.includes('top'),
-      [CLASSES.contextmenuSubmenuMenusRight]: placements.value.includes(
-        'right'
-      ),
-      [CLASSES.contextmenuSubmenuMenusBottom]: placements.value.includes(
-        'bottom'
-      ),
-      [CLASSES.contextmenuSubmenuMenusLeft]: placements.value.includes('left')
+      [CLASSES.contextmenuSubmenuMenusRight]:
+        placements.value.includes('right'),
+      [CLASSES.contextmenuSubmenuMenusBottom]:
+        placements.value.includes('bottom'),
+      [CLASSES.contextmenuSubmenuMenusLeft]: placements.value.includes('left'),
     }))
 
     return {
@@ -102,7 +102,7 @@ const ContextmenuSubmenu = defineComponent({
       menusClasses,
 
       handleMouseenter,
-      handleMouseleave
+      handleMouseleave,
     }
   },
 
@@ -130,7 +130,7 @@ const ContextmenuSubmenu = defineComponent({
         {/* </Transition> */}
       </li>
     )
-  }
+  },
 })
 
 export default ContextmenuSubmenu

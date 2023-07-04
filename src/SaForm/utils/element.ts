@@ -1,6 +1,6 @@
 import { findNode } from 'sugar-sajs'
 import { BasicGraph } from '../graph'
-import { BasicElement, BasicElementAttributes } from '../element'
+import type { BasicElement, BasicElementAttributes } from '../element'
 
 /**
  * return next unique id
@@ -43,6 +43,9 @@ export function getNextId(element: BasicElement): string {
   }
 }
 
-export function isElementAttribute(attr: string, elem: BasicElement): attr is keyof BasicElementAttributes {
+export function isElementAttribute(
+  attr: string,
+  elem: BasicElement
+): attr is keyof BasicElementAttributes {
   return Reflect.has(elem.attrs, attr)
 }

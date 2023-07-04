@@ -1,31 +1,35 @@
+import { computed, defineComponent, h } from 'vue'
 import { findNode } from 'sugar-sajs'
-import { defineComponent, PropType, computed, CSSProperties, h } from 'vue'
 import { setDataTransfer } from '../../../../utils/drag'
-import { PcGraph } from '../../../graph'
 import { PcElement, containerElements } from '../../../element'
 
-import ElementRenderer from './renderer/element-renderer'
 import { useClazs } from '../../../../utils/class'
-import { StencilAttrs } from '../../../../layout/sidebar/index'
+import ElementRenderer from './renderer/element-renderer'
 import { gridFloor } from './renderer/hooks/utils'
+import type { StencilAttrs } from '../../../../layout/sidebar'
+import type { CSSProperties, PropType } from 'vue'
+import type { PcGraph } from '../../../graph'
 
 export default defineComponent({
   name: 'NativeWorkspace',
   props: {
     graph: {
       required: true,
-      type: Object as PropType<PcGraph>
-    }
+      type: Object as PropType<PcGraph>,
+    },
   },
   setup(props) {
-    const onDragover = (event: DragEvent) => setDataTransfer(event, 'dropEffect', 'copy')
+    const onDragover = (event: DragEvent) =>
+      setDataTransfer(event, 'dropEffect', 'copy')
     const onDrop = (event: DragEvent) => {
       setDataTransfer(event, 'dropEffect', 'copy')
 
       const elementMessage = event.dataTransfer?.getData('element')
 
       if (!elementMessage) {
-        console.error('[Sa warn]：Event dataTransfer\'s \'element\' data is not existed but it\'s necessary.')
+        console.error(
+          "[Sa warn]：Event dataTransfer's 'element' data is not existed but it's necessary."
+        )
 
         return
       }
@@ -37,7 +41,10 @@ export default defineComponent({
       }
 
       const targetId = dropTarget.id
-      const parent = findNode(props.graph.canvas, (el) => el.attrs.id === targetId)
+      const parent = findNode(
+        props.graph.canvas,
+        (el) => el.attrs.id === targetId
+      )
 
       if (!parent || !containerElements.includes(parent?.attrs.type)) return
 
@@ -48,8 +55,8 @@ export default defineComponent({
           ...attrs,
           id: props.graph.getNextId(),
           x: gridFloor(event.offsetX - attrs.width / 2, props.graph.grid.size), // TODO:
-          y: gridFloor(event.offsetY - attrs.height / 2, props.graph.grid.size)
-        }
+          y: gridFloor(event.offsetY - attrs.height / 2, props.graph.grid.size),
+        },
       })
 
       props.graph.addChild(dropElement, parent)
@@ -68,20 +75,15 @@ export default defineComponent({
         left: `${x}px`,
         top: `${y}px`,
         width: `${width}px`,
-        height: `${height}px`
+        height: `${height}px`,
       }
     })
 
     return () => (
       <div
-        class={useClazs(
-          'w-full',
-          'h-full',
-          'relative',
-          {
-            'cursor-move':  props.graph.isDragging
-          }
-        )}
+        class={useClazs('w-full', 'h-full', 'relative', {
+          'cursor-move': props.graph.isDragging,
+        })}
         onDrop={onDrop}
         onDragover={onDragover}
       >
@@ -91,5 +93,5 @@ export default defineComponent({
         <div style={selectionBoxStyle.value}></div>
       </div>
     )
-  }
+  },
 })

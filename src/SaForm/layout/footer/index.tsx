@@ -1,11 +1,12 @@
-import { defineComponent, PropType, computed } from 'vue'
-import { BasicGraph } from '../../graph'
+import { computed, defineComponent } from 'vue'
 import { NButton, NPopover, NScrollbar } from 'naive-ui'
 
 import './index.scss'
 import { BasicRecordType } from '../../record'
 import { PcRecord } from '../../PcForm/record'
 import { useClazs } from '../../utils/class'
+import type { BasicGraph } from '../../graph'
+import type { PropType } from 'vue'
 
 export default defineComponent({
   name: 'SaFormLayoutFooter',
@@ -13,8 +14,8 @@ export default defineComponent({
   props: {
     graph: {
       required: true,
-      type: Object as PropType<BasicGraph>
-    }
+      type: Object as PropType<BasicGraph>,
+    },
   },
 
   setup(props) {
@@ -23,28 +24,40 @@ export default defineComponent({
 
     return () => (
       <div class="sa-form-footer flex justify-start p-1">
-        <NPopover class="history-popover" placement="top-start" trigger="click" showArrow={false}>
+        <NPopover
+          class="history-popover"
+          placement="top-start"
+          trigger="click"
+          showArrow={false}
+        >
           {{
             trigger: () => <NButton type="primary">history</NButton>,
-            default: () => <NScrollbar style={{ maxHeight: '400px' }}>
-              <ol class="history-container">{
-                recordsRef.value.length ?
-                  recordsRef.value.map((record, index) =>
-                    <li
-                      class={ useClazs('history', {
-                        active: currentRef.value === index
-                      })}
-                      onClick={() => props.graph.historyTo(record)}
-                    >
-                      <span class="type">{BasicRecordType[record.type]}</span>
-                      <span class="name">{record.data.map(d => d.name).join(', ') || 'graph'}</span>
-                    </li>)
-                  : <div class="empty">empty history record</div>
-              }</ol>
-            </NScrollbar>
+            default: () => (
+              <NScrollbar style={{ maxHeight: '400px' }}>
+                <ol class="history-container">
+                  {recordsRef.value.length ? (
+                    recordsRef.value.map((record, index) => (
+                      <li
+                        class={useClazs('history', {
+                          active: currentRef.value === index,
+                        })}
+                        onClick={() => props.graph.historyTo(record)}
+                      >
+                        <span class="type">{BasicRecordType[record.type]}</span>
+                        <span class="name">
+                          {record.data.map((d) => d.name).join(', ') || 'graph'}
+                        </span>
+                      </li>
+                    ))
+                  ) : (
+                    <div class="empty">empty history record</div>
+                  )}
+                </ol>
+              </NScrollbar>
+            ),
           }}
         </NPopover>
       </div>
     )
-  }
+  },
 })

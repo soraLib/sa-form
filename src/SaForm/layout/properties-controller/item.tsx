@@ -1,34 +1,38 @@
-import { computed, defineComponent, PropType, ref, VNode } from 'vue'
-import { SaPlugin, SaPluginType } from '../../plugin'
-
-import { NColorPicker, NInput, NInputNumber, NButton } from 'naive-ui'
-import { BasicGraph } from '../../graph'
-import { SaController } from '../../config'
-import SaDialog from './dialog'
-
+import { computed, defineComponent, ref } from 'vue'
+import { NButton, NColorPicker, NInput, NInputNumber } from 'naive-ui'
+import { SaPluginType } from '../../plugin'
 import { isElementAttribute } from '../../utils//element'
+import SaDialog from './dialog'
+import type { PropType, VNode } from 'vue'
+import type { SaPlugin } from '../../plugin'
+
+import type { BasicGraph } from '../../graph'
+import type { SaController } from '../../config'
 
 export default defineComponent({
   name: 'ControllerItem',
   props: {
     plugin: {
       required: true,
-      type: Object as PropType<SaPlugin>
+      type: Object as PropType<SaPlugin>,
     },
     graph: {
       required: true,
-      type: Object as PropType<BasicGraph>
+      type: Object as PropType<BasicGraph>,
     },
     controller: {
       required: true,
-      type: Object as PropType<SaController>
-    }
+      type: Object as PropType<SaController>,
+    },
   },
 
   setup(props) {
     const selected = computed(() => props.graph.selected[0])
     const modelValue = computed<any>(() => {
-      if (selected.value && isElementAttribute(props.plugin.attr, selected.value)) {
+      if (
+        selected.value &&
+        isElementAttribute(props.plugin.attr, selected.value)
+      ) {
         return selected.value?.attrs[props.plugin.attr]
       }
 
@@ -45,36 +49,46 @@ export default defineComponent({
       switch (props.plugin.type) {
         case SaPluginType.Input: {
           // TODO: emit on change not on input
-          return <NInput
-            class="sa-plugin"
-            value={modelValue.value}
-            onUpdateValue={handlePluginValueChange}
-            disabled={props.plugin.disabled ?? false}
-          />
+          return (
+            <NInput
+              class="sa-plugin"
+              value={modelValue.value}
+              onUpdateValue={handlePluginValueChange}
+              disabled={props.plugin.disabled ?? false}
+            />
+          )
         }
 
         case SaPluginType.Number: {
-          return <NInputNumber
-            class="sa-plugin"
-            showButton={false}
-            value={modelValue.value}
-            onUpdateValue={handlePluginValueChange}
-            disabled={props.plugin.disabled ?? false}
-          />
+          return (
+            <NInputNumber
+              class="sa-plugin"
+              showButton={false}
+              value={modelValue.value}
+              onUpdateValue={handlePluginValueChange}
+              disabled={props.plugin.disabled ?? false}
+            />
+          )
         }
 
         case SaPluginType.Dialog: {
-          return <SaDialog
-            class="sa-plugin"
-            graph={props.graph}
-            plugin={props.plugin}
-            controller={props.controller}
-          />
+          return (
+            <SaDialog
+              class="sa-plugin"
+              graph={props.graph}
+              plugin={props.plugin}
+              controller={props.controller}
+            />
+          )
         }
 
         case SaPluginType.Color: {
           const updateValue = (color: string) => {
-            props.graph.updateElemData(selected.value, { [props.plugin.attr]: color }, false)
+            props.graph.updateElemData(
+              selected.value,
+              { [props.plugin.attr]: color },
+              false
+            )
           }
           const updateShow = (show: boolean) => {
             if (!show && modelValue.value !== colorTemp) {
@@ -88,29 +102,39 @@ export default defineComponent({
             colorTemp = v
           }
 
-          return <div class="sa-plugin flex">
-            <NColorPicker
-              value={modelValue.value}
-              showPreview={true}
-              modes={['rgb', 'hex', 'hsl', 'hsv']}
-              actions={['confirm']}
-              disabled={props.plugin.disabled ?? false}
-              onUpdateValue={updateValue}
-              onUpdateShow={updateShow}
-              onConfirm={onConfirm}
-            />
-            <NButton onClick={() => handlePluginValueChange('')}>清空</NButton>
-          </div>
+          return (
+            <div class="sa-plugin flex">
+              <NColorPicker
+                value={modelValue.value}
+                showPreview={true}
+                modes={['rgb', 'hex', 'hsl', 'hsv']}
+                actions={['confirm']}
+                disabled={props.plugin.disabled ?? false}
+                onUpdateValue={updateValue}
+                onUpdateShow={updateShow}
+                onConfirm={onConfirm}
+              />
+              <NButton onClick={() => handlePluginValueChange('')}>
+                清空
+              </NButton>
+            </div>
+          )
         }
 
         default: {
-          console.error(`[Sa error]: Unexpected plugin type ${props.plugin.type}.`)
+          console.error(
+            `[Sa error]: Unexpected plugin type ${props.plugin.type}.`
+          )
 
-          return <span class="bg-red-700 w-full block text-center">{props.plugin.type}</span>
+          return (
+            <span class="bg-red-700 w-full block text-center">
+              {props.plugin.type}
+            </span>
+          )
         }
       }
     }
 
     return () => createPlugin()
-  }
+  },
 })

@@ -13,8 +13,8 @@ export const createMockPcCanvas: () => PcElement = () => {
       height: 600,
       x: 0,
       y: 0,
-      background: ''
-    }
+      background: '',
+    },
   })
 
   const child1 = new PcElement({
@@ -27,8 +27,8 @@ export const createMockPcCanvas: () => PcElement = () => {
       height: 45,
       x: 200,
       y: 100,
-      background: '#50DA58'
-    }
+      background: '#50DA58',
+    },
   })
 
   const child2 = new PcElement({
@@ -41,8 +41,8 @@ export const createMockPcCanvas: () => PcElement = () => {
       height: 40,
       x: 150,
       y: 200,
-      background: ''
-    }
+      background: '',
+    },
   })
 
   const child3 = new PcElement({
@@ -55,9 +55,9 @@ export const createMockPcCanvas: () => PcElement = () => {
       height: 200,
       x: 50,
       y: 300,
-      background: '#EFAE46'
+      background: '#EFAE46',
     },
-    children: []
+    children: [],
   })
 
   canvas.children?.push(...[child1, child2, child3])

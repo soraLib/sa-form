@@ -1,4 +1,4 @@
-import { BasicElement, BasicElementAttributes } from './element'
+import type { BasicElement, BasicElementAttributes } from './element'
 
 export enum BasicRecordType {
   /** init graph */
@@ -48,12 +48,16 @@ export type URecordDataList = URecordData[]
 export type BasicRecordDataList = CDRecordDataList | URecordDataList
 
 /** is update record data list */
-export function isURecordDataList(data: BasicRecordDataList): data is URecordDataList {
+export function isURecordDataList(
+  data: BasicRecordDataList
+): data is URecordDataList {
   return Reflect.has(data[0], 'id')
 }
 
 /** is create or delete record data list */
-export function isCDRecordDataList(data: BasicRecordDataList): data is CDRecordDataList {
+export function isCDRecordDataList(
+  data: BasicRecordDataList
+): data is CDRecordDataList {
   return !Reflect.has(data[0], 'id')
 }
 

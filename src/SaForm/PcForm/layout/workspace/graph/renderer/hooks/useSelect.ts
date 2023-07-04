@@ -1,6 +1,6 @@
-import { PcElement } from '../../../../../element'
-import { PcGraph, SelectionBox } from '../../../../../graph'
-import { Rect } from '../utils/rectangle'
+import type { PcElement } from '../../../../../element'
+import type { PcGraph, SelectionBox } from '../../../../../graph'
+import type { Rect } from '../utils/rectangle'
 
 interface SelectStatus {
   _mouseStartX: number
@@ -9,21 +9,29 @@ interface SelectStatus {
   _startY: number
 }
 
-export const useElementSelect = (event: MouseEvent, element: PcElement, graph: PcGraph) => {
+export const useElementSelect = (
+  event: MouseEvent,
+  element: PcElement,
+  graph: PcGraph
+) => {
   const status: SelectStatus = {
     _mouseStartX: event.screenX,
     _mouseStartY: event.screenY,
     _startX: event.offsetX,
-    _startY: event.offsetY
+    _startY: event.offsetY,
   }
 
   const selectCb = elementSelect
 
   document.addEventListener('mousemove', selectCb)
-  document.addEventListener('mouseup', () => {
-    document.removeEventListener('mousemove', selectCb)
-    elementSelectEnd()
-  }, { once: true })
+  document.addEventListener(
+    'mouseup',
+    () => {
+      document.removeEventListener('mousemove', selectCb)
+      elementSelectEnd()
+    },
+    { once: true }
+  )
 
   function elementSelect(event: MouseEvent) {
     graph.setSelected(element)
@@ -39,18 +47,30 @@ export const useElementSelect = (event: MouseEvent, element: PcElement, graph: P
     const moveY = event.screenY - status._mouseStartY
 
     if (moveX > 0 && moveY > 0) {
-      width = status._startX + moveX > element.attrs.width ? element.attrs.width - status._startX : moveX
-      height = status._startY + moveY > element.attrs.height ? element.attrs.height - status._startY : moveY
+      width =
+        status._startX + moveX > element.attrs.width
+          ? element.attrs.width - status._startX
+          : moveX
+      height =
+        status._startY + moveY > element.attrs.height
+          ? element.attrs.height - status._startY
+          : moveY
     }
     if (moveX > 0 && moveY < 0) {
-      width = status._startX + moveX > element.attrs.width ? element.attrs.width - status._startX : moveX
+      width =
+        status._startX + moveX > element.attrs.width
+          ? element.attrs.width - status._startX
+          : moveX
       height = status._startY + moveY < 0 ? status._startY : Math.abs(moveY)
 
       y -= height
     }
     if (moveX < 0 && moveY > 0) {
       width = status._startX + moveX < 0 ? status._startX : Math.abs(moveX)
-      height = status._startY + moveY > element.attrs.height ? element.attrs.height - status._startY : moveY
+      height =
+        status._startY + moveY > element.attrs.height
+          ? element.attrs.height - status._startY
+          : moveY
 
       x -= width
     }
@@ -66,7 +86,7 @@ export const useElementSelect = (event: MouseEvent, element: PcElement, graph: P
       x,
       y,
       width,
-      height
+      height,
     })
   }
   function elementSelectEnd() {
@@ -91,18 +111,20 @@ const selectWithBox = (box: SelectionBox, graph: PcGraph) => {
   const selected = graph.selected[0]
   const compares = selected.parent?.children ?? selected.children
 
-  const selections = compares?.length ? compares.reduce(
-    (selections, cur) => isCoincide(
-      box,
-      {
-        x: cur.attrs.x,
-        y: cur.attrs.y,
-        width: cur.attrs.width,
-        height: cur.attrs.height
-      }
-    ) ? [...selections, cur] : selections
-    , [] as PcElement[]) : []
+  const selections = compares?.length
+    ? compares.reduce(
+        (selections, cur) =>
+          isCoincide(box, {
+            x: cur.attrs.x,
+            y: cur.attrs.y,
+            width: cur.attrs.width,
+            height: cur.attrs.height,
+          })
+            ? [...selections, cur]
+            : selections,
+        [] as PcElement[]
+      )
+    : []
 
   graph.setSelected(selections)
 }
-

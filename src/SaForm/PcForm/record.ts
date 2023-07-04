@@ -1,5 +1,10 @@
-import { BasicRecord, BasicRecordDataList, BasicRecordStore, BasicRecordType } from '../record'
 import { PcGraph } from './graph'
+import type {
+  BasicRecord,
+  BasicRecordDataList,
+  BasicRecordStore,
+  BasicRecordType,
+} from '../record'
 
 export class PcRecord implements BasicRecord {
   type: BasicRecordType
@@ -15,7 +20,7 @@ export class PcRecord implements BasicRecord {
 
 export class PcRecordStore implements BasicRecordStore {
   records: PcRecord[] = []
-  index: number = -1
+  index = -1
   max: number
   recording: boolean
 

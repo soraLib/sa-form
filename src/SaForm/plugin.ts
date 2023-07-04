@@ -1,4 +1,4 @@
-import { ElementType } from './element'
+import type { ElementType } from './element'
 
 /** property controller type */
 export enum SaPluginType {
@@ -7,7 +7,7 @@ export enum SaPluginType {
   Select = 'select',
   Dialog = 'dialog',
   Color = 'color',
-  Cascader = 'cascader'
+  Cascader = 'cascader',
 }
 
 export interface SaPlugin {
@@ -37,39 +37,39 @@ export const BasicPlugins = {
     label: 'id',
     attr: 'id',
     type: SaPluginType.Input,
-    disabled: true
+    disabled: true,
   },
   'widget-name': {
     label: 'name',
     attr: 'name',
-    type: SaPluginType.Input
+    type: SaPluginType.Input,
   },
   'widget-width': {
     label: 'width',
     attr: 'width',
-    type: SaPluginType.Number
+    type: SaPluginType.Number,
   },
   'widget-height': {
     label: 'height',
     attr: 'height',
-    type: SaPluginType.Number
+    type: SaPluginType.Number,
   },
   'widget-x': {
     label: 'x',
     attr: 'x',
-    type: SaPluginType.Number
+    type: SaPluginType.Number,
   },
   'widget-y': {
     label: 'y',
     attr: 'y',
-    type: SaPluginType.Number
+    type: SaPluginType.Number,
   },
   'widget-background': {
     label: 'BGD',
     title: 'background',
     attr: 'background',
-    type: SaPluginType.Color
-  }
+    type: SaPluginType.Color,
+  },
 } as const
 
 export type SaPluginLayout = {
