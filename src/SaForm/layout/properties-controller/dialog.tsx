@@ -85,18 +85,15 @@ export default defineComponent({
       dialogVisible.value = false
     }
 
+    const displayContent = computed(() =>
+      props.plugin.filter?.(getPluginValue(props.graph, props.plugin))
+    )
+
     return () => (
       <div class="dialog-container">
-        {props.plugin?.filter ? (
-          <NInput
-            value={props.plugin.filter(
-              getPluginValue(props.graph, props.plugin)
-            )}
-            disabled
-          />
-        ) : (
-          ''
-        )}
+        <span title={displayContent.value}>
+          <NInput value={displayContent.value} disabled />
+        </span>
 
         <NButton onClick={() => (dialogVisible.value = true)}>set</NButton>
 
@@ -105,18 +102,21 @@ export default defineComponent({
             title={props.plugin.dialog?.title ?? props.plugin.label}
             show={dialogVisible.value}
             mask-closable={false}
-            onClose={() => (dialogVisible.value = false)}
+            preset="card"
+            class="!w-fit"
+            close-on-esc
+            onUpdate:show={(visible) => (dialogVisible.value = visible)}
             v-slots={{
               action: () => (
-                <div>
+                <div class="flex justify-end gap-2">
                   <NButton
                     type="default"
                     onClick={() => (dialogVisible.value = false)}
                   >
-                    cancel
+                    Cancel
                   </NButton>
                   <NButton type="primary" onClick={handleConfirm}>
-                    submit
+                    Submit
                   </NButton>
                 </div>
               ),

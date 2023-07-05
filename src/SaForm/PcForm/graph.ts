@@ -263,6 +263,8 @@ export class PcGraph extends Events implements BasicGraph {
     data: Partial<PcElement['attrs']>,
     needRecord = true
   ) {
+    console.log('updateElemData', arg, data, needRecord)
+
     if (!arg) return
 
     const element =
