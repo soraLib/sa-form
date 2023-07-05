@@ -1,20 +1,23 @@
 import { BasicRecordType } from '../../../../../../record'
 import { PcRecord } from '../../../../../record'
 import { getRectangle } from '../utils/rectangle'
-import { useElementSelect } from './useSelect'
 import { gridFloor } from './utils'
 import type { PcGraph } from '../../../../../graph'
 import type { PcElement } from '../../../../../element'
+
+export const aheadSelected = (element: PcElement, graph: PcGraph) => {
+  return graph.setSelected([
+    element,
+    ...graph.selected.filter((ele) => ele !== element),
+  ])
+}
 
 /** select element or take it at the ahead of the selected */
 export const selectOrAhead = (element: PcElement, graph: PcGraph) => {
   const find = graph.selected.find((ele) => ele === element)
 
   if (find) {
-    return graph.setSelected([
-      element,
-      ...graph.selected.filter((ele) => ele !== element),
-    ])
+    return aheadSelected(element, graph)
   }
 
   return graph.setSelected([element])
@@ -25,7 +28,7 @@ interface DragPositon {
   _startY: number
 }
 
-const useElementDrag = (
+export const useElementDrag = (
   event: MouseEvent,
   element: PcElement,
   graph: PcGraph
@@ -157,23 +160,5 @@ const useElementDrag = (
 
     graph.setDragging(false)
     graph.setMouse()
-  }
-}
-
-/**
- * OnMousedown element handler.
- */
-export const useElementHandler = (
-  event: MouseEvent,
-  element: PcElement,
-  graph: PcGraph
-) => {
-  event.stopPropagation()
-
-  if (!element.parent) {
-    // canvas
-    useElementSelect(event, element, graph)
-  } else {
-    useElementDrag(event, element, graph)
   }
 }
