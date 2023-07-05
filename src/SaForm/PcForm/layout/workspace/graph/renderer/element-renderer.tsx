@@ -2,8 +2,9 @@ import { computed, defineComponent } from 'vue'
 import { useClazs } from '../../../../../utils/class'
 import { useElementStickReszie } from './hooks/useResize'
 import { useElementStyle } from './hooks/useStyle'
-import { useElementHandler } from './hooks/useDrag'
 import ElementRenderer from './element-renderer'
+import { aheadSelected, selectOrAhead, useElementDrag } from './hooks/useDrag'
+import { useElementSelect } from './hooks/useSelect'
 import type { CSSProperties, PropType } from 'vue'
 import type { PcGraph, Stick } from '../../../../graph'
 import type { PcElement } from '../../../../element'
@@ -39,6 +40,40 @@ function vdrStick(stick: Stick) {
   stickStyle[styleMapping.x[lastOfStick(stick)]] = `${stickSize / -2}px`
 
   return stickStyle
+}
+
+/**
+ * OnMousedown element handler.
+ */
+export const useElementHandler = (
+  event: MouseEvent,
+  element: PcElement,
+  graph: PcGraph
+) => {
+  event.stopPropagation()
+
+  if (!element.parent) {
+    // canvas
+    useElementSelect(event, element, graph)
+    return
+  }
+
+  if (event.ctrlKey) {
+    const index = graph.selected.indexOf(element)
+    if (index !== -1) {
+      if (index === 0) {
+        graph.selected = graph.selected.slice(1)
+      } else {
+        aheadSelected(element, graph)
+      }
+    } else {
+      graph.selected.unshift(element)
+    }
+
+    return
+  }
+
+  useElementDrag(event, element, graph)
 }
 
 export default defineComponent({
