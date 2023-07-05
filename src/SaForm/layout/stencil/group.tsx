@@ -4,7 +4,7 @@ import { CaretDown } from '@vicons/ionicons5'
 import { NIcon } from 'naive-ui'
 import { useToggle } from '@vueuse/core'
 import { useClazs } from '../../utils/class'
-import NativeItem from './native'
+import StencilItem from './item'
 import type { ComposedNativeStencil } from '.'
 import type { PropType } from 'vue'
 
@@ -31,7 +31,7 @@ export default defineComponent({
 
         <div class="stencil-group__content">
           {props.group[1].map((item) => (
-            <NativeItem key={item.attrs.name} item={item} />
+            <StencilItem key={item.attrs.name} item={item} />
           ))}
         </div>
       </div>

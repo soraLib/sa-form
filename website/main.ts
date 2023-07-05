@@ -1,9 +1,8 @@
 import { createApp } from 'vue'
 import Provider from './AppProvider.vue'
 
-import './styles/base.css'
-import './styles/var.scss'
-import './styles/iconfont.css'
+// TODO: integrate styles into src/SaForm
+import './styles/index.scss'
 
 const meta = document.createElement('meta')
 meta.name = 'naive-ui-style'

@@ -1,13 +1,13 @@
 import { PcGraph } from './PcForm/graph'
 
-import { PcHeaderOptions } from './PcForm/layout/header'
-import { getNativeSideStencil } from './PcForm/layout/side'
+import { PcHeaderToolkits } from './PcForm/layout/header'
+import { getNativeSideStencil } from './PcForm/layout/stencil'
 import PcWorkspace from './PcForm/layout/workspace'
 import { ElementType } from './element'
 import { PcPlugin, pcPluginValueChange } from './PcForm/plugin'
-import type { Component, PropType } from 'vue'
-import type { NativeStencil } from './layout/sidebar'
-import type { HeaderTool } from './layout/header'
+import type { DefineComponent, PropType } from 'vue'
+import type { NativeStencil } from './layout/stencil'
+import type { HeaderToolkit } from './layout/header/toolkit'
 import type { BasicGraph, GraphType } from './graph'
 import type { SaPlugin, SaPluginLayout } from './plugin'
 const PcComponents = import.meta.glob('./PcForm/controller/*/index.tsx')
@@ -24,8 +24,8 @@ const createPcFormConfig = () => ({
       y: 0,
     },
   }),
-  header: PcHeaderOptions,
-  side: getNativeSideStencil(),
+  toolkits: PcHeaderToolkits,
+  stencil: getNativeSideStencil(),
   workspace: PcWorkspace as any,
   controller: {
     plugins: PcPlugin,
@@ -45,12 +45,12 @@ export type SaController = {
 export type ILayout = {
   [key in GraphType]: () => {
     graph: BasicGraph
-    header: HeaderTool[]
-    side: NativeStencil
-    workspace: Component<{
+    toolkits: HeaderToolkit[]
+    stencil: NativeStencil
+    workspace: DefineComponent<{
       graph: {
         required: true
-        type: PropType<PcGraph>
+        type: PropType<BasicGraph>
       }
     }>
     controller: SaController

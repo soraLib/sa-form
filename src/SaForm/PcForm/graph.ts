@@ -17,8 +17,8 @@ import { PcRecord, PcRecordStore } from './record'
 
 import { PcClipBoard } from './clipboard'
 import { Events } from './events'
+import type { BasicGraph, GraphType, Layout, MousePosition } from '../graph'
 import type { BasicRecordStore } from '../record'
-import type { BasicGraph, GraphType, MousePosition } from '../graph'
 
 export type IdUpdateData = { id: string; data: Partial<PcElement['attrs']> }
 export type ElUpdateData = {
@@ -44,10 +44,14 @@ export type Stick = 'tl' | 'tm' | 'tr' | 'mr' | 'br' | 'bm' | 'bl' | 'ml'
 /** pc graph */
 export class PcGraph extends Events implements BasicGraph {
   type: GraphType
+  layout: Layout = {
+    layer: true,
+  }
   canvas: PcElement
   history: BasicRecordStore
   clipboard: PcClipBoard
   selected: PcElement[] = []
+
   nextId: string
   isDragging = false
   mousePosition = {
@@ -96,6 +100,12 @@ export class PcGraph extends Events implements BasicGraph {
         data: [],
       })
     )
+  }
+
+  setLayout(layout: Partial<Layout>) {
+    for (const [key, value] of Object.entries(layout)) {
+      this.layout[key as keyof Layout] = value
+    }
   }
 
   setCanvas(canvas: PcElement) {

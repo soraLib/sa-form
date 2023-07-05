@@ -6,7 +6,7 @@ import { PcElement, containerElements } from '../../../element'
 import { useClazs } from '../../../../utils/class'
 import ElementRenderer from './renderer/element-renderer'
 import { gridFloor } from './renderer/hooks/utils'
-import type { StencilAttrs } from '../../../../layout/sidebar'
+import type { StencilAttrs } from '../../../../layout/stencil'
 import type { CSSProperties, PropType } from 'vue'
 import type { PcGraph } from '../../../graph'
 

@@ -1,56 +1,28 @@
-import { defineComponent, h } from 'vue'
-import { PcGraph } from '../../PcForm/graph'
-import type { PropType, VNode } from 'vue'
+import { defineComponent } from 'vue'
+import Toolkit from './toolkit'
+import Layout from './layout'
+import type { PropType } from 'vue'
 import type { BasicGraph } from '../../graph'
 import './index.scss'
-
-// TODO: Render component
-export interface HeaderTool {
-  /** icon title on dom */
-  title: string
-  /** icon width */
-  width?: number
-  /** icon */
-  icon: VNode
-  /** icon click callback */
-  click: (graph: any /** TODO: */, e: Event) => void
-  /** a divider separates the icons */
-  divider?: boolean
-}
+import type { HeaderToolkit } from './toolkit'
 
 export default defineComponent({
   name: 'SaFormLayoutHeader',
   props: {
-    options: {
+    toolkits: {
       required: true,
-      type: Array as PropType<HeaderTool[]>,
+      type: Array as PropType<HeaderToolkit[]>,
     },
     graph: {
       required: true,
       type: Object as PropType<BasicGraph>,
     },
   },
-
-  render() {
-    return (
-      <div class="sa-form-header flex justify-start p-1">
-        {this.options.map((tool) => (
-          <div class="heade-tool-wrapper">
-            <span
-              class="header-tool"
-              onClick={(e) => tool.click(this.graph, e)}
-              title={tool.title}
-              style={{
-                width: tool.width ? `${tool.width}px` : '30px',
-                height: '30px',
-              }}
-            >
-              {tool.icon}
-            </span>
-
-            {tool.divider && <span class="header-tool-divider" />}
-          </div>
-        ))}
+  setup(props) {
+    return () => (
+      <div class="sa-form-header p-1">
+        <Layout graph={props.graph} />
+        <Toolkit toolkits={props.toolkits} graph={props.graph} />
       </div>
     )
   },

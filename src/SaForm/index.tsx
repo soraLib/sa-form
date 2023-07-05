@@ -5,9 +5,10 @@ import { computed, defineComponent, reactive } from 'vue'
 import { LAYOUTS } from './config'
 
 import SaFormHeader from './layout/header'
-import SaFormSidebar from './layout/sidebar'
+import SaFormStencil from './layout/stencil'
 import SaFormController from './layout/properties-controller'
 import SaFormFooter from './layout/footer'
+import SaFormLayer from './layout/layer'
 import type { ILayout } from './config'
 import type { GraphType } from './graph'
 import type { CSSProperties, PropType } from 'vue'
@@ -68,22 +69,24 @@ linear-gradient(90deg, #DEDEDEFF 1px, transparent 0)`,
       <section class="flex flex-col h-full">
         <header>
           <SaFormHeader
-            options={layout.header}
+            toolkits={layout.toolkits}
             graph={layout.graph}
             class="sa-bg"
           />
         </header>
 
         <main class="mt-1 flex flex-grow h-full">
-          <aside>
-            <SaFormSidebar
-              stencil={layout.side}
+          <section>
+            <SaFormStencil
+              stencil={layout.stencil}
               graph={layout.graph}
               class="sa-bg h-full"
             />
-          </aside>
+          </section>
 
-          <main class="overflow-auto sa-bg mx-1 flex item-center flex-col grow">
+          <SaFormLayer class="shrink-0" graph={layout.graph} />
+
+          <main class="sa-bg mx-1 flex item-center flex-col grow">
             <section class="workspace-bg grow overflow-auto">
               <SaFormWorkspace
                 class="workspace"
