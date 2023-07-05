@@ -1,0 +1,12 @@
+.collapse-transition {
+  &-enter-active,
+  &-leave-active {
+    transition: width 0.2s ease-in-out;
+    overflow: hidden;
+  }
+
+  &-enter-from,
+  &-leave-to {
+    width: 0;
+  }
+}

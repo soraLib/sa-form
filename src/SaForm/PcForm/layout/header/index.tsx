@@ -1,10 +1,10 @@
 import { alignElements } from '../../acitons/align'
 import { equalElementsSize } from '../../acitons/size'
 import { connectElements } from '../../acitons/connect'
-import type { HeaderTool } from '../../../layout/header'
+import type { HeaderToolkit } from '../../../layout/header/toolkit'
 import type { PcGraph } from '../../graph'
 
-export const PcHeaderOptions: HeaderTool[] = [
+export const PcHeaderToolkits: HeaderToolkit[] = [
   // history
   {
     title: 'Undo',

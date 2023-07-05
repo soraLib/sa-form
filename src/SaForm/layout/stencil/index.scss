@@ -1,5 +1,7 @@
-.sa-form-side {
-  .native-item {
+.sa-form-stencil {
+  min-width: 200px;
+
+  .stencil-item {
     display: inline-flex;
     width: fit-content;
     color: var(--c-text-1);
@@ -7,8 +9,7 @@
     padding: 0.25rem;
     cursor: move;
     border: 1px solid transparent;
-    transition: 
-      border-color var(--c-transition), 
+    transition: border-color var(--c-transition),
       background-color var(--c-transition);
 
     &:hover {
@@ -58,7 +59,7 @@
     justify-content: flex-start;
     padding: 10px 5px 0 12px;
   }
- 
+
   &.collapsed {
     .caret {
       transform: rotate(-90deg);

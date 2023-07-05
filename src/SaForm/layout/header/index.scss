@@ -2,36 +2,38 @@ $gap: 4px;
 
 .sa-form-header {
   display: flex;
-  gap: $gap;
+  flex-direction: column;
 
-  .heade-tool-wrapper {
+  .header-button {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    overflow: hidden;
+    user-select: none;
     display: flex;
     align-items: center;
+    justify-content: center;
+    transition: color var(--c-transition);
 
-    .header-tool {
-      cursor: pointer;
-      overflow: hidden;
-      user-select: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      &:hover {
-        color: var(--c-text-inverse-1);
-        background-color: var(--c-bg-ground-mute);
-        border-color: var(--c-brand);
-      }
-
-      &:active {
-        transform: translateY(0.5px);
-      }
+    &:hover {
+      color: var(--c-text-inverse-1);
+      background-color: var(--c-bg-ground-mute);
+      border-color: var(--c-brand);
     }
 
-    .header-tool-divider {
-      margin: 0 $gap * 2 0 $gap * 2.5;
-      border-left: 1px solid var(--c-bg-soft);
-      border-right: 1px solid var(--c-divider);
-      height: 90%;
+    &:active {
+      transform: translateY(0.5px);
     }
+
+    &.is-active {
+      color: var(--c-brand);
+    }
+  }
+
+  .header-button-divider {
+    margin: 0 $gap * 2 0 $gap * 2.5;
+    border-left: 1px solid var(--c-bg-soft);
+    border-right: 1px solid var(--c-divider);
+    height: 90%;
   }
 }

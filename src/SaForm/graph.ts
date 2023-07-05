@@ -27,6 +27,9 @@ export type Snapline = {
   threshold: number
   enabled: boolean
 }
+export type Layout = {
+  layer: boolean
+}
 /** basic graph */
 export interface BasicGraph {
   /** graph type */
@@ -41,6 +44,8 @@ export interface BasicGraph {
   containter?: HTMLDivElement
   grid: Grid
   snapline: Snapline
+  layout: Layout
+  setLayout: (layout: Partial<Layout>) => void
 
   getNextId(): string
   updateElemData(

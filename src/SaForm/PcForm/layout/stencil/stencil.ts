@@ -1,8 +1,10 @@
 import { ElementType } from '../../../element'
-import type { NativeStencil } from '../../../layout/sidebar'
+import type { NativeStencil } from '../../../layout/stencil'
 import type { PcGraph } from '../../graph'
 
-export const NativePcSideStencil: NativeStencil = (graph: PcGraph) => ({
+export const NativePcSideStencil: NativeStencil = <Graph = PcGraph>(
+  graph: Graph
+) => ({
   groups: [
     { name: 'Normal', collapsable: true },
     // { name: 'Container', collapsable: true }

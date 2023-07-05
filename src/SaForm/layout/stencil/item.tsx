@@ -4,7 +4,7 @@ import type { NativeItem } from '.'
 import type { PropType } from 'vue'
 
 export default defineComponent({
-  name: 'NativeSidebarItem',
+  name: 'NativeStencilItem',
   props: {
     item: {
       required: true,
@@ -20,7 +20,7 @@ export default defineComponent({
 
     return () => (
       <div
-        class="native-item"
+        class="stencil-item"
         title={props.item.title ?? props.item.attrs.name}
         draggable
         onDragstart={onDragstart}

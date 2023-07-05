@@ -31,7 +31,7 @@ export type ComposedNativeStencil =
   ReturnType<NativeStencil>['groups'][number] & NativeItem
 
 export default defineComponent({
-  name: 'CoFormLayoutSidebar',
+  name: 'SaFormLayoutStencil',
 
   props: {
     stencil: {
@@ -98,7 +98,7 @@ export default defineComponent({
     return (
       <div
         class={
-          'sa-form-side flex flex-col justify-start p-1 box-border relative'
+          'sa-form-stencil flex flex-col justify-start p-1 box-border relative'
         }
       >
         <NInput
