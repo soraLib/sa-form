@@ -1,5 +1,7 @@
 import { SaPluginType } from '../../plugin'
 
+export type SelectOption = { label: string; value: any }
+
 export const SelectPlugins = {
   'select-options': {
     label: 'options',
@@ -10,7 +12,7 @@ export const SelectPlugins = {
       title: 'select-options',
     },
     disabled: true,
-    filter: (value: { name: string }[]) =>
-      value.map((item) => item.name).join(';'),
+    filter: (value: SelectOption[]) =>
+      value.map((item) => item.label).join('; '),
   },
 } as const

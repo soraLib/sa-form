@@ -60,7 +60,32 @@ export const createMockPcCanvas: () => PcElement = () => {
     children: [],
   })
 
-  canvas.children?.push(...[child1, child2, child3])
+  const child4 = new PcElement({
+    parent: canvas,
+    attrs: {
+      type: ElementType.Select,
+      id: '5',
+      name: 'Mock Select',
+      width: 200,
+      height: 60,
+      x: 400,
+      y: 150,
+      background: '#4d85ff',
+      options: [
+        {
+          label: 'Option A',
+          value: 'Value A',
+        },
+        {
+          label: 'Option B',
+          value: 'Value B',
+        },
+      ],
+    },
+    children: [],
+  })
+
+  canvas.children?.push(...[child1, child2, child3, child4])
 
   return canvas
 }

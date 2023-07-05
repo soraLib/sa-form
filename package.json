@@ -20,7 +20,6 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@element-plus/icons-vue": "^2.0.10",
     "@vicons/ionicons5": "^0.12.0",
     "@vueuse/core": "^9.12.0",
     "lodash-es": "^4.17.21",

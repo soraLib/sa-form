@@ -37,6 +37,10 @@ export const NativePcSideStencil: NativeStencil = (graph: PcGraph) => ({
           width: 100,
           height: 40,
           background: '#eee',
+          options: [
+            { label: 'Option A', value: 'Value A' },
+            { label: 'Option B', value: 'Value B' },
+          ],
         },
       },
     ],

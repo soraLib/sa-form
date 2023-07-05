@@ -4,9 +4,6 @@ importers:
 
   .:
     dependencies:
-      '@element-plus/icons-vue':
-        specifier: ^2.0.10
-        version: 2.0.10(vue@3.2.37)
       '@vicons/ionicons5':
         specifier: ^0.12.0
         version: 0.12.0
@@ -642,14 +639,6 @@ packages:
     resolution: {integrity: sha512-keGKnkB2nyVGoA8GezMKNsmvTGXEzgLOGGlgshwOTSEzd1dsROyZ2m/khJ9jV5zbzDM4rWeAWbWF0zwHemsJcw==}
     peerDependencies:
       vue: ^3.0.11
-    dependencies:
-      vue: 3.2.37
-    dev: false
-
-  /@element-plus/icons-vue@2.0.10(vue@3.2.37):
-    resolution: {integrity: sha512-ygEZ1mwPjcPo/OulhzLE7mtDrQBWI8vZzEWSNB2W/RNCRjoQGwbaK4N8lV4rid7Ts4qvySU3njMN7YCiSlSaTQ==}
-    peerDependencies:
-      vue: ^3.2.0
     dependencies:
       vue: 3.2.37
     dev: false
