@@ -13,12 +13,11 @@ $gap: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: color var(--c-transition);
+    transition: color var(--c-transition), background var(--c-transition);
+    border-radius: 4px;
 
     &:hover {
-      color: var(--c-text-inverse-1);
-      background-color: var(--c-bg-ground-mute);
-      border-color: var(--c-brand);
+      background-color: var(--c-bg-hover);
     }
 
     &:active {

@@ -75,7 +75,7 @@ linear-gradient(90deg, #DEDEDEFF 1px, transparent 0)`,
           />
         </header>
 
-        <main class="mt-1 flex flex-grow h-full">
+        <main class="mt-1 flex flex-grow h-full overflow-auto">
           <section>
             <SaFormStencil
               stencil={layout.stencil}

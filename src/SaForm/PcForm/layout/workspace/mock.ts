@@ -9,7 +9,7 @@ export const createMockPcCanvas: () => PcElement = () => {
       type: ElementType.Canvas,
       id: '1',
       name: 'mock pc form',
-      width: 800,
+      width: 1500,
       height: 600,
       x: 0,
       y: 0,
@@ -68,7 +68,7 @@ export const createMockPcCanvas: () => PcElement = () => {
       name: 'Mock Select',
       width: 200,
       height: 60,
-      x: 400,
+      x: 1200,
       y: 150,
       background: '#4d85ff',
       options: [
@@ -82,7 +82,6 @@ export const createMockPcCanvas: () => PcElement = () => {
         },
       ],
     },
-    children: [],
   })
 
   canvas.children?.push(...[child1, child2, child3, child4])

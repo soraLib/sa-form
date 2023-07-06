@@ -25,10 +25,11 @@ export interface URecordData extends BasicRecordData {
   next: Partial<BasicElementAttributes>
 }
 
+export type CDRecord = Pick<BasicElement, 'parent' | 'children' | 'attrs'>
 /** create or delete record data */
 export interface CDRecordData extends BasicRecordData {
-  prev?: BasicElement
-  next?: BasicElement
+  prev?: CDRecord
+  next?: CDRecord
 }
 
 export type RecordData = CDRecordData | URecordData

@@ -1,5 +1,5 @@
 .sa-form-stencil {
-  min-width: 200px;
+  width: 220px;
 
   .stencil-item {
     display: inline-flex;
@@ -9,6 +9,7 @@
     padding: 0.25rem;
     cursor: move;
     border: 1px solid transparent;
+    border-radius: 4px;
     transition: border-color var(--c-transition),
       background-color var(--c-transition);
 

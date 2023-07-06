@@ -106,7 +106,7 @@ export default defineComponent({
           value={this.stencilSearch}
           onUpdateValue={this.stencilSearchChange}
           clearable
-          placeholder="请输入搜索内容"
+          placeholder="Search Component"
         >
           {{
             prefix: () => <NIcon component={FlashOutline} />,
