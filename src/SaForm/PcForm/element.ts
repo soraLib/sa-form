@@ -27,14 +27,19 @@ export interface IPcElement extends BasicElement {
 
 export class PcElement implements IPcElement {
   key: string
+  el?: HTMLElement
   parent?: PcElement
   children?: PcElement[]
   attrs: PcElementAttributes
 
-  constructor(config: Omit<PcElement, 'key'>) {
+  constructor(config: Pick<PcElement, 'parent' | 'children' | 'attrs'>) {
     this.parent = config.parent
     this.attrs = cloneDeep(config.attrs)
     this.key = config.attrs.id
     if (config.children) this.children = config.children
+  }
+
+  setEl(el?: HTMLElement) {
+    this.el = el
   }
 }

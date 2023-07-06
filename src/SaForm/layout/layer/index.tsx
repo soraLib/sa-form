@@ -9,6 +9,7 @@ import type { BasicGraph } from '../../graph'
 import './index.scss'
 import type { TreeOption } from 'naive-ui'
 import { pcStencilIcons } from '@/SaForm/PcForm/layout/stencil/stencil'
+import { useClazs } from '@/SaForm/utils/class'
 
 export default defineComponent({
   name: 'SaFormLayoutLayer',
@@ -46,9 +47,15 @@ export default defineComponent({
                   trigger: () => (
                     <div
                       title="Filter"
-                      class="flex items-center p-1.5 cursor-pointer"
+                      class={useClazs(
+                        'flex',
+                        'items-center',
+                        'p-1.5',
+                        'cursor-pointer',
+                        { 'is-filtered': pattern.value !== '' }
+                      )}
                     >
-                      <NIcon size={16} {...{}}>
+                      <NIcon size={16}>
                         <Funnel />
                       </NIcon>
                     </div>

@@ -40,7 +40,10 @@ export interface BasicElementAttributes {
 /** basic element */
 export interface BasicElement {
   key: string
+  el?: HTMLElement
   parent?: BasicElement
   children?: BasicElement[]
   attrs: BasicElementAttributes
+
+  setEl: (el?: HTMLElement) => void
 }

@@ -18,7 +18,7 @@ import { PcRecord, PcRecordStore } from './record'
 import { PcClipBoard } from './clipboard'
 import { Events } from './events'
 import type { BasicGraph, GraphType, Layout, MousePosition } from '../graph'
-import type { BasicRecordStore } from '../record'
+import type { BasicRecordStore, CDRecord } from '../record'
 
 export type IdUpdateData = { id: string; data: Partial<PcElement['attrs']> }
 export type ElUpdateData = {
@@ -224,16 +224,6 @@ export class PcGraph extends Events implements BasicGraph {
 
     if (!this.canvas.children) return
 
-    if (typeof arg === 'string') {
-      const node = findNode(this.canvas, (node) => node.attrs.id === arg)
-
-      if (node) {
-        this.selected = [node]
-      }
-
-      return node
-    }
-
     if (Array.isArray(arg)) {
       const selected: PcElement[] = []
 
@@ -248,11 +238,25 @@ export class PcGraph extends Events implements BasicGraph {
 
       this.selected = selected
 
+      selected[0].el?.scrollIntoView({ behavior: 'smooth' })
+
       return selected
+    }
+
+    if (typeof arg === 'string') {
+      const node = findNode(this.canvas, (node) => node.attrs.id === arg)
+
+      if (node) {
+        this.selected = [node]
+        node.el?.scrollIntoView({ behavior: 'smooth' })
+      }
+
+      return node
     }
 
     if (typeof arg === 'object') {
       this.selected = [arg]
+      arg.el?.scrollIntoView({ behavior: 'smooth' })
 
       return arg
     }
@@ -459,7 +463,7 @@ export class PcGraph extends Events implements BasicGraph {
 }
 
 /** add canvas node */
-const addGraphNode = (graph: PcGraph, element?: PcElement) => {
+const addGraphNode = (graph: PcGraph, element?: CDRecord) => {
   if (!graph.canvas.children || !element) return
 
   if (element.parent) {
@@ -469,7 +473,7 @@ const addGraphNode = (graph: PcGraph, element?: PcElement) => {
       (node) => node.attrs.id === element.parent?.attrs.id
     )
     if (graphParent) {
-      graphParent.children?.push(element)
+      graphParent.children?.push(element as PcElement)
       element.parent = graphParent
     }
   }
