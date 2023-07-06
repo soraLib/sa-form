@@ -225,20 +225,19 @@ export class PcGraph extends Events implements BasicGraph {
     if (!this.canvas.children) return
 
     if (Array.isArray(arg)) {
-      const selected: PcElement[] = []
-
-      for (const item of arg) {
-        if (typeof item === 'string') {
-          const node = findNode(this.canvas, (node) => node.attrs.id === item)
-          if (node) selected.push(node)
+      const selected = arg.reduce<PcElement[]>((acc, cur) => {
+        if (typeof cur === 'string') {
+          const node = findNode(this.canvas, (node) => node.attrs.id === cur)
+          if (node) return [...acc, node]
+          return acc
         } else {
-          selected.push(item)
+          return [...acc, cur]
         }
-      }
+      }, [])
+      if (!selected.length) return (this.selected = [this.canvas])
 
       this.selected = selected
-
-      selected[0].el?.scrollIntoView({ behavior: 'smooth' })
+      selected[0]?.el?.scrollIntoView({ behavior: 'smooth' })
 
       return selected
     }
@@ -473,7 +472,7 @@ const addGraphNode = (graph: PcGraph, element?: CDRecord) => {
       (node) => node.attrs.id === element.parent?.attrs.id
     )
     if (graphParent) {
-      graphParent.children?.push(element as PcElement)
+      graphParent.children?.push(new PcElement(element))
       element.parent = graphParent
     }
   }
