@@ -4,4 +4,33 @@
   box-sizing: border-box;
   width: 200px;
   height: 100%;
+
+  .layer-close-button {
+    transition: background-color var(--c-transition);
+    &:hover {
+      background-color: var(--c-bg-hover);
+    }
+  }
+
+  .is-filtered {
+    color: var(--c-brand);
+  }
+
+  .n-tree-node {
+    border: 1px solid transparent;
+  }
+  .n-tree-node--selected {
+    border-color: var(--c-brand);
+    .n-tree-node-content {
+      color: var(--c-brand) !important;
+    }
+  }
+  [layer-tree-status='is-reference'] {
+    border-color: var(--c-red);
+    background-color: rgba(237, 60, 80, 0.15) !important;
+
+    .n-tree-node-content {
+      color: var(--c-red-lighter) !important;
+    }
+  }
 }

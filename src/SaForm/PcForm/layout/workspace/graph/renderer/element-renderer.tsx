@@ -104,6 +104,7 @@ export default defineComponent({
     return () => (
       <div
         id={props.element.attrs.id}
+        ref={(el) => props.element.setEl(el as HTMLElement)}
         class={useClazs('native-element', {
           'is-selected': props.graph.selected.some(
             (e) => e.attrs.id === props.element.attrs.id
