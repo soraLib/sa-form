@@ -29,10 +29,6 @@ import Github from './Github/index.vue'
 
 <style lang="scss" scoped>
 .navbar {
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
   display: flex;
   height: 3.6rem;
   box-sizing: border-box;
