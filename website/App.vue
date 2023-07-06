@@ -1,10 +1,12 @@
 <template>
-  <div id="app" class="flex h-full mx-auto">
+  <div id="app" class="flex flex-col h-full">
     <SaHeader />
 
-    <div class="w-4/5 m-auto h-4/5">
-      <SaForm id="1" type="PcForm" />
-    </div>
+    <SaForm
+      id="1"
+      class="flex-grow mx-24 my-6 overflow-hidden rounded-lg shadow"
+      type="PcForm"
+    />
   </div>
 </template>
 
@@ -22,7 +24,9 @@ import SaForm from '@/SaForm'
   height: 100vh;
   width: 100vw;
   box-sizing: border-box;
-  background-color: var(--c-bg-mute);
-  color: var(--c-text);
+  background: #eaeaea;
+}
+.dark #app {
+  background: var(--c-bg);
 }
 </style>
