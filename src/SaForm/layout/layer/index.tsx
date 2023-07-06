@@ -1,6 +1,7 @@
 import { Transition, computed, defineComponent, ref } from 'vue'
-import { NIcon, NInput, NScrollbar, NTree } from 'naive-ui'
-import { ChevronBack, Layers } from '@vicons/ionicons5'
+import { NIcon, NInput, NPopover, NScrollbar, NSwitch, NTree } from 'naive-ui'
+import { ChevronBack, Funnel, Layers } from '@vicons/ionicons5'
+import { useStorage } from '@vueuse/core'
 import { type BasicElement, ElementType } from '../../element'
 import type { PropType } from 'vue'
 import type { BasicGraph } from '../../graph'
@@ -25,18 +26,56 @@ export default defineComponent({
     const selectedKeys = computed(() =>
       props.graph.selected.map(({ key }) => key)
     )
-
+    // filter
+    const pattern = ref('')
+    const hideIrrelevantNodes = useStorage('hide-irrelevant-nodes', true)
     return () => (
       <Transition name="collapse-transition">
         {visible.value && (
           <div v-show={visible} class="sa-form-layer sa-bg ml-1 p-2">
-            <div class="title flex items-center gap-2 text-base font-medium">
-              <NIcon size={20}>
+            <div class="title flex items-center text-base font-medium">
+              <NIcon class="mr-2" size={20}>
                 <Layers />
               </NIcon>
-              Layer
+              <span class="mr-auto">Layer</span>
+              <NPopover
+                trigger="click"
+                placement="right-start"
+                width={200}
+                v-slots={{
+                  trigger: () => (
+                    <div
+                      title="Filter"
+                      class="flex items-center p-1.5 cursor-pointer"
+                    >
+                      <NIcon size={16} {...{}}>
+                        <Funnel />
+                      </NIcon>
+                    </div>
+                  ),
+                }}
+              >
+                <div class="flex justify-between">
+                  <span>Hide irrelevant nodes</span>
+                  <NSwitch
+                    value={hideIrrelevantNodes.value}
+                    onUpdate:value={(v: boolean) =>
+                      (hideIrrelevantNodes.value = v)
+                    }
+                  ></NSwitch>
+                </div>
+                <NInput
+                  class="my-2"
+                  size="small"
+                  placeholder="Search by id or name"
+                  clearable
+                  value={pattern.value}
+                  onUpdate:value={(v) => (pattern.value = v)}
+                ></NInput>
+              </NPopover>
+
               <div
-                class="layer-close-button ml-auto rounded-full cursor-pointer flex items-center p-1.5"
+                class="layer-close-button rounded-full cursor-pointer flex items-center p-1.5"
                 title="Close Layer"
                 onClick={() => props.graph.setLayout({ layer: false })}
               >
@@ -50,7 +89,12 @@ export default defineComponent({
               <NTree
                 block-line
                 block-node
+                showIrrelevantNodes={!hideIrrelevantNodes.value}
                 data={treeData.value as unknown as TreeOption[]}
+                pattern={pattern.value}
+                filter={(pattern, node: any) =>
+                  node.attrs.id == pattern || node.attrs.name.includes(pattern)
+                }
                 node-props={({ option }: { option: BasicElement }) => {
                   const index = props.graph.selected.indexOf(option)
                   return {
