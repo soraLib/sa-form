@@ -1,12 +1,12 @@
 import { Transition, computed, defineComponent, ref } from 'vue'
 import { NIcon, NInput, NScrollbar, NTree } from 'naive-ui'
-import { ArrowBackOutline, Layers } from '@vicons/ionicons5'
+import { ChevronBack, Layers } from '@vicons/ionicons5'
 import { type BasicElement, ElementType } from '../../element'
-import type { TreeOption } from 'naive-ui'
 import type { PropType } from 'vue'
 import type { BasicGraph } from '../../graph'
 
 import './index.scss'
+import type { TreeOption } from 'naive-ui'
 import { pcStencilIcons } from '@/SaForm/PcForm/layout/stencil/stencil'
 
 export default defineComponent({
@@ -22,6 +22,9 @@ export default defineComponent({
   setup(props) {
     const visible = computed(() => props.graph.layout.layer)
     const treeData = computed(() => props.graph.canvas.children)
+    const selectedKeys = computed(() =>
+      props.graph.selected.map(({ key }) => key)
+    )
 
     return () => (
       <Transition name="collapse-transition">
@@ -32,23 +35,34 @@ export default defineComponent({
                 <Layers />
               </NIcon>
               Layer
-              <NIcon
-                size={20}
-                class="ml-auto cursor-pointer hover:text-[var(--c-brand)]"
-                {...{
-                  title: 'Close Layer',
-                  onClick: () => props.graph.setLayout({ layer: false }),
-                }}
+              <div
+                class="layer-close-button ml-auto rounded-full cursor-pointer flex items-center p-1.5"
+                title="Close Layer"
+                onClick={() => props.graph.setLayout({ layer: false })}
               >
-                <ArrowBackOutline />
-              </NIcon>
+                <NIcon size={20} {...{}}>
+                  <ChevronBack />
+                </NIcon>
+              </div>
             </div>
 
             <NScrollbar class="my-2">
               <NTree
-                data={treeData.value}
                 block-line
                 block-node
+                data={treeData.value as unknown as TreeOption[]}
+                node-props={({ option }: { option: BasicElement }) => {
+                  const index = props.graph.selected.indexOf(option)
+                  return {
+                    'layer-tree-status':
+                      index === -1
+                        ? 'not-selected'
+                        : index === 0 && props.graph.selected.length > 1
+                        ? 'is-reference'
+                        : 'is-selected',
+                  }
+                }}
+                selectedKeys={selectedKeys.value}
                 render-label={({ option }: { option: BasicElement }) => (
                   <div
                     title={`${ElementType[option.attrs.type]}: ${
@@ -61,6 +75,9 @@ export default defineComponent({
                 )}
                 render-prefix={({ option }: { option: BasicElement }) => (
                   <i class={`iconfont ${pcStencilIcons[option.attrs.type]}`} />
+                )}
+                onUpdate:selectedKeys={props.graph.setSelected.bind(
+                  props.graph
                 )}
               ></NTree>
             </NScrollbar>

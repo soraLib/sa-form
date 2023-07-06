@@ -39,7 +39,6 @@ export interface BasicElementAttributes {
 
 /** basic element */
 export interface BasicElement {
-  [k: string]: unknown
   key: string
   parent?: BasicElement
   children?: BasicElement[]

@@ -46,8 +46,14 @@ export interface BasicGraph {
   snapline: Snapline
   layout: Layout
   setLayout: (layout: Partial<Layout>) => void
-
   getNextId(): string
+
+  setSelected(): BasicElement | undefined
+  setSelected(id: string): BasicElement | undefined
+  setSelected(ids: string[]): BasicElement[]
+  setSelected(element: BasicElement): BasicElement
+  setSelected(elements: BasicElement[]): BasicElement[]
+
   updateElemData(
     id: string,
     data: Partial<BasicElement['attrs']>,

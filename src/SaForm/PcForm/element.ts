@@ -19,14 +19,14 @@ export function isPcElementAttribute(
 
 export const containerElements = [ElementType.Canvas, ElementType.Container]
 
-const S4 = () =>
-  Math.trunc((1 + Math.random()) * 0x10000)
-    .toString(16)
-    .slice(1)
+/** pc element */
+export interface IPcElement extends BasicElement {
+  children?: IPcElement[]
+  attrs: PcElementAttributes
+}
 
-export class PcElement implements BasicElement {
-  [k: string]: any
-  key: string = S4()
+export class PcElement implements IPcElement {
+  key: string
   parent?: PcElement
   children?: PcElement[]
   attrs: PcElementAttributes
@@ -34,6 +34,7 @@ export class PcElement implements BasicElement {
   constructor(config: Omit<PcElement, 'key'>) {
     this.parent = config.parent
     this.attrs = cloneDeep(config.attrs)
+    this.key = config.attrs.id
     if (config.children) this.children = config.children
   }
 }
