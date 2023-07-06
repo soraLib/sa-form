@@ -1,11 +1,13 @@
 import { Transition, computed, defineComponent, ref } from 'vue'
-import { NIcon, NInput } from 'naive-ui'
+import { NIcon, NInput, NScrollbar, NTree } from 'naive-ui'
 import { ArrowBackOutline, Layers } from '@vicons/ionicons5'
+import { type BasicElement, ElementType } from '../../element'
+import type { TreeOption } from 'naive-ui'
 import type { PropType } from 'vue'
 import type { BasicGraph } from '../../graph'
-import type { BasicElement } from '../../element'
 
 import './index.scss'
+import { pcStencilIcons } from '@/SaForm/PcForm/layout/stencil/stencil'
 
 export default defineComponent({
   name: 'SaFormLayoutLayer',
@@ -19,6 +21,7 @@ export default defineComponent({
 
   setup(props) {
     const visible = computed(() => props.graph.layout.layer)
+    const treeData = computed(() => props.graph.canvas.children)
 
     return () => (
       <Transition name="collapse-transition">
@@ -40,6 +43,27 @@ export default defineComponent({
                 <ArrowBackOutline />
               </NIcon>
             </div>
+
+            <NScrollbar class="my-2">
+              <NTree
+                data={treeData.value}
+                block-line
+                block-node
+                render-label={({ option }: { option: BasicElement }) => (
+                  <div
+                    title={`${ElementType[option.attrs.type]}: ${
+                      option.attrs.name
+                    }`}
+                    class="text-left w-full overflow-hidden whitespace-nowrap text-ellipsis"
+                  >
+                    {option.attrs.name}
+                  </div>
+                )}
+                render-prefix={({ option }: { option: BasicElement }) => (
+                  <i class={`iconfont ${pcStencilIcons[option.attrs.type]}`} />
+                )}
+              ></NTree>
+            </NScrollbar>
           </div>
         )}
       </Transition>

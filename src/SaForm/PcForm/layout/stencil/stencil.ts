@@ -2,6 +2,15 @@ import { ElementType } from '../../../element'
 import type { NativeStencil } from '../../../layout/stencil'
 import type { PcGraph } from '../../graph'
 
+// TODO: use svg
+export const pcStencilIcons: Record<ElementType, string> = {
+  [ElementType.Canvas]: '',
+  [ElementType.Container]: 'iconzidingyikongjian',
+  [ElementType.Text]: 'iconjingtaiwenbenkuang',
+  [ElementType.Button]: 'iconanniu',
+  [ElementType.Select]: 'iconxialabianjikuang',
+}
+
 export const NativePcSideStencil: NativeStencil = <Graph = PcGraph>(
   graph: Graph
 ) => ({
@@ -12,7 +21,7 @@ export const NativePcSideStencil: NativeStencil = <Graph = PcGraph>(
   nodes: {
     Normal: [
       {
-        icon: 'iconjingtaiwenbenkuang', // TODO: use svg
+        icon: pcStencilIcons[ElementType.Text],
         attrs: {
           type: ElementType.Text,
           name: 'Text',
@@ -22,7 +31,7 @@ export const NativePcSideStencil: NativeStencil = <Graph = PcGraph>(
         },
       },
       {
-        icon: 'iconanniu',
+        icon: pcStencilIcons[ElementType.Button],
         attrs: {
           type: ElementType.Button,
           name: 'Button',
@@ -32,7 +41,7 @@ export const NativePcSideStencil: NativeStencil = <Graph = PcGraph>(
         },
       },
       {
-        icon: 'iconxialabianjikuang',
+        icon: pcStencilIcons[ElementType.Select],
         attrs: {
           type: ElementType.Select,
           name: 'Select',

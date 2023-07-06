@@ -82,7 +82,6 @@ export const createMockPcCanvas: () => PcElement = () => {
         },
       ],
     },
-    children: [],
   })
 
   canvas.children?.push(...[child1, child2, child3, child4])
