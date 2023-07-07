@@ -10,7 +10,7 @@ export const createMockPcCanvas: () => PcElement = () => {
       id: '1',
       name: 'mock pc form',
       width: 1500,
-      height: 600,
+      height: 1000,
       x: 0,
       y: 0,
       background: '',
@@ -54,7 +54,7 @@ export const createMockPcCanvas: () => PcElement = () => {
       width: 400,
       height: 200,
       x: 50,
-      y: 300,
+      y: 400,
       background: '#EFAE46',
     },
     children: [],
@@ -69,7 +69,7 @@ export const createMockPcCanvas: () => PcElement = () => {
       width: 200,
       height: 60,
       x: 1200,
-      y: 150,
+      y: 400,
       background: '#4d85ff',
       options: [
         {
