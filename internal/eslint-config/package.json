@@ -27,7 +27,7 @@
     "eslint-plugin-vue": "^9.1.1",
     "jsonc-eslint-parser": "^2.1.0",
     "prettier": "^2.7.1",
-    "typescript": "^4.7.4",
+    "typescript": "^5.1.6",
     "yaml-eslint-parser": "^1.0.1"
   },
   "devDependencies": {
