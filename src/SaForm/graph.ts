@@ -48,6 +48,11 @@ export interface BasicGraph {
   setLayout: (layout: Partial<Layout>) => void
   getNextId(): string
 
+  scrollIntoView(
+    element: BasicElement | undefined,
+    options?: ScrollIntoViewOptions
+  ): void
+
   setSelected(): BasicElement | undefined
   setSelected(id: string): BasicElement | undefined
   setSelected(ids: string[]): BasicElement[]

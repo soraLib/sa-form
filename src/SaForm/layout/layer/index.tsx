@@ -27,9 +27,15 @@ export default defineComponent({
     const selectedKeys = computed(() =>
       props.graph.selected.map(({ key }) => key)
     )
+    const onUpdateSelectedKeys = (keys: string[]) => {
+      const [head] = props.graph.setSelected(keys)
+      props.graph.scrollIntoView(head)
+    }
+
     // filter
     const pattern = ref('')
     const hideIrrelevantNodes = useStorage('hide-irrelevant-nodes', true)
+
     return () => (
       <Transition name="collapse-transition">
         {visible.value && (
@@ -127,9 +133,7 @@ export default defineComponent({
                 render-prefix={({ option }: { option: BasicElement }) => (
                   <i class={`iconfont ${pcStencilIcons[option.attrs.type]}`} />
                 )}
-                onUpdate:selectedKeys={props.graph.setSelected.bind(
-                  props.graph
-                )}
+                onUpdate:selectedKeys={onUpdateSelectedKeys}
               ></NTree>
             </NScrollbar>
           </div>
