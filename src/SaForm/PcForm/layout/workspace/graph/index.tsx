@@ -11,7 +11,7 @@ import type { CSSProperties, PropType } from 'vue'
 import type { PcGraph } from '../../../graph'
 
 export default defineComponent({
-  name: 'NativeWorkspace',
+  name: 'SaPcFormGraph',
   props: {
     graph: {
       required: true,
@@ -49,12 +49,14 @@ export default defineComponent({
       if (!parent || !containerElements.includes(parent?.attrs.type)) return
 
       const attrs: StencilAttrs = JSON.parse(elementMessage)
+
+      // TODO: extract the position function
       const dropElement = new PcElement({
         parent,
         attrs: {
           ...attrs,
           id: props.graph.getNextId(),
-          x: gridFloor(event.offsetX - attrs.width / 2, props.graph.grid.size), // TODO:
+          x: gridFloor(event.offsetX - attrs.width / 2, props.graph.grid.size),
           y: gridFloor(event.offsetY - attrs.height / 2, props.graph.grid.size),
         },
       })

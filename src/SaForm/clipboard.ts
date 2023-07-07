@@ -1,6 +1,11 @@
 import type { BasicGraph } from './graph'
 import type { BasicElement } from './element'
 
+export type Position = {
+  left: number
+  top: number
+}
+
 export declare interface BasicClipBoard {
   clips:
     | {
@@ -22,7 +27,8 @@ export declare interface BasicClipBoard {
 
   paste(
     graph: BasicGraph,
-    parent: string | undefined,
+    parent: BasicElement | undefined,
+    position: Position,
     options?: {
       nodeProps?: (element: BasicElement) => Partial<BasicElement['attrs']>
       deep?: boolean
