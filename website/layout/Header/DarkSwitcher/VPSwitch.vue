@@ -16,14 +16,8 @@
   width: 40px;
   height: 22px;
   flex-shrink: 0;
-  border: 1px solid var(--vp-input-border-color);
-  transition: border-color 0.25s;
+  border: 1px solid var(--c-border);
 }
-
-.VPSwitch:hover {
-  border-color: var(--vp-input-hover-border-color);
-}
-
 .check {
   position: absolute;
   top: 1px;
@@ -31,8 +25,8 @@
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background-color: var(--vp-c-neutral-inverse);
-  transition: transform 0.25s;
+  background-color: var(--c-text-inverse-1);
+  transition: transform 0.25s !important;
 }
 
 .icon {
@@ -50,11 +44,10 @@
   left: 3px;
   width: 12px;
   height: 12px;
-  fill: var(--vp-c-text-2);
+  fill: var(--c-text-2);
 }
 
 .dark .icon :deep(svg) {
-  fill: var(--vp-c-text-1);
   transition: opacity 0.25s;
 }
 </style>
