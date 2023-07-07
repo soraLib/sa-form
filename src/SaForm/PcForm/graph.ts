@@ -210,6 +210,14 @@ export class PcGraph extends Events implements BasicGraph {
     return parent
   }
 
+  scrollIntoView(
+    element: PcElement | undefined,
+    options: ScrollIntoViewOptions = { behavior: 'smooth' }
+  ) {
+    if (!element || element === this.canvas) return
+    element.el?.scrollIntoView(options)
+  }
+
   setSelected(): PcElement | undefined
   setSelected(id: string): PcElement | undefined
   setSelected(ids: string[]): PcElement[]
@@ -237,7 +245,7 @@ export class PcGraph extends Events implements BasicGraph {
       if (!selected.length) return (this.selected = [this.canvas])
 
       this.selected = selected
-      selected[0]?.el?.scrollIntoView({ behavior: 'smooth' })
+      this.scrollIntoView(selected[0])
 
       return selected
     }
@@ -247,7 +255,7 @@ export class PcGraph extends Events implements BasicGraph {
 
       if (node) {
         this.selected = [node]
-        node.el?.scrollIntoView({ behavior: 'smooth' })
+        this.scrollIntoView(node)
       }
 
       return node
@@ -255,7 +263,7 @@ export class PcGraph extends Events implements BasicGraph {
 
     if (typeof arg === 'object') {
       this.selected = [arg]
-      arg.el?.scrollIntoView({ behavior: 'smooth' })
+      this.scrollIntoView(arg)
 
       return arg
     }
