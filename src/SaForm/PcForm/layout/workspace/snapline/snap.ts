@@ -13,10 +13,6 @@ interface ColResult {
   triggerX: number
 }
 type CalcResult = RowResult | ColResult
-export interface Snapline {
-  x?: number
-  y?: number
-}
 
 const directions: Record<
   'row' | 'col',
@@ -105,7 +101,6 @@ const directions: Record<
 const isSorption = (a: number, b: number, threshold: number) =>
   Math.abs(a - b) <= threshold
 
-export type SnapType = 'drag' | 'resize'
 interface CalcOption {
   deepOffsetX: number
   deepOffsetY: number
@@ -263,7 +258,12 @@ const calcResizeLines = (
   return snaplines
 }
 
-export const getSnaplines = (
+export interface Snapline {
+  x?: number
+  y?: number
+}
+export type SnapType = 'drag' | 'resize'
+export const onSnapping = (
   type: SnapType,
   graph: PcGraph,
   elements: PcElement[],
@@ -272,6 +272,8 @@ export const getSnaplines = (
   if (!elements.length) return new Map()
 
   const parent = elements[0].parent
+  if (!parent) return new Map()
+
   const _compares = compares ?? parent?.children ?? []
 
   const deepOffsetX = getDeepOffset('x', parent)
@@ -285,9 +287,7 @@ export const getSnaplines = (
 
 const getDeepOffset = (
   attr: keyof Pick<PcElementAttributes, 'x' | 'y'>,
-  element?: PcElement
+  element: PcElement
 ): number =>
-  element
-    ? (element.parent ? getDeepOffset(attr, element.parent) : 0) +
-      element.attrs[attr]
-    : 0
+  (element.parent ? getDeepOffset(attr, element.parent) : 0) +
+  element.attrs[attr]

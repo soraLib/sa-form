@@ -1,7 +1,7 @@
 import { computed, defineComponent, reactive, watch } from 'vue'
 import { throttle } from 'lodash-es'
 import { useClazs } from '../../../../utils/class'
-import { getSnaplines } from './snap'
+import { onSnapping } from './snap'
 import type { PropType } from 'vue'
 import type { PcGraph } from '../../../graph'
 import type { SnapType, Snapline } from './snap'
@@ -30,7 +30,7 @@ export default defineComponent({
     })
 
     const useSnap = throttle((type: SnapType) => {
-      line.snaplines = getSnaplines(type, props.graph, selectedRef.value)
+      line.snaplines = onSnapping(type, props.graph, selectedRef.value)
     }, 200)
 
     watch(

@@ -14,6 +14,9 @@ export const useElementSelect = (
   element: PcElement,
   graph: PcGraph
 ) => {
+  graph.setSelected(element)
+  graph.setSelect(true)
+
   const status: SelectStatus = {
     _mouseStartX: event.screenX,
     _mouseStartY: event.screenY,
@@ -34,9 +37,6 @@ export const useElementSelect = (
   )
 
   function elementSelect(event: MouseEvent) {
-    graph.setSelected(element)
-    graph.setSelect(true)
-
     let width = 0
     let height = 0
     let x = status._startX
