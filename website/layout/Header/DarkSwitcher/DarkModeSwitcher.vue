@@ -11,7 +11,10 @@ const toggleDark = useToggle(isDark)
 
 <template>
   <label title="toggle dark mode">
-    <VPSwitch class="VPSwitchAppearance" @click="() => toggleDark()">
+    <VPSwitch
+      class="cursor-pointer VPSwitchAppearance"
+      @click="() => toggleDark()"
+    >
       <VPIconSun class="sun" />
       <VPIconMoon class="moon" />
     </VPSwitch>
