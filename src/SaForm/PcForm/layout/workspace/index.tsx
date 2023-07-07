@@ -1,21 +1,13 @@
-import {
-  ShallowRef,
-  computed,
-  defineComponent,
-  onMounted,
-  onUnmounted,
-  ref,
-  shallowRef,
-} from 'vue'
-import { ElementType } from '../../../element'
+import { defineComponent, ref } from 'vue'
 import { createMockPcCanvas } from './mock'
 
 import Workspace from './graph'
 import Snapline from './snapline'
 import SelectionBox from './selection'
+import Contextmenu from './contextmenu'
 
 import type { PcGraph } from '../../graph'
-import type { PropType, Ref } from 'vue'
+import type { PropType } from 'vue'
 
 export default defineComponent({
   name: 'SaPcFormRender',
@@ -27,73 +19,29 @@ export default defineComponent({
   },
 
   setup(props) {
-    const workspace: Ref<typeof Workspace | null> = ref(null)
-    // const contextmenuEvent: ShallowRef<Event | undefined> = shallowRef()
+    props.graph.setCanvas(createMockPcCanvas())
 
-    // const setContextmenuEvent = (event: Event) => contextmenuEvent.value = event
-
-    onMounted(() => {
-      if (workspace.value) {
-        props.graph.setCanvas(createMockPcCanvas())
-
-        // workspace.value.$el.addEventListener('contextmenu', setContextmenuEvent)
-      }
-    })
-
-    // onUnmounted(() => {
-    //   if (workspace.value) {
-    //     workspace.value.$el.removeEventListener('contextmenu', setContextmenuEvent)
-    //   }
-    // })
-    // const graphContextmenu = computed(() => {
-    //   if (props.graph.selected[0]?.attrs.type !== ElementType.Canvas) {
-    //     return (
-    //       <>
-    //         <v-contextmenu-item onClick={() => props.graph.clipboard.copy(props.graph)}>
-    //           copy
-    //         </v-contextmenu-item>
-    //         <v-contextmenu-item onClick={() => props.graph.clipboard.cut(props.graph)}>
-    //           cut
-    //         </v-contextmenu-item>
-    //         <v-contextmenu-item disabled={props.graph.clipboard.isEmpty()} onClick={() => props.graph.clipboard.paste(props.graph)}>
-    //           paste
-    //         </v-contextmenu-item>
-    //         {/* <v-contextmenu-item type="danger" icon={<DeleteFilled />} onClick={props.graph}>
-    //           delete
-    //         </v-contextmenu-item> */}
-    //       </>
-    //     )
-    //   }
-
-    //   return (
-    //     <v-contextmenu-item disabled={props.graph.clipboard.isEmpty()} onClick={() => props.graph.clipboard.paste(props.graph)}>
-    //       paste
-    //     </v-contextmenu-item>
-    //   )
-    // })
-
-    return {
-      workspace,
-      // graphContextmenu
+    const contextmenuRef = ref<InstanceType<typeof Contextmenu> | null>(null)
+    const onContextmenu = (event: MouseEvent) => {
+      event.preventDefault()
+      contextmenuRef.value?.open(event)
     }
-  },
 
-  render() {
-    return (
+    return () => (
       <div
         class="relative"
         style={{
-          width: `${this.graph.canvas.attrs.width}px`,
-          height: `${this.graph.canvas.attrs.height}px`,
+          width: `${props.graph.canvas.attrs.width}px`,
+          height: `${props.graph.canvas.attrs.height}px`,
         }}
+        onContextmenu={onContextmenu}
       >
-        <Workspace ref="workspace" graph={this.graph} />
+        <Workspace ref="workspace" graph={props.graph} />
 
-        <Snapline graph={this.graph} />
-        <SelectionBox graph={this.graph} />
-        {/* TODO: <v-contextmenu ref="contextmenu">
-          {this.graphContextmenu}
-        </v-contextmenu> */}
+        <Snapline graph={props.graph} />
+        <SelectionBox graph={props.graph} />
+
+        <Contextmenu ref={contextmenuRef} graph={props.graph} />
       </div>
     )
   },

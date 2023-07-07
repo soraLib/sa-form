@@ -32,7 +32,7 @@ export class PcElement implements IPcElement {
   children?: PcElement[]
   attrs: PcElementAttributes
 
-  constructor(config: Pick<PcElement, 'parent' | 'children' | 'attrs'>) {
+  constructor(config: Pick<IPcElement, 'parent' | 'children' | 'attrs'>) {
     this.parent = config.parent
     this.attrs = cloneDeep(config.attrs)
     this.key = config.attrs.id
