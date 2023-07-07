@@ -25,7 +25,12 @@ export interface URecordData extends BasicRecordData {
   next: Partial<BasicElementAttributes>
 }
 
-export type CDRecord = Pick<BasicElement, 'parent' | 'children' | 'attrs'>
+export type CDBasicElement<T extends BasicElement> = {
+  parent?: T
+  children?: T[]
+  attrs: BasicElementAttributes
+}
+export type CDRecord = CDBasicElement<BasicElement>
 /** create or delete record data */
 export interface CDRecordData extends BasicRecordData {
   prev?: CDRecord
@@ -59,7 +64,7 @@ export function isURecordDataList(
 export function isCDRecordDataList(
   data: BasicRecordDataList
 ): data is CDRecordDataList {
-  return !Reflect.has(data[0], 'id')
+  return !isURecordDataList(data)
 }
 
 export interface BasicRecord {

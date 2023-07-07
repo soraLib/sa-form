@@ -52,6 +52,12 @@ export const useElementHandler = (
 ) => {
   event.stopPropagation()
 
+  if (event.button === 2) {
+    // contextmenu event
+    graph.setSelected(element)
+    return
+  }
+
   if (!element.parent) {
     // canvas
     useElementSelect(event, element, graph)

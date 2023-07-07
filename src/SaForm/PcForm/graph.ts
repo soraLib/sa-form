@@ -1,14 +1,8 @@
-import {
-  findNode,
-  findTreeNode,
-  removeTreeNode,
-  setObjectValues,
-} from 'sugar-sajs'
+import { findNode, findTreeNode, setObjectValues } from 'sugar-sajs'
 import { cloneDeep, pick } from 'lodash-es'
 import {
   BasicRecordType,
   isCDRecordDataList,
-  isURecordData,
   isURecordDataList,
 } from '../record'
 import { getNextId } from '../utils/element'
@@ -159,6 +153,14 @@ export class PcGraph extends Events implements BasicGraph {
 
     addGraphNode(this, child)
 
+    // TODO:
+    const validIntegerRegex = /^-?\d+$/
+    if (child.attrs.id && validIntegerRegex.test(child.attrs.id)) {
+      if (+this.nextId < +child.attrs.id) {
+        this.nextId = `${+child.attrs.id + 1}`
+      }
+    }
+
     // skip add record when it's undo or redo
     const record = new PcRecord({
       type: BasicRecordType.Add,
@@ -208,6 +210,33 @@ export class PcGraph extends Events implements BasicGraph {
     this.setSelected(children)
 
     return parent
+  }
+
+  /** remove child and return its parent */
+  removeChild(id: string): PcElement
+  removeChild(child: PcElement): PcElement
+  removeChild(arg: string | PcElement): PcElement | undefined {
+    const child = removeGraphNode(
+      this,
+      typeof arg === 'string' ? arg : arg.attrs.id
+    )
+    if (!child) return
+
+    // skip add record when it's undo or redo
+    const record = new PcRecord({
+      type: BasicRecordType.Delete,
+      time: new Date(),
+      data: [
+        {
+          name: child.attrs.name,
+          prev: cloneDeep(extractGraphNodePureAttr(child)),
+        },
+      ],
+    })
+    this.addRecord(record)
+    this.setSelected()
+
+    return child.parent
   }
 
   scrollIntoView(
@@ -420,6 +449,8 @@ export class PcGraph extends Events implements BasicGraph {
       return
     }
 
+    console.log('redo', nextRecord)
+
     if (isURecordDataList(nextRecord.data)) {
       for (const data of nextRecord.data) {
         const element = findNode(
@@ -439,6 +470,7 @@ export class PcGraph extends Events implements BasicGraph {
           // ADD
           addGraphNode(this, data.next)
         } else if (nextRecord.type === BasicRecordType.Delete) {
+          console.log('is cd delete', data)
           // DELETE
           removeGraphNode(this, data.prev?.attrs?.id)
         }
@@ -470,32 +502,43 @@ export class PcGraph extends Events implements BasicGraph {
   }
 }
 
+// TODO: extract in deep
+const extractGraphNodePureAttr = (element: PcElement) => {
+  return pick(element, 'parent', 'children', 'attrs')
+}
+
 /** add canvas node */
 const addGraphNode = (graph: PcGraph, element?: CDRecord) => {
   if (!graph.canvas.children || !element) return
 
-  if (element.parent) {
-    // bind graph canvas elements' paternity
-    const graphParent = findNode(
-      graph.canvas,
-      (node) => node.attrs.id === element.parent?.attrs.id
-    )
-    if (graphParent) {
-      graphParent.children?.push(new PcElement(element))
-      element.parent = graphParent
-    }
+  const pid = element.parent?.attrs.id
+  if (!pid) return
+
+  const parent = findNode(graph.canvas, (node) => node.attrs.id === pid)
+
+  if (parent) {
+    const pcElement = new PcElement(element)
+    parent.children?.push(new PcElement(element))
+    pcElement.parent = parent
   }
 }
 /** remove canvas node */
-const removeGraphNode = (graph: PcGraph, id?: string) => {
+const removeGraphNode = (
+  graph: PcGraph,
+  id?: string
+): PcElement | undefined => {
   if (!graph.canvas.children || !id) return
 
   const element = findNode(graph.canvas, (node) => node.attrs.id === id)
+  if (!element) return
 
-  if (element && graph.canvas.children) {
-    removeTreeNode(
-      graph.canvas.children,
-      (node) => node.attrs.id === element.attrs.id
-    )
+  const pid = element.parent?.attrs.id
+  if (!pid) return
+
+  const parent = findNode(graph.canvas, (node) => node.attrs.id === pid)
+  if (parent?.children) {
+    parent.children.splice(parent.children.indexOf(element), 1)
+
+    return element
   }
 }
