@@ -68,11 +68,16 @@ export const useElementDrag = (
 
   const elementMove = (event: MouseEvent) => {
     graph.setDragging(true)
-    const rect = getRectangle(graph.selected)
 
     // move distance
-    const moveX = event.screenX - mousePos._startX
-    const moveY = event.screenY - mousePos._startY
+    let moveX = event.screenX - mousePos._startX
+    let moveY = event.screenY - mousePos._startY
+
+    // grid
+    if (graph.grid.enabled) {
+      moveX = gridFloor(rect.x + moveX, graph.grid.size) - rect.x
+      moveY = gridFloor(rect.y + moveY, graph.grid.size) - rect.y
+    }
 
     const finalX = rectPos._startX + moveX
     const finalY = rectPos._startY + moveY
@@ -93,14 +98,8 @@ export const useElementDrag = (
 
     graph.updateElemsData(
       graph.selected.map((ele, i) => {
-        let x = elemsPos[i]._startX + finalMoveX
-        let y = elemsPos[i]._startY + finalMoveY
-
-        // grid
-        if (graph.grid.enabled) {
-          x = gridFloor(x, graph.grid.size)
-          y = gridFloor(y, graph.grid.size)
-        }
+        const x = elemsPos[i]._startX + finalMoveX
+        const y = elemsPos[i]._startY + finalMoveY
 
         return {
           element: ele,

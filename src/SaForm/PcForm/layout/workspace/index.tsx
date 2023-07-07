@@ -12,6 +12,8 @@ import { createMockPcCanvas } from './mock'
 
 import Workspace from './graph'
 import Snapline from './snapline'
+import SelectionBox from './selection'
+
 import type { PcGraph } from '../../graph'
 import type { PropType, Ref } from 'vue'
 
@@ -32,10 +34,7 @@ export default defineComponent({
 
     onMounted(() => {
       if (workspace.value) {
-        const canvas = createMockPcCanvas()
-
-        console.log('create canvas', canvas)
-        props.graph.setCanvas(canvas)
+        props.graph.setCanvas(createMockPcCanvas())
 
         // workspace.value.$el.addEventListener('contextmenu', setContextmenuEvent)
       }
@@ -81,8 +80,6 @@ export default defineComponent({
 
   render() {
     return (
-      // TODO: graph scroll and resize container
-      /** graph wrapper */
       <div
         class="relative"
         style={{
@@ -93,7 +90,7 @@ export default defineComponent({
         <Workspace ref="workspace" graph={this.graph} />
 
         <Snapline graph={this.graph} />
-
+        <SelectionBox graph={this.graph} />
         {/* TODO: <v-contextmenu ref="contextmenu">
           {this.graphContextmenu}
         </v-contextmenu> */}
