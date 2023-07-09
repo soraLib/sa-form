@@ -10,13 +10,14 @@
     list-style-type: none;
     min-width: 10rem;
     width: 200px;
-  
+
     color: var(--c-text);
     .history {
       padding: 0.4rem 0.75rem;
       cursor: pointer;
       display: flex;
-      
+      transition: background-color var(--c-transition);
+
       > .type {
         font-weight: bold;
         min-width: 32px;
@@ -25,12 +26,12 @@
         position: relative;
 
         &::after {
-          content: ":";
+          content: ':';
           position: absolute;
           right: 0;
         }
       }
-  
+
       > .name {
         flex-grow: 1;
         text-align: start;
@@ -38,16 +39,16 @@
         white-space: nowrap;
         overflow: hidden;
       }
-  
+
       &:hover {
-        background-color: var(--c-option-active);
+        background-color: var(--c-bg-hover);
       }
 
       &.active {
         color: var(--c-brand);
       }
     }
-  
+
     > .empty {
       width: 200px;
       padding: 2rem 2rem;
