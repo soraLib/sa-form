@@ -3,6 +3,7 @@ import { firstOfStick, lastOfStick } from '../graph/renderer/element-renderer'
 import type { PcElement, PcElementAttributes } from '../../../element'
 import type { Rect } from '../graph/renderer/utils/rectangle'
 import type { PcGraph } from '../../../graph'
+import type { Position } from '@/SaForm/graph'
 
 interface RowResult {
   lineY: number
@@ -105,11 +106,12 @@ interface CalcOption {
   deepOffsetX: number
   deepOffsetY: number
   graph: PcGraph
+  positions: [Position, Position]
 }
 const calcDragLines = (
   targets: PcElement[],
   compares: PcElement[],
-  { deepOffsetX, deepOffsetY, graph }: CalcOption
+  { deepOffsetX, deepOffsetY, graph, positions: [pointA, pointB] }: CalcOption
 ) => {
   const rect = getRectangle(targets)
   const rectIdSet = new Set(targets.map((t) => t.attrs.id))
@@ -129,7 +131,15 @@ const calcDragLines = (
       const result = direct.calc(compare, rect)
       const { lineY, triggerY } = result as RowResult
 
-      if (isSorption(rect.y, triggerY, graph.snapline.threshold)) {
+      const isMovingCloser =
+        (rect.y > lineY && pointA.y - pointB.y < 0) ||
+        (rect.y < lineY && pointA.y - pointB.y > 0)
+
+      if (
+        // attempt to snap to row when get closer
+        isMovingCloser &&
+        isSorption(rect.y, triggerY, graph.snapline.threshold)
+      ) {
         if (!sorption.row) {
           const moveY = triggerY - rect.y
           for (const elem of targets) {
@@ -150,7 +160,15 @@ const calcDragLines = (
       const result = direct.calc(compare, rect)
       const { lineX, triggerX } = result as ColResult
 
-      if (isSorption(rect.x, triggerX, graph.snapline.threshold)) {
+      const isMovingCloser =
+        (rect.x > lineX && pointA.x - pointB.x < 0) ||
+        (rect.x < lineX && pointA.x - pointB.x > 0)
+
+      if (
+        // attempt to snap to row when get closer
+        isMovingCloser &&
+        isSorption(rect.x, triggerX, graph.snapline.threshold)
+      ) {
         if (!sorption.col) {
           const moveX = triggerX - rect.x
           for (const elem of targets) {
@@ -267,7 +285,8 @@ export const onSnapping = (
   type: SnapType,
   graph: PcGraph,
   elements: PcElement[],
-  compares?: PcElement[]
+  compares: PcElement[] | undefined,
+  positions: [Position, Position]
 ): Map<string, Snapline> => {
   if (!elements.length) return new Map()
 
@@ -278,7 +297,12 @@ export const onSnapping = (
 
   const deepOffsetX = getDeepOffset('x', parent)
   const deepOffsetY = getDeepOffset('y', parent)
-  const optiopns = { deepOffsetX, deepOffsetY, graph }
+  const optiopns = {
+    deepOffsetX,
+    deepOffsetY,
+    graph,
+    positions,
+  }
 
   return type === 'drag'
     ? calcDragLines(elements, _compares, optiopns)

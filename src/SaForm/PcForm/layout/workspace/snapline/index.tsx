@@ -5,6 +5,7 @@ import { onSnapping } from './snap'
 import type { PropType } from 'vue'
 import type { PcGraph } from '../../../graph'
 import type { SnapType, Snapline } from './snap'
+import type { Position } from '@/SaForm/graph'
 
 import './index.scss'
 
@@ -29,15 +30,29 @@ export default defineComponent({
       snaplines: new Map<string, Snapline>(),
     })
 
-    const useSnap = throttle((type: SnapType) => {
-      line.snaplines = onSnapping(type, props.graph, selectedRef.value)
-    }, 200)
+    const useSnap = throttle(
+      (type: SnapType, positions: [Position, Position]) => {
+        line.snaplines = onSnapping(
+          type,
+          props.graph,
+          selectedRef.value,
+          undefined,
+          positions
+        )
+      },
+      200
+    )
 
     watch(
-      () => props.graph.mousePosition,
-      () => {
-        if (isDraggingRef.value) useSnap('drag')
-        if (isResizingRef.value) useSnap('resize')
+      () => [props.graph.mousePosition.x, props.graph.mousePosition.y],
+      ([x1, y1], [x2, y2]) => {
+        if (x2 === 0 && y2 === 0) return
+        const positions: [Position, Position] = [
+          { x: x1, y: y1 },
+          { x: x2, y: y2 },
+        ]
+        if (isDraggingRef.value) useSnap('drag', positions)
+        if (isResizingRef.value) useSnap('resize', positions)
       },
       { deep: true }
     )
