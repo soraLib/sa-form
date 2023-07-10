@@ -39,7 +39,7 @@ export default defineComponent({
 
       if (grid.type === 'dot')
         return {
-          backgroundPositionX: '0.5px', // TODO: use canvas
+          backgroundPositionX: '0.5px',
           backgroundPositionY: '0.5px',
           backgroundImage: `linear-gradient(var(--c-bg) ${
             grid.size - 1
@@ -53,10 +53,10 @@ export default defineComponent({
       return {
         backgroundPositionX: '-1px',
         backgroundPositionY: '-1px',
-        backgroundImage: `linear-gradient(rgba(229,229,229,.5) 1px, transparent 0),
-linear-gradient(90deg, rgba(229,229,229,.5) 1px, transparent 0),
-linear-gradient(#DEDEDEFF 1px, transparent 0),
-linear-gradient(90deg, #DEDEDEFF 1px, transparent 0)`,
+        backgroundImage: `linear-gradient(var(--c-line) 1px, transparent 0),
+linear-gradient(90deg, var(--c-line) 1px, transparent 0),
+linear-gradient(var(--c-line-bold) 1px, transparent 0),
+linear-gradient(90deg, var(--c-line-bold) 1px, transparent 0)`,
         backgroundSize: `${grid.size}px ${grid.size}px, ${grid.size}px ${
           grid.size
         }px, ${grid.size * 5}px ${grid.size * 5}px, ${grid.size * 5}px ${
