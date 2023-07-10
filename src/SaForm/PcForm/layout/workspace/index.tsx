@@ -1,4 +1,4 @@
-import { defineComponent, ref } from 'vue'
+import { Transition, computed, defineComponent, ref } from 'vue'
 import { useClazs } from '../../../utils/class'
 import { createMockPcCanvas } from './mock'
 
@@ -7,9 +7,10 @@ import Snapline from './snapline'
 import Group from './group'
 import Selection from './selection'
 import Contextmenu from './contextmenu'
+import Settings from './settings'
 
 import type { PcGraph } from '../../graph'
-import type { PropType } from 'vue'
+import type { CSSProperties, PropType } from 'vue'
 
 export default defineComponent({
   name: 'SaPcFormRender',
@@ -20,7 +21,7 @@ export default defineComponent({
     },
   },
 
-  setup(props) {
+  setup(props, ctx) {
     // TODO: mock
     props.graph.setCanvas(createMockPcCanvas())
     props.graph.setSelected(['2', '3'])
@@ -31,28 +32,71 @@ export default defineComponent({
       contextmenuRef.value?.open(event)
     }
 
+    const gridStyle = computed<CSSProperties>(() => {
+      const grid = props.graph.grid
+      if (!grid.enabled) return {}
+
+      if (grid.type === 'dot')
+        return {
+          backgroundPositionX: '0.5px',
+          backgroundPositionY: '0.5px',
+          backgroundImage: `linear-gradient(var(--c-bg) ${
+            grid.size - 1
+          }px, transparent 0), linear-gradient(90deg, transparent ${
+            grid.size - 1
+          }px, var(--c-bg-dark) 0)`,
+          backgroundSize: `${grid.size}px ${grid.size}px, ${grid.size}px ${grid.size}px`,
+        }
+
+      // mesh
+      return {
+        backgroundPositionX: '-1px',
+        backgroundPositionY: '-1px',
+        backgroundImage: `linear-gradient(var(--c-line) 1px, transparent 0),
+linear-gradient(90deg, var(--c-line) 1px, transparent 0),
+linear-gradient(var(--c-line-bold) 1px, transparent 0),
+linear-gradient(90deg, var(--c-line-bold) 1px, transparent 0)`,
+        backgroundSize: `${grid.size}px ${grid.size}px, ${grid.size}px ${
+          grid.size
+        }px, ${grid.size * 5}px ${grid.size * 5}px, ${grid.size * 5}px ${
+          grid.size * 5
+        }px`,
+      }
+    })
+
     return () => (
-      <div
-        class={useClazs('relative', {
-          'cursor-move': props.graph.isDragging,
-          'cursor-crosshair':
-            props.graph.isSelecting &&
-            props.graph.selectionBox.width > 0 &&
-            props.graph.selectionBox.height > 0,
-        })}
-        style={{
-          width: `${props.graph.canvas.attrs.width}px`,
-          height: `${props.graph.canvas.attrs.height}px`,
-        }}
-        onContextmenu={onContextmenu}
-      >
-        <Workspace ref="workspace" graph={props.graph} />
+      <div class="relative">
+        <div class="w-full h-full overflow-auto">
+          <div
+            class={useClazs('relative workspace-container', {
+              'cursor-move': props.graph.isDragging,
+              'cursor-crosshair':
+                props.graph.isSelecting &&
+                props.graph.selectionBox.width > 0 &&
+                props.graph.selectionBox.height > 0,
+            })}
+            style={{
+              width: `${props.graph.canvas.attrs.width}px`,
+              height: `${props.graph.canvas.attrs.height}px`,
+              ...gridStyle.value,
+            }}
+            onContextmenu={onContextmenu}
+          >
+            <Workspace ref="workspace" graph={props.graph} />
 
-        <Snapline graph={props.graph} />
-        <Group graph={props.graph} />
-        <Selection graph={props.graph} />
+            <Snapline graph={props.graph} />
+            <Group graph={props.graph} />
+            <Selection graph={props.graph} />
 
-        <Contextmenu ref={contextmenuRef} graph={props.graph} />
+            <Contextmenu ref={contextmenuRef} graph={props.graph} />
+          </div>
+        </div>
+
+        <Transition name="fade-slide-top-transition" appear>
+          <div class="workspace-tools">
+            <Settings graph={props.graph} />
+          </div>
+        </Transition>
       </div>
     )
   },

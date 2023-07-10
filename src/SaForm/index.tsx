@@ -1,6 +1,6 @@
 /** sa-form entry */
 
-import { computed, defineComponent, reactive } from 'vue'
+import { defineComponent, reactive } from 'vue'
 
 import { LAYOUTS } from './config'
 
@@ -11,7 +11,7 @@ import SaFormFooter from './layout/footer'
 import SaFormLayer from './layout/layer'
 import type { ILayout } from './config'
 import type { GraphType } from './graph'
-import type { CSSProperties, PropType } from 'vue'
+import type { PropType } from 'vue'
 
 import './styles/index.scss'
 
@@ -32,38 +32,6 @@ export default defineComponent({
     >
 
     const SaFormWorkspace = layout.workspace
-
-    const gridStyle = computed<CSSProperties>(() => {
-      const grid = layout.graph.grid
-      if (!grid.enabled) return {}
-
-      if (grid.type === 'dot')
-        return {
-          backgroundPositionX: '0.5px',
-          backgroundPositionY: '0.5px',
-          backgroundImage: `linear-gradient(var(--c-bg) ${
-            grid.size - 1
-          }px, transparent 0), linear-gradient(90deg, transparent ${
-            grid.size - 1
-          }px, var(--c-bg-dark) 0)`,
-          backgroundSize: `${grid.size}px ${grid.size}px, ${grid.size}px ${grid.size}px`,
-        }
-
-      // mesh
-      return {
-        backgroundPositionX: '-1px',
-        backgroundPositionY: '-1px',
-        backgroundImage: `linear-gradient(var(--c-line) 1px, transparent 0),
-linear-gradient(90deg, var(--c-line) 1px, transparent 0),
-linear-gradient(var(--c-line-bold) 1px, transparent 0),
-linear-gradient(90deg, var(--c-line-bold) 1px, transparent 0)`,
-        backgroundSize: `${grid.size}px ${grid.size}px, ${grid.size}px ${
-          grid.size
-        }px, ${grid.size * 5}px ${grid.size * 5}px, ${grid.size * 5}px ${
-          grid.size * 5
-        }px`,
-      }
-    })
 
     return () => (
       <section class="flex flex-col h-full">
@@ -89,9 +57,8 @@ linear-gradient(90deg, var(--c-line-bold) 1px, transparent 0)`,
           <main class="sa-bg flex item-center flex-col grow">
             <section class="workspace-bg grow overflow-auto">
               <SaFormWorkspace
-                class="workspace"
+                class="workspace w-full h-full"
                 graph={layout.graph}
-                style={gridStyle.value}
               />
             </section>
             <SaFormFooter class="sa-bg" graph={layout.graph} />

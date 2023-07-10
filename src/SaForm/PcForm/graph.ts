@@ -11,7 +11,13 @@ import { PcRecord, PcRecordStore } from './record'
 
 import { PcClipBoard } from './clipboard'
 import { Events } from './events'
-import type { BasicGraph, GraphType, Layout, MousePosition } from '../graph'
+import type {
+  BasicGraph,
+  GraphType,
+  Grid,
+  Layout,
+  MousePosition,
+} from '../graph'
 import type { BasicRecordStore, CDRecord } from '../record'
 
 export type IdUpdateData = { id: string; data: Partial<PcElement['attrs']> }
@@ -65,14 +71,12 @@ export class PcGraph extends Events implements BasicGraph {
     width: 0,
     height: 0,
   }
-  grid = {
-    // TODO:
+  grid: Grid = {
     type: 'mesh',
     size: 15,
     enabled: true,
-  } as const
+  }
   snapline = {
-    // TODO:
     threshold: 15,
     enabled: true,
   }
