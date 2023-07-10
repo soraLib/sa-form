@@ -11,11 +11,13 @@ export type GraphType =
 /** print form */
 // 'Print'
 
-export interface MousePosition {
-  startX: number
-  startY: number
+export interface Position {
   x: number
   y: number
+}
+export interface MousePosition extends Position {
+  startX: number
+  startY: number
 }
 
 export type Grid = {
