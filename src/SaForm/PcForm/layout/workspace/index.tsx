@@ -19,7 +19,9 @@ export default defineComponent({
   },
 
   setup(props) {
+    // TODO: mock
     props.graph.setCanvas(createMockPcCanvas())
+    props.graph.setSelected(['2', '3'])
 
     const contextmenuRef = ref<InstanceType<typeof Contextmenu> | null>(null)
     const onContextmenu = (event: MouseEvent) => {

@@ -132,8 +132,8 @@ const calcDragLines = (
       const { lineY, triggerY } = result as RowResult
 
       const isMovingCloser =
-        (rect.y > lineY && pointA.y - pointB.y < 0) ||
-        (rect.y < lineY && pointA.y - pointB.y > 0)
+        (rect.y >= lineY && pointA.y - pointB.y <= 0) ||
+        (rect.y <= lineY && pointA.y - pointB.y >= 0)
 
       if (
         // attempt to snap to row when get closer
@@ -161,8 +161,8 @@ const calcDragLines = (
       const { lineX, triggerX } = result as ColResult
 
       const isMovingCloser =
-        (rect.x > lineX && pointA.x - pointB.x < 0) ||
-        (rect.x < lineX && pointA.x - pointB.x > 0)
+        (rect.x >= lineX && pointA.x - pointB.x <= 0) ||
+        (rect.x <= lineX && pointA.x - pointB.x >= 0)
 
       if (
         // attempt to snap to row when get closer
