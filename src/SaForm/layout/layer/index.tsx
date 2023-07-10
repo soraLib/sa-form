@@ -39,7 +39,7 @@ export default defineComponent({
     return () => (
       <Transition name="collapse-transition">
         {visible.value && (
-          <div v-show={visible} class="sa-form-layer sa-bg ml-1 p-2">
+          <div class="sa-form-layer sa-bg p-2">
             <div class="title flex items-center text-base font-medium">
               <NIcon class="mr-2" size={20}>
                 <Layers />

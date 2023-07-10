@@ -1,6 +1,6 @@
 import { defineComponent } from 'vue'
-import { NButton, NIcon } from 'naive-ui'
-import { Layers, Sparkles } from '@vicons/ionicons5'
+import { NIcon } from 'naive-ui'
+import { Construct, Layers, Library } from '@vicons/ionicons5'
 import { useClazs } from '../../utils/class'
 import type { PropType } from 'vue'
 import type { BasicGraph } from '../../graph'
@@ -18,7 +18,21 @@ export default defineComponent({
     return () => (
       <div class="flex w-fit">
         <span
-          title="Layers"
+          title="Component"
+          class={useClazs('header-button', {
+            'is-active': props.graph.layout.component,
+          })}
+          onClick={() =>
+            props.graph.setLayout({ component: !props.graph.layout.component })
+          }
+        >
+          <NIcon>
+            <Library />
+          </NIcon>
+        </span>
+
+        <span
+          title="Layer"
           class={useClazs('header-button', {
             'is-active': props.graph.layout.layer,
           })}
@@ -28,6 +42,20 @@ export default defineComponent({
         >
           <NIcon>
             <Layers />
+          </NIcon>
+        </span>
+
+        <span
+          title="Property"
+          class={useClazs('header-button', {
+            'is-active': props.graph.layout.property,
+          })}
+          onClick={() =>
+            props.graph.setLayout({ property: !props.graph.layout.property })
+          }
+        >
+          <NIcon>
+            <Construct />
           </NIcon>
         </span>
       </div>

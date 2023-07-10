@@ -39,7 +39,9 @@ export type Stick = 'tl' | 'tm' | 'tr' | 'mr' | 'br' | 'bm' | 'bl' | 'ml'
 export class PcGraph extends Events implements BasicGraph {
   type: GraphType
   layout: Layout = {
+    component: true,
     layer: true,
+    property: true,
   }
   canvas: PcElement
   history: BasicRecordStore

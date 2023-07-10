@@ -1,0 +1,37 @@
+.controller-container {
+  margin-bottom: 4px;
+
+  .controller-item {
+    display: flex;
+    vertical-align: baseline;
+    line-height: 26px;
+    margin-bottom: 1px;
+
+    &-label {
+      width: 80px;
+      text-align: start;
+      text-indent: 0.75rem;
+      color: var(--c-text-1);
+    }
+
+    &-plugin {
+      width: 150px;
+      text-align: start;
+    }
+
+    .sa-plugin {
+      &.dialog-container {
+        line-height: inherit;
+        display: flex;
+
+        &:first-child {
+          flex-grow: 1;
+        }
+      }
+    }
+  }
+
+  .controller-item-plugin {
+    flex-grow: 1;
+  }
+}

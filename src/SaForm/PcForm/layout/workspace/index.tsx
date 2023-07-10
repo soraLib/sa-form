@@ -35,7 +35,10 @@ export default defineComponent({
       <div
         class={useClazs('relative', {
           'cursor-move': props.graph.isDragging,
-          'cursor-crosshair': props.graph.isSelecting,
+          'cursor-crosshair':
+            props.graph.isSelecting &&
+            props.graph.selectionBox.width > 0 &&
+            props.graph.selectionBox.height > 0,
         })}
         style={{
           width: `${props.graph.canvas.attrs.width}px`,

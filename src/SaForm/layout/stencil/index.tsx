@@ -1,4 +1,4 @@
-import { computed, defineComponent, ref } from 'vue'
+import { Transition, computed, defineComponent, ref } from 'vue'
 import { FlashOutline } from '@vicons/ionicons5'
 import { NIcon, NInput } from 'naive-ui'
 import StencilGroup from './group'
@@ -45,6 +45,7 @@ export default defineComponent({
   },
 
   setup(props) {
+    const visible = computed(() => props.graph.layout.component)
     const refStencil = ref<HTMLDivElement | null>(null)
     const stencilSearch = ref('')
     const stencilSearchChange = (search: string) => {
@@ -85,6 +86,7 @@ export default defineComponent({
     nativeStencil.value = (props.stencil as NativeStencil)(props.graph)
 
     return {
+      visible,
       stencilSearch,
       stencilSearchChange,
       refStencil,
@@ -96,30 +98,36 @@ export default defineComponent({
 
   render() {
     return (
-      <div
-        class={
-          'sa-form-stencil flex flex-col justify-start p-1 box-border relative'
-        }
-      >
-        <NInput
-          class="stencil-search"
-          value={this.stencilSearch}
-          onUpdateValue={this.stencilSearchChange}
-          clearable
-          placeholder="Search Component"
-        >
-          {{
-            prefix: () => <NIcon component={FlashOutline} />,
-          }}
-        </NInput>
+      <Transition name="collapse-transition">
+        {this.visible && (
+          <div
+            class={
+              'sa-form-stencil flex flex-col justify-start p-1 box-border relative'
+            }
+          >
+            <NInput
+              class="stencil-search"
+              value={this.stencilSearch}
+              onUpdateValue={this.stencilSearchChange}
+              clearable
+              placeholder="Search Component"
+            >
+              {{
+                prefix: () => <NIcon component={FlashOutline} />,
+              }}
+            </NInput>
 
-        {
-          // groups
-          this.filteredNativeStencilGroups
-            ?.map((group) => group[1].length && <StencilGroup group={group} />)
-            .filter(Boolean)
-        }
-      </div>
+            {
+              // groups
+              this.filteredNativeStencilGroups
+                ?.map(
+                  (group) => group[1].length && <StencilGroup group={group} />
+                )
+                .filter(Boolean)
+            }
+          </div>
+        )}
+      </Transition>
     )
   },
 })

@@ -1,7 +1,7 @@
 import { computed, defineComponent, ref } from 'vue'
 import { NButton, NColorPicker, NInput, NInputNumber } from 'naive-ui'
 import { SaPluginType } from '../../plugin'
-import { isElementAttribute } from '../../utils//element'
+import { isElementAttribute } from '../../utils/element'
 import SaDialog from './dialog'
 import type { PropType, VNode } from 'vue'
 import type { SaPlugin } from '../../plugin'
@@ -115,7 +115,7 @@ export default defineComponent({
                 onConfirm={onConfirm}
               />
               <NButton onClick={() => handlePluginValueChange('')}>
-                清空
+                Reset
               </NButton>
             </div>
           )

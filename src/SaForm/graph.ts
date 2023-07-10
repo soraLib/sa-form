@@ -30,7 +30,9 @@ export type Snapline = {
   enabled: boolean
 }
 export type Layout = {
+  component: boolean
   layer: boolean
+  property: boolean
 }
 /** basic graph */
 export interface BasicGraph {

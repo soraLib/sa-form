@@ -6,7 +6,7 @@ import { LAYOUTS } from './config'
 
 import SaFormHeader from './layout/header'
 import SaFormStencil from './layout/stencil'
-import SaFormController from './layout/properties-controller'
+import SaFormProperty from './layout/property'
 import SaFormFooter from './layout/footer'
 import SaFormLayer from './layout/layer'
 import type { ILayout } from './config'
@@ -75,7 +75,7 @@ linear-gradient(90deg, var(--c-line-bold) 1px, transparent 0)`,
           />
         </header>
 
-        <main class="mt-1 flex flex-grow h-full overflow-auto">
+        <main class="mt-1 flex flex-grow gap-1 h-full overflow-auto">
           <section>
             <SaFormStencil
               stencil={layout.stencil}
@@ -86,7 +86,7 @@ linear-gradient(90deg, var(--c-line-bold) 1px, transparent 0)`,
 
           <SaFormLayer class="shrink-0" graph={layout.graph} />
 
-          <main class="sa-bg mx-1 flex item-center flex-col grow">
+          <main class="sa-bg flex item-center flex-col grow">
             <section class="workspace-bg grow overflow-auto">
               <SaFormWorkspace
                 class="workspace"
@@ -97,12 +97,11 @@ linear-gradient(90deg, var(--c-line-bold) 1px, transparent 0)`,
             <SaFormFooter class="sa-bg" graph={layout.graph} />
           </main>
 
-          <aside class="w-64 sa-bg shrink-0">
-            <SaFormController
-              graph={layout.graph}
-              controller={layout.controller}
-            />
-          </aside>
+          <SaFormProperty
+            class="w-64 sa-bg shrink-0"
+            graph={layout.graph}
+            controller={layout.controller}
+          />
         </main>
       </section>
     )
