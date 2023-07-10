@@ -26,6 +26,10 @@
   --c-bg-overlay-dark-1: #1d1e1f;
   --c-border-light-1: rgba(60, 60, 67, 0.29);
   --c-border-dark-1: rgba(82, 82, 89, 0.68);
+  --c-line-light-1: rgba(60, 60, 60, 0.1);
+  --c-line-light-2: rgba(60, 60, 60, 0.07);
+  --c-line-dark-1: rgba(84, 84, 84, 0.48);
+  --c-line-dark-2: rgba(84, 84, 84, 0.35);
   --c-divider-light-1: rgba(60, 60, 60, 0.29);
   --c-divider-light-2: rgba(60, 60, 60, 0.12);
   --c-divider-dark-1: rgba(84, 84, 84, 0.65);
@@ -120,6 +124,8 @@
   --c-bg-ground-soft: var(--c-gray-light-1);
   --c-bg-ground-mute: var(--c-gray-light-2);
   --c-border: var(--c-border-light-1);
+  --c-line: var(--c-line-light-2);
+  --c-line-bold: var(--c-line-light-1);
   --c-divider: var(--c-divider-light-1);
   --c-divider-light: var(--c-divider-light-2);
   --c-divider-inverse: var(--c-divider-dark-1);
@@ -149,6 +155,8 @@ html.dark:root {
   --c-bg-overlay: var(--c-bg-overlay-dark-1);
   --c-bg-hover: var(--c-hover-dark);
   --c-border: var(--c-border-dark-1);
+  --c-line: var(--c-line-dark-2);
+  --c-line-bold: var(--c-line-dark-1);
   --c-divider: var(--c-divider-dark-1);
   --c-divider-light: var(--c-divider-dark-2);
   --c-divider-inverse: var(--c-divider-light-1);
