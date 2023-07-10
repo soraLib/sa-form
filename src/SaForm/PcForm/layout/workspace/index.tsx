@@ -1,9 +1,11 @@
 import { defineComponent, ref } from 'vue'
+import { useClazs } from '../../../utils/class'
 import { createMockPcCanvas } from './mock'
 
 import Workspace from './graph'
 import Snapline from './snapline'
-import SelectionBox from './selection'
+import Group from './group'
+import Selection from './selection'
 import Contextmenu from './contextmenu'
 
 import type { PcGraph } from '../../graph'
@@ -31,7 +33,10 @@ export default defineComponent({
 
     return () => (
       <div
-        class="relative"
+        class={useClazs('relative', {
+          'cursor-move': props.graph.isDragging,
+          'cursor-crosshair': props.graph.isSelecting,
+        })}
         style={{
           width: `${props.graph.canvas.attrs.width}px`,
           height: `${props.graph.canvas.attrs.height}px`,
@@ -41,7 +46,8 @@ export default defineComponent({
         <Workspace ref="workspace" graph={props.graph} />
 
         <Snapline graph={props.graph} />
-        <SelectionBox graph={props.graph} />
+        <Group graph={props.graph} />
+        <Selection graph={props.graph} />
 
         <Contextmenu ref={contextmenuRef} graph={props.graph} />
       </div>

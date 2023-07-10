@@ -1,13 +1,12 @@
-import { computed, defineComponent, h } from 'vue'
+import { defineComponent } from 'vue'
 import { findNode } from 'sugar-sajs'
 import { setDataTransfer } from '../../../../utils/drag'
 import { PcElement, containerElements } from '../../../element'
 
-import { useClazs } from '../../../../utils/class'
 import ElementRenderer from './renderer/element-renderer'
 import { gridFloor } from './renderer/hooks/utils'
 import type { StencilAttrs } from '../../../../layout/stencil'
-import type { CSSProperties, PropType } from 'vue'
+import type { PropType } from 'vue'
 import type { PcGraph } from '../../../graph'
 
 export default defineComponent({
@@ -64,35 +63,13 @@ export default defineComponent({
       props.graph.addChild(dropElement, parent)
     }
 
-    const selectionBoxStyle = computed<CSSProperties>(() => {
-      const { x, y, width, height } = props.graph.selectionBox
-
-      return {
-        position: 'absolute',
-        display: props.graph.isSelect ? 'block' : 'none',
-        'z-index': 1000,
-        border: '1px solid var(--c-brand)',
-        background: '#B5CBEC',
-        opacity: 0.3,
-        left: `${x}px`,
-        top: `${y}px`,
-        width: `${width}px`,
-        height: `${height}px`,
-      }
-    })
-
     return () => (
       <div
-        class={useClazs('w-full', 'h-full', 'relative', {
-          'cursor-move': props.graph.isDragging,
-        })}
+        class="w-full h-full relative"
         onDrop={onDrop}
         onDragover={onDragover}
       >
         <ElementRenderer graph={props.graph} element={props.graph.canvas} />
-
-        {/* selection box */}
-        <div style={selectionBoxStyle.value}></div>
       </div>
     )
   },
