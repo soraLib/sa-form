@@ -56,7 +56,7 @@ export class PcGraph extends Events implements BasicGraph {
   }
   isResizing = false
   resizeStick: Stick | '' = ''
-  isSelect = false
+  isSelecting = false
   selectionBox = {
     x: 0,
     y: 0,
@@ -125,8 +125,8 @@ export class PcGraph extends Events implements BasicGraph {
     this.resizeStick = stick
   }
 
-  setSelect(isSelect: boolean) {
-    this.isSelect = isSelect
+  setSelecting(isSelecting: boolean) {
+    this.isSelecting = isSelecting
   }
 
   setSelectionBox(

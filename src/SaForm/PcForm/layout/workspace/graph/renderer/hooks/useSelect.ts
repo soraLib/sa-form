@@ -15,7 +15,7 @@ export const useElementSelect = (
   graph: PcGraph
 ) => {
   graph.setSelected(element)
-  graph.setSelect(true)
+  graph.setSelecting(true)
 
   const status: SelectStatus = {
     _mouseStartX: event.screenX,
@@ -91,7 +91,7 @@ export const useElementSelect = (
   }
   function elementSelectEnd() {
     selectWithBox(graph.selectionBox, graph)
-    graph.setSelect(false)
+    graph.setSelecting(false)
     graph.setSelectionBox()
   }
 }

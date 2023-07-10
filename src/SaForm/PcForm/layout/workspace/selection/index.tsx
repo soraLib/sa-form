@@ -1,10 +1,9 @@
-import { computed, defineComponent, reactive, watch } from 'vue'
-import { getRectangle } from '../graph/renderer/utils/rectangle'
+import { computed, defineComponent, h } from 'vue'
 import type { CSSProperties, PropType } from 'vue'
 import type { PcGraph } from '../../../graph'
 
 export default defineComponent({
-  name: 'SaPcFormSelectionBox',
+  name: 'SaPcFormSelection',
   props: {
     graph: {
       required: true,
@@ -12,25 +11,23 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const rect = computed(() => {
-      if (props.graph.selected.length < 2)
-        return { x: 0, y: 0, width: 0, height: 0 }
+    const selectionBoxStyle = computed<CSSProperties>(() => {
+      const { x, y, width, height } = props.graph.selectionBox
 
-      return getRectangle(props.graph.selected)
+      return {
+        position: 'absolute',
+        display: props.graph.isSelecting && width && height ? 'block' : 'none',
+        'z-index': 1000,
+        border: '1px solid var(--c-brand)',
+        background: '#B5CBEC',
+        opacity: 0.3,
+        left: `${x}px`,
+        top: `${y}px`,
+        width: `${width}px`,
+        height: `${height}px`,
+      }
     })
-    const boxStyle = computed<CSSProperties>(() => ({
-      position: 'absolute',
-      border: '2px dashed var(--c-brand)',
-      left: `${rect.value.x}px`,
-      top: `${rect.value.y}px`,
-      width: `${rect.value.width}px`,
-      height: `${rect.value.height}px`,
-      zIndex: 1,
-      pointerEvents: 'none',
-      boxSizing: 'border-box',
-      display: !rect.value.width || !rect.value.height ? 'none' : 'block',
-    }))
 
-    return () => <div style={boxStyle.value}></div>
+    return () => <div style={selectionBoxStyle.value}></div>
   },
 })
