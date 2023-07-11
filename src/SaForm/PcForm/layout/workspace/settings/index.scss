@@ -1,0 +1,19 @@
+.form-settings {
+  width: 350px;
+}
+
+.form-settings-row {
+  display: flex;
+  gap: 12px;
+  margin: 12px 0;
+  align-items: center;
+
+  > *:first-child {
+    width: 80px;
+    flex-shrink: 0;
+  }
+
+  > *:nth-child(2) {
+    flex-grow: 1;
+  }
+}
