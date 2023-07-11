@@ -24,15 +24,20 @@ export default defineComponent({
     },
   },
 
-  setup(props) {
+  setup(props, ctx) {
     const [visible, toggleVisible] = useToggle(false)
 
     return () => (
-      <div title="Settings">
-        <NIcon size={24} {...{ onClick: () => toggleVisible(true) }}>
-          <Settings />
-        </NIcon>
-
+      <>
+        <div
+          {...ctx.attrs}
+          title="Settings"
+          onClick={() => toggleVisible(true)}
+        >
+          <NIcon size={24}>
+            <Settings />
+          </NIcon>
+        </div>
         <NModal
           title="Settings"
           show={visible.value}
@@ -127,7 +132,7 @@ export default defineComponent({
             </div>
           </div>
         </NModal>
-      </div>
+      </>
     )
   },
 })
