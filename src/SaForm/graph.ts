@@ -30,6 +30,16 @@ export type Snapline = {
   radius: number
   enabled: boolean
 }
+export enum ModifierKey {
+  Ctrl = 'ctrl',
+  Alt = 'alt',
+  Shift = 'shift',
+}
+export type Selection = {
+  enabled: boolean
+  modifier: ModifierKey
+  showSelectionBox: boolean
+}
 export type Scroller = {
   pannable: boolean
 }
@@ -55,6 +65,7 @@ export interface BasicGraph {
   layout: Layout
   scroller: Scroller
   setLayout: (layout: Partial<Layout>) => void
+  setSelection: (selection: Partial<Selection>) => void
   setGrid: (grid: Partial<Grid>) => void
   setSnap: (snap: Partial<Snapline>) => void
   setScroller: (scroller: Partial<Scroller>) => void

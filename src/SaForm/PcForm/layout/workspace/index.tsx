@@ -94,10 +94,11 @@ linear-gradient(90deg, ${boldLineColor} 1px, transparent 0)`,
           >
             <Workspace ref="workspace" graph={props.graph} />
 
-            <Snapline graph={props.graph} />
-            <Group graph={props.graph} />
-            <Selection graph={props.graph} />
-
+            {props.graph.snapline.enabled && <Snapline graph={props.graph} />}
+            {props.graph.selection.showSelectionBox && (
+              <Group graph={props.graph} />
+            )}
+            {props.graph.selection.enabled && <Selection graph={props.graph} />}
             <Contextmenu ref={contextmenuRef} graph={props.graph} />
           </div>
         </div>
