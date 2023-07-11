@@ -6,7 +6,7 @@
 <p align="center">A Vue 3 Lowode Form Component</p>
 <p align="center"><b>Customizable, Uses TypeScript</b></p>
 <p align="center">
-  <a href="https://soralib.github.io/sa-form/"><img alt="pages-build-deployment" src="https://github.com/soraLib/sa-form/actions/workflows/pages/pages-build-deployment/badge.svg"></a>
+  <a href="https://soralib.github.io/sa-form/"><img alt="pages-build-deployment" src="https://github.com/soraLib/sa-form/actions/workflows/pages/pages-build-deployment/badge.svg?branch=docs"></a>
   <a href="https://www.typescriptlang.org"><img alt="Types" src="https://img.shields.io/npm/types/scrub-js.svg"></a>
   <a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg"></a>
   <a href="https://github.com/soraLib/sa-form"><img alt="Github" src="https://img.shields.io/badge/Github-232323?logo=github"></a>
