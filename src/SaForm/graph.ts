@@ -30,6 +30,9 @@ export type Snapline = {
   radius: number
   enabled: boolean
 }
+export type Scroller = {
+  pannable: boolean
+}
 export type Layout = {
   component: boolean
   layer: boolean
@@ -50,7 +53,12 @@ export interface BasicGraph {
   grid: Grid
   snapline: Snapline
   layout: Layout
+  scroller: Scroller
   setLayout: (layout: Partial<Layout>) => void
+  setGrid: (grid: Partial<Grid>) => void
+  setSnap: (snap: Partial<Snapline>) => void
+  setScroller: (scroller: Partial<Scroller>) => void
+
   getNextId(): string
 
   scrollIntoView(

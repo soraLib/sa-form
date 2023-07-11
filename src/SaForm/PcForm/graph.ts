@@ -17,6 +17,7 @@ import type {
   Grid,
   Layout,
   MousePosition,
+  Scroller,
   Snapline,
 } from '../graph'
 import type { BasicRecordStore, CDRecord } from '../record'
@@ -82,6 +83,10 @@ export class PcGraph extends Events implements BasicGraph {
     radius: 15,
     enabled: true,
   }
+  isPanning = false
+  scroller: Scroller = {
+    pannable: true,
+  }
 
   constructor(config: Partial<PcElement> & { attrs: Record<string, any> }) {
     super()
@@ -112,6 +117,9 @@ export class PcGraph extends Events implements BasicGraph {
   }
   setSnap(snap: Partial<Snapline>) {
     setObjectValues(this.snapline, snap)
+  }
+  setScroller(scroller: Partial<Scroller>) {
+    setObjectValues(this.scroller, scroller)
   }
 
   setCanvas(canvas: PcElement) {
@@ -145,6 +153,10 @@ export class PcGraph extends Events implements BasicGraph {
     box: Partial<SelectionBox> = { x: 0, y: 0, width: 0, height: 0 }
   ) {
     setObjectValues(this.selectionBox, box)
+  }
+
+  setPanning(isPanning = false) {
+    this.isPanning = isPanning
   }
 
   getNextId() {

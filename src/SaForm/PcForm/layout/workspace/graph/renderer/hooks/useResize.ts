@@ -1,8 +1,7 @@
-import { ElementType } from '../../../../../../element'
 import { BasicRecordType } from '../../../../../../record'
 import { PcRecord } from '../../../../../record'
 import { getRectangle } from '../utils/rectangle'
-import { gridFloor, useResizeOnGird } from './utils'
+import { useResizeOnGird } from './utils'
 import type { PcGraph, Stick } from '../../../../../graph'
 import type { PcElement } from '../../../../../element'
 
