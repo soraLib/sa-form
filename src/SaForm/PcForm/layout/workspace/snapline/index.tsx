@@ -46,6 +46,7 @@ export default defineComponent({
     watch(
       () => [props.graph.mousePosition.x, props.graph.mousePosition.y],
       ([x1, y1], [x2, y2]) => {
+        if (!props.graph.snapline.enabled) return
         if (x2 === 0 && y2 === 0) return
         const positions: [Position, Position] = [
           { x: x1, y: y1 },

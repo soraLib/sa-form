@@ -99,8 +99,8 @@ const directions: Record<
   ],
 }
 
-const isSorption = (a: number, b: number, threshold: number) =>
-  Math.abs(a - b) <= threshold
+const isSorption = (a: number, b: number, radius: number) =>
+  Math.abs(a - b) <= radius
 
 interface CalcOption {
   deepOffsetX: number
@@ -138,7 +138,7 @@ const calcDragLines = (
       if (
         // attempt to snap to row when get closer
         isMovingCloser &&
-        isSorption(rect.y, triggerY, graph.snapline.threshold)
+        isSorption(rect.y, triggerY, graph.snapline.radius)
       ) {
         if (!sorption.row) {
           const moveY = triggerY - rect.y
@@ -167,7 +167,7 @@ const calcDragLines = (
       if (
         // attempt to snap to row when get closer
         isMovingCloser &&
-        isSorption(rect.x, triggerX, graph.snapline.threshold)
+        isSorption(rect.x, triggerX, graph.snapline.radius)
       ) {
         if (!sorption.col) {
           const moveX = triggerX - rect.x
@@ -213,7 +213,7 @@ const calcResizeLines = (
       const result = direct.calc(compare, rect)
       const { lineY, triggerY } = result as RowResult
 
-      if (isSorption(rect.y, triggerY, graph.snapline.threshold)) {
+      if (isSorption(rect.y, triggerY, graph.snapline.radius)) {
         let resized = false
 
         if (!sorption.row && graph.resizeStick) {
@@ -247,7 +247,7 @@ const calcResizeLines = (
       const result = direct.calc(compare, rect)
       const { lineX, triggerX } = result as ColResult
 
-      if (isSorption(rect.x, triggerX, graph.snapline.threshold)) {
+      if (isSorption(rect.x, triggerX, graph.snapline.radius)) {
         let resized = false
         if (!sorption.col && graph.resizeStick) {
           const stickX = lastOfStick(graph.resizeStick)

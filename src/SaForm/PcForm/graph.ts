@@ -11,7 +11,14 @@ import { PcRecord, PcRecordStore } from './record'
 
 import { PcClipBoard } from './clipboard'
 import { Events } from './events'
-import type { BasicGraph, GraphType, Layout, MousePosition } from '../graph'
+import type {
+  BasicGraph,
+  GraphType,
+  Grid,
+  Layout,
+  MousePosition,
+  Snapline,
+} from '../graph'
 import type { BasicRecordStore, CDRecord } from '../record'
 
 export type IdUpdateData = { id: string; data: Partial<PcElement['attrs']> }
@@ -65,15 +72,14 @@ export class PcGraph extends Events implements BasicGraph {
     width: 0,
     height: 0,
   }
-  grid = {
-    // TODO:
-    type: 'mesh',
+  grid: Grid = {
+    type: 'double-mesh',
     size: 15,
     enabled: true,
-  } as const
-  snapline = {
-    // TODO:
-    threshold: 15,
+    visible: true,
+  }
+  snapline: Snapline = {
+    radius: 15,
     enabled: true,
   }
 
@@ -99,9 +105,13 @@ export class PcGraph extends Events implements BasicGraph {
   }
 
   setLayout(layout: Partial<Layout>) {
-    for (const [key, value] of Object.entries(layout)) {
-      this.layout[key as keyof Layout] = value
-    }
+    setObjectValues(this.layout, layout)
+  }
+  setGrid(grid: Partial<Grid>) {
+    setObjectValues(this.grid, grid)
+  }
+  setSnap(snap: Partial<Snapline>) {
+    setObjectValues(this.snapline, snap)
   }
 
   setCanvas(canvas: PcElement) {

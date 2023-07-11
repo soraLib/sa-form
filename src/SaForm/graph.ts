@@ -21,12 +21,13 @@ export interface MousePosition extends Position {
 }
 
 export type Grid = {
-  type: 'dot' | 'mesh'
+  type: 'dot' | 'mesh' | 'double-mesh'
   size: number
   enabled: boolean
+  visible: true
 }
 export type Snapline = {
-  threshold: number
+  radius: number
   enabled: boolean
 }
 export type Layout = {
