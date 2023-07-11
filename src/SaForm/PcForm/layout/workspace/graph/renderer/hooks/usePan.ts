@@ -61,8 +61,6 @@ export const usePan = (event: MouseEvent, graph: PcGraph) => {
   const scroller = getScrollContainer(graph.canvas.el) as HTMLElement
   if (!scroller) return
 
-  graph.setPanning(true)
-
   const pos = {
     left: scroller.scrollLeft,
     top: scroller.scrollTop,
@@ -71,6 +69,8 @@ export const usePan = (event: MouseEvent, graph: PcGraph) => {
   }
 
   const panMove = (event: MouseEvent) => {
+    graph.setPanning(true)
+
     const dx = event.clientX - pos.x
     const dy = event.clientY - pos.y
 
@@ -80,6 +80,9 @@ export const usePan = (event: MouseEvent, graph: PcGraph) => {
   const panEnd = () => {
     graph.setPanning(false)
     removePanListener()
+
+    if (scroller.scrollTop === pos.left && scroller.scrollTop === pos.top)
+      graph.setSelected()
   }
 
   const addPanListener = () => {
