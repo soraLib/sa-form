@@ -3,8 +3,9 @@ import { useClazs } from '../../../../../utils/class'
 import { useElementStickReszie } from './hooks/useResize'
 import { useElementStyle } from './hooks/useStyle'
 import ElementRenderer from './element-renderer'
-import { aheadSelected, selectOrAhead, useElementDrag } from './hooks/useDrag'
+import { aheadSelected, useElementDrag } from './hooks/useDrag'
 import { useElementSelect } from './hooks/useSelect'
+import { usePan } from './hooks/usePan'
 import type { CSSProperties, PropType } from 'vue'
 import type { PcGraph, Stick } from '../../../../graph'
 import type { PcElement } from '../../../../element'
@@ -60,7 +61,14 @@ export const useElementHandler = (
 
   if (!element.parent) {
     // canvas
-    useElementSelect(event, element, graph)
+    if (event.ctrlKey) {
+      // multiple select
+      useElementSelect(event, element, graph)
+    } else {
+      // panning
+      usePan(event, graph)
+    }
+
     return
   }
 

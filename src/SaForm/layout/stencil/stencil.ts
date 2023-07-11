@@ -1,5 +1,5 @@
 import { useEventListener } from '@vueuse/core'
-import { setDataTransfer } from '../../utils/drag'
+import { setDataTransfer } from '../../utils/stencil'
 import type { StencilAttrs } from '.'
 
 export namespace Stencil {
