@@ -17,6 +17,7 @@ import type {
   Grid,
   Layout,
   MousePosition,
+  Snapline,
 } from '../graph'
 import type { BasicRecordStore, CDRecord } from '../record'
 
@@ -72,12 +73,13 @@ export class PcGraph extends Events implements BasicGraph {
     height: 0,
   }
   grid: Grid = {
-    type: 'mesh',
+    type: 'double-mesh',
     size: 15,
     enabled: true,
+    visible: true,
   }
-  snapline = {
-    threshold: 15,
+  snapline: Snapline = {
+    radius: 15,
     enabled: true,
   }
 
@@ -103,9 +105,13 @@ export class PcGraph extends Events implements BasicGraph {
   }
 
   setLayout(layout: Partial<Layout>) {
-    for (const [key, value] of Object.entries(layout)) {
-      this.layout[key as keyof Layout] = value
-    }
+    setObjectValues(this.layout, layout)
+  }
+  setGrid(grid: Partial<Grid>) {
+    setObjectValues(this.grid, grid)
+  }
+  setSnap(snap: Partial<Snapline>) {
+    setObjectValues(this.snapline, snap)
   }
 
   setCanvas(canvas: PcElement) {

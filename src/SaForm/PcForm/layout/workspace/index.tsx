@@ -21,8 +21,7 @@ export default defineComponent({
     },
   },
 
-  setup(props, ctx) {
-    // TODO: mock
+  setup(props) {
     props.graph.setCanvas(createMockPcCanvas())
     props.graph.setSelected(['2', '3'])
 
@@ -34,7 +33,10 @@ export default defineComponent({
 
     const gridStyle = computed<CSSProperties>(() => {
       const grid = props.graph.grid
-      if (!grid.enabled) return {}
+      if (!grid.visible)
+        return {
+          backgroundColor: 'var(--c-bg-soft)',
+        }
 
       if (grid.type === 'dot')
         return {
@@ -44,18 +46,20 @@ export default defineComponent({
             grid.size - 1
           }px, transparent 0), linear-gradient(90deg, transparent ${
             grid.size - 1
-          }px, var(--c-bg-dark) 0)`,
+          }px, #86909f 0)`,
           backgroundSize: `${grid.size}px ${grid.size}px, ${grid.size}px ${grid.size}px`,
         }
 
       // mesh
+      const boldLineColor =
+        grid.type === 'double-mesh' ? 'var(--c-line-bold)' : 'transparent'
       return {
         backgroundPositionX: '-1px',
         backgroundPositionY: '-1px',
         backgroundImage: `linear-gradient(var(--c-line) 1px, transparent 0),
 linear-gradient(90deg, var(--c-line) 1px, transparent 0),
-linear-gradient(var(--c-line-bold) 1px, transparent 0),
-linear-gradient(90deg, var(--c-line-bold) 1px, transparent 0)`,
+linear-gradient(${boldLineColor} 1px, transparent 0),
+linear-gradient(90deg, ${boldLineColor} 1px, transparent 0)`,
         backgroundSize: `${grid.size}px ${grid.size}px, ${grid.size}px ${
           grid.size
         }px, ${grid.size * 5}px ${grid.size * 5}px, ${grid.size * 5}px ${
