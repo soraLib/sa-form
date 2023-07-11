@@ -4,6 +4,8 @@ import {
   NIcon,
   NInputNumber,
   NModal,
+  NRadio,
+  NRadioGroup,
   NSelect,
   NSwitch,
 } from 'naive-ui'
@@ -12,6 +14,7 @@ import { useToggle } from '@vueuse/core'
 import { isNumber } from 'lodash-es'
 import type { PropType } from 'vue'
 import type { PcGraph } from '@/SaForm/PcForm/graph'
+import { ModifierKey } from '@/SaForm/graph'
 
 import './index.scss'
 
@@ -129,6 +132,56 @@ export default defineComponent({
                   isNumber(radius) && props.graph.setSnap({ radius })
                 }
               />
+            </div>
+
+            <NDivider />
+
+            <h3>Multiple Selection</h3>
+
+            <div class="form-settings-row">
+              <div>Enabled</div>
+              <div>
+                <NSwitch
+                  value={props.graph.selection.enabled}
+                  onUpdate:value={(enabled) =>
+                    props.graph.setSelection({ enabled })
+                  }
+                />
+              </div>
+            </div>
+
+            <div class="form-settings-row">
+              <div>ShowSelectionBox</div>
+              <div>
+                <NSwitch
+                  value={props.graph.selection.showSelectionBox}
+                  onUpdate:value={(showSelectionBox) =>
+                    props.graph.setSelection({ showSelectionBox })
+                  }
+                />
+              </div>
+            </div>
+
+            <div class="form-settings-row">
+              <div>Modifier</div>
+              <div>
+                <NRadioGroup
+                  value={props.graph.selection.modifier}
+                  onUpdate:value={(modifier) =>
+                    props.graph.setSelection({ modifier })
+                  }
+                >
+                  <NRadio key="Ctrl" value={ModifierKey.Ctrl}>
+                    Ctrl
+                  </NRadio>
+                  <NRadio key="Alt" value={ModifierKey.Alt}>
+                    Alt
+                  </NRadio>
+                  <NRadio key="Shift" value={ModifierKey.Shift}>
+                    Shift
+                  </NRadio>
+                </NRadioGroup>
+              </div>
             </div>
           </div>
         </NModal>

@@ -1,5 +1,6 @@
 import { computed, defineComponent } from 'vue'
 import { useClazs } from '../../../../../utils/class'
+import { ModifierKey } from '../../../../../graph'
 import { useElementStickReszie } from './hooks/useResize'
 import { useElementStyle } from './hooks/useStyle'
 import ElementRenderer from './element-renderer'
@@ -61,7 +62,13 @@ export const useElementHandler = (
 
   if (!element.parent) {
     // canvas
-    if (event.ctrlKey) {
+    const selectionModifer = graph.selection.modifier
+    const isSelectingKey =
+      graph.selection.enabled &&
+      ((event.ctrlKey && selectionModifer === ModifierKey.Ctrl) ||
+        (event.altKey && selectionModifer === ModifierKey.Alt) ||
+        (event.shiftKey && selectionModifer === ModifierKey.Shift))
+    if (isSelectingKey) {
       // multiple select
       useElementSelect(event, element, graph)
     } else {

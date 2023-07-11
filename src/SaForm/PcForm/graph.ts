@@ -6,6 +6,7 @@ import {
   isURecordDataList,
 } from '../record'
 import { getNextId } from '../utils/element'
+import { ModifierKey } from '../graph'
 import { PcElement } from './element'
 import { PcRecord, PcRecordStore } from './record'
 
@@ -18,6 +19,7 @@ import type {
   Layout,
   MousePosition,
   Scroller,
+  Selection,
   Snapline,
 } from '../graph'
 import type { BasicRecordStore, CDRecord } from '../record'
@@ -73,6 +75,11 @@ export class PcGraph extends Events implements BasicGraph {
     width: 0,
     height: 0,
   }
+  selection: Selection = {
+    enabled: true,
+    modifier: ModifierKey.Ctrl,
+    showSelectionBox: true,
+  }
   grid: Grid = {
     type: 'double-mesh',
     size: 15,
@@ -111,6 +118,9 @@ export class PcGraph extends Events implements BasicGraph {
 
   setLayout(layout: Partial<Layout>) {
     setObjectValues(this.layout, layout)
+  }
+  setSelection(selection: Partial<Selection>) {
+    setObjectValues(this.selection, selection)
   }
   setGrid(grid: Partial<Grid>) {
     setObjectValues(this.grid, grid)
