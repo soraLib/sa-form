@@ -1,6 +1,6 @@
 import { defineComponent } from 'vue'
 import { findNode } from 'sugar-sajs'
-import { setDataTransfer } from '../../../../utils/drag'
+import { setDataTransfer } from '../../../../utils/stencil'
 import { PcElement, containerElements } from '../../../element'
 
 import ElementRenderer from './renderer/element-renderer'

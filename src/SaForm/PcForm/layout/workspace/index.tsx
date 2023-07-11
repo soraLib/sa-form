@@ -70,7 +70,7 @@ linear-gradient(90deg, ${boldLineColor} 1px, transparent 0)`,
 
     return () => (
       <div class="relative">
-        <div class="w-full h-full overflow-auto">
+        <div ref="scrollerRef" class="w-full h-full overflow-auto">
           <div
             class={useClazs('relative workspace-container', {
               'cursor-move': props.graph.isDragging,
@@ -78,6 +78,12 @@ linear-gradient(90deg, ${boldLineColor} 1px, transparent 0)`,
                 props.graph.isSelecting &&
                 props.graph.selectionBox.width > 0 &&
                 props.graph.selectionBox.height > 0,
+              'cursor-grabbing': props.graph.isPanning,
+              'select-none':
+                props.graph.isPanning ||
+                props.graph.isSelecting ||
+                props.graph.isDragging ||
+                props.graph.isResizing,
             })}
             style={{
               width: `${props.graph.canvas.attrs.width}px`,
