@@ -88,7 +88,11 @@ export const useElementHandler = (
         aheadSelected(element, graph)
       }
     } else {
-      graph.selected.unshift(element)
+      if (graph.selected[0] === graph.canvas) {
+        graph.selected = [element]
+      } else {
+        graph.selected.unshift(element)
+      }
     }
 
     return
