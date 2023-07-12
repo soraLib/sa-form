@@ -98,7 +98,7 @@ export default defineComponent({
 
   render() {
     return (
-      <Transition name="collapse-transition">
+      <Transition name="collapse-x-transition">
         {this.visible && (
           <div
             class={

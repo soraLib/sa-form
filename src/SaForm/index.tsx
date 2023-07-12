@@ -65,7 +65,7 @@ export default defineComponent({
           </main>
 
           <SaFormProperty
-            class="w-64 sa-bg shrink-0"
+            class="sa-property sa-bg shrink-0"
             graph={layout.graph}
             controller={layout.controller}
           />
