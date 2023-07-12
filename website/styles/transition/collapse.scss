@@ -1,7 +1,7 @@
-.collapse-transition {
+.collapse-x-transition {
   &-enter-active,
   &-leave-active {
-    transition: width 0.2s ease-in-out;
+    transition: width var(--c-transition);
     overflow: hidden;
   }
 
