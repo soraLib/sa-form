@@ -37,7 +37,7 @@ export default defineComponent({
     const hideIrrelevantNodes = useStorage('hide-irrelevant-nodes', true)
 
     return () => (
-      <Transition name="collapse-transition">
+      <Transition name="collapse-x-transition">
         {visible.value && (
           <div class="sa-form-layer sa-bg p-2">
             <div class="title flex items-center text-base font-medium">

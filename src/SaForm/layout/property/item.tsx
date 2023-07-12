@@ -1,6 +1,13 @@
-import { computed, defineComponent, ref } from 'vue'
-import { NButton, NColorPicker, NInput, NInputNumber } from 'naive-ui'
-import { SaPluginType } from '../../plugin'
+import { computed, defineComponent } from 'vue'
+import {
+  NButton,
+  NColorPicker,
+  NInput,
+  NInputGroup,
+  NInputGroupLabel,
+  NInputNumber,
+} from 'naive-ui'
+import { SaPluginType, isGroupPlugin } from '../../plugin'
 import { isElementAttribute } from '../../utils/element'
 import SaDialog from './dialog'
 import type { PropType, VNode } from 'vue'
@@ -24,17 +31,21 @@ export default defineComponent({
       required: true,
       type: Object as PropType<SaController>,
     },
+    isInsideGroup: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   setup(props) {
     const selected = computed(() => props.graph.selected[0])
     const modelValue = computed<any>(() => {
       if (
+        !isGroupPlugin(props.plugin) &&
         selected.value &&
         isElementAttribute(props.plugin.attr, selected.value)
-      ) {
+      )
         return selected.value?.attrs[props.plugin.attr]
-      }
 
       return undefined
     })
@@ -45,30 +56,52 @@ export default defineComponent({
       props.controller.valueChange(props.plugin.attr, value, props.graph)
     }
 
-    const createPlugin = (): VNode => {
-      switch (props.plugin.type) {
+    const createPluginContent = (): VNode => {
+      const plugin = props.plugin
+
+      switch (plugin.type) {
         case SaPluginType.Input: {
           // TODO: emit on change not on input
-          return (
+          const Input = (
             <NInput
               class="sa-plugin"
               value={modelValue.value}
               onUpdateValue={handlePluginValueChange}
-              disabled={props.plugin.disabled ?? false}
+              disabled={plugin.disabled ?? false}
             />
           )
+
+          if (props.isInsideGroup)
+            return (
+              <NInputGroup>
+                <NInputGroupLabel>{props.plugin.label}</NInputGroupLabel>
+                {Input}
+              </NInputGroup>
+            )
+
+          return Input
         }
 
         case SaPluginType.Number: {
-          return (
+          const Input = (
             <NInputNumber
               class="sa-plugin"
               showButton={false}
               value={modelValue.value}
               onUpdateValue={handlePluginValueChange}
-              disabled={props.plugin.disabled ?? false}
+              disabled={plugin.disabled ?? false}
             />
           )
+
+          if (props.isInsideGroup)
+            return (
+              <NInputGroup>
+                <NInputGroupLabel>{props.plugin.label}</NInputGroupLabel>
+                {Input}
+              </NInputGroup>
+            )
+
+          return Input
         }
 
         case SaPluginType.Dialog: {
@@ -76,7 +109,7 @@ export default defineComponent({
             <SaDialog
               class="sa-plugin"
               graph={props.graph}
-              plugin={props.plugin}
+              plugin={plugin}
               controller={props.controller}
             />
           )
@@ -86,7 +119,7 @@ export default defineComponent({
           const updateValue = (color: string) => {
             props.graph.updateElemData(
               selected.value,
-              { [props.plugin.attr]: color },
+              { [plugin.attr]: color },
               false
             )
           }
@@ -109,7 +142,7 @@ export default defineComponent({
                 showPreview={true}
                 modes={['rgb', 'hex', 'hsl', 'hsv']}
                 actions={['confirm']}
-                disabled={props.plugin.disabled ?? false}
+                disabled={plugin.disabled ?? false}
                 onUpdateValue={updateValue}
                 onUpdateShow={updateShow}
                 onConfirm={onConfirm}
@@ -122,19 +155,29 @@ export default defineComponent({
         }
 
         default: {
-          console.error(
-            `[Sa error]: Unexpected plugin type ${props.plugin.type}.`
-          )
+          console.error(`[Sa error]: Unexpected plugin type ${plugin.type}.`)
 
           return (
-            <span class="bg-red-700 w-full block text-center">
-              {props.plugin.type}
+            <span class="bg-red-400 text-red-700 w-full h-full block text-center">
+              ERROR {plugin.type}
             </span>
           )
         }
       }
     }
+    const createPlugin = (): VNode => {
+      return createPluginContent()
+    }
 
-    return () => createPlugin()
+    return () => (
+      <div class="plugin-item">
+        {!props.isInsideGroup && (
+          <div class="plugin-item-label" title={props.plugin.title}>
+            {props.plugin.label}
+          </div>
+        )}
+        <div class="plugin-item-content">{createPlugin()}</div>
+      </div>
+    )
   },
 })

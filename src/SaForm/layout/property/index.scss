@@ -1,21 +1,25 @@
-.controller-container {
+.plugins-container {
+  padding: 8px 12px;
   margin-bottom: 4px;
 
-  .controller-item {
+  .plugin-label {
+    text-align: start;
+    color: var(--c-text-1);
+  }
+
+  .plugin-item {
     display: flex;
     vertical-align: baseline;
     line-height: 26px;
     margin-bottom: 1px;
+    padding: 4px 0;
 
     &-label {
-      width: 80px;
-      text-align: start;
-      text-indent: 0.75rem;
-      color: var(--c-text-1);
+      @extend .plugin-label;
+      width: 60px;
     }
-
-    &-plugin {
-      width: 150px;
+    &-content {
+      flex-grow: 1;
       text-align: start;
     }
 
@@ -31,7 +35,50 @@
     }
   }
 
-  .controller-item-plugin {
-    flex-grow: 1;
+  .plugin-group {
+    &-label {
+      @extend .plugin-label;
+      font-weight: 400;
+      line-height: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      .group-collapse-label {
+        min-width: 56px;
+      }
+      .group-collapse-button {
+        padding: 4px;
+        border-radius: 100%;
+        transition: background-color var(--c-transition),
+          transform var(--c-transition);
+        &:hover {
+          background-color: var(--c-bg-hover);
+        }
+        &.is-active {
+          transform: rotate(90deg);
+        }
+      }
+    }
+    &-collapse {
+      display: grid;
+      grid-template-rows: 1fr;
+      overflow: hidden;
+      transition: 0.3s;
+    }
+    &-content {
+      padding: 8px 0 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+
+      .plugin-item {
+        width: calc(50% - 4px);
+
+        &-content {
+          width: 100%;
+        }
+      }
+    }
   }
 }

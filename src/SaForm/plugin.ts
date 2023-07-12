@@ -9,16 +9,16 @@ export enum SaPluginType {
   Color = 'color',
   Cascader = 'cascader',
 }
-
-export interface SaPlugin {
+export interface SaPluginBasic {
   /** plugin label */
   label: string
-  /** plugin attribute, related to element's attr */
+  /** plugin full name, used on DOM's title */
+  title?: string
+}
+export interface SaPlugin extends SaPluginBasic {
   attr: string
   /** plugin display type */
   type: SaPluginType
-  /** plugin full name, used on DOM's title */
-  title?: string
   /** dialog component settings, needed when SaPlugin type is `Dialog` */
   dialog?: {
     /** component name */
@@ -31,6 +31,16 @@ export interface SaPlugin {
   /** plugin disable option */
   disabled?: boolean
 }
+export interface SaGroupPlugin extends SaPluginBasic {
+  /** group collapsed, default is `true` */
+  collapsed?: boolean
+  plugins: Record<string, SaPlugin>
+}
+export type SaPluginCombination = SaPlugin | SaGroupPlugin
+
+export const isGroupPlugin = (
+  plugin: SaPluginCombination
+): plugin is SaGroupPlugin => (plugin as any).plugins
 
 export const BasicPlugins = {
   'widget-id': {
@@ -44,25 +54,38 @@ export const BasicPlugins = {
     attr: 'name',
     type: SaPluginType.Input,
   },
-  'widget-width': {
-    label: 'width',
-    attr: 'width',
-    type: SaPluginType.Number,
+
+  'widget-size': {
+    label: 'size',
+    collapsed: false,
+    plugins: {
+      'widget-width': {
+        label: 'width',
+        attr: 'width',
+        type: SaPluginType.Number,
+      },
+      'widget-height': {
+        label: 'height',
+        attr: 'height',
+        type: SaPluginType.Number,
+      },
+    },
   },
-  'widget-height': {
-    label: 'height',
-    attr: 'height',
-    type: SaPluginType.Number,
-  },
-  'widget-x': {
-    label: 'x',
-    attr: 'x',
-    type: SaPluginType.Number,
-  },
-  'widget-y': {
-    label: 'y',
-    attr: 'y',
-    type: SaPluginType.Number,
+  'widget-position': {
+    label: 'position',
+    collapsed: false,
+    plugins: {
+      'widget-x': {
+        label: 'x',
+        attr: 'x',
+        type: SaPluginType.Number,
+      },
+      'widget-y': {
+        label: 'y',
+        attr: 'y',
+        type: SaPluginType.Number,
+      },
+    },
   },
   'widget-background': {
     label: 'BGD',
@@ -74,7 +97,8 @@ export const BasicPlugins = {
 
 export type SaPluginLayout = {
   [key in ElementType]: {
-    basic?: SaPlugin[]
-    extend?: SaPlugin[]
+    /** basic property plugins */
+    basic?: SaPluginCombination[]
+    extend?: SaPluginCombination[]
   }
 }
