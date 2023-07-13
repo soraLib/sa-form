@@ -55,11 +55,19 @@ export const getScrollContainer = (
   return parent
 }
 
+const hasVerticalScrollbar = (element: HTMLElement) =>
+  element.scrollHeight > element.clientHeight
+const hasHorizontalScrollbar = (element: HTMLElement) =>
+  element.scrollWidth > element.clientWidth
+const hasScrollbar = (element: HTMLElement) =>
+  hasVerticalScrollbar(element) || hasHorizontalScrollbar(element)
+
 export const usePan = (event: MouseEvent, graph: PcGraph) => {
   if (!graph.canvas.el) return
 
   const scroller = getScrollContainer(graph.canvas.el) as HTMLElement
   if (!scroller) return
+  const graphHasScrollbar = hasScrollbar(scroller)
 
   const pos = {
     left: scroller.scrollLeft,
@@ -69,6 +77,8 @@ export const usePan = (event: MouseEvent, graph: PcGraph) => {
   }
 
   const panMove = (event: MouseEvent) => {
+    if (!graphHasScrollbar) return
+
     graph.setPanning(true)
 
     const dx = event.clientX - pos.x
@@ -77,12 +87,11 @@ export const usePan = (event: MouseEvent, graph: PcGraph) => {
     scroller.scrollTop = pos.top - dy
     scroller.scrollLeft = pos.left - dx
   }
-  const panEnd = () => {
+  const panEnd = (event: MouseEvent) => {
     graph.setPanning(false)
     removePanListener()
 
-    if (scroller.scrollTop === pos.left && scroller.scrollTop === pos.top)
-      graph.setSelected()
+    if (event.clientX === pos.x && event.clientY === pos.y) graph.setSelected()
   }
 
   const addPanListener = () => {
