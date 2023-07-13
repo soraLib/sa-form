@@ -2,9 +2,8 @@ name: gen_website
 
 on:
   push:
-  release:
-    types: [published]
-    branches: [main]
+    branches:
+      - main
 
   workflow_dispatch:
 
