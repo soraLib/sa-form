@@ -23,7 +23,7 @@ export default defineComponent({
     const currentRef = computed(() => props.graph.history.index)
 
     return () => (
-      <div class="sa-form-footer flex justify-start p-1">
+      <div class="sa-form-footer flex justify-start items-center p-1">
         <NPopover
           class="history-popover"
           placement="top-start"

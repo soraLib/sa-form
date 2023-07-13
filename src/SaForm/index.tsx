@@ -54,14 +54,14 @@ export default defineComponent({
 
           <SaFormLayer class="shrink-0" graph={layout.graph} />
 
-          <main class="sa-bg flex item-center flex-col grow">
-            <section class="workspace-bg grow overflow-auto">
+          <main class="flex item-center flex-col grow overflow-auto">
+            <section class="sa-bg workspace-bg grow">
               <SaFormWorkspace
                 class="workspace w-full h-full"
                 graph={layout.graph}
               />
             </section>
-            <SaFormFooter class="sa-bg" graph={layout.graph} />
+            <SaFormFooter class="sa-bg mt-1" graph={layout.graph} />
           </main>
 
           <SaFormProperty
