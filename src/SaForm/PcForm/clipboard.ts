@@ -5,6 +5,7 @@ import type { BasicClipBoard, Position } from '../clipboard'
 import type { PcGraph } from './graph'
 
 export class PcClipBoard implements BasicClipBoard {
+  graph: PcGraph
   clips:
     | {
         elements: PcElement[]
@@ -12,30 +13,30 @@ export class PcClipBoard implements BasicClipBoard {
       }
     | undefined = undefined
 
+  constructor(graph: PcGraph) {
+    this.graph = graph
+  }
+
   isEmpty(clip = this.clips): clip is undefined {
     return !this.clips?.elements.length
   }
 
-  copy(
-    graph: PcGraph,
-    options?: { useLocalStorage?: boolean; deep?: boolean }
-  ) {
+  copy(options?: { useLocalStorage?: boolean; deep?: boolean }) {
     this.clips = {
-      elements: cloneDeep(graph.selected), // TODO: options
+      elements: cloneDeep(this.graph.selected), // TODO: options
       type: 'copy',
     }
   }
 
-  cut(graph: PcGraph, options?: { useLocalStorage?: boolean; deep?: boolean }) {
+  cut(options?: { useLocalStorage?: boolean; deep?: boolean }) {
     this.clips = {
-      elements: cloneDeep(graph.selected), // TODO: options
+      elements: cloneDeep(this.graph.selected), // TODO: options
       type: 'cut',
     }
   }
 
   paste(
-    graph: PcGraph,
-    parent = graph.canvas,
+    parent: PcElement,
     position: Position,
     options?: {
       nodeProps?: (element: PcElement) => Partial<PcElement['attrs']>
@@ -51,7 +52,7 @@ export class PcClipBoard implements BasicClipBoard {
         /* TODO: position offset */
         attrs: {
           ...ele.attrs,
-          id: graph.getNextId(),
+          id: this.graph.getNextId(),
           x: position.left,
           y: position.top,
         },
@@ -64,7 +65,7 @@ export class PcClipBoard implements BasicClipBoard {
       return paste
     })
 
-    graph.addChildren(newPasteElements, parent)
+    this.graph.addChildren(newPasteElements, parent)
 
     return newPasteElements
   }

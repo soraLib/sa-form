@@ -7,6 +7,7 @@ export type Position = {
 }
 
 export declare interface BasicClipBoard {
+  graph: BasicGraph
   clips:
     | {
         elements: BasicElement[]
@@ -16,18 +17,10 @@ export declare interface BasicClipBoard {
 
   isEmpty(): boolean
 
-  copy(
-    graph: BasicGraph,
-    options?: { useLocalStorage?: boolean; deep?: boolean }
-  ): void
-  cut(
-    graph: BasicGraph,
-    options?: { useLocalStorage?: boolean; deep?: boolean }
-  ): void
-
+  copy(options?: { useLocalStorage?: boolean; deep?: boolean }): void
+  cut(options?: { useLocalStorage?: boolean; deep?: boolean }): void
   paste(
-    graph: BasicGraph,
-    parent: BasicElement | undefined,
+    parent: BasicElement,
     position: Position,
     options?: {
       nodeProps?: (element: BasicElement) => Partial<BasicElement['attrs']>
