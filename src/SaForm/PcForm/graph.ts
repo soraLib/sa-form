@@ -100,7 +100,7 @@ export class PcGraph extends Events implements BasicGraph {
 
     this.type = 'PcForm'
     this.history = new PcRecordStore()
-    this.clipboard = new PcClipBoard()
+    this.clipboard = new PcClipBoard(this)
     this.nextId = '1'
     this.canvas = new PcElement({
       parent: undefined,

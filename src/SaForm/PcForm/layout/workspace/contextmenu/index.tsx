@@ -69,22 +69,19 @@ export default defineComponent({
 
       switch (select.value) {
         case SaFormContextmenuItem.Copy: {
-          props.graph.clipboard.copy(props.graph)
+          props.graph.clipboard.copy()
 
           break
         }
 
         case SaFormContextmenuItem.Cut: {
-          // TODO:
+          props.graph.clipboard.cut()
+
           break
         }
 
         case SaFormContextmenuItem.Paste: {
-          props.graph.clipboard.paste(
-            props.graph,
-            selected.value,
-            position.value!
-          )
+          props.graph.clipboard.paste(selected.value, position.value!)
 
           break
         }
