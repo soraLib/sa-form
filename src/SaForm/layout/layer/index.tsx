@@ -28,8 +28,8 @@ export default defineComponent({
       props.graph.selected.map(({ key }) => key)
     )
     const onUpdateSelectedKeys = (keys: string[]) => {
-      const [head] = props.graph.setSelected(keys)
-      props.graph.scrollIntoView(head)
+      const selected = props.graph.setSelected(keys)
+      if (selected) props.graph.scrollIntoView(selected[0])
     }
 
     // filter

@@ -17,8 +17,16 @@ export declare interface BasicClipBoard {
 
   isEmpty(): boolean
 
-  copy(options?: { useLocalStorage?: boolean; deep?: boolean }): void
-  cut(options?: { useLocalStorage?: boolean; deep?: boolean }): void
+  copy(options?: {
+    useLocalStorage?: boolean
+    deep?: boolean
+    elements?: BasicElement[]
+  }): void
+  cut(options?: {
+    useLocalStorage?: boolean
+    deep?: boolean
+    elements?: BasicElement[]
+  }): void
   paste(
     parent: BasicElement,
     position: Position,

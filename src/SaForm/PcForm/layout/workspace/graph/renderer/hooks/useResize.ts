@@ -133,7 +133,6 @@ export const useElementStickReszie = (
   }
   const stickUp = () => {
     const record = new PcRecord({
-      time: new Date(),
       type: BasicRecordType.Attr,
       data: [
         {

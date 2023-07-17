@@ -1,5 +1,10 @@
 import { computed, defineComponent, ref, watch } from 'vue'
-import { ClipboardOutline, CopyOutline, TrashOutline } from '@vicons/ionicons5'
+import {
+  ClipboardOutline,
+  CopyOutline,
+  CutOutline,
+  TrashOutline,
+} from '@vicons/ionicons5'
 import { containerElements } from '../../../element'
 
 import { SaFormContextmenuItem } from './shared'
@@ -47,6 +52,13 @@ export default defineComponent({
         disabled: isSelectingCanvas.value,
         type: 'primary',
         value: SaFormContextmenuItem.Copy,
+      },
+      {
+        icon: CutOutline,
+        label: 'Cut',
+        disabled: isSelectingCanvas.value,
+        type: 'warning',
+        value: SaFormContextmenuItem.Cut,
       },
       {
         icon: ClipboardOutline,
