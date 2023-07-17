@@ -1,4 +1,3 @@
-import { PcGraph } from './graph'
 import type {
   BasicRecord,
   BasicRecordDataList,
@@ -11,8 +10,8 @@ export class PcRecord implements BasicRecord {
   time: Date
   data: BasicRecordDataList
 
-  constructor(config: PcRecord) {
-    this.time = config.time
+  constructor(config: Partial<PcRecord> & Omit<PcRecord, 'time'>) {
+    this.time = config.time ?? new Date()
     this.type = config.type
     this.data = config.data
   }

@@ -3,11 +3,11 @@ import type { BasicElement, BasicElementAttributes } from './element'
 export enum BasicRecordType {
   /** init graph */
   Init,
-  /** add element */
+  /** add elements */
   Add,
-  /** delete element */
+  /** delete elements */
   Delete,
-  /** modify element attribute */
+  /** modify elements attribute */
   Attr,
 }
 
