@@ -1,3 +1,3 @@
-import { NativePcSideStencil } from './stencil'
+import { pcStencil } from './stencil'
 
-export const getNativeSideStencil = () => NativePcSideStencil
+export const getPcStencil = () => pcStencil

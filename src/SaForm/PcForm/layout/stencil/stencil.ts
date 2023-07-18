@@ -11,14 +11,24 @@ export const pcStencilIcons: Record<ElementType, string> = {
   [ElementType.Select]: 'iconxialabianjikuang',
 }
 
-export const NativePcSideStencil: NativeStencil = <Graph = PcGraph>(
-  graph: Graph
-) => ({
+export const pcStencil: NativeStencil = <Graph = PcGraph>(graph: Graph) => ({
   groups: [
+    { name: 'Container', collapsable: true },
     { name: 'Normal', collapsable: true },
-    // { name: 'Container', collapsable: true }
   ],
   nodes: {
+    Container: [
+      {
+        icon: pcStencilIcons[ElementType.Container],
+        attrs: {
+          type: ElementType.Container,
+          name: 'Container',
+          width: 200,
+          height: 160,
+          background: '',
+        },
+      },
+    ],
     Normal: [
       {
         icon: pcStencilIcons[ElementType.Text],
@@ -27,7 +37,7 @@ export const NativePcSideStencil: NativeStencil = <Graph = PcGraph>(
           name: 'Text',
           width: 80,
           height: 60,
-          background: '#eee',
+          background: '',
         },
       },
       {
@@ -37,7 +47,7 @@ export const NativePcSideStencil: NativeStencil = <Graph = PcGraph>(
           name: 'Button',
           width: 80,
           height: 40,
-          background: '#eee',
+          background: '',
         },
       },
       {
@@ -47,7 +57,7 @@ export const NativePcSideStencil: NativeStencil = <Graph = PcGraph>(
           name: 'Select',
           width: 100,
           height: 40,
-          background: '#eee',
+          background: '',
           options: [
             { label: 'Option A', value: 'Value A' },
             { label: 'Option B', value: 'Value B' },

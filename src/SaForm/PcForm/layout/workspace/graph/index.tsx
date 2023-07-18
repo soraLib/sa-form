@@ -1,7 +1,7 @@
 import { defineComponent } from 'vue'
 import { findNode } from 'sugar-sajs'
 import { setDataTransfer } from '../../../../utils/stencil'
-import { PcElement, containerElements } from '../../../element'
+import { PcElement, isContainer } from '../../../element'
 
 import ElementRenderer from './renderer/element-renderer'
 import { gridFloor } from './renderer/hooks/utils'
@@ -45,7 +45,7 @@ export default defineComponent({
         (el) => el.attrs.id === targetId
       )
 
-      if (!parent || !containerElements.includes(parent?.attrs.type)) return
+      if (!parent || !isContainer(parent)) return
 
       const attrs: StencilAttrs = JSON.parse(elementMessage)
 

@@ -18,6 +18,10 @@ export function isPcElementAttribute(
 }
 
 export const containerElements = [ElementType.Canvas, ElementType.Container]
+export const isContainerType = (type: ElementType) =>
+  containerElements.includes(type)
+export const isContainer = (element: PcElement) =>
+  isContainerType(element.attrs.type)
 
 /** pc element */
 export interface IPcElement extends BasicElement {
@@ -36,7 +40,8 @@ export class PcElement implements IPcElement {
     this.parent = config.parent
     this.attrs = cloneDeep(config.attrs)
     this.key = config.attrs.id
-    if (config.children) this.children = config.children
+    if (config.children || isContainerType(config.attrs.type))
+      this.children = config.children ?? []
   }
 
   setEl(el?: HTMLElement) {

@@ -27,8 +27,7 @@ export const createGhostElement = (attrs: StencilAttrs) => {
   ghost.style.cssText = `
     width: ${attrs.width}px;
     height: ${attrs.height}px;
-    border: 1px solid green;
-    background: #eee;
+    border: 1px solid var(--c-brand);
     position: absolute;
     z-index: 1000;
     display: flex;
