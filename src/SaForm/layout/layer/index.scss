@@ -25,6 +25,9 @@
       color: var(--c-brand) !important;
     }
   }
+  [is-empty='true'] .n-tree-node-switcher {
+    opacity: 0;
+  }
   [layer-tree-status='is-reference'] {
     border-color: var(--c-red);
     background-color: rgba(237, 60, 80, 0.15) !important;

@@ -5,6 +5,14 @@ import type { SaPluginLayout } from '../plugin'
 import type { PcGraph } from './graph'
 import type { PcElementAttributes } from './element'
 
+const basicPlugins = [
+  BasicPlugins['widget-id'],
+  BasicPlugins['widget-name'],
+  BasicPlugins['widget-background'],
+  BasicPlugins['widget-size'],
+  BasicPlugins['widget-position'],
+]
+
 export const PcPlugin: SaPluginLayout = {
   [ElementType.Canvas]: {
     basic: [
@@ -15,41 +23,52 @@ export const PcPlugin: SaPluginLayout = {
     ],
   },
   [ElementType.Container]: {
-    basic: [
-      BasicPlugins['widget-id'],
-      BasicPlugins['widget-name'],
-      BasicPlugins['widget-background'],
-      BasicPlugins['widget-size'],
-      BasicPlugins['widget-position'],
-    ],
+    basic: [...basicPlugins],
   },
   [ElementType.Text]: {
-    basic: [
-      BasicPlugins['widget-id'],
-      BasicPlugins['widget-name'],
-      BasicPlugins['widget-background'],
-      BasicPlugins['widget-size'],
-      BasicPlugins['widget-position'],
-    ],
+    basic: [...basicPlugins],
+  },
+  [ElementType.Input]: {
+    basic: [...basicPlugins],
+  },
+  [ElementType.Textarea]: {
+    basic: [...basicPlugins],
   },
   [ElementType.Button]: {
-    basic: [
-      BasicPlugins['widget-id'],
-      BasicPlugins['widget-name'],
-      BasicPlugins['widget-background'],
-      BasicPlugins['widget-size'],
-      BasicPlugins['widget-position'],
-    ],
+    basic: [...basicPlugins],
+  },
+  [ElementType.Radio]: {
+    basic: [...basicPlugins],
+  },
+  [ElementType.Checkbox]: {
+    basic: [...basicPlugins],
   },
   [ElementType.Select]: {
-    basic: [
-      BasicPlugins['widget-id'],
-      BasicPlugins['widget-name'],
-      BasicPlugins['widget-background'],
-      BasicPlugins['widget-size'],
-      BasicPlugins['widget-position'],
-      SelectPlugins['select-options'],
-    ],
+    basic: [...basicPlugins, SelectPlugins['select-options']],
+  },
+  [ElementType.Table]: {
+    basic: [...basicPlugins],
+  },
+  [ElementType.Image]: {
+    basic: [...basicPlugins],
+  },
+  [ElementType.Tab]: {
+    basic: [...basicPlugins],
+  },
+  [ElementType.Calendar]: {
+    basic: [...basicPlugins],
+  },
+  [ElementType.Contextmenu]: {
+    basic: [...basicPlugins],
+  },
+  [ElementType.Tree]: {
+    basic: [...basicPlugins],
+  },
+  [ElementType.Map]: {
+    basic: [...basicPlugins],
+  },
+  [ElementType.Chart]: {
+    basic: [...basicPlugins],
   },
 }
 

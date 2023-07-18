@@ -2,17 +2,23 @@ import type { CSSProperties } from 'vue'
 
 /** element types */ // TODO: split pc types
 export enum ElementType {
-  /** pc form canvas */
   Canvas = 1,
-  /** pc form text */
-  Text,
-  /** pc form button */
-  Button,
-  /** pc form select */
-  Select,
-  /** pc form container */
   Container,
-  /** extra element type */
+  Text,
+  Input,
+  Textarea,
+  Button,
+  Radio,
+  Checkbox,
+  Select,
+  Table,
+  Image,
+  Tab,
+  Calendar,
+  Contextmenu,
+  Tree,
+  Map,
+  Chart,
 }
 
 /** basic element attributes */
