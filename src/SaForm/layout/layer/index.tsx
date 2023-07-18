@@ -3,6 +3,7 @@ import { NIcon, NInput, NPopover, NScrollbar, NSwitch, NTree } from 'naive-ui'
 import { ChevronBack, Funnel, Layers } from '@vicons/ionicons5'
 import { useStorage } from '@vueuse/core'
 import { type BasicElement, ElementType } from '../../element'
+import { isContainer } from '../../PcForm/element'
 import type { PropType } from 'vue'
 import type { BasicGraph } from '../../graph'
 
@@ -111,6 +112,7 @@ export default defineComponent({
                 node-props={({ option }: { option: BasicElement }) => {
                   const index = props.graph.selected.indexOf(option)
                   return {
+                    'is-empty': isContainer(option) && !option.children?.length,
                     'layer-tree-status':
                       index === -1
                         ? 'not-selected'

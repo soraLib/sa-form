@@ -17,7 +17,11 @@ export function isPcElementAttribute(
   return Reflect.has(elem.attrs, attr)
 }
 
-export const containerElements = [ElementType.Canvas, ElementType.Container]
+export const containerElements = [
+  ElementType.Canvas,
+  ElementType.Container,
+  ElementType.Tab,
+]
 export const isContainerType = (type: ElementType) =>
   containerElements.includes(type)
 export const isContainer = (element: PcElement) =>
