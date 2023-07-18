@@ -33,14 +33,20 @@ export interface BasicElementAttributes {
   x: number
   /** offset Y to parent element */
   y: number
-  /** element width `px` */
+  /** width `px` */
   width: number
-  /** element height `px` */
+  /** height `px` */
   height: number
-  /** element background */
+  /** background */
   background?: CSSProperties['background']
-  /** element display name */
+  /** display name */
   display?: string
+  /** border style */
+  'border-style'?: CSSProperties['borderStyle']
+  /** border width */
+  'border-width'?: number
+  /** border color */
+  'border-color'?: CSSProperties['borderColor']
 }
 
 /** basic element */
