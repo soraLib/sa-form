@@ -43,21 +43,22 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      cursor: pointer;
 
       .group-collapse-label {
         min-width: 56px;
       }
-      .group-collapse-button {
+      .group-collapse-caret {
         padding: 4px;
         border-radius: 100%;
-        transition: background-color var(--c-transition),
-          transform var(--c-transition);
-        &:hover {
-          background-color: var(--c-bg-hover);
-        }
-        &.is-active {
-          transform: rotate(90deg);
-        }
+        transition: all var(--c-transition);
+      }
+      &:hover .group-collapse-caret {
+        background-color: var(--c-bg-hover);
+        color: var(--c-brand);
+      }
+      &.is-collapsed .group-collapse-caret {
+        transform: rotate(90deg);
       }
     }
     &-collapse {
