@@ -1,7 +1,7 @@
 import { PcGraph } from './PcForm/graph'
 
 import { PcHeaderToolkits } from './PcForm/layout/header'
-import { getNativeSideStencil } from './PcForm/layout/stencil'
+import { getPcStencil } from './PcForm/layout/stencil'
 import PcWorkspace from './PcForm/layout/workspace'
 import { ElementType } from './element'
 import { PcPlugin, pcPluginValueChange } from './PcForm/plugin'
@@ -25,7 +25,7 @@ const createPcFormConfig = () => ({
     },
   }),
   toolkits: PcHeaderToolkits,
-  stencil: getNativeSideStencil(),
+  stencil: getPcStencil(),
   workspace: PcWorkspace as any,
   controller: {
     plugins: PcPlugin,
