@@ -70,7 +70,7 @@ linear-gradient(90deg, ${boldLineColor} 1px, transparent 0)`,
 
     return () => (
       <div class="relative">
-        <div ref="scrollerRef" class="w-full h-full overflow-auto">
+        <div class="w-full h-full overflow-auto">
           <div
             class={useClazs('relative workspace-container', {
               'cursor-move': props.graph.isDragging,
