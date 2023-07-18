@@ -47,59 +47,56 @@ function vdrStick(stick: Stick) {
 /**
  * OnMousedown element handler.
  */
-export const useElementHandler = (
-  event: MouseEvent,
-  element: PcElement,
-  graph: PcGraph
-) => {
-  event.stopPropagation()
+export const useElementHandler =
+  (element: PcElement, graph: PcGraph) => (event: MouseEvent) => {
+    event.stopPropagation()
 
-  if (event.button === 2) {
-    // contextmenu event
-    graph.setSelected(element)
-    return
-  }
-
-  if (!element.parent) {
-    // canvas
-    const selectionModifer = graph.selection.modifier
-    const isSelectingKey =
-      graph.selection.enabled &&
-      ((event.ctrlKey && selectionModifer === ModifierKey.Ctrl) ||
-        (event.altKey && selectionModifer === ModifierKey.Alt) ||
-        (event.shiftKey && selectionModifer === ModifierKey.Shift))
-    if (isSelectingKey) {
-      // multiple select
-      useElementSelect(event, element, graph)
-    } else {
-      // panning
-      usePan(event, graph)
+    if (event.button === 2) {
+      // contextmenu event
+      graph.setSelected(element)
+      return
     }
 
-    return
-  }
+    if (!element.parent) {
+      // canvas
+      const selectionModifer = graph.selection.modifier
+      const isSelectingKey =
+        graph.selection.enabled &&
+        ((event.ctrlKey && selectionModifer === ModifierKey.Ctrl) ||
+          (event.altKey && selectionModifer === ModifierKey.Alt) ||
+          (event.shiftKey && selectionModifer === ModifierKey.Shift))
+      if (isSelectingKey) {
+        // multiple select
+        useElementSelect(event, element, graph)
+      } else {
+        // panning
+        usePan(event, graph)
+      }
 
-  if (event.ctrlKey) {
-    const index = graph.selected.indexOf(element)
-    if (index !== -1) {
-      if (index === 0) {
-        graph.selected = graph.selected.slice(1)
-      } else {
-        aheadSelected(element, graph)
-      }
-    } else {
-      if (graph.selected[0] === graph.canvas) {
-        graph.selected = [element]
-      } else {
-        graph.selected.unshift(element)
-      }
+      return
     }
 
-    return
-  }
+    if (event.ctrlKey) {
+      const index = graph.selected.indexOf(element)
+      if (index !== -1) {
+        if (index === 0) {
+          graph.selected = graph.selected.slice(1)
+        } else {
+          aheadSelected(element, graph)
+        }
+      } else {
+        if (graph.selected[0] === graph.canvas) {
+          graph.selected = [element]
+        } else {
+          graph.selected.unshift(element)
+        }
+      }
 
-  useElementDrag(event, element, graph)
-}
+      return
+    }
+
+    useElementDrag(event, element, graph)
+  }
 
 export default defineComponent({
   name: 'ElementRenderer',
@@ -126,6 +123,8 @@ export default defineComponent({
         props.graph.selected[0] === props.element
     )
 
+    const styles = useElementStyle(props.element)
+
     return () => (
       <div
         id={props.element.attrs.id}
@@ -135,10 +134,10 @@ export default defineComponent({
             (e) => e.attrs.id === props.element.attrs.id
           ),
           'is-reference': isReference.value,
-          graph: props.graph.canvas.attrs.id === props.element.attrs.id,
+          'is-graph': props.graph.canvas.attrs.id === props.element.attrs.id,
         })}
-        style={useElementStyle(props.element)}
-        onMousedown={(e) => useElementHandler(e, props.element, props.graph)}
+        style={styles.value}
+        onMousedown={useElementHandler(props.element, props.graph)}
       >
         {
           /* resizer */

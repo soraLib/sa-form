@@ -2,6 +2,12 @@ import { ElementType } from '../../../element'
 import { PcElement } from '../../element'
 
 export const createMockPcCanvas: () => PcElement = () => {
+  const commonBorderProperties = {
+    'border-style': 'solid',
+    'border-width': 1,
+    'border-color': 'rgba(82, 82, 89, 0.68)',
+  }
+
   const canvas = new PcElement({
     parent: undefined,
     children: [],
@@ -28,6 +34,8 @@ export const createMockPcCanvas: () => PcElement = () => {
       x: 200,
       y: 100,
       background: '#50DA58',
+      'border-style': 'none',
+      'border-color': '',
     },
   })
 
@@ -42,6 +50,9 @@ export const createMockPcCanvas: () => PcElement = () => {
       x: 150,
       y: 200,
       background: '',
+      'border-width': 2,
+      'border-style': 'dotted',
+      'border-color': '#98c379',
     },
   })
 
@@ -56,6 +67,8 @@ export const createMockPcCanvas: () => PcElement = () => {
       x: 50,
       y: 400,
       background: '#EFAE46',
+      ...commonBorderProperties,
+      'border-width': 4,
     },
     children: [],
   })
@@ -81,6 +94,7 @@ export const createMockPcCanvas: () => PcElement = () => {
           value: 'Value B',
         },
       ],
+      ...commonBorderProperties,
     },
   })
 

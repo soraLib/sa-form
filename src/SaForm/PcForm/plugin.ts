@@ -11,6 +11,7 @@ const basicPlugins = [
   BasicPlugins['widget-background'],
   BasicPlugins['widget-size'],
   BasicPlugins['widget-position'],
+  BasicPlugins['widget-border'],
 ]
 
 export const PcPlugin: SaPluginLayout = {

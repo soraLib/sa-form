@@ -6,6 +6,7 @@ import {
   NInputGroup,
   NInputGroupLabel,
   NInputNumber,
+  NSelect,
 } from 'naive-ui'
 import { SaPluginType, isGroupPlugin } from '../../plugin'
 import { isElementAttribute } from '../../utils/element'
@@ -68,6 +69,7 @@ export default defineComponent({
               value={modelValue.value}
               onUpdateValue={handlePluginValueChange}
               disabled={plugin.disabled ?? false}
+              placeholder=""
             />
           )
 
@@ -90,6 +92,30 @@ export default defineComponent({
               value={modelValue.value}
               onUpdateValue={handlePluginValueChange}
               disabled={plugin.disabled ?? false}
+              placeholder=""
+            />
+          )
+
+          if (props.isInsideGroup)
+            return (
+              <NInputGroup>
+                <NInputGroupLabel>{props.plugin.label}</NInputGroupLabel>
+                {Input}
+              </NInputGroup>
+            )
+
+          return Input
+        }
+
+        case SaPluginType.Select: {
+          const Input = (
+            <NSelect
+              class="sa-plugin"
+              value={modelValue.value}
+              onUpdateValue={handlePluginValueChange}
+              filterable
+              disabled={plugin.disabled ?? false}
+              options={plugin.options ?? []}
             />
           )
 

@@ -15,6 +15,10 @@ export interface SaPluginBasic {
   /** plugin full name, used on DOM's title */
   title?: string
 }
+export type SaPluginOption = {
+  label: string
+  value: any
+}
 export interface SaPlugin extends SaPluginBasic {
   attr: string
   /** plugin display type */
@@ -26,6 +30,8 @@ export interface SaPlugin extends SaPluginBasic {
     /** dialog title, set plugin label in default */
     title?: string
   }
+  /** options for `Select` */
+  options?: SaPluginOption[]
   /** value filter for display format data */
   filter?: (value: any) => string
   /** plugin disable option */
@@ -92,6 +98,65 @@ export const BasicPlugins = {
     title: 'background',
     attr: 'background',
     type: SaPluginType.Color,
+  },
+  'widget-border': {
+    label: 'border',
+    collapsed: false,
+    plugins: {
+      'border-style': {
+        label: 'style',
+        attr: 'border-style',
+        type: SaPluginType.Select,
+        options: [
+          {
+            label: 'none',
+            value: 'none',
+          },
+          {
+            label: 'dashed',
+            value: 'dashed',
+          },
+          {
+            label: 'dotted',
+            value: 'dotted',
+          },
+          {
+            label: 'solid',
+            value: 'solid',
+          },
+          {
+            label: 'double',
+            value: 'double',
+          },
+          {
+            label: 'inset',
+            value: 'inset',
+          },
+          {
+            label: 'outset',
+            value: 'outset',
+          },
+          {
+            label: 'groove',
+            value: 'groove',
+          },
+          {
+            label: 'ridge',
+            value: 'ridge',
+          },
+        ] as SaPluginOption[],
+      },
+      'border-width': {
+        label: 'width',
+        attr: 'border-width',
+        type: SaPluginType.Number,
+      },
+      'border-color': {
+        label: 'color',
+        attr: 'border-color',
+        type: SaPluginType.Color,
+      },
+    },
   },
 } as const
 

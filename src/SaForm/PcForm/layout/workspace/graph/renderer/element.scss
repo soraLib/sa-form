@@ -52,7 +52,7 @@
     display: none;
   }
 
-  &:not(.graph) {
+  &:not(.is-graph) {
     border: 2px solid rgba(0, 0, 0, 0);
 
     &:hover {
@@ -60,7 +60,7 @@
       z-index: 99;
     }
   }
-  &.is-selected:not(.graph) {
+  &.is-selected:not(.is-graph) {
     border: 2px solid var(--c-brand);
     z-index: 99;
 
