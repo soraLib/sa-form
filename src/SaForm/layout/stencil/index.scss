@@ -35,10 +35,10 @@
   text-align: start;
 }
 .stencil-group {
-  border-bottom: 1px solid #dfe2e5;
+  border-bottom: 1px solid var(--c-divider);
   padding: 10px 0;
 
-  .stencil-group__header {
+  .stencil-group-header {
     display: flex;
     align-items: center;
     gap: 4px;
@@ -49,24 +49,29 @@
     height: 20px;
     line-height: 20px;
     box-sizing: border-box;
+    cursor: pointer;
 
     .caret {
-      transition: all 0.2s ease-in-out;
+      transition: all var(--c-transition);
+      padding: 4px;
+      border-radius: 100%;
+    }
+
+    &:hover .caret {
+      background-color: var(--c-bg-hover);
+      color: var(--c-brand);
     }
   }
 
-  .stencil-group__content {
+  .stencil-group-content {
     display: flex;
     justify-content: flex-start;
     padding: 10px 5px 0 12px;
   }
 
-  &.collapsed {
+  &.is-collapsed {
     .caret {
       transform: rotate(-90deg);
-    }
-    .stencil-group__content {
-      display: none;
     }
   }
 }

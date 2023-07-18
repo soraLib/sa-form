@@ -1,7 +1,7 @@
 import { defineComponent } from 'vue'
 
 import { CaretDown } from '@vicons/ionicons5'
-import { NIcon } from 'naive-ui'
+import { NCollapseTransition, NIcon } from 'naive-ui'
 import { useToggle } from '@vueuse/core'
 import { useClazs } from '../../utils/class'
 import StencilItem from './item'
@@ -20,20 +20,24 @@ export default defineComponent({
     const [collapsed, toggleGroupCollapse] = useToggle(false)
 
     return () => (
-      <div class={useClazs('stencil-group', { collapsed: collapsed.value })}>
+      <div
+        class={useClazs('stencil-group', { 'is-collapsed': collapsed.value })}
+      >
         <div
-          class="stencil-group__header select-none"
+          class="stencil-group-header select-none"
           onClick={() => toggleGroupCollapse()}
         >
           <NIcon class="caret" size={12} component={CaretDown} />
           <span class="name">{props.group[0]}</span>
         </div>
 
-        <div class="stencil-group__content">
-          {props.group[1].map((item) => (
-            <StencilItem key={item.attrs.name} item={item} />
-          ))}
-        </div>
+        <NCollapseTransition show={!collapsed.value}>
+          <div class="stencil-group-content">
+            {props.group[1].map((item) => (
+              <StencilItem key={item.attrs.name} item={item} />
+            ))}
+          </div>
+        </NCollapseTransition>
       </div>
     )
   },

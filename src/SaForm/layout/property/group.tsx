@@ -32,20 +32,17 @@ export default defineComponent({
 
     return () => (
       <div class="plugin-group">
-        <div class="plugin-group-label">
+        <div
+          class={useClazs('plugin-group-label', {
+            'is-collapsed': !visible.value,
+          })}
+          onClick={() => toggleVisible()}
+        >
           <span class="group-collapse-label">{props.plugin.label}</span>
 
-          <NButton
-            class={useClazs('group-collapse-button', {
-              'is-active': visible.value,
-            })}
-            onClick={() => toggleVisible()}
-            text
-          >
-            <NIcon size={16}>
-              <ChevronForward />
-            </NIcon>
-          </NButton>
+          <NIcon class="group-collapse-caret" size={16}>
+            <ChevronForward />
+          </NIcon>
         </div>
 
         <NCollapseTransition show={visible.value}>
