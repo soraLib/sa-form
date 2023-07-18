@@ -76,4 +76,7 @@
       transform: rotate(-90deg);
     }
   }
+  &:last-child {
+    border-bottom: none;
+  }
 }

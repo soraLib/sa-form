@@ -1,6 +1,6 @@
 import { Transition, computed, defineComponent, ref } from 'vue'
 import { FlashOutline } from '@vicons/ionicons5'
-import { NIcon, NInput } from 'naive-ui'
+import { NIcon, NInput, NScrollbar } from 'naive-ui'
 import StencilGroup from './group'
 import type { PropType } from 'vue'
 import type { PartialOptional } from 'sugar-sajs'
@@ -117,14 +117,16 @@ export default defineComponent({
               }}
             </NInput>
 
-            {
-              // groups
-              this.filteredNativeStencilGroups
-                ?.map(
-                  (group) => group[1].length && <StencilGroup group={group} />
-                )
-                .filter(Boolean)
-            }
+            <NScrollbar>
+              {
+                // groups
+                this.filteredNativeStencilGroups
+                  ?.map(
+                    (group) => group[1].length && <StencilGroup group={group} />
+                  )
+                  .filter(Boolean)
+              }
+            </NScrollbar>
           </div>
         )}
       </Transition>

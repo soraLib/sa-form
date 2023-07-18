@@ -75,26 +75,6 @@ export const pcStencil: NativeStencil = <Graph = PcGraph>(graph: Graph) => ({
           background: '',
         },
       },
-      {
-        icon: pcStencilIcons[ElementType.Calendar],
-        attrs: {
-          type: ElementType.Calendar,
-          name: 'Calendar',
-          width: 200,
-          height: 100,
-          background: '',
-        },
-      },
-      {
-        icon: pcStencilIcons[ElementType.Map],
-        attrs: {
-          type: ElementType.Map,
-          name: 'Map',
-          width: 200,
-          height: 100,
-          background: '',
-        },
-      },
     ],
     Input: [
       {
@@ -188,6 +168,26 @@ export const pcStencil: NativeStencil = <Graph = PcGraph>(graph: Graph) => ({
         attrs: {
           type: ElementType.Chart,
           name: 'Chart',
+          width: 200,
+          height: 100,
+          background: '',
+        },
+      },
+      {
+        icon: pcStencilIcons[ElementType.Calendar],
+        attrs: {
+          type: ElementType.Calendar,
+          name: 'Calendar',
+          width: 200,
+          height: 100,
+          background: '',
+        },
+      },
+      {
+        icon: pcStencilIcons[ElementType.Map],
+        attrs: {
+          type: ElementType.Map,
+          name: 'Map',
           width: 200,
           height: 100,
           background: '',
