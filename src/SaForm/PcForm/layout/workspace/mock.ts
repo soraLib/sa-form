@@ -36,6 +36,7 @@ export const createMockPcCanvas: () => PcElement = () => {
       background: '#50DA58',
       'border-style': 'none',
       'border-color': '',
+      'border-width': 1,
     },
   })
 
@@ -68,7 +69,7 @@ export const createMockPcCanvas: () => PcElement = () => {
       y: 400,
       background: '#EFAE46',
       ...commonBorderProperties,
-      'border-width': 4,
+      'border-width': 8,
     },
     children: [],
   })

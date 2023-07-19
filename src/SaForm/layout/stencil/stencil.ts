@@ -11,8 +11,6 @@ export namespace Stencil {
     setDataTransfer(evt, 'effectAllowed', 'copy', false)
     evt.dataTransfer?.setData('element', JSON.stringify(attrs))
 
-    console.log('createGhostElement', attrs)
-
     const ghost = createGhostElement(attrs)
     evt.dataTransfer?.setDragImage(ghost, attrs.width / 2, attrs.height / 2)
 

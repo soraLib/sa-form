@@ -10,6 +10,7 @@ import {
 } from 'naive-ui'
 import { SaPluginType, isGroupPlugin } from '../../plugin'
 import { isElementAttribute } from '../../utils/element'
+import { useClazs } from '../../utils/class'
 import SaDialog from './dialog'
 import type { PropType, VNode } from 'vue'
 import type { SaPlugin } from '../../plugin'
@@ -87,7 +88,7 @@ export default defineComponent({
         case SaPluginType.Number: {
           const Input = (
             <NInputNumber
-              class="sa-plugin"
+              class="sa-plugin w-full"
               showButton={false}
               value={modelValue.value}
               onUpdateValue={handlePluginValueChange}
@@ -196,7 +197,9 @@ export default defineComponent({
     }
 
     return () => (
-      <div class="plugin-item">
+      <div
+        class={useClazs('plugin-item', { 'is-inline': !!props.plugin.inline })}
+      >
         {!props.isInsideGroup && (
           <div class="plugin-item-label" title={props.plugin.title}>
             {props.plugin.label}
