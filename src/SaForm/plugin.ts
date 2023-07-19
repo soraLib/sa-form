@@ -36,6 +36,8 @@ export interface SaPlugin extends SaPluginBasic {
   filter?: (value: any) => string
   /** plugin disable option */
   disabled?: boolean
+  /** displayed inline, only works in `SaGroupPlugin` */
+  inline?: boolean
 }
 export interface SaGroupPlugin extends SaPluginBasic {
   /** group collapsed, default is `true` */
@@ -155,6 +157,7 @@ export const BasicPlugins = {
         label: 'color',
         attr: 'border-color',
         type: SaPluginType.Color,
+        inline: true,
       },
     },
   },

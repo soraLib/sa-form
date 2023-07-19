@@ -76,6 +76,9 @@
       .plugin-item {
         width: calc(50% - 4px);
 
+        &.is-inline {
+          width: 100%;
+        }
         &-content {
           width: 100%;
         }
