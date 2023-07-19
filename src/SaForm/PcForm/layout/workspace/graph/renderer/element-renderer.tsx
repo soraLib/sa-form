@@ -1,12 +1,13 @@
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, ref, watch } from 'vue'
 import { useClazs } from '../../../../../utils/class'
 import { ModifierKey } from '../../../../../graph'
 import { useElementStickReszie } from './hooks/useResize'
-import { useElementStyle } from './hooks/useStyle'
+import { useElementInnerStyle, useElementStyle } from './hooks/useStyle'
 import ElementRenderer from './element-renderer'
 import { aheadSelected, useElementDrag } from './hooks/useDrag'
 import { useElementSelect } from './hooks/useSelect'
 import { usePan } from './hooks/usePan'
+import { useElementBounding } from './hooks/useBounding'
 import type { CSSProperties, PropType } from 'vue'
 import type { PcGraph, Stick } from '../../../../graph'
 import type { PcElement } from '../../../../element'
@@ -122,21 +123,50 @@ export default defineComponent({
         props.graph.selected.length > 1 &&
         props.graph.selected[0] === props.element
     )
+    const isSelected = computed(() =>
+      props.graph.selected.some((e) => e.attrs.id === props.element.attrs.id)
+    )
+    const isCanvas = computed(() => props.graph.canvas === props.element)
 
-    const styles = useElementStyle(props.element)
+    const elementStyle = useElementStyle(props.element)
+    const elementInnerStyle = useElementInnerStyle(props.element)
+
+    const canvasRef = ref<HTMLCanvasElement | null>(null)
+
+    const {
+      toggleVisible,
+      style: canvasStyle,
+      padding,
+      color,
+    } = useElementBounding(
+      canvasRef,
+      computed(() => ({
+        width: props.element.attrs.width,
+        height: props.element.attrs.height,
+      }))
+    )
+
+    watch(
+      [isReference, isSelected, isOnlySelection],
+      ([isReference, isSelected, isOnlySelection]) => {
+        color.value = isOnlySelection || isReference ? '#fd1d7c' : '#42b883'
+        toggleVisible(isSelected)
+      },
+      {
+        immediate: true,
+      }
+    )
 
     return () => (
       <div
         id={props.element.attrs.id}
         ref={(el) => props.element.setEl(el as HTMLElement)}
         class={useClazs('pc-element', {
-          'is-selected': props.graph.selected.some(
-            (e) => e.attrs.id === props.element.attrs.id
-          ),
+          'is-selected': isSelected.value,
           'is-reference': isReference.value,
-          'is-graph': props.graph.canvas.attrs.id === props.element.attrs.id,
+          'is-graph': isCanvas.value,
         })}
-        style={styles.value}
+        style={elementStyle.value}
         onMousedown={useElementHandler(props.element, props.graph)}
       >
         {
@@ -162,14 +192,26 @@ export default defineComponent({
           )
         }
 
-        {/* TODO: specific display styles */}
-        {props.element.parent && props.element.attrs.name}
+        {!isCanvas.value && (
+          <canvas
+            ref={canvasRef}
+            width={props.element.attrs.width + padding.value * 2}
+            height={props.element.attrs.height + padding.value * 2}
+            class="bounding"
+            style={canvasStyle.value}
+          />
+        )}
 
-        {props.element.children?.length
-          ? props.element.children.map((ele) => (
-              <ElementRenderer graph={props.graph} element={ele} />
-            ))
-          : undefined}
+        <div class="pc-element-inner" style={elementInnerStyle.value}>
+          {/* TODO: specific display styles */}
+          <span> {props.element.parent && props.element.attrs.name}</span>
+
+          {props.element.children?.length
+            ? props.element.children.map((ele) => (
+                <ElementRenderer graph={props.graph} element={ele} />
+              ))
+            : undefined}
+        </div>
       </div>
     )
   },

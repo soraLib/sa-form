@@ -118,6 +118,8 @@ export default defineComponent({
                         ? 'not-selected'
                         : index === 0 && props.graph.selected.length > 1
                         ? 'is-reference'
+                        : index === 0 && props.graph.selected.length === 1
+                        ? 'is-only-selection'
                         : 'is-selected',
                   }
                 }}

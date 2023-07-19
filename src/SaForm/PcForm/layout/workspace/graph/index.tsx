@@ -49,8 +49,7 @@ export default defineComponent({
 
       const attrs: StencilAttrs = JSON.parse(elementMessage)
 
-      // TODO: extract the position function
-      const dropElement = new PcElement({
+      const dropElementData = {
         parent,
         attrs: {
           ...attrs,
@@ -58,9 +57,9 @@ export default defineComponent({
           x: gridFloor(event.offsetX - attrs.width / 2, props.graph.grid.size),
           y: gridFloor(event.offsetY - attrs.height / 2, props.graph.grid.size),
         },
-      })
+      }
 
-      props.graph.addChild(dropElement, parent)
+      props.graph.addChild(dropElementData, parent)
     }
 
     return () => (
