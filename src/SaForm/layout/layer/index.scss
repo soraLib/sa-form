@@ -28,7 +28,8 @@
   [is-empty='true'] .n-tree-node-switcher {
     opacity: 0;
   }
-  [layer-tree-status='is-reference'] {
+  [layer-tree-status='is-reference'],
+  [layer-tree-status='is-only-selection'] {
     border-color: var(--c-red);
     background-color: rgba(237, 60, 80, 0.15) !important;
 

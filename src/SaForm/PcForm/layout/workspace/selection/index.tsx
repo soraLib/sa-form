@@ -1,4 +1,4 @@
-import { computed, defineComponent, h } from 'vue'
+import { computed, defineComponent } from 'vue'
 import type { CSSProperties, PropType } from 'vue'
 import type { PcGraph } from '../../../graph'
 

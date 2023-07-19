@@ -176,23 +176,20 @@ export class PcGraph extends Events implements BasicGraph {
   }
 
   /** add child and return its parent */
+  addChild(child: CDRecord, parent?: PcElement, needRecord?: boolean): PcElement
+  addChild(child: CDRecord, parent?: string, needRecord?: boolean): PcElement
   addChild(
-    child: PcElement,
-    parent?: PcElement,
-    needRecord?: boolean
-  ): PcElement
-  addChild(child: PcElement, parent?: string, needRecord?: boolean): PcElement
-  addChild(
-    child: PcElement,
+    child: CDRecord,
     arg?: string | PcElement,
     needRecord = true
-  ): PcElement {
+  ): PcElement | undefined {
     const parent =
       (typeof arg === 'string'
         ? findTreeNode(this.canvas.children!, (node) => node.attrs.id === arg)
         : arg) ?? this.canvas
 
-    addGraphNode(this, child)
+    const createdChild = addGraphNode(this, child)
+    if (!createdChild) return
 
     // TODO:
     const validIntegerRegex = /^-?\d+$/
@@ -216,7 +213,7 @@ export class PcGraph extends Events implements BasicGraph {
       })
       this.addRecord(record)
     }
-    this.setSelected(child)
+    this.setSelected(createdChild)
 
     return parent
   }
@@ -559,7 +556,10 @@ const extractGraphNodePureAttr = (element: PcElement) => {
 }
 
 /** add canvas node */
-const addGraphNode = (graph: PcGraph, element?: CDRecord) => {
+const addGraphNode = (
+  graph: PcGraph,
+  element?: CDRecord
+): PcElement | undefined => {
   if (!graph.canvas.children || !element) return
 
   const pid = element.parent?.attrs.id
@@ -569,8 +569,9 @@ const addGraphNode = (graph: PcGraph, element?: CDRecord) => {
 
   if (parent) {
     const pcElement = new PcElement(element)
-    parent.children?.push(new PcElement(element))
+    parent.children?.push(pcElement)
     pcElement.parent = parent
+    return pcElement
   }
 }
 /** remove canvas node */

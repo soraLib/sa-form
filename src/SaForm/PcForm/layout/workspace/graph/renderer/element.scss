@@ -1,5 +1,4 @@
 .pc-element {
-  @apply select-none;
   position: absolute;
   box-sizing: border-box;
 
@@ -52,20 +51,14 @@
     display: none;
   }
 
-  &:not(.is-graph) {
-    border: 2px solid rgba(0, 0, 0, 0);
-
-    &:hover {
-      border: 2px dashed var(--c-brand);
-      z-index: 99;
-    }
+  &-inner {
+    @apply select-none;
+    box-sizing: border-box;
   }
-  &.is-selected:not(.is-graph) {
-    border: 2px solid var(--c-brand);
-    z-index: 99;
 
-    &.is-reference {
-      border: 2px dashed var(--c-red-lighter);
-    }
+  .bounding {
+    position: absolute;
+    z-index: 99;
+    pointer-events: none;
   }
 }

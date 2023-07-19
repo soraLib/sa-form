@@ -1,5 +1,6 @@
-import { computed, defineComponent, reactive, watch } from 'vue'
+import { computed, defineComponent, ref, watch } from 'vue'
 import { getRectangle } from '../graph/renderer/utils/rectangle'
+import { useElementBounding } from '../graph/renderer/hooks/useBounding'
 import type { CSSProperties, PropType } from 'vue'
 import type { PcGraph } from '../../../graph'
 
@@ -18,19 +19,35 @@ export default defineComponent({
 
       return getRectangle(props.graph.selected)
     })
+
+    const canvasRef = ref<HTMLCanvasElement | null>(null)
+    const {
+      toggleVisible,
+      style: canvasStyle,
+      padding,
+    } = useElementBounding(canvasRef, rect)
+
+    watch(() => props.graph.selected.length > 1, toggleVisible, {
+      immediate: true,
+    })
+
     const boxStyle = computed<CSSProperties>(() => ({
+      ...canvasStyle.value,
       position: 'absolute',
-      border: '2px dashed var(--c-brand)',
-      left: `${rect.value.x}px`,
-      top: `${rect.value.y}px`,
-      width: `${rect.value.width}px`,
-      height: `${rect.value.height}px`,
+      left: `${rect.value.x - padding.value}px`,
+      top: `${rect.value.y - padding.value}px`,
+      boxSizing: 'border-box',
       zIndex: 1,
       pointerEvents: 'none',
-      boxSizing: 'border-box',
-      display: !rect.value.width || !rect.value.height ? 'none' : 'block',
     }))
 
-    return () => <div style={boxStyle.value}></div>
+    return () => (
+      <canvas
+        ref={canvasRef}
+        width={rect.value.width}
+        height={rect.value.height}
+        style={boxStyle.value}
+      ></canvas>
+    )
   },
 })
