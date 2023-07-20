@@ -7,6 +7,13 @@ import type { PropType } from 'vue'
 
 import './shotcuts.scss'
 
+const capitalizeFirstLetter = (input: string): string => {
+  if (input.length === 0) return input
+  if (input === ' ') return 'Space'
+
+  return `${input[0].toUpperCase()}${input.slice(1)}`
+}
+
 export default defineComponent({
   name: 'SaFormShortcuts',
   props: {
@@ -24,7 +31,7 @@ export default defineComponent({
       <span class="shortcuts">
         {keys.value.map((key, index) => (
           <>
-            <ShortCutKey>{key}</ShortCutKey>
+            <ShortCutKey>{capitalizeFirstLetter(key)}</ShortCutKey>
             {index < keys.value.length - 1 && <span class="join">+</span>}
           </>
         ))}
