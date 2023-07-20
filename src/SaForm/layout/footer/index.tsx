@@ -1,12 +1,12 @@
-import { computed, defineComponent } from 'vue'
-import { NButton, NPopover, NScrollbar } from 'naive-ui'
+import { defineComponent } from 'vue'
 
-import './index.scss'
-import { BasicRecordType } from '../../record'
-import { PcRecord } from '../../PcForm/record'
-import { useClazs } from '../../utils/class'
+import GraphHistory from './history'
+import GraphShortcuts from './shortcuts/shortcuts'
+
 import type { BasicGraph } from '../../graph'
 import type { PropType } from 'vue'
+
+import './index.scss'
 
 export default defineComponent({
   name: 'SaFormLayoutFooter',
@@ -19,44 +19,10 @@ export default defineComponent({
   },
 
   setup(props) {
-    const recordsRef = computed(() => props.graph.history.records)
-    const currentRef = computed(() => props.graph.history.index)
-
     return () => (
-      <div class="sa-form-footer flex justify-start items-center p-1">
-        <NPopover
-          class="history-popover"
-          placement="top-start"
-          trigger="click"
-          showArrow={false}
-        >
-          {{
-            trigger: () => <NButton type="primary">history</NButton>,
-            default: () => (
-              <NScrollbar style={{ maxHeight: '400px' }}>
-                <ol class="history-container">
-                  {recordsRef.value.length ? (
-                    recordsRef.value.map((record, index) => (
-                      <li
-                        class={useClazs('history', {
-                          active: currentRef.value === index,
-                        })}
-                        onClick={() => props.graph.historyTo(record)}
-                      >
-                        <span class="type">{BasicRecordType[record.type]}</span>
-                        <span class="name">
-                          {record.data.map((d) => d.name).join(', ') || 'graph'}
-                        </span>
-                      </li>
-                    ))
-                  ) : (
-                    <div class="empty">empty history record</div>
-                  )}
-                </ol>
-              </NScrollbar>
-            ),
-          }}
-        </NPopover>
+      <div class="sa-form-footer flex justify-start items-center p-1 gap-4">
+        <GraphHistory graph={props.graph} />
+        <GraphShortcuts graph={props.graph} />
       </div>
     )
   },

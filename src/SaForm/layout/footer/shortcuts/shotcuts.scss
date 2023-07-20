@@ -1,0 +1,10 @@
+.shortcuts {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  .join {
+    opacity: 0.4;
+    font-weight: 500;
+  }
+}
