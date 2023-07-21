@@ -82,7 +82,8 @@ export const useElementDrag = (
     const finalX = rectPos._startX + moveX
     const finalY = rectPos._startY + moveY
 
-    // Limits the offset of the elements to ensure its always inside the parent element.
+    // TODO: try to integrate into `graph.move`
+    // limits the offset of the elements to ensure its always inside the parent.
     const finalMoveX =
       finalX + rect.width > element.parent!.attrs.width
         ? element.parent!.attrs.width - rect.width - rectPos._startX
