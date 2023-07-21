@@ -30,8 +30,11 @@ export class PcClipBoard implements BasicClipBoard {
     deep?: boolean
     elements?: PcElement[]
   }) {
+    const targets = options?.elements ?? this.graph.selected // TODO: options
+    if (targets.includes(this.graph.canvas)) return
+
     this.clips = {
-      elements: cloneDeep(options?.elements ?? this.graph.selected), // TODO: options
+      elements: cloneDeep(targets),
       type: 'copy',
       times: 1,
     }
@@ -42,8 +45,11 @@ export class PcClipBoard implements BasicClipBoard {
     deep?: boolean
     elements?: PcElement[]
   }) {
+    const targets = options?.elements ?? this.graph.selected // TODO: options
+    if (targets.includes(this.graph.canvas)) return
+
     this.clips = {
-      elements: cloneDeep(options?.elements ?? this.graph.selected), // TODO: options
+      elements: cloneDeep(targets),
       type: 'cut',
       times: 1,
     }
