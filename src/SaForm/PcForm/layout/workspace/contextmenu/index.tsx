@@ -93,13 +93,15 @@ export default defineComponent({
         }
 
         case SaFormContextmenuItem.Paste: {
-          props.graph.clipboard.paste(selected.value, position.value!)
+          props.graph.clipboard.paste(selected.value, {
+            position: position.value,
+          })
 
           break
         }
 
         case SaFormContextmenuItem.Delete: {
-          props.graph.removeChild(selected.value)
+          props.graph.remove(selected.value)
           break
         }
 
