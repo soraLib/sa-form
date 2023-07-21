@@ -3,7 +3,7 @@
 </p>
 
 <h1 align="center">Sa Form</h1>
-<p align="center">A Vue 3 Lowode Form Component</p>
+<p align="center">A Vue 3 Lowcode Form Component</p>
 <p align="center"><b>Customizable, Uses TypeScript</b></p>
 <p align="center">
   <a href="https://soralib.github.io/sa-form/"><img alt="pages-build-deployment" src="https://github.com/soraLib/sa-form/actions/workflows/pages/pages-build-deployment/badge.svg?branch=docs"></a>
