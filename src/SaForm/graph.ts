@@ -1,3 +1,5 @@
+import type { Arrayable } from '@vueuse/core'
+import type { BasicClipBoard } from './clipboard'
 import type { BasicElement } from './element'
 import type { BasicRecord, BasicRecordStore } from './record'
 
@@ -48,6 +50,14 @@ export type Layout = {
   layer: boolean
   property: boolean
 }
+
+export enum MoveDirection {
+  UP = 'up',
+  DOWN = 'down',
+  RIGHT = 'right',
+  LEFT = 'left',
+}
+
 /** basic graph */
 export interface BasicGraph {
   /** graph type */
@@ -64,6 +74,7 @@ export interface BasicGraph {
   snapline: Snapline
   layout: Layout
   scroller: Scroller
+  clipboard: BasicClipBoard
   setLayout: (layout: Partial<Layout>) => void
   setSelection: (selection: Partial<Selection>) => void
   setGrid: (grid: Partial<Grid>) => void
@@ -95,4 +106,20 @@ export interface BasicGraph {
   ): BasicElement | undefined
   historyTo(to: number): void
   historyTo(to: BasicRecord): void
+
+  move<A extends Arrayable<string | BasicElement>>(
+    as: A,
+    options: {
+      direction: MoveDirection
+      distance?: number
+    },
+    needRecord?: boolean
+  ): void
+  remove<A extends Arrayable<string | BasicElement>>(
+    as: A,
+    needRecord?: boolean
+  ): void
+
+  undo(): void
+  redo(): void
 }

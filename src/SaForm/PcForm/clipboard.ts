@@ -12,8 +12,10 @@ export class PcClipBoard implements BasicClipBoard {
     | {
         elements: PcElement[]
         type: 'cut' | 'copy'
+        times: number
       }
     | undefined = undefined
+  offset = 30
 
   constructor(graph: PcGraph) {
     this.graph = graph
@@ -31,6 +33,7 @@ export class PcClipBoard implements BasicClipBoard {
     this.clips = {
       elements: cloneDeep(options?.elements ?? this.graph.selected), // TODO: options
       type: 'copy',
+      times: 1,
     }
   }
 
@@ -42,6 +45,7 @@ export class PcClipBoard implements BasicClipBoard {
     this.clips = {
       elements: cloneDeep(options?.elements ?? this.graph.selected), // TODO: options
       type: 'cut',
+      times: 1,
     }
 
     const record = new PcRecord({
@@ -53,16 +57,16 @@ export class PcClipBoard implements BasicClipBoard {
     })
 
     for (const ele of this.clips.elements) {
-      this.graph.removeChild(ele.attrs.id, false)
+      this.graph.remove(ele.attrs.id, false)
     }
 
     this.graph.addRecord(record)
   }
 
   paste(
-    parent: PcElement,
-    position: Position,
+    parent?: PcElement,
     options?: {
+      position?: Position
       nodeProps?: (element: PcElement) => Partial<PcElement['attrs']>
       deep?: boolean
     }
@@ -70,22 +74,22 @@ export class PcClipBoard implements BasicClipBoard {
     const clips = this.clips
     if (this.isEmpty(clips)) return
 
+    const pasteTo = parent ?? clips.elements[0].parent
     const newPasteElements = clips.elements.map((ele) => {
       const id =
         clips.type === 'cut' &&
-        findNode(this.graph.canvas, (a) => a.attrs.id === ele.attrs.id)
-          ? this.graph.getNextId()
-          : ele.attrs.id
+        !findNode(this.graph.canvas, (a) => a.attrs.id === ele.attrs.id)
+          ? ele.attrs.id
+          : this.graph.getNextId()
 
       const paste = new PcElement({
-        parent,
+        parent: pasteTo,
         children: undefined /* TODO: */,
-        /* TODO: position offset */
         attrs: {
           ...ele.attrs,
           id,
-          x: position.left,
-          y: position.top,
+          x: options?.position?.left ?? ele.attrs.x + clips.times * this.offset,
+          y: options?.position?.top ?? ele.attrs.y + clips.times * this.offset,
         },
       })
 
@@ -96,7 +100,8 @@ export class PcClipBoard implements BasicClipBoard {
       return paste
     })
 
-    this.graph.addChildren(newPasteElements, parent)
+    this.graph.addChildren(newPasteElements, pasteTo)
+    clips.times += 1
 
     return newPasteElements
   }

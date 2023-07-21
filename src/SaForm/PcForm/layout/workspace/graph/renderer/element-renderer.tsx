@@ -208,7 +208,11 @@ export default defineComponent({
 
           {props.element.children?.length
             ? props.element.children.map((ele) => (
-                <ElementRenderer graph={props.graph} element={ele} />
+                <ElementRenderer
+                  key={ele.attrs.id}
+                  graph={props.graph}
+                  element={ele}
+                />
               ))
             : undefined}
         </div>

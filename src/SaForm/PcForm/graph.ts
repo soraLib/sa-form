@@ -6,12 +6,14 @@ import {
   isURecordDataList,
 } from '../record'
 import { getNextId } from '../utils/element'
-import { ModifierKey } from '../graph'
+import { ModifierKey, MoveDirection } from '../graph'
 import { PcElement } from './element'
 import { PcRecord, PcRecordStore } from './record'
 
 import { PcClipBoard } from './clipboard'
 import { Events } from './events'
+import { getRectangle } from './layout/workspace/graph/renderer/utils/rectangle'
+import type { Arrayable } from '@vueuse/core'
 import type {
   BasicGraph,
   GraphType,
@@ -175,6 +177,64 @@ export class PcGraph extends Events implements BasicGraph {
     return nextId
   }
 
+  move<A extends Arrayable<string | PcElement>>(
+    as: A,
+    options: {
+      direction: MoveDirection
+      distance?: number
+    },
+    needRecord = true
+  ): void {
+    const array: (PcElement | string)[] = Array.isArray(as) ? as : [as]
+    const targets = array.reduce<PcElement[]>((acc, cur) => {
+      if (typeof cur === 'string') {
+        const target = findNode(this.canvas, (a) => a.attrs.id === cur)
+        return target ? [...acc, target] : acc
+      }
+
+      return [...acc, cur]
+    }, [])
+    const parent = targets[0].parent
+    if (!parent) return
+    const rect = getRectangle(targets)
+    const distance = options.distance ?? this.grid.size
+    const direction = options.direction
+
+    // limits the offset of the elements to ensure its always inside the parent.
+    const moveX = distance * (direction === MoveDirection.LEFT ? -1 : 1)
+    const finalMoveX =
+      direction === MoveDirection.LEFT || direction === MoveDirection.RIGHT
+        ? moveX + rect.width > parent.attrs.width
+          ? parent.attrs.width - rect.width - rect.x
+          : rect.x + moveX < 0
+          ? -rect.x
+          : moveX
+        : 0
+    const moveY = distance * (direction === MoveDirection.UP ? -1 : 1)
+    const finalMoveY =
+      direction === MoveDirection.UP || direction === MoveDirection.DOWN
+        ? moveY + rect.height > parent.attrs.height
+          ? parent.attrs.height - rect.height - rect.y
+          : rect.y + moveY < 0
+          ? -rect.y
+          : moveY
+        : 0
+
+    if (finalMoveX || finalMoveY)
+      this.updateElemsData(
+        targets.map((ele) => {
+          return {
+            element: ele,
+            data: {
+              x: ele.attrs.x + finalMoveX,
+              y: ele.attrs.y + finalMoveY,
+            },
+          }
+        }),
+        needRecord
+      )
+  }
+
   /** add child and return its parent */
   addChild(child: CDRecord, parent?: PcElement, needRecord?: boolean): PcElement
   addChild(child: CDRecord, parent?: string, needRecord?: boolean): PcElement
@@ -239,9 +299,10 @@ export class PcGraph extends Events implements BasicGraph {
         ? findTreeNode(this.canvas.children!, (node) => node.attrs.id === arg)
         : arg) ?? this.canvas
 
-    for (const child of children) {
-      addGraphNode(this, child)
-    }
+    const added = children.reduce<PcElement[]>((acc, cur) => {
+      const node = addGraphNode(this, cur)
+      return node ? [...acc, node] : acc
+    }, [])
 
     if (needRecord) {
       const record = new PcRecord({
@@ -255,39 +316,37 @@ export class PcGraph extends Events implements BasicGraph {
       })
       this.addRecord(record)
     }
-    this.setSelected(children)
+    this.setSelected(added)
 
     return parent
   }
 
-  /** remove child and return its parent */
-  removeChild(id: string, needRecord?: boolean): PcElement
-  removeChild(child: PcElement, needRecord?: boolean): PcElement
-  removeChild(
-    arg: string | PcElement,
+  /** remove elements(s)  */
+  remove<A extends Arrayable<PcElement | string>>(
+    as: A,
     needRecord = true
-  ): PcElement | undefined {
-    const child = removeGraphNode(
-      this,
-      typeof arg === 'string' ? arg : arg.attrs.id
-    )
-    if (!child) return
+  ): void {
+    const children: (PcElement | string)[] = Array.isArray(as) ? as : [as]
+
+    const removedChildren = children.reduce<PcElement[]>((acc, cur) => {
+      const removed = removeGraphNode(
+        this,
+        typeof cur === 'string' ? cur : cur.attrs.id
+      )
+      return removed ? [...acc, removed] : acc
+    }, [])
 
     if (needRecord) {
       const record = new PcRecord({
         type: BasicRecordType.Delete,
-        data: [
-          {
-            name: child.attrs.name,
-            prev: cloneDeep(extractGraphNodePureAttr(child)),
-          },
-        ],
+        data: removedChildren.map((a) => ({
+          name: a.attrs.name,
+          prev: cloneDeep(extractGraphNodePureAttr(a)),
+        })),
       })
       this.addRecord(record)
     }
     this.setSelected()
-
-    return child.parent
   }
 
   scrollIntoView(
@@ -518,7 +577,6 @@ export class PcGraph extends Events implements BasicGraph {
           // ADD
           addGraphNode(this, data.next)
         } else if (nextRecord.type === BasicRecordType.Delete) {
-          console.log('is cd delete', data)
           // DELETE
           removeGraphNode(this, data.prev?.attrs?.id)
         }

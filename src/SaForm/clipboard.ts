@@ -12,8 +12,10 @@ export declare interface BasicClipBoard {
     | {
         elements: BasicElement[]
         type: 'cut' | 'copy'
+        times: number
       }
     | undefined
+  offset: number
 
   isEmpty(): boolean
 
@@ -28,9 +30,9 @@ export declare interface BasicClipBoard {
     elements?: BasicElement[]
   }): void
   paste(
-    parent: BasicElement,
-    position: Position,
+    parent?: BasicElement,
     options?: {
+      position?: Position
       nodeProps?: (element: BasicElement) => Partial<BasicElement['attrs']>
       deep?: boolean
     }
