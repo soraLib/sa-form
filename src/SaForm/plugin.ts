@@ -161,6 +161,50 @@ export const BasicPlugins = {
       },
     },
   },
+  'widget-font': {
+    label: 'font',
+    collapsed: false,
+    plugins: {
+      'font-size': {
+        label: 'size',
+        attr: 'font-size',
+        type: SaPluginType.Number,
+      },
+      'font-family': {
+        label: 'family',
+        attr: 'font-family',
+        type: SaPluginType.Select,
+        options: [
+          {
+            label: 'auto',
+            value: 'auto',
+          },
+          {
+            label: 'Arial',
+            value: 'Arial',
+          },
+          {
+            label: 'Verdana',
+            value: 'Verdana',
+          },
+          {
+            label: 'Tahoma',
+            value: 'Tahoma',
+          },
+          {
+            label: 'Trebuchet MS',
+            value: 'Trebuchet MS',
+          },
+        ] as SaPluginOption[],
+      },
+      'font-color': {
+        label: 'color',
+        attr: 'font-color',
+        type: SaPluginType.Color,
+        inline: true,
+      },
+    },
+  },
 } as const
 
 export type SaPluginLayout = {

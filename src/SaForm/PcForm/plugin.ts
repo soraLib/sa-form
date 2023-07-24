@@ -11,6 +11,7 @@ const basicPlugins = [
   BasicPlugins['widget-background'],
   BasicPlugins['widget-size'],
   BasicPlugins['widget-position'],
+  BasicPlugins['widget-font'],
   BasicPlugins['widget-border'],
 ]
 
@@ -21,6 +22,7 @@ export const PcPlugin: SaPluginLayout = {
       BasicPlugins['widget-name'],
       BasicPlugins['widget-background'],
       BasicPlugins['widget-size'],
+      BasicPlugins['widget-font'],
     ],
   },
   [ElementType.Container]: {

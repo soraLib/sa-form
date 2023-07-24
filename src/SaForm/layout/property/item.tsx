@@ -115,6 +115,8 @@ export default defineComponent({
               value={modelValue.value}
               onUpdateValue={handlePluginValueChange}
               filterable
+              placeholder=""
+              consistentMenuWidth={false}
               disabled={plugin.disabled ?? false}
               options={plugin.options ?? []}
             />

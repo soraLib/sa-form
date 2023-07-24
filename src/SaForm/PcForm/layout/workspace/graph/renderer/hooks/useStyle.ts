@@ -30,6 +30,9 @@ export function useElementInnerStyle(
       borderStyle: element.attrs['border-style'],
       borderWidth: `${element.attrs['border-width'] ?? 0}px`,
       borderColor: element.attrs['border-color'],
+      fontSize: `${element.attrs['font-size'] ?? 14}px`,
+      color: element.attrs['font-color'] || 'inherit',
+      fontFamily: element.attrs['font-family'] ?? 'auto',
     }
 
     return omitBy(styles, (style) => style === undefined)
