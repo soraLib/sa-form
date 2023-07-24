@@ -47,6 +47,12 @@ export interface BasicElementAttributes {
   'border-width'?: number
   /** border color */
   'border-color'?: CSSProperties['borderColor']
+  /** font size `px` */
+  'font-size'?: number
+  /** font family */
+  'font-family'?: CSSProperties['fontFamily']
+  /** font color */
+  'font-color'?: CSSProperties['color']
 }
 
 /** basic element */

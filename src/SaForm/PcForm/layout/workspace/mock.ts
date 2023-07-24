@@ -2,12 +2,6 @@ import { ElementType } from '../../../element'
 import { PcElement } from '../../element'
 
 export const createMockPcCanvas: () => PcElement = () => {
-  const commonBorderProperties = {
-    'border-style': 'solid',
-    'border-width': 1,
-    'border-color': 'rgba(82, 82, 89, 0.68)',
-  }
-
   const canvas = new PcElement({
     parent: undefined,
     children: [],
@@ -20,6 +14,9 @@ export const createMockPcCanvas: () => PcElement = () => {
       x: 0,
       y: 0,
       background: '',
+      'font-size': 24,
+      'font-family': 'Arial',
+      'font-color': '',
     },
   })
 
@@ -27,16 +24,19 @@ export const createMockPcCanvas: () => PcElement = () => {
     parent: canvas,
     attrs: {
       id: '2',
-      type: ElementType.Button,
-      name: 'mock button 1',
-      width: 80,
-      height: 45,
-      x: 200,
+      type: ElementType.Text,
+      name: 'transparent text',
+      width: 180,
+      height: 80,
+      x: 250,
       y: 100,
-      background: '#50DA58',
+      background: '',
       'border-style': 'none',
       'border-color': '',
       'border-width': 1,
+      'font-size': 24,
+      'font-family': 'Arial',
+      'font-color': '#17F1C2FF',
     },
   })
 
@@ -45,15 +45,18 @@ export const createMockPcCanvas: () => PcElement = () => {
     attrs: {
       type: ElementType.Button,
       id: '3',
-      name: 'transparent button',
+      name: 'button',
       width: 80,
       height: 40,
       x: 150,
       y: 200,
-      background: '',
+      background: '#50DA58',
       'border-width': 2,
-      'border-style': 'dotted',
-      'border-color': '#98c379',
+      'border-style': 'double',
+      'border-color': '#B30E79FF',
+      'font-size': 14,
+      'font-family': 'Arial',
+      'font-color': '',
     },
   })
 
@@ -68,8 +71,12 @@ export const createMockPcCanvas: () => PcElement = () => {
       x: 50,
       y: 400,
       background: '#EFAE46',
-      ...commonBorderProperties,
       'border-width': 8,
+      'border-style': 'solid',
+      'border-color': 'rgba(82, 82, 89, 0.68)',
+      'font-size': 14,
+      'font-family': 'Arial',
+      'font-color': '',
     },
     children: [],
   })
@@ -95,7 +102,12 @@ export const createMockPcCanvas: () => PcElement = () => {
           value: 'Value B',
         },
       ],
-      ...commonBorderProperties,
+      'border-style': 'solid',
+      'border-width': 1,
+      'border-color': 'rgba(82, 82, 89, 0.68)',
+      'font-size': 14,
+      'font-family': 'Arial',
+      'font-color': '',
     },
   })
 
