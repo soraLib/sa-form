@@ -197,6 +197,53 @@ export const BasicPlugins = {
           },
         ] as SaPluginOption[],
       },
+      'font-decoration': {
+        label: 'deco',
+        title: 'decoration',
+        attr: 'font-decoration',
+        type: SaPluginType.Select,
+        options: [
+          {
+            label: 'none',
+            value: 'none',
+          },
+          {
+            label: 'underline',
+            value: 'underline',
+          },
+          {
+            label: 'line-through',
+            value: 'line-through',
+          },
+          {
+            label: 'overline',
+            value: 'overline',
+          },
+        ] as SaPluginOption[],
+      },
+      'font-style': {
+        label: 'style',
+        attr: 'font-style',
+        type: SaPluginType.Select,
+        options: [
+          {
+            label: 'normal',
+            value: 'normal',
+          },
+          {
+            label: 'italic',
+            value: 'italic',
+          },
+          {
+            label: 'bold',
+            value: 'bold',
+          },
+          {
+            label: 'bold italic',
+            value: 'bold-italic',
+          },
+        ] as SaPluginOption[],
+      },
       'font-color': {
         label: 'color',
         attr: 'font-color',

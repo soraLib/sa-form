@@ -21,8 +21,28 @@ export enum ElementType {
   Chart,
 }
 
+export type ElementBorderAttributes = {
+  /** border style */
+  'border-style'?: CSSProperties['borderStyle']
+  /** border width */
+  'border-width'?: number
+  /** border color */
+  'border-color'?: CSSProperties['borderColor']
+}
+export type ElementFontAttributes = {
+  /** font size `px` */
+  'font-size'?: number
+  /** font family */
+  'font-family'?: CSSProperties['fontFamily']
+  /** font color */
+  'font-color'?: CSSProperties['color']
+  /** font decoration */
+  'font-decoration'?: 'none' | 'underline' | 'line-through' | 'overline'
+  /** font style */
+  'font-style'?: 'normal' | 'italic' | 'bold' | 'bold-italic'
+}
 /** basic element attributes */
-export interface BasicElementAttributes {
+export type BasicElementAttributes = {
   /** element type */
   type: ElementType
   /** unique id */
@@ -41,19 +61,8 @@ export interface BasicElementAttributes {
   background?: CSSProperties['background']
   /** display name */
   display?: string
-  /** border style */
-  'border-style'?: CSSProperties['borderStyle']
-  /** border width */
-  'border-width'?: number
-  /** border color */
-  'border-color'?: CSSProperties['borderColor']
-  /** font size `px` */
-  'font-size'?: number
-  /** font family */
-  'font-family'?: CSSProperties['fontFamily']
-  /** font color */
-  'font-color'?: CSSProperties['color']
-}
+} & ElementBorderAttributes &
+  ElementFontAttributes
 
 /** basic element */
 export interface BasicElement {

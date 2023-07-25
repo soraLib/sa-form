@@ -76,7 +76,7 @@ export default defineComponent({
 
           if (props.isInsideGroup)
             return (
-              <NInputGroup>
+              <NInputGroup title={props.plugin.title}>
                 <NInputGroupLabel>{props.plugin.label}</NInputGroupLabel>
                 {Input}
               </NInputGroup>
@@ -99,7 +99,7 @@ export default defineComponent({
 
           if (props.isInsideGroup)
             return (
-              <NInputGroup>
+              <NInputGroup title={props.plugin.title}>
                 <NInputGroupLabel>{props.plugin.label}</NInputGroupLabel>
                 {Input}
               </NInputGroup>
@@ -124,7 +124,7 @@ export default defineComponent({
 
           if (props.isInsideGroup)
             return (
-              <NInputGroup>
+              <NInputGroup title={props.plugin.title}>
                 <NInputGroupLabel>{props.plugin.label}</NInputGroupLabel>
                 {Input}
               </NInputGroup>
@@ -203,9 +203,7 @@ export default defineComponent({
         class={useClazs('plugin-item', { 'is-inline': !!props.plugin.inline })}
       >
         {!props.isInsideGroup && (
-          <div class="plugin-item-label" title={props.plugin.title}>
-            {props.plugin.label}
-          </div>
+          <div class="plugin-item-label">{props.plugin.label}</div>
         )}
         <div class="plugin-item-content">{createPlugin()}</div>
       </div>
