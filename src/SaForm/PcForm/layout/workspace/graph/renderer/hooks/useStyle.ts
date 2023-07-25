@@ -41,6 +41,13 @@ export const createFontStyle = (element: PcElement): CSSProperties => {
       : 'inherit',
   }
 }
+export const createAlignStyle = (element: PcElement): CSSProperties => {
+  return {
+    display: 'flex',
+    alignItems: element.attrs['align-vertical'] ?? 'start',
+    justifyContent: element.attrs['align-horizontal'] ?? 'flex-start',
+  }
+}
 export function useElementInnerStyle(
   element: PcElement
 ): ComputedRef<CSSProperties> {
@@ -51,6 +58,7 @@ export function useElementInnerStyle(
       background: element.attrs.background,
       ...createBorderStyle(element),
       ...createFontStyle(element),
+      ...createAlignStyle(element),
     }
 
     return omitBy(styles, (a) => a === undefined)

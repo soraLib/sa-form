@@ -202,7 +202,7 @@ export const BasicPlugins = {
         ] as SaPluginOption[],
       },
       'font-decoration': {
-        label: 'deco',
+        label: 'Deco',
         title: 'decoration',
         attr: 'font-decoration',
         type: SaPluginType.Select,
@@ -253,6 +253,52 @@ export const BasicPlugins = {
         attr: 'font-color',
         type: SaPluginType.Color,
         inline: true,
+      },
+    },
+  },
+  'widget-align': {
+    label: 'align',
+    collapsed: false,
+    plugins: {
+      'align-horizontal': {
+        label: 'H',
+        title: 'horizontal',
+        attr: 'align-horizontal',
+        type: SaPluginType.Select,
+        options: [
+          {
+            label: 'left',
+            value: 'flex-start',
+          },
+          {
+            label: 'center',
+            value: 'center',
+          },
+          {
+            label: 'right',
+            value: 'flex-end',
+          },
+        ] as SaPluginOption[],
+      },
+      'align-vertical': {
+        label: 'V',
+        title: 'vertical',
+        attr: 'align-vertical',
+        type: SaPluginType.Select,
+        options: [
+          {
+            label: 'top',
+            value: 'start',
+          },
+          {
+            label: 'center',
+            value: 'center',
+          },
+          {
+            label: 'bottom',
+            value: 'end',
+          },
+        ] as SaPluginOption[],
       },
     },
   },

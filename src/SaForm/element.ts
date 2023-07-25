@@ -43,6 +43,10 @@ export type ElementFontAttributes = {
   /** font style */
   'font-style'?: 'normal' | 'italic' | 'bold' | 'bold-italic'
 }
+export type ElementAlignAttributes = {
+  'align-horizontal'?: CSSProperties['justify-content']
+  'align-vertical'?: CSSProperties['align-items']
+}
 /** basic element attributes */
 export type BasicElementAttributes = {
   /** element type */
@@ -64,7 +68,8 @@ export type BasicElementAttributes = {
   /** display name */
   display?: string
 } & ElementBorderAttributes &
-  ElementFontAttributes
+  ElementFontAttributes &
+  ElementAlignAttributes
 
 /** basic element */
 export interface BasicElement {
