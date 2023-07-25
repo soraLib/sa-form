@@ -41,6 +41,7 @@ export const createMockPcCanvas: () => PcElement = () => {
       'font-color': '#17F1C2FF',
       'font-decoration': 'underline',
       'font-style': 'bold',
+      'align-horizontal': 'center',
     },
   })
 
@@ -63,6 +64,8 @@ export const createMockPcCanvas: () => PcElement = () => {
       'font-color': '',
       'font-decoration': 'none',
       'font-style': 'bold-italic',
+      'align-horizontal': 'center',
+      'align-vertical': 'center',
     },
   })
 
@@ -119,6 +122,7 @@ export const createMockPcCanvas: () => PcElement = () => {
       'font-color': '',
       'font-decoration': 'none',
       'font-style': 'normal',
+      'align-vertical': 'center',
     },
   })
 

@@ -13,6 +13,7 @@ const basicPlugins = [
   BasicPlugins['widget-position'],
   BasicPlugins['widget-font'],
   BasicPlugins['widget-border'],
+  BasicPlugins['widget-align'],
 ]
 
 export const PcPlugin: SaPluginLayout = {
