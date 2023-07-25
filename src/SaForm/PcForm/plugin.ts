@@ -13,7 +13,6 @@ const basicPlugins = [
   BasicPlugins['widget-position'],
   BasicPlugins['widget-font'],
   BasicPlugins['widget-border'],
-  BasicPlugins['widget-align'],
 ]
 
 export const PcPlugin: SaPluginLayout = {
@@ -30,25 +29,29 @@ export const PcPlugin: SaPluginLayout = {
     basic: [...basicPlugins],
   },
   [ElementType.Text]: {
-    basic: [...basicPlugins],
+    basic: [...basicPlugins, BasicPlugins['widget-align']],
   },
   [ElementType.Input]: {
-    basic: [...basicPlugins],
+    basic: [...basicPlugins, BasicPlugins['widget-align']],
   },
   [ElementType.Textarea]: {
-    basic: [...basicPlugins],
+    basic: [...basicPlugins, BasicPlugins['widget-align']],
   },
   [ElementType.Button]: {
-    basic: [...basicPlugins],
+    basic: [...basicPlugins, BasicPlugins['widget-align']],
   },
   [ElementType.Radio]: {
-    basic: [...basicPlugins],
+    basic: [...basicPlugins, BasicPlugins['widget-align']],
   },
   [ElementType.Checkbox]: {
-    basic: [...basicPlugins],
+    basic: [...basicPlugins, BasicPlugins['widget-align']],
   },
   [ElementType.Select]: {
-    basic: [...basicPlugins, SelectPlugins['select-options']],
+    basic: [
+      ...basicPlugins,
+      BasicPlugins['widget-align'],
+      SelectPlugins['select-options'],
+    ],
   },
   [ElementType.Table]: {
     basic: [...basicPlugins],
