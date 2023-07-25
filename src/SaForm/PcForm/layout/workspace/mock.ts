@@ -28,7 +28,7 @@ export const createMockPcCanvas: () => PcElement = () => {
       id: '2',
       type: ElementType.Text,
       name: 'transparent text',
-      width: 180,
+      width: 210,
       height: 80,
       x: 250,
       y: 100,
@@ -41,6 +41,7 @@ export const createMockPcCanvas: () => PcElement = () => {
       'font-color': '#17F1C2FF',
       'font-decoration': 'underline',
       'font-style': 'bold',
+      'align-vertical': 'start',
       'align-horizontal': 'center',
     },
   })
@@ -122,6 +123,7 @@ export const createMockPcCanvas: () => PcElement = () => {
       'font-color': '',
       'font-decoration': 'none',
       'font-style': 'normal',
+      'align-horizontal': 'flex-start',
       'align-vertical': 'center',
     },
   })
