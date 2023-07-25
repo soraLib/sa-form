@@ -105,6 +105,16 @@ export const BasicPlugins = {
     label: 'border',
     collapsed: false,
     plugins: {
+      'border-width': {
+        label: 'width',
+        attr: 'border-width',
+        type: SaPluginType.Number,
+      },
+      'border-radius': {
+        label: 'radius',
+        attr: 'border-radius',
+        type: SaPluginType.Number,
+      },
       'border-style': {
         label: 'style',
         attr: 'border-style',
@@ -148,16 +158,10 @@ export const BasicPlugins = {
           },
         ] as SaPluginOption[],
       },
-      'border-width': {
-        label: 'width',
-        attr: 'border-width',
-        type: SaPluginType.Number,
-      },
       'border-color': {
         label: 'color',
         attr: 'border-color',
         type: SaPluginType.Color,
-        inline: true,
       },
     },
   },

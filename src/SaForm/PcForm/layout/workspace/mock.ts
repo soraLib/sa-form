@@ -80,6 +80,7 @@ export const createMockPcCanvas: () => PcElement = () => {
       'border-width': 8,
       'border-style': 'solid',
       'border-color': 'rgba(82, 82, 89, 0.68)',
+      'border-radius': 14,
       'font-size': 14,
       'font-family': 'Arial',
       'font-color': '',
