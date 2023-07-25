@@ -17,6 +17,8 @@ export const createMockPcCanvas: () => PcElement = () => {
       'font-size': 24,
       'font-family': 'Arial',
       'font-color': '',
+      'font-decoration': 'none',
+      'font-style': 'normal',
     },
   })
 
@@ -37,6 +39,8 @@ export const createMockPcCanvas: () => PcElement = () => {
       'font-size': 24,
       'font-family': 'Arial',
       'font-color': '#17F1C2FF',
+      'font-decoration': 'underline',
+      'font-style': 'bold',
     },
   })
 
@@ -48,8 +52,8 @@ export const createMockPcCanvas: () => PcElement = () => {
       name: 'button',
       width: 80,
       height: 40,
-      x: 150,
-      y: 200,
+      x: 170,
+      y: 180,
       background: '#50DA58',
       'border-width': 2,
       'border-style': 'double',
@@ -57,6 +61,8 @@ export const createMockPcCanvas: () => PcElement = () => {
       'font-size': 14,
       'font-family': 'Arial',
       'font-color': '',
+      'font-decoration': 'none',
+      'font-style': 'bold-italic',
     },
   })
 
@@ -77,6 +83,8 @@ export const createMockPcCanvas: () => PcElement = () => {
       'font-size': 14,
       'font-family': 'Arial',
       'font-color': '',
+      'font-decoration': 'none',
+      'font-style': 'normal',
     },
     children: [],
   })
@@ -108,6 +116,8 @@ export const createMockPcCanvas: () => PcElement = () => {
       'font-size': 14,
       'font-family': 'Arial',
       'font-color': '',
+      'font-decoration': 'none',
+      'font-style': 'normal',
     },
   })
 
