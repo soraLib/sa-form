@@ -28,6 +28,8 @@ export type ElementBorderAttributes = {
   'border-width'?: number
   /** border color */
   'border-color'?: CSSProperties['borderColor']
+  /** border radius */
+  'border-radius'?: number
 }
 export type ElementFontAttributes = {
   /** font size `px` */

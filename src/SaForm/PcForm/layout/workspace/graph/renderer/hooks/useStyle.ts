@@ -19,6 +19,14 @@ export function useElementStyle(
   })
 }
 
+export const createBorderStyle = (element: PcElement): CSSProperties => {
+  return {
+    borderStyle: element.attrs['border-style'],
+    borderWidth: `${element.attrs['border-width'] ?? 0}px`,
+    borderRadius: `${element.attrs['border-radius'] ?? 0}px`,
+    borderColor: element.attrs['border-color'],
+  }
+}
 export const createFontStyle = (element: PcElement): CSSProperties => {
   return {
     fontSize: `${element.attrs['font-size'] ?? 14}px`,
@@ -41,9 +49,7 @@ export function useElementInnerStyle(
       width: `${element.attrs.width}px`,
       height: `${element.attrs.height}px`,
       background: element.attrs.background,
-      borderStyle: element.attrs['border-style'],
-      borderWidth: `${element.attrs['border-width'] ?? 0}px`,
-      borderColor: element.attrs['border-color'],
+      ...createBorderStyle(element),
       ...createFontStyle(element),
     }
 

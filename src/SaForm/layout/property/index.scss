@@ -21,6 +21,10 @@
     &-content {
       flex-grow: 1;
       text-align: start;
+
+      .n-color-picker-trigger__value {
+        overflow: hidden;
+      }
     }
 
     .sa-plugin {
