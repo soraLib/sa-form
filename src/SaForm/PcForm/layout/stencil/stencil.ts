@@ -1,4 +1,6 @@
 import { ElementType } from '../../../element'
+import { TableColumnAlign } from '../../plugins/table'
+import type { PcElementAttributes } from '../../element'
 import type { NativeStencil } from '../../../layout/stencil'
 import type { PcGraph } from '../../graph'
 
@@ -22,12 +24,6 @@ export const pcStencilIcons: Record<ElementType, string> = {
   [ElementType.Map]: 'iconditukongjian',
   [ElementType.Chart]: 'icontubiaokuang',
 }
-
-export type ElementRadioAttributes = {
-  'row-number'?: number
-  'column-number'?: number
-}
-export type PcElementAttributes = ElementRadioAttributes
 
 export const pcStencil: NativeStencil<PcElementAttributes> = <Graph = PcGraph>(
   graph: Graph
@@ -183,12 +179,33 @@ export const pcStencil: NativeStencil<PcElementAttributes> = <Graph = PcGraph>(
         attrs: {
           type: ElementType.Table,
           name: 'Table',
-          width: 200,
-          height: 100,
+          width: 250,
+          height: 150,
           background: '',
           'border-color': '#585858',
           'border-width': 1,
           'border-style': 'solid',
+          data: [
+            {
+              title: 'Column A',
+              width: 150,
+              align: TableColumnAlign.Left,
+              color: '',
+              backgroundColor: '',
+              wrappable: true,
+              isHtml: false,
+              sortable: true,
+            },
+            {
+              title: 'Column B',
+              align: TableColumnAlign.Left,
+              color: '',
+              backgroundColor: '',
+              wrappable: true,
+              isHtml: false,
+              sortable: true,
+            },
+          ],
         },
       },
       {

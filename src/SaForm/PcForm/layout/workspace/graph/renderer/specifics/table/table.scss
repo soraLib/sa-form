@@ -1,0 +1,14 @@
+.sa-table {
+  width: inherit;
+  height: inherit;
+  box-sizing: border-box;
+
+  &-inner {
+    width: inherit;
+    height: inherit;
+
+    .n-data-table-empty {
+      display: none !important;
+    }
+  }
+}

@@ -19,8 +19,10 @@ export default defineComponent({
   },
 
   setup(props) {
-    const rowNumber = computed(() => props.element.attrs['row-number'])
-    const columnNumber = computed(() => props.element.attrs['column-number'])
+    const rowNumber = computed(() => props.element.attrs['row-number'] ?? 2)
+    const columnNumber = computed(
+      () => props.element.attrs['column-number'] ?? 2
+    )
 
     return () => (
       <div class="sa-checkbox">
