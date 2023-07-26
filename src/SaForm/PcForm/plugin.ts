@@ -1,6 +1,7 @@
 import { ElementType } from '../element'
 import { BasicPlugins } from '../plugin'
 import { SelectPlugins } from './plugins/select'
+import { RadioPlugins } from './plugins/radio'
 import type { SaPluginLayout } from '../plugin'
 import type { PcGraph } from './graph'
 import type { PcElementAttributes } from './element'
@@ -41,10 +42,18 @@ export const PcPlugin: SaPluginLayout = {
     basic: [...basicPlugins, BasicPlugins['widget-align']],
   },
   [ElementType.Radio]: {
-    basic: [...basicPlugins, BasicPlugins['widget-align']],
+    basic: [
+      ...basicPlugins,
+      RadioPlugins['widget-rows-x-columns'],
+      SelectPlugins['select-options'],
+    ],
   },
   [ElementType.Checkbox]: {
-    basic: [...basicPlugins, BasicPlugins['widget-align']],
+    basic: [
+      ...basicPlugins,
+      RadioPlugins['widget-rows-x-columns'],
+      SelectPlugins['select-options'],
+    ],
   },
   [ElementType.Select]: {
     basic: [

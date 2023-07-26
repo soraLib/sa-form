@@ -3,12 +3,18 @@ import { ElementType } from '../element'
 import type { SelectOption } from './plugins/select'
 import type { BasicElement, BasicElementAttributes } from '../element'
 
-export interface PcSelectAttributes {
+export type PcSelectAttributes = {
   /** select options */
   options?: SelectOption[]
 }
+export type PcRadioAttributes = {
+  'row-number': number
+  'column-number': number
+}
 
-export type PcElementAttributes = BasicElementAttributes & PcSelectAttributes
+export type PcElementAttributes = BasicElementAttributes &
+  PcSelectAttributes &
+  PcRadioAttributes
 
 export function isPcElementAttribute(
   attr: string,
