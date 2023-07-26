@@ -1,0 +1,13 @@
+.widget-table-data {
+  .is-current-row td {
+    background-color: var(--c-bg-hover) !important;
+  }
+
+  &-column-form-scrollbar {
+    width: 320px;
+    max-height: 380px;
+  }
+  &-column-form {
+    padding: 0 14px;
+  }
+}

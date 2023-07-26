@@ -1,7 +1,7 @@
 import { defineComponent, ref } from 'vue'
 import { NButton, NDataTable, NIcon } from 'naive-ui'
 import { Array as SaArray } from 'sugar-sajs'
-import { Add, Close } from '@vicons/ionicons5'
+import { Add } from '@vicons/ionicons5'
 import { isPcElementAttribute } from '../../element'
 import { ShowOrEdit } from './ShowOrEdit'
 import type { SelectOption } from '../../plugins/select'
@@ -37,14 +37,10 @@ export default defineComponent({
       }))
     }
 
-    const expose = {
+    ctx.expose({
       update() {
         return selectOptions.value
       },
-    }
-
-    ctx.expose({
-      ...expose,
     })
 
     function onAddRow() {

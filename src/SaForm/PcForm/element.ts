@@ -1,5 +1,6 @@
 import { cloneDeep } from 'lodash-es'
 import { ElementType } from '../element'
+import type { TableData } from './plugins/table'
 import type { SelectOption } from './plugins/select'
 import type { BasicElement, BasicElementAttributes } from '../element'
 
@@ -8,13 +9,16 @@ export type PcSelectAttributes = {
   options?: SelectOption[]
 }
 export type PcRadioAttributes = {
-  'row-number': number
-  'column-number': number
+  'row-number'?: number
+  'column-number'?: number
 }
-
+export type PcTableAttributes = {
+  data?: TableData
+}
 export type PcElementAttributes = BasicElementAttributes &
   PcSelectAttributes &
-  PcRadioAttributes
+  PcRadioAttributes &
+  PcTableAttributes
 
 export function isPcElementAttribute(
   attr: string,

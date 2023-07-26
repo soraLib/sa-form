@@ -9,7 +9,7 @@ export const SelectPlugins = {
     type: SaPluginType.Dialog,
     dialog: {
       component: 'widget-options',
-      title: 'options',
+      title: 'Options',
     },
     disabled: true,
     filter: (value: SelectOption[]) =>
