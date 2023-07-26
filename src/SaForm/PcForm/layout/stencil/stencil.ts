@@ -23,7 +23,15 @@ export const pcStencilIcons: Record<ElementType, string> = {
   [ElementType.Chart]: 'icontubiaokuang',
 }
 
-export const pcStencil: NativeStencil = <Graph = PcGraph>(graph: Graph) => ({
+export type ElementRadioAttributes = {
+  'row-number'?: number
+  'column-number'?: number
+}
+export type PcElementAttributes = ElementRadioAttributes
+
+export const pcStencil: NativeStencil<PcElementAttributes> = <Graph = PcGraph>(
+  graph: Graph
+) => ({
   groups: [
     { name: 'Container', collapsable: true },
     { name: 'Common', collapsable: true },
@@ -120,6 +128,14 @@ export const pcStencil: NativeStencil = <Graph = PcGraph>(graph: Graph) => ({
           'border-color': '#585858',
           'border-width': 1,
           'border-style': 'solid',
+          'column-number': 2,
+          'row-number': 2,
+          options: [
+            { label: 'Radio A', value: 'Value A' },
+            { label: 'Radio B', value: 'Value B' },
+            { label: 'Radio C', value: 'Value C' },
+            { label: 'Radio D', value: 'Value D' },
+          ],
         },
       },
       {
@@ -133,6 +149,14 @@ export const pcStencil: NativeStencil = <Graph = PcGraph>(graph: Graph) => ({
           'border-color': '#585858',
           'border-width': 1,
           'border-style': 'solid',
+          'column-number': 2,
+          'row-number': 2,
+          options: [
+            { label: 'Checkbox A', value: 'Value A' },
+            { label: 'Checkbox B', value: 'Value B' },
+            { label: 'Checkbox C', value: 'Value C' },
+            { label: 'Checkbox D', value: 'Value D' },
+          ],
         },
       },
       {

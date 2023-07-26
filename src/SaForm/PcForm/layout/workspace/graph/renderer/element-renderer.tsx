@@ -4,6 +4,7 @@ import { ModifierKey } from '../../../../../graph'
 import { useElementStickReszie } from './hooks/useResize'
 import { useElementInnerStyle, useElementStyle } from './hooks/useStyle'
 import ElementRenderer from './element-renderer'
+import ElementSpecific from './specifics'
 import { aheadSelected, useElementDrag } from './hooks/useDrag'
 import { useElementSelect } from './hooks/useSelect'
 import { usePan } from './hooks/usePan'
@@ -203,8 +204,7 @@ export default defineComponent({
         )}
 
         <div class="pc-element-inner" style={elementInnerStyle.value}>
-          {/* TODO: specific display styles */}
-          <span> {props.element.parent && props.element.attrs.name}</span>
+          <ElementSpecific graph={props.graph} element={props.element} />
 
           {props.element.children?.length
             ? props.element.children.map((ele) => (

@@ -1,0 +1,34 @@
+.sa-checkbox {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: inherit;
+  height: inherit;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+
+  .checkbox-item {
+    padding-left: 14px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-shrink: 0;
+
+    .checkbox-item-label {
+      padding-left: 10px;
+    }
+
+    &::before {
+      content: '';
+      border: 1px solid var(--c-border);
+      background-color: var(--c-bg);
+      width: 14px;
+      height: 14px;
+      display: inline-block;
+      box-sizing: border-box;
+      flex-shrink: 0;
+    }
+  }
+}

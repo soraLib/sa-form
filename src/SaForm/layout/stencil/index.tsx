@@ -2,26 +2,26 @@ import { Transition, computed, defineComponent, ref } from 'vue'
 import { FlashOutline } from '@vicons/ionicons5'
 import { NIcon, NInput, NScrollbar } from 'naive-ui'
 import StencilGroup from './group'
-import type { PropType } from 'vue'
 import type { PartialOptional } from 'sugar-sajs'
+import type { PropType } from 'vue'
 import type { BasicGraph } from '../../graph'
-import type { BasicElement } from '../../element'
+import type { BasicElementAttributes } from '../../element'
 
 import './index.scss'
 
 export type StencilAttrKey = 'type' | 'name' | 'width' | 'height'
-export type StencilAttrs = PartialOptional<
-  BasicElement['attrs'],
-  Exclude<keyof BasicElement['attrs'], StencilAttrKey>
+export type StencilAttributes<T = object> = PartialOptional<
+  BasicElementAttributes & T,
+  Exclude<keyof (BasicElementAttributes & T), StencilAttrKey>
 >
 // native stencil config
-export type NativeStencil = (graph: any /** TODO: */) => {
+export type NativeStencil<T = object> = (graph: any /** TODO: */) => {
   groups: { name: string }[]
   nodes: {
-    [key in ReturnType<NativeStencil>['groups'][number]['name']]: {
+    [key in ReturnType<NativeStencil<T>>['groups'][number]['name']]: {
       icon: string
       title?: string
-      attrs: StencilAttrs
+      attrs: StencilAttributes<T>
     }[]
   }
 }
