@@ -15,10 +15,14 @@ export type PcRadioAttributes = {
 export type PcTableAttributes = {
   data?: TableData
 }
+export type PcTimePickerAttributes = {
+  'time-format'?: string
+}
 export type PcElementAttributes = BasicElementAttributes &
   PcSelectAttributes &
   PcRadioAttributes &
-  PcTableAttributes
+  PcTableAttributes &
+  PcTimePickerAttributes
 
 export function isPcElementAttribute(
   attr: string,
