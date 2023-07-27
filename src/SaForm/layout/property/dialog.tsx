@@ -52,8 +52,11 @@ export default defineComponent({
     }
 
     const child = computed(() =>
-      asyncCompo.value
-        ? h(asyncCompo.value, { graph: props.graph, plugin: props.plugin })
+      dialogVisible.value && asyncCompo.value
+        ? h(asyncCompo.value, {
+            graph: props.graph,
+            plugin: props.plugin,
+          })
         : ''
     )
 

@@ -1,14 +1,14 @@
 import { computed, defineComponent } from 'vue'
-import { ChevronDown } from '@vicons/ionicons5'
+import { TimeOutline } from '@vicons/ionicons5'
 import { NIcon } from 'naive-ui'
 import type { PropType } from 'vue'
 import type { PcElement } from '@/SaForm/PcForm/element'
 import type { PcGraph } from '@/SaForm/PcForm/graph'
 
-import './select.scss'
+import './time-picker.scss'
 
 export default defineComponent({
-  name: 'ElementRendererSpecificSelect',
+  name: 'ElementRendererSpecificTimePicker',
   props: {
     graph: {
       required: true,
@@ -21,19 +21,11 @@ export default defineComponent({
   },
 
   setup(props) {
-    const options = computed(() => props.element.attrs.options)
-
     return () => (
-      <div
-        class="sa-select"
-        title={options.value?.map(({ label }) => label).join('; ')}
-      >
-        <span>
-          {props.element.attrs.name} (
-          {options.value?.length && options.value.length})
-        </span>
-        <NIcon class="sa-select-arrow" size={14}>
-          <ChevronDown />
+      <div class="sa-time-picker">
+        <span>{props.element.attrs['time-format']}</span>
+        <NIcon class="sa-time-picker-arrow" size={14}>
+          <TimeOutline />
         </NIcon>
       </div>
     )

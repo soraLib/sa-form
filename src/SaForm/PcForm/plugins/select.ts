@@ -11,7 +11,6 @@ export const SelectPlugins = {
       component: 'widget-options',
       title: 'Options',
     },
-    disabled: true,
     filter: (value: SelectOption[]) =>
       value.map((item) => item.label).join('; '),
   },

@@ -3,6 +3,8 @@ import { BasicPlugins } from '../plugin'
 import { SelectPlugins } from './plugins/select'
 import { RadioPlugins } from './plugins/radio'
 import { TablePlugins } from './plugins/table'
+import { TimePickerPlugins } from './plugins/timePicker'
+import { ContextmenuPlugins } from './plugins/contextmenu'
 import type { SaPluginLayout } from '../plugin'
 import type { PcGraph } from './graph'
 import type { PcElementAttributes } from './element'
@@ -72,11 +74,11 @@ export const PcPlugin: SaPluginLayout = {
   [ElementType.Tab]: {
     basic: [...basicPlugins],
   },
-  [ElementType.Calendar]: {
-    basic: [...basicPlugins],
+  [ElementType.TimePicker]: {
+    basic: [...basicPlugins, TimePickerPlugins['widget-time-format']],
   },
   [ElementType.Contextmenu]: {
-    basic: [...basicPlugins],
+    basic: [...basicPlugins, ContextmenuPlugins['widget-contextmenu-binds']],
   },
   [ElementType.Tree]: {
     basic: [...basicPlugins],

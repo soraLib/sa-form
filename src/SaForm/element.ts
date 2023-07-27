@@ -14,7 +14,7 @@ export enum ElementType {
   Table,
   Image,
   Tab,
-  Calendar,
+  TimePicker,
   Contextmenu,
   Tree,
   Map,
