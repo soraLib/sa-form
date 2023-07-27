@@ -4,6 +4,7 @@ import CheckboxSpecific from './checkbox/checkbox'
 import SelectSpecific from './select/select'
 import TableSpecific from './table/table'
 import TimePickerSpecific from './time-picker/time-picker'
+import ContextmenuSpecific from './contextmenu/contextmenu'
 import type { Component, PropType } from 'vue'
 import type { PcElement } from '@/SaForm/PcForm/element'
 import type { PcGraph } from '@/SaForm/PcForm/graph'
@@ -15,6 +16,7 @@ const SpecificComponentMap: Partial<Record<ElementType, Component>> = {
   [ElementType.Select]: SelectSpecific,
   [ElementType.Table]: TableSpecific,
   [ElementType.TimePicker]: TimePickerSpecific,
+  [ElementType.Contextmenu]: ContextmenuSpecific,
 }
 export default defineComponent({
   name: 'ElementRendererSpecifics',

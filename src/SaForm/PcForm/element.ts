@@ -18,11 +18,15 @@ export type PcTableAttributes = {
 export type PcTimePickerAttributes = {
   'time-format'?: string
 }
+export type PcContextmenuAttributes = {
+  'contextmenu-binds'?: string[]
+}
 export type PcElementAttributes = BasicElementAttributes &
   PcSelectAttributes &
   PcRadioAttributes &
   PcTableAttributes &
-  PcTimePickerAttributes
+  PcTimePickerAttributes &
+  PcContextmenuAttributes
 
 export function isPcElementAttribute(
   attr: string,
