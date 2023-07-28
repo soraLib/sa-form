@@ -1,7 +1,8 @@
 import { computed, defineComponent, ref } from 'vue'
 import { NTransfer, NTree } from 'naive-ui'
 import { pcStencilIcons } from '../../layout/stencil/stencil'
-import type { PcElement } from '../../element'
+import { createElementTreeData } from '../../utils/tree'
+import type { ElementTreeDataOption } from '../../utils/tree'
 import type {
   TransferRenderSourceList,
   TransferRenderTargetLabel,
@@ -12,23 +13,6 @@ import type { PcGraph } from '../../graph'
 
 import './index.scss'
 import { ElementType } from '@/SaForm/element'
-
-type Option = {
-  label: string
-  value: string
-  children?: Option[]
-  type: ElementType
-}
-const createData = (elems?: PcElement[]): Option[] | undefined => {
-  return elems
-    ?.filter((elem) => elem.attrs.type !== ElementType.Contextmenu)
-    .map((elem) => ({
-      label: elem.attrs.name,
-      value: elem.attrs.id,
-      children: createData(elem.children),
-      type: elem.attrs.type,
-    }))
-}
 
 export default defineComponent({
   name: 'WidgetContextmenuBinds',
@@ -43,7 +27,9 @@ export default defineComponent({
     },
   },
   setup(props, ctx) {
-    const treeData = computed(() => createData(props.graph.canvas.children))
+    const treeData = computed(() =>
+      createElementTreeData(props.graph.canvas.children)
+    )
     const checkedKeys = ref<string[]>([
       ...(props.graph.selected[0].attrs['contextmenu-binds'] ?? []),
     ])
@@ -62,7 +48,7 @@ export default defineComponent({
           node.value == pattern || node.label.includes(pattern)
         }
         showIrrelevantNodes={false}
-        render-label={({ option }: { option: Option }) => (
+        render-label={({ option }: { option: ElementTreeDataOption }) => (
           <div
             title={`${ElementType[option.type]}: ${option.label}`}
             class="text-left w-full overflow-hidden whitespace-nowrap text-ellipsis"
@@ -70,7 +56,7 @@ export default defineComponent({
             {option.label}
           </div>
         )}
-        render-prefix={({ option }: { option: Option }) => (
+        render-prefix={({ option }: { option: ElementTreeDataOption }) => (
           <i class={`iconfont ${pcStencilIcons[option.type]}`} />
         )}
         checkedKeys={checkedKeys.value}

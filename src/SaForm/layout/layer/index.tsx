@@ -1,14 +1,15 @@
-import { Transition, computed, defineComponent, ref } from 'vue'
+import { Transition, computed, defineComponent, ref, watch } from 'vue'
 import { NIcon, NInput, NPopover, NScrollbar, NSwitch, NTree } from 'naive-ui'
 import { ChevronBack, Funnel, Layers } from '@vicons/ionicons5'
 import { useStorage } from '@vueuse/core'
-import { type BasicElement, ElementType } from '../../element'
-import { isContainer } from '../../PcForm/element'
+import { ElementType } from '../../element'
+import { isContainerType } from '../../PcForm/element'
+import { createElementTreeData } from '../../PcForm/utils/tree'
+import type { ElementTreeDataOption } from '../../PcForm/utils/tree'
 import type { PropType } from 'vue'
 import type { BasicGraph } from '../../graph'
 
 import './index.scss'
-import type { TreeOption } from 'naive-ui'
 import { pcStencilIcons } from '@/SaForm/PcForm/layout/stencil/stencil'
 import { useClazs } from '@/SaForm/utils/class'
 
@@ -24,9 +25,11 @@ export default defineComponent({
 
   setup(props) {
     const visible = computed(() => props.graph.layout.layer)
-    const treeData = computed(() => props.graph.canvas.children)
+    const treeData = computed(() =>
+      createElementTreeData(props.graph.canvas.children)
+    )
     const selectedKeys = computed(() =>
-      props.graph.selected.map(({ key }) => key)
+      props.graph.selected.map(({ attrs }) => attrs.id)
     )
     const onUpdateSelectedKeys = (keys: string[]) => {
       const selected = props.graph.setSelected(keys)
@@ -101,18 +104,22 @@ export default defineComponent({
 
             <NScrollbar class="my-2">
               <NTree
+                keyField="value"
                 block-line
                 block-node
                 showIrrelevantNodes={!hideIrrelevantNodes.value}
-                data={treeData.value as unknown as TreeOption[]}
+                data={treeData.value}
                 pattern={pattern.value}
                 filter={(pattern, node: any) =>
                   node.attrs.id == pattern || node.attrs.name.includes(pattern)
                 }
-                node-props={({ option }: { option: BasicElement }) => {
-                  const index = props.graph.selected.indexOf(option)
+                node-props={({ option }: { option: ElementTreeDataOption }) => {
+                  const index = props.graph.selected.findIndex(
+                    (elem) => elem.attrs.id === option.value
+                  )
                   return {
-                    'is-empty': isContainer(option) && !option.children?.length,
+                    'is-empty':
+                      isContainerType(option.type) && !option.children?.length,
                     'layer-tree-status':
                       index === -1
                         ? 'not-selected'
@@ -124,19 +131,23 @@ export default defineComponent({
                   }
                 }}
                 selectedKeys={selectedKeys.value}
-                render-label={({ option }: { option: BasicElement }) => (
+                render-label={({
+                  option,
+                }: {
+                  option: ElementTreeDataOption
+                }) => (
                   <div
-                    title={`${ElementType[option.attrs.type]}: ${
-                      option.attrs.name
-                    }`}
+                    title={`${ElementType[option.type]}: ${option.label}`}
                     class="text-left w-full overflow-hidden whitespace-nowrap text-ellipsis"
                   >
-                    {option.attrs.name}
+                    {option.label}
                   </div>
                 )}
-                render-prefix={({ option }: { option: BasicElement }) => (
-                  <i class={`iconfont ${pcStencilIcons[option.attrs.type]}`} />
-                )}
+                render-prefix={({
+                  option,
+                }: {
+                  option: ElementTreeDataOption
+                }) => <i class={`iconfont ${pcStencilIcons[option.type]}`} />}
                 onUpdate:selectedKeys={onUpdateSelectedKeys}
               ></NTree>
             </NScrollbar>

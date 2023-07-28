@@ -63,7 +63,6 @@ export interface IPcElement extends BasicElement {
 }
 
 export class PcElement implements IPcElement {
-  key: string
   el?: HTMLElement
   parent?: PcElement
   tabs?: TabPane[]
@@ -75,7 +74,6 @@ export class PcElement implements IPcElement {
   ) {
     this.parent = config.parent
     this.attrs = cloneDeep(config.attrs)
-    this.key = config.attrs.id
     if (config.children || isContainerType(config.attrs.type))
       this.children = config.children ?? []
     if (config.tabs) this.tabs = config.tabs
