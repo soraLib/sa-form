@@ -1,8 +1,9 @@
 import { cloneDeep } from 'lodash-es'
-import { findNode, setObjectValues } from 'sugar-sajs'
+import { setObjectValues } from 'sugar-sajs'
 import { BasicRecordType } from '../record'
 import { PcElement } from './element'
 import { PcRecord } from './record'
+import { findNode } from './utils/node'
 import type { BasicClipBoard, Position } from '../clipboard'
 import type { PcGraph } from './graph'
 

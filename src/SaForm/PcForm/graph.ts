@@ -1,18 +1,18 @@
-import { findNode, findTreeNode, setObjectValues } from 'sugar-sajs'
+import { findTreeNode, setObjectValues } from 'sugar-sajs'
 import { cloneDeep, pick } from 'lodash-es'
 import {
   BasicRecordType,
   isCDRecordDataList,
   isURecordDataList,
 } from '../record'
-import { getNextId } from '../utils/element'
 import { ModifierKey, MoveDirection } from '../graph'
-import { PcElement } from './element'
+import { PcElement, getNextId } from './element'
 import { PcRecord, PcRecordStore } from './record'
 
 import { PcClipBoard } from './clipboard'
 import { Events } from './events'
 import { getRectangle } from './layout/workspace/graph/renderer/utils/rectangle'
+import { findNode } from './utils/node'
 import type { Arrayable } from '@vueuse/core'
 import type {
   BasicGraph,
@@ -245,7 +245,7 @@ export class PcGraph extends Events implements BasicGraph {
   ): PcElement | undefined {
     const parent =
       (typeof arg === 'string'
-        ? findTreeNode(this.canvas.children!, (node) => node.attrs.id === arg)
+        ? findNode(this.canvas, (node) => node.attrs.id === arg)
         : arg) ?? this.canvas
 
     const createdChild = addGraphNode(this, child)
@@ -374,6 +374,8 @@ export class PcGraph extends Events implements BasicGraph {
     }
 
     if (!this.canvas.children) return
+
+    console.log('setsss', arg)
 
     if (Array.isArray(arg)) {
       const selected = arg.reduce<PcElement[]>((acc, cur) => {

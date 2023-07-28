@@ -1,5 +1,4 @@
 import { defineComponent } from 'vue'
-import { findNode } from 'sugar-sajs'
 import { setDataTransfer } from '../../../../utils/stencil'
 import { isContainer } from '../../../element'
 
@@ -8,6 +7,7 @@ import { gridFloor } from './renderer/hooks/utils'
 import type { StencilAttributes } from '../../../../layout/stencil'
 import type { PropType } from 'vue'
 import type { PcGraph } from '../../../graph'
+import { findNode } from '@/SaForm/PcForm/utils/node'
 
 export default defineComponent({
   name: 'SaPcFormGraph',
