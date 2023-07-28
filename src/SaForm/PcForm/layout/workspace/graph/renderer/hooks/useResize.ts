@@ -11,6 +11,9 @@ export const useElementStickReszie = (
   element: PcElement,
   graph: PcGraph
 ) => {
+  const parent = element.parent
+  if (!parent) return
+
   event.stopPropagation()
   graph.setResizeStick(stick)
 
@@ -98,8 +101,15 @@ export const useElementStickReszie = (
     let width = origin.width + deltaX
     let height = origin.height + deltaY
 
-    const maxWidth = element.parent!.attrs.width - x
-    const maxHeight = element.parent!.attrs.height - y
+    const parentBorderLength = (parent.attrs['border-width'] ?? 0) * 2
+    const parentWidth = parent.attrs.width - parentBorderLength
+    const parentHeight =
+      parent.attrs.height -
+      (parent.attrs['tab-height'] ?? 0) -
+      parentBorderLength
+
+    const maxWidth = parentWidth - x
+    const maxHeight = parentHeight - y
     width = width > maxWidth ? maxWidth : width
     height = height > maxHeight ? maxHeight : height
 
@@ -116,8 +126,10 @@ export const useElementStickReszie = (
       )
       x = rect.x
       y = rect.y
-      width = rect.width
-      height = rect.height
+      const rectMaxWidth = parentWidth - x
+      const rectMaxHeight = parentHeight - y
+      width = rect.width > rectMaxWidth ? rectMaxWidth : rect.width
+      height = rect.height > rectMaxHeight ? rectMaxHeight : rect.height
     }
 
     graph.updateElemData(

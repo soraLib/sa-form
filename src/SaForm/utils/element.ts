@@ -1,5 +1,3 @@
-import { findNode } from 'sugar-sajs'
-import { BasicGraph } from '../graph'
 import type { BasicElement, BasicElementAttributes } from '../element'
 
 /**
@@ -17,6 +15,7 @@ export function getNextId(element: BasicElement): string {
 
     if (element.children?.length) {
       for (const child of element.children) {
+        // TODO: in tabs
         const childNextId = getMaxId(child)
 
         const childIdNumber = Number(childId)

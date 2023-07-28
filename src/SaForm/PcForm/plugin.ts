@@ -5,6 +5,7 @@ import { RadioPlugins } from './plugins/radio'
 import { TablePlugins } from './plugins/table'
 import { TimePickerPlugins } from './plugins/timePicker'
 import { ContextmenuPlugins } from './plugins/contextmenu'
+import { TabPlugins } from './plugins/tab'
 import type { SaPluginLayout } from '../plugin'
 import type { PcGraph } from './graph'
 import type { PcElementAttributes } from './element'
@@ -72,7 +73,7 @@ export const PcPlugin: SaPluginLayout = {
     basic: [...basicPlugins],
   },
   [ElementType.Tab]: {
-    basic: [...basicPlugins],
+    basic: [...basicPlugins, TabPlugins['widget-tab-height']],
   },
   [ElementType.TimePicker]: {
     basic: [...basicPlugins, TimePickerPlugins['widget-time-format']],

@@ -1,9 +1,9 @@
-import { BasicRecordType } from '../../../../../../record'
-import { PcRecord } from '../../../../../record'
 import { getRectangle } from '../utils/rectangle'
 import { gridFloor } from './utils'
-import type { PcGraph } from '../../../../../graph'
-import type { PcElement } from '../../../../../element'
+import type { PcElement } from '@/SaForm/PcForm/element'
+import type { PcGraph } from '@/SaForm/PcForm/graph'
+import { PcRecord } from '@/SaForm/PcForm/record'
+import { BasicRecordType } from '@/SaForm/record'
 
 export const aheadSelected = (element: PcElement, graph: PcGraph) => {
   return graph.setSelected([
@@ -33,6 +33,9 @@ export const useElementDrag = (
   element: PcElement,
   graph: PcGraph
 ) => {
+  const parent = element.parent
+  if (!parent) return
+
   selectOrAhead(element, graph)
   const rect = getRectangle(graph.selected)
 
@@ -82,17 +85,24 @@ export const useElementDrag = (
     const finalX = rectPos._startX + moveX
     const finalY = rectPos._startY + moveY
 
+    const parentBorderLength = (parent.attrs['border-width'] ?? 0) * 2
+    const parentWidth = parent.attrs.width - parentBorderLength
+    const parentHeight =
+      parent.attrs.height -
+      (parent.attrs['tab-height'] ?? 0) -
+      parentBorderLength
+
     // TODO: try to integrate into `graph.move`
     // limits the offset of the elements to ensure its always inside the parent.
     const finalMoveX =
-      finalX + rect.width > element.parent!.attrs.width
-        ? element.parent!.attrs.width - rect.width - rectPos._startX
+      finalX + rect.width > parentWidth
+        ? parentWidth - rect.width - rectPos._startX
         : finalX < 0
         ? -rectPos._startX
         : moveX
     const finalMoveY =
-      finalY + rect.height > element.parent!.attrs.height
-        ? element.parent!.attrs.height - rect.height - rectPos._startY
+      finalY + rect.height > parentHeight
+        ? parentHeight - rect.height - rectPos._startY
         : finalY < 0
         ? -rectPos._startY
         : moveY
