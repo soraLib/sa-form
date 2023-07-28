@@ -83,3 +83,37 @@ export class PcElement implements IPcElement {
     this.el = el
   }
 }
+
+/**
+ * return next unique id
+ */
+export function getNextId(element: PcElement): string {
+  return (Number(getMaxId(element)) + 1).toString()
+}
+
+function getMaxId(element: PcElement): string {
+  const ids: number[] = []
+
+  if (element.attrs.id) ids.push(Number(element.attrs.id))
+
+  if (element.children?.length) {
+    for (const child of element.children) {
+      const childId = getMaxId(child)
+      if (childId) {
+        ids.push(Number(childId))
+      }
+    }
+  }
+  if (element.tabs?.length) {
+    for (const pane of element.tabs) {
+      for (const child of pane.children) {
+        const childId = getMaxId(child)
+        if (childId) {
+          ids.push(Number(childId))
+        }
+      }
+    }
+  }
+
+  return ids.length > 0 ? Math.max(...ids).toString() : ''
+}

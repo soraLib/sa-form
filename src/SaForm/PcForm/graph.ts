@@ -5,9 +5,8 @@ import {
   isCDRecordDataList,
   isURecordDataList,
 } from '../record'
-import { getNextId } from '../utils/element'
 import { ModifierKey, MoveDirection } from '../graph'
-import { PcElement } from './element'
+import { PcElement, getNextId } from './element'
 import { PcRecord, PcRecordStore } from './record'
 
 import { PcClipBoard } from './clipboard'
