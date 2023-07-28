@@ -54,6 +54,7 @@
   &-inner {
     @apply select-none;
     box-sizing: border-box;
+    overflow: hidden;
   }
 
   .bounding {

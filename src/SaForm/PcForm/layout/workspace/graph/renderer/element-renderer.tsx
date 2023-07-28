@@ -1,6 +1,4 @@
 import { computed, defineComponent, ref, watch } from 'vue'
-import { useClazs } from '../../../../../utils/class'
-import { ModifierKey } from '../../../../../graph'
 import { useElementStickReszie } from './hooks/useResize'
 import { useElementInnerStyle, useElementStyle } from './hooks/useStyle'
 import ElementRenderer from './element-renderer'
@@ -10,8 +8,11 @@ import { useElementSelect } from './hooks/useSelect'
 import { usePan } from './hooks/usePan'
 import { useElementBounding } from './hooks/useBounding'
 import type { CSSProperties, PropType } from 'vue'
-import type { PcGraph, Stick } from '../../../../graph'
-import type { PcElement } from '../../../../element'
+import type { PcElement } from '@/SaForm/PcForm/element'
+import type { PcGraph, Stick } from '@/SaForm/PcForm/graph'
+import { ElementType } from '@/SaForm/element'
+import { ModifierKey } from '@/SaForm/graph'
+import { useClazs } from '@/SaForm/utils/class'
 
 import './element.scss'
 
@@ -206,7 +207,9 @@ export default defineComponent({
         <div class="pc-element-inner" style={elementInnerStyle.value}>
           <ElementSpecific graph={props.graph} element={props.element} />
 
-          {props.element.children?.length
+          {(props.element.attrs.type === ElementType.Canvas ||
+            props.element.attrs.type === ElementType.Container) &&
+          props.element.children?.length
             ? props.element.children.map((ele) => (
                 <ElementRenderer
                   key={ele.attrs.id}

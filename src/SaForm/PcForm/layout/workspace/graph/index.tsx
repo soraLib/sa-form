@@ -1,11 +1,11 @@
 import { defineComponent } from 'vue'
 import { findNode } from 'sugar-sajs'
 import { setDataTransfer } from '../../../../utils/stencil'
-import { PcElement, isContainer } from '../../../element'
+import { isContainer } from '../../../element'
 
 import ElementRenderer from './renderer/element-renderer'
 import { gridFloor } from './renderer/hooks/utils'
-import type { StencilAttrs } from '../../../../layout/stencil'
+import type { StencilAttributes } from '../../../../layout/stencil'
 import type { PropType } from 'vue'
 import type { PcGraph } from '../../../graph'
 
@@ -47,7 +47,7 @@ export default defineComponent({
 
       if (!parent || !isContainer(parent)) return
 
-      const attrs: StencilAttrs = JSON.parse(elementMessage)
+      const attrs: StencilAttributes = JSON.parse(elementMessage)
 
       const dropElementData = {
         parent,

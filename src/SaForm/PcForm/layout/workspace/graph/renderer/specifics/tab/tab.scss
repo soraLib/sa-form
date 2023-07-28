@@ -1,0 +1,13 @@
+.sa-tab {
+  width: inherit;
+  height: inherit;
+  box-sizing: border-box;
+
+  .n-tabs .n-tabs-rail {
+    padding: 0;
+  }
+
+  .sa-tab-pane {
+    height: 100%;
+  }
+}

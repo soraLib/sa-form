@@ -55,6 +55,7 @@ export const pcStencil: NativeStencil<PcElementAttributes> = <Graph = PcGraph>(
           width: 200,
           height: 100,
           background: '',
+          'tab-height': 40,
         },
       },
     ],

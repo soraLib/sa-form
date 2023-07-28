@@ -73,9 +73,9 @@ export const createMockPcCanvas: () => PcElement = () => {
   const child3 = new PcElement({
     parent: canvas,
     attrs: {
-      type: ElementType.Container,
+      type: ElementType.Tab,
       id: '4',
-      name: 'mock container',
+      name: 'mock tab',
       width: 400,
       height: 200,
       x: 50,
@@ -90,9 +90,70 @@ export const createMockPcCanvas: () => PcElement = () => {
       'font-color': '',
       'font-decoration': 'none',
       'font-style': 'normal',
+      'tab-height': 40,
     },
-    children: [],
+    tabs: [
+      {
+        label: 'Pane A',
+        children: [],
+      },
+      {
+        label: 'Pane B',
+        children: [],
+      },
+    ],
   })
+
+  child3.tabs?.[0].children.push(
+    new PcElement({
+      parent: child3,
+      attrs: {
+        id: '6',
+        type: ElementType.Text,
+        name: 'A',
+        width: 100,
+        height: 40,
+        x: 100,
+        y: 50,
+        background: '',
+        'border-style': 'solid',
+        'border-color': '#17F1C2FF',
+        'border-width': 1,
+        'font-size': 24,
+        'font-family': 'Arial',
+        'font-color': '#17F1C2FF',
+        'font-decoration': 'underline',
+        'font-style': 'bold',
+        'align-vertical': 'start',
+        'align-horizontal': 'center',
+      },
+    })
+  )
+  child3.tabs?.[1].children.push(
+    new PcElement({
+      parent: child3,
+      attrs: {
+        id: '7',
+        type: ElementType.Text,
+        name: 'B',
+        width: 80,
+        height: 40,
+        x: 120,
+        y: 50,
+        background: '',
+        'border-style': 'solid',
+        'border-color': '#2160FFFF',
+        'border-width': 1,
+        'font-size': 24,
+        'font-family': 'Arial',
+        'font-color': '#2160FFFF',
+        'font-decoration': 'underline',
+        'font-style': 'bold',
+        'align-vertical': 'start',
+        'align-horizontal': 'center',
+      },
+    })
+  )
 
   const child4 = new PcElement({
     parent: canvas,

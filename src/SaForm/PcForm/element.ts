@@ -21,12 +21,16 @@ export type PcTimePickerAttributes = {
 export type PcContextmenuAttributes = {
   'contextmenu-binds'?: string[]
 }
+export type PcTabAttributes = {
+  'tab-height'?: number
+}
 export type PcElementAttributes = BasicElementAttributes &
   PcSelectAttributes &
   PcRadioAttributes &
   PcTableAttributes &
   PcTimePickerAttributes &
-  PcContextmenuAttributes
+  PcContextmenuAttributes &
+  PcTabAttributes
 
 export function isPcElementAttribute(
   attr: string,
@@ -45,9 +49,16 @@ export const isContainerType = (type: ElementType) =>
 export const isContainer = (element: PcElement) =>
   isContainerType(element.attrs.type)
 
+export type TabPane = {
+  label: string
+  children: PcElement[]
+}
+export const isTab = (a: object): a is TabPane => Object.hasOwn(a, 'tabs')
+
 /** pc element */
 export interface IPcElement extends BasicElement {
   children?: IPcElement[]
+  tabs?: TabPane[]
   attrs: PcElementAttributes
 }
 
@@ -55,15 +66,19 @@ export class PcElement implements IPcElement {
   key: string
   el?: HTMLElement
   parent?: PcElement
+  tabs?: TabPane[]
   children?: PcElement[]
   attrs: PcElementAttributes
 
-  constructor(config: Pick<IPcElement, 'parent' | 'children' | 'attrs'>) {
+  constructor(
+    config: Pick<IPcElement, 'parent' | 'children' | 'attrs' | 'tabs'>
+  ) {
     this.parent = config.parent
     this.attrs = cloneDeep(config.attrs)
     this.key = config.attrs.id
     if (config.children || isContainerType(config.attrs.type))
       this.children = config.children ?? []
+    if (config.tabs) this.tabs = config.tabs
   }
 
   setEl(el?: HTMLElement) {
