@@ -107,6 +107,7 @@ const onSelectItem = (item: InternalContextmenuItem) => {
   border: 1px solid var(--c-divider);
   color: var(--c-text-1);
   min-width: 100px;
+  width: fit-content;
   box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
   position: absolute;
   z-index: 1000;

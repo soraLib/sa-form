@@ -375,8 +375,6 @@ export class PcGraph extends Events implements BasicGraph {
 
     if (!this.canvas.children) return
 
-    console.log('setsss', arg)
-
     if (Array.isArray(arg)) {
       const selected = arg.reduce<PcElement[]>((acc, cur) => {
         if (typeof cur === 'string') {
