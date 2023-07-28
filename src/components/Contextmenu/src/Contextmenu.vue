@@ -1,10 +1,10 @@
 <template>
-  <ul v-show="visible" ref="contextmenu" class="sa-contextmenu" :style="style">
+  <ul v-show="visible" ref="contextmenu" class="contextmenu" :style="style">
     <NScrollbar>
       <li
         v-for="item in interalMenu"
         :key="item.id"
-        class="sa-contextmenu-item"
+        class="contextmenu-item"
         :class="[
           `is-${item.type ?? 'primary'}`,
           { 'is-disabled': item.disabled, 'has-divider': item.divider },
@@ -101,7 +101,7 @@ const onSelectItem = (item: InternalContextmenuItem) => {
 </script>
 
 <style lang="scss" scoped>
-.sa-contextmenu {
+.contextmenu {
   padding: 10px 0;
   background: var(--c-bg-overlay);
   border: 1px solid var(--c-divider);
@@ -113,7 +113,7 @@ const onSelectItem = (item: InternalContextmenuItem) => {
   z-index: 1000;
   max-height: 282px;
 
-  .sa-contextmenu-item {
+  .contextmenu-item {
     cursor: pointer;
     font-size: 14px;
     padding: 5px 20px 5px 4px;
