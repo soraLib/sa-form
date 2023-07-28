@@ -14,6 +14,7 @@ export enum ElementType {
   Table,
   Image,
   Tab,
+  TabPane,
   TimePicker,
   Contextmenu,
   Tree,
@@ -73,7 +74,6 @@ export type BasicElementAttributes = {
 
 /** basic element */
 export interface BasicElement {
-  key: string
   el?: HTMLElement
   parent?: BasicElement
   children?: BasicElement[]
