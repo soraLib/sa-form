@@ -1,4 +1,4 @@
-import { isTab } from '../element'
+import { isContainer, isTab } from '../element'
 import { ElementType } from '../../element'
 import type { PcElement } from '../element'
 
@@ -24,7 +24,9 @@ export const createElementTreeData = (
             children: createElementTreeData(pane.children),
             disabled: true,
           }))
-        : createElementTreeData(elem.children),
+        : isContainer(elem)
+        ? createElementTreeData(elem.children)
+        : undefined,
       type: elem.attrs.type,
     })) ?? []
   )
