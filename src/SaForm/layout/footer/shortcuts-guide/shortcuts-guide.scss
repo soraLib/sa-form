@@ -1,0 +1,18 @@
+.shortcuts-guide-card {
+  width: 600px !important;
+
+  .key {
+    padding: 4px 8px;
+    border-radius: 4px;
+    background-color: var(--c-bg-hover);
+    margin-right: 20px;
+    position: relative;
+
+    &:not(:last-child)::after {
+      content: '+';
+      position: absolute;
+      right: -20px;
+      width: 15px;
+    }
+  }
+}
