@@ -1,4 +1,5 @@
-import { findTreeNode, setObjectValues } from 'sugar-sajs'
+import { nextTick } from 'vue'
+import { setObjectValues } from 'sugar-sajs'
 import { cloneDeep, pick } from 'lodash-es'
 import {
   BasicRecordType,
@@ -379,7 +380,7 @@ export class PcGraph extends Events implements BasicGraph {
       current = current.parent
     }
 
-    element.el?.scrollIntoView(options)
+    nextTick(() => element.el?.scrollIntoView(options))
   }
 
   setSelected(): PcElement | undefined
