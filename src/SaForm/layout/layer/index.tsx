@@ -111,7 +111,7 @@ export default defineComponent({
                 data={treeData.value}
                 pattern={pattern.value}
                 filter={(pattern, node: any) =>
-                  node.attrs.id == pattern || node.attrs.name.includes(pattern)
+                  node.value == pattern || node.label.includes(pattern)
                 }
                 node-props={({ option }: { option: ElementTreeDataOption }) => {
                   const index = props.graph.selected.findIndex(
