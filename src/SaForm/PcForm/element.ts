@@ -59,7 +59,7 @@ export const isTab = (
 ): a is PcElement &
   Required<Pick<PcElement, 'tabs'>> &
   Record<'attrs', PcElementAttributes & Required<PcTabAttributes>> =>
-  Object.hasOwn(a, 'tabs')
+  Array.isArray((a as PcElement).tabs)
 
 /** pc element */
 export interface IPcElement extends BasicElement {
