@@ -6,7 +6,7 @@ import {
   isURecordDataList,
 } from '../record'
 import { ModifierKey, MoveDirection } from '../graph'
-import { PcElement, getNextId } from './element'
+import { PcElement, getNextId, isTab } from './element'
 import { PcRecord, PcRecordStore } from './record'
 
 import { PcClipBoard } from './clipboard'
@@ -236,10 +236,18 @@ export class PcGraph extends Events implements BasicGraph {
   }
 
   /** add child and return its parent */
-  addChild(child: CDRecord, parent?: PcElement, needRecord?: boolean): PcElement
-  addChild(child: CDRecord, parent?: string, needRecord?: boolean): PcElement
   addChild(
-    child: CDRecord,
+    child: CDRecord<PcElement>,
+    parent?: PcElement,
+    needRecord?: boolean
+  ): PcElement
+  addChild(
+    child: CDRecord<PcElement>,
+    parent?: string,
+    needRecord?: boolean
+  ): PcElement
+  addChild(
+    child: CDRecord<PcElement>,
     arg?: string | PcElement,
     needRecord = true
   ): PcElement | undefined {
@@ -248,7 +256,7 @@ export class PcGraph extends Events implements BasicGraph {
         ? findNode(this.canvas, (node) => node.attrs.id === arg)
         : arg) ?? this.canvas
 
-    const createdChild = addGraphNode(this, child)
+    const createdChild = addGraphElement(this, child)
     if (!createdChild) return
 
     // TODO:
@@ -266,7 +274,7 @@ export class PcGraph extends Events implements BasicGraph {
           {
             name: child.attrs.name,
             next: {
-              ...cloneDeep(child),
+              ...cloneDeep(extractGraphNodePureAttr(child)),
             },
           },
         ],
@@ -280,27 +288,27 @@ export class PcGraph extends Events implements BasicGraph {
 
   /** add children and return their parent */
   addChildren(
-    children: PcElement[],
+    children: CDRecord<PcElement>[],
     parent?: PcElement,
     needRecord?: boolean
   ): PcElement
   addChildren(
-    children: PcElement[],
+    children: CDRecord<PcElement>[],
     parent?: string,
     needRecord?: boolean
   ): PcElement
   addChildren(
-    children: PcElement[],
+    children: CDRecord<PcElement>[],
     arg?: string | PcElement,
     needRecord = true
   ): PcElement {
     const parent =
       (typeof arg === 'string'
-        ? findTreeNode(this.canvas.children!, (node) => node.attrs.id === arg)
+        ? findNode(this.canvas, (node) => node.attrs.id === arg)
         : arg) ?? this.canvas
 
     const added = children.reduce<PcElement[]>((acc, cur) => {
-      const node = addGraphNode(this, cur)
+      const node = addGraphElement(this, cur)
       return node ? [...acc, node] : acc
     }, [])
 
@@ -329,7 +337,7 @@ export class PcGraph extends Events implements BasicGraph {
     const children: (PcElement | string)[] = Array.isArray(as) ? as : [as]
 
     const removedChildren = children.reduce<PcElement[]>((acc, cur) => {
-      const removed = removeGraphNode(
+      const removed = removeGraphElement(
         this,
         typeof cur === 'string' ? cur : cur.attrs.id
       )
@@ -532,10 +540,10 @@ export class PcGraph extends Events implements BasicGraph {
       for (const data of prevRecord.data) {
         if (prevRecord.type === BasicRecordType.Add) {
           // DELETE
-          removeGraphNode(this, data.next?.attrs?.id)
+          removeGraphElement(this, data.next)
         } else if (prevRecord.type === BasicRecordType.Delete) {
           // ADD
-          addGraphNode(this, data.prev)
+          addGraphElement(this, data.prev)
         }
       }
 
@@ -575,10 +583,10 @@ export class PcGraph extends Events implements BasicGraph {
       for (const data of nextRecord.data) {
         if (nextRecord.type === BasicRecordType.Add) {
           // ADD
-          addGraphNode(this, data.next)
+          addGraphElement(this, data.next)
         } else if (nextRecord.type === BasicRecordType.Delete) {
           // DELETE
-          removeGraphNode(this, data.prev?.attrs?.id)
+          removeGraphElement(this, data.prev)
         }
       }
 
@@ -608,15 +616,29 @@ export class PcGraph extends Events implements BasicGraph {
   }
 }
 
-// TODO: extract in deep
-const extractGraphNodePureAttr = (element: PcElement) => {
-  return pick(element, 'parent', 'children', 'attrs')
+const extractGraphNodePureAttr = (element: CDRecord<PcElement>) => {
+  const parent = element.parent
+    ? {
+        attrs: {
+          id: element.parent.attrs.id,
+          type: element.parent.attrs.type,
+          'tab-index': element.parent.attrs['tab-index'],
+        },
+      }
+    : undefined
+
+  return {
+    parent,
+    // TODO: extract children in deep
+    children: element.children,
+    attrs: element.attrs,
+  } as PcElement
 }
 
-/** add canvas node */
-const addGraphNode = (
+/** add canvas element */
+const addGraphElement = (
   graph: PcGraph,
-  element?: CDRecord
+  element?: CDRecord<PcElement>
 ): PcElement | undefined => {
   if (!graph.canvas.children || !element) return
 
@@ -627,28 +649,46 @@ const addGraphNode = (
 
   if (parent) {
     const pcElement = new PcElement(element)
-    parent.children?.push(pcElement)
+    if (isTab(parent)) {
+      const pane =
+        parent.tabs[
+          element.parent?.attrs['tab-index'] ?? parent.attrs['tab-index']
+        ]
+      pane.children.push(pcElement)
+    } else {
+      parent.children?.push(pcElement)
+    }
     pcElement.parent = parent
+
     return pcElement
   }
 }
-/** remove canvas node */
-const removeGraphNode = (
+/** remove canvas element */
+const removeGraphElement = (
   graph: PcGraph,
-  id?: string
+  arg?: CDRecord<PcElement> | string
 ): PcElement | undefined => {
-  if (!graph.canvas.children || !id) return
+  const id = typeof arg === 'string' ? arg : arg?.attrs.id
+  if (!graph.canvas.children?.length || !id) return
 
-  const element = findNode(graph.canvas, (node) => node.attrs.id === id)
-  if (!element) return
+  const finded = findNode(graph.canvas, (node) => node.attrs.id === id)
+  if (!finded) return
 
-  const pid = element.parent?.attrs.id
+  const pid = finded.parent?.attrs.id
   if (!pid) return
 
   const parent = findNode(graph.canvas, (node) => node.attrs.id === pid)
-  if (parent?.children) {
-    parent.children.splice(parent.children.indexOf(element), 1)
+  if (!parent) return
 
-    return element
+  if (isTab(parent)) {
+    const tabIndex = parent.tabs.findIndex((tab) =>
+      tab.children.some((a) => a.attrs.id === id)
+    ) // TODO: Waiting for optimization. Reduce the number of iterations.
+    const pane = parent.tabs[tabIndex]
+    pane.children.splice(pane.children.indexOf(finded), 1)
+  } else if (parent.children) {
+    parent.children.splice(parent.children.indexOf(finded), 1)
   }
+
+  return finded
 }

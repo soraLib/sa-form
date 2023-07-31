@@ -23,6 +23,7 @@ export type PcContextmenuAttributes = {
 }
 export type PcTabAttributes = {
   'tab-height'?: number
+  'tab-index'?: number
 }
 export type PcElementAttributes = BasicElementAttributes &
   PcSelectAttributes &
@@ -53,7 +54,12 @@ export type TabPane = {
   label: string
   children: PcElement[]
 }
-export const isTab = (a: object): a is TabPane => Object.hasOwn(a, 'tabs')
+export const isTab = (
+  a: object
+): a is PcElement &
+  Required<Pick<PcElement, 'tabs'>> &
+  Record<'attrs', PcElementAttributes & Required<PcTabAttributes>> =>
+  Object.hasOwn(a, 'tabs')
 
 /** pc element */
 export interface IPcElement extends BasicElement {
