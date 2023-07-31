@@ -28,9 +28,9 @@ export interface URecordData extends BasicRecordData {
 export type CDBasicElement<T extends BasicElement> = {
   parent?: T
   children?: T[]
-  attrs: BasicElementAttributes
+  attrs: T['attrs']
 }
-export type CDRecord = CDBasicElement<BasicElement>
+export type CDRecord<T extends BasicElement = BasicElement> = CDBasicElement<T>
 /** create or delete record data */
 export interface CDRecordData extends BasicRecordData {
   prev?: CDRecord

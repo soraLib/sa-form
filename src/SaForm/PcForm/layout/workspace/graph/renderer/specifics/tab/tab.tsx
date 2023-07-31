@@ -29,6 +29,7 @@ export default defineComponent({
         boxSizing: 'border-box',
       }
     })
+    const tabIndex = computed(() => props.element.attrs['tab-index']!)
     const tabPaneStyle = computed<CSSProperties>(() => {
       const borderLength = (props.element.attrs['border-width'] ?? 0) * 2
 
@@ -43,17 +44,28 @@ export default defineComponent({
       }
     })
 
+    const updateTabIndex = (index: number) => {
+      props.graph.updateElemData(
+        props.element,
+        {
+          'tab-index': index,
+        },
+        false
+      )
+    }
+
     return () => (
       <div class="sa-tab">
         <NTabs
           animated
           type="segment"
-          defaultValue={props.element.tabs?.[0]?.label}
+          value={tabIndex.value}
+          onUpdate:value={updateTabIndex}
           tabStyle={tabStyle.value}
           paneStyle={tabPaneStyle.value}
         >
-          {props.element.tabs?.map((pane) => (
-            <NTabPane displayDirective="if" name={pane.label} tab={pane.label}>
+          {props.element.tabs?.map((pane, index) => (
+            <NTabPane displayDirective="if" name={index} tab={pane.label}>
               {pane.children.map((ele) => (
                 <ElementRenderer
                   key={ele.attrs.id}

@@ -91,6 +91,7 @@ export const createMockPcCanvas: () => PcElement = () => {
       'font-decoration': 'none',
       'font-style': 'normal',
       'tab-height': 40,
+      'tab-index': 0,
     },
     tabs: [
       {
