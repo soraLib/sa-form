@@ -358,6 +358,7 @@ export class PcGraph extends Events implements BasicGraph {
   }
 
   scrollIntoView(
+    // TODO: multi elements
     element: PcElement | undefined,
     options: ScrollIntoViewOptions = {
       behavior: 'smooth',
@@ -366,6 +367,18 @@ export class PcGraph extends Events implements BasicGraph {
     }
   ) {
     if (!element || element === this.canvas) return
+
+    let current = element
+    while (current.parent) {
+      const parent = current.parent
+      if (isTab(parent))
+        parent.attrs['tab-index'] = parent.tabs.findIndex((pane) =>
+          pane.children.includes(current)
+        )
+
+      current = current.parent
+    }
+
     element.el?.scrollIntoView(options)
   }
 
@@ -554,6 +567,7 @@ export class PcGraph extends Events implements BasicGraph {
       }
     }
 
+    this.scrollIntoView(this.selected[0])
     this.history.index -= 1
   }
 
@@ -597,6 +611,7 @@ export class PcGraph extends Events implements BasicGraph {
       }
     }
 
+    this.scrollIntoView(this.selected[0])
     this.history.index += 1
   }
 
