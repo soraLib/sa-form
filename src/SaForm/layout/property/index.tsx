@@ -27,7 +27,7 @@ export default defineComponent({
     const plugin = computed(() => {
       const type = props.graph.selected[0]?.attrs.type
 
-      if (type) {
+      if (type !== undefined) {
         if (props.controller.plugins[type]) {
           return props.controller.plugins[type]
         }

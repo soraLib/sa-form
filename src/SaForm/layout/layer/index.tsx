@@ -102,7 +102,7 @@ export default defineComponent({
               </div>
             </div>
 
-            <NScrollbar class="my-2">
+            <NScrollbar class="my-2 pr-3">
               <NTree
                 keyField="value"
                 block-line
