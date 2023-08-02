@@ -1,13 +1,13 @@
 import { useEventListener } from '@vueuse/core'
 import { setDataTransfer } from '../../utils/stencil'
-import type { StencilAttrs } from '.'
+import type { StencilAttributes } from '.'
 
 export namespace Stencil {
   export const updatePosition = (target: HTMLElement, evt: MouseEvent) => {
     target.style.left = `${evt.clientX}px`
     target.style.top = `${evt.clientY}px`
   }
-  export const start = (attrs: StencilAttrs, evt: DragEvent) => {
+  export const start = (attrs: StencilAttributes, evt: DragEvent) => {
     setDataTransfer(evt, 'effectAllowed', 'copy', false)
     evt.dataTransfer?.setData('element', JSON.stringify(attrs))
 
@@ -21,7 +21,7 @@ export namespace Stencil {
   }
 }
 
-export const createGhostElement = (attrs: StencilAttrs) => {
+export const createGhostElement = (attrs: StencilAttributes) => {
   const ghost = document.createElement('div')
   ghost.classList.add('drag-ghost')
 

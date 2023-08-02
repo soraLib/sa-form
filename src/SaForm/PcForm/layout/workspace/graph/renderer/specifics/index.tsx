@@ -5,11 +5,14 @@ import SelectSpecific from './select/select'
 import TableSpecific from './table/table'
 import TimePickerSpecific from './time-picker/time-picker'
 import ContextmenuSpecific from './contextmenu/contextmenu'
+import TextSpecific from './text/text'
 import TabSpecific from './tab/tab'
 import type { Component, PropType } from 'vue'
 import type { PcElement } from '@/SaForm/PcForm/element'
 import type { PcGraph } from '@/SaForm/PcForm/graph'
 import { ElementType } from '@/SaForm/element'
+
+const EmptyDiv = <div />
 
 const SpecificComponentMap: Partial<Record<ElementType, Component>> = {
   [ElementType.Radio]: RadioSpecific,
@@ -19,6 +22,8 @@ const SpecificComponentMap: Partial<Record<ElementType, Component>> = {
   [ElementType.TimePicker]: TimePickerSpecific,
   [ElementType.Contextmenu]: ContextmenuSpecific,
   [ElementType.Tab]: TabSpecific,
+  [ElementType.Text]: TextSpecific,
+  [ElementType.Container]: EmptyDiv,
 }
 export default defineComponent({
   name: 'ElementRendererSpecifics',

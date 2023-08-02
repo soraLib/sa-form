@@ -34,7 +34,7 @@ export default defineComponent({
     const SaFormWorkspace = layout.workspace
 
     return () => (
-      <section class="flex flex-col h-full">
+      <section key={layout.graph.canvas.attrs.id} class="flex flex-col h-full">
         <header>
           <SaFormHeader
             toolkits={layout.toolkits}
