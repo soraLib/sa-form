@@ -1,4 +1,5 @@
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
+import { useClazs } from '../../utils/class'
 import type { PropType, VNode } from 'vue'
 import type { BasicGraph } from '../../graph'
 
@@ -11,7 +12,7 @@ export interface HeaderToolkit {
   /** icon */
   icon: VNode
   /** icon click callback */
-  click: (graph: any /** TODO: */, e: Event) => void
+  click: (graph: any /** TODO: */, e: Event) => Promise<void>
   /** a divider separates the icons */
   divider?: boolean
 }
@@ -29,14 +30,27 @@ export default defineComponent({
     },
   },
 
-  render() {
-    return (
+  setup(props) {
+    const isRunningMap = ref<Record<string, boolean>>({})
+
+    return () => (
       <div class="header-toolkit-wrapper">
-        {this.toolkits.map((tool) => (
+        {props.toolkits.map((tool) => (
           <div class="header-toolkit-inner">
             <span
-              class="header-button"
-              onClick={(e) => tool.click(this.graph, e)}
+              class={useClazs('header-button', {
+                'is-running': isRunningMap.value[tool.title],
+              })}
+              onClick={async (e) => {
+                if (isRunningMap.value[tool.title]) return
+
+                try {
+                  isRunningMap.value[tool.title] = true
+                  await tool.click(props.graph, e)
+                } finally {
+                  isRunningMap.value[tool.title] = false
+                }
+              }}
               title={tool.title}
             >
               {tool.icon}

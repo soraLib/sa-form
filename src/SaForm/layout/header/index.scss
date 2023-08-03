@@ -27,6 +27,12 @@ $gap: 4px;
     &.is-active {
       color: var(--c-brand);
     }
+
+    &.is-running {
+      @apply animate-pulse;
+      cursor: wait;
+      color: var(--c-brand);
+    }
   }
 
   .header-button-divider {
