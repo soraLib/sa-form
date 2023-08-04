@@ -135,6 +135,7 @@ const onSelectItem = (item: InternalContextmenuItem) => {
     .content {
       flex-grow: 1;
       text-align: left;
+      white-space: nowrap;
     }
 
     &.is-primary:hover {
