@@ -1,18 +1,18 @@
 import { defineComponent, ref } from 'vue'
+import { PromisifyFn } from '@vueuse/core'
 import { useClazs } from '../../utils/class'
 import type { PropType, VNode } from 'vue'
 import type { BasicGraph } from '../../graph'
 
 import './toolkit.scss'
 
-// TODO: Render component
 export interface HeaderToolkit {
   /** icon title on dom */
   title: string
   /** icon */
-  icon: VNode
+  icon: VNode | ((graph: any /** TODO: */) => VNode)
   /** icon click callback */
-  click: (graph: any /** TODO: */, e: Event) => Promise<void>
+  click: (graph: any /** TODO: */, e: Event) => Promise<void> | void
   /** a divider separates the icons */
   divider?: boolean
 }
@@ -53,7 +53,9 @@ export default defineComponent({
               }}
               title={tool.title}
             >
-              {tool.icon}
+              {typeof tool.icon === 'function'
+                ? tool.icon(props.graph)
+                : tool.icon}
             </span>
 
             {tool.divider && <span class="header-button-divider" />}
