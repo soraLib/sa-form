@@ -26,7 +26,12 @@ export default defineComponent({
   setup(props) {
     const visible = computed(() => props.graph.layout.layer)
     const treeData = computed(() =>
-      createElementTreeData(props.graph.canvas.children)
+      createElementTreeData(
+        props.graph.canvas.children,
+        (elem) =>
+          (elem.attrs['is-draft'] && props.graph.isDraft) ||
+          (!props.graph.isDraft && !elem.attrs['is-draft'])
+      )
     )
     const selectedKeys = computed(() =>
       props.graph.selected.map(({ attrs }) => attrs.id)

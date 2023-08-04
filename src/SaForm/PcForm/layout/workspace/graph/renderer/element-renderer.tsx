@@ -159,67 +159,75 @@ export default defineComponent({
       }
     )
 
-    return () => (
-      <div
-        id={props.element.attrs.id}
-        ref={(el) => props.element.setEl(el as HTMLElement)}
-        class={useClazs('pc-element', {
-          'is-selected': isSelected.value,
-          'is-reference': isReference.value,
-          'is-graph': isCanvas.value,
-        })}
-        style={elementStyle.value}
-        onMousedown={useElementHandler(props.element, props.graph)}
-      >
-        {
-          /* resizer */
-          props.element.parent && isOnlySelection.value && (
-            <div class="vdr">
-              {sticks.map((stick) => (
-                <div
-                  class={`vdr-stick vdr-stick-${stick}`}
-                  key={stick}
-                  style={vdrStick(stick)}
-                  onMousedown={(event) =>
-                    useElementStickReszie(
-                      event,
-                      stick,
-                      props.element,
-                      props.graph
-                    )
-                  }
-                />
-              ))}
-            </div>
-          )
-        }
-
-        {!isCanvas.value && (
-          <canvas
-            ref={canvasRef}
-            width={props.element.attrs.width + padding.value * 2}
-            height={props.element.attrs.height + padding.value * 2}
-            class="bounding"
-            style={canvasStyle.value}
-          />
-        )}
-
-        <div class="pc-element-inner" style={elementInnerStyle.value}>
-          <ElementSpecific graph={props.graph} element={props.element} />
-
-          {(props.element.attrs.type === ElementType.Canvas ||
-            props.element.attrs.type === ElementType.Container) &&
-          props.element.children?.length
-            ? props.element.children.map((ele) => (
-                <ElementRenderer
-                  key={ele.attrs.id}
-                  graph={props.graph}
-                  element={ele}
-                />
-              ))
-            : undefined}
-        </div>
-      </div>
+    const elementVisible = computed(
+      () =>
+        isCanvas.value ||
+        (props.graph.isDraft && props.element.attrs['is-draft']) ||
+        (!props.graph.isDraft && !props.element.attrs['is-draft'])
     )
+
+    return () =>
+      elementVisible.value && (
+        <div
+          id={props.element.attrs.id}
+          ref={(el) => props.element.setEl(el as HTMLElement)}
+          class={useClazs('pc-element', {
+            'is-selected': isSelected.value,
+            'is-reference': isReference.value,
+            'is-graph': isCanvas.value,
+          })}
+          style={elementStyle.value}
+          onMousedown={useElementHandler(props.element, props.graph)}
+        >
+          {
+            /* resizer */
+            props.element.parent && isOnlySelection.value && (
+              <div class="vdr">
+                {sticks.map((stick) => (
+                  <div
+                    class={`vdr-stick vdr-stick-${stick}`}
+                    key={stick}
+                    style={vdrStick(stick)}
+                    onMousedown={(event) =>
+                      useElementStickReszie(
+                        event,
+                        stick,
+                        props.element,
+                        props.graph
+                      )
+                    }
+                  />
+                ))}
+              </div>
+            )
+          }
+
+          {!isCanvas.value && (
+            <canvas
+              ref={canvasRef}
+              width={props.element.attrs.width + padding.value * 2}
+              height={props.element.attrs.height + padding.value * 2}
+              class="bounding"
+              style={canvasStyle.value}
+            />
+          )}
+
+          <div class="pc-element-inner" style={elementInnerStyle.value}>
+            <ElementSpecific graph={props.graph} element={props.element} />
+
+            {(props.element.attrs.type === ElementType.Canvas ||
+              props.element.attrs.type === ElementType.Container) &&
+            props.element.children?.length
+              ? props.element.children.map((ele) => (
+                  <ElementRenderer
+                    key={ele.attrs.id}
+                    graph={props.graph}
+                    element={ele}
+                  />
+                ))
+              : undefined}
+          </div>
+        </div>
+      )
   },
 })

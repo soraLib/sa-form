@@ -28,7 +28,11 @@ export default defineComponent({
   },
   setup(props, ctx) {
     const treeData = computed(() =>
-      createElementTreeData(props.graph.canvas.children)
+      createElementTreeData(
+        props.graph.canvas.children,
+        (elem) =>
+          elem.attrs.type !== ElementType.Contextmenu && !elem.attrs['is-draft']
+      )
     )
     const checkedKeys = ref<string[]>([
       ...(props.graph.selected[0].attrs['contextmenu-binds'] ?? []),

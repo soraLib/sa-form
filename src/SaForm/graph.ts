@@ -70,6 +70,7 @@ export interface BasicGraph {
   selected: BasicElement[]
   /** div container */
   containter?: HTMLDivElement
+  isDraft: boolean
   grid: Grid
   snapline: Snapline
   layout: Layout
@@ -80,6 +81,7 @@ export interface BasicGraph {
   setGrid: (grid: Partial<Grid>) => void
   setSnap: (snap: Partial<Snapline>) => void
   setScroller: (scroller: Partial<Scroller>) => void
+  setIsDraft: (isDraft?: boolean) => void
 
   getNextId(): string
 

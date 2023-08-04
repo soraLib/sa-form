@@ -4,6 +4,10 @@ import type { TableData } from './plugins/table'
 import type { SelectOption } from './plugins/select'
 import type { BasicElement, BasicElementAttributes } from '../element'
 
+export type PcDraftAttributes = {
+  /** is draft element, default as `false` */
+  'is-draft'?: boolean
+}
 export type PcSelectAttributes = {
   /** select options */
   options?: SelectOption[]
@@ -26,6 +30,7 @@ export type PcTabAttributes = {
   'tab-index'?: number
 }
 export type PcElementAttributes = BasicElementAttributes &
+  PcDraftAttributes &
   PcSelectAttributes &
   PcRadioAttributes &
   PcTableAttributes &

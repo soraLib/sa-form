@@ -1,5 +1,6 @@
 import { isContainer, isTab } from '../element'
 import { ElementType } from '../../element'
+import type { Predicate } from './node'
 import type { PcElement } from '../element'
 
 export type ElementTreeDataOption = {
@@ -10,10 +11,13 @@ export type ElementTreeDataOption = {
   disabled?: boolean
 }
 export const createElementTreeData = (
-  elems?: PcElement[]
+  elems: PcElement[] | undefined,
+  filter?: Predicate<PcElement>
 ): ElementTreeDataOption[] | undefined => {
+  const filteredElems = filter ? elems?.filter(filter) : elems
+
   return (
-    elems?.map((elem) => ({
+    filteredElems?.map((elem) => ({
       label: elem.attrs.name,
       value: elem.attrs.id,
       children: isTab(elem)
@@ -21,11 +25,11 @@ export const createElementTreeData = (
             label: pane.label,
             value: pane.label,
             type: ElementType.TabPane,
-            children: createElementTreeData(pane.children),
+            children: createElementTreeData(pane.children, filter),
             disabled: true,
           }))
         : isContainer(elem)
-        ? createElementTreeData(elem.children)
+        ? createElementTreeData(elem.children, filter)
         : undefined,
       type: elem.attrs.type,
     })) ?? []
