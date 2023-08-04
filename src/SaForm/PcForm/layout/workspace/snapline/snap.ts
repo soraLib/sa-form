@@ -293,7 +293,9 @@ export const onSnapping = (
   const parent = elements[0].parent
   if (!parent) return new Map()
 
-  const _compares = compares ?? parent?.children ?? []
+  const _compares = (compares ?? parent?.children ?? []).filter(
+    (elem) => elem.attrs['is-draft'] === elements[0].attrs['is-draft']
+  )
 
   const deepOffsetX = getDeepOffset('x', parent)
   const deepOffsetY = getDeepOffset('y', parent)

@@ -1,6 +1,9 @@
+import { NIcon } from 'naive-ui'
+import { EyeOffOutline, EyeOutline } from '@vicons/ionicons5'
 import { alignElements } from '../../acitons/align'
 import { equalElementsSize } from '../../acitons/size'
 import { connectElements } from '../../acitons/connect'
+import { toggleDraft } from '../../acitons/draft'
 import type { HeaderToolkit } from '../../../layout/header/toolkit'
 import type { PcGraph } from '../../graph'
 
@@ -76,5 +79,16 @@ export const PcHeaderToolkits: HeaderToolkit[] = [
     title: 'Connect Vertically',
     icon: <i class="iconfont iconzonglian" />,
     click: (graph: PcGraph) => connectElements('vertical', graph),
+    divider: true,
+  },
+  // draft
+  {
+    title: 'Toggle Draft',
+    icon: (graph: PcGraph) => (
+      <NIcon size={16}>
+        {graph.isDraft ? <EyeOffOutline /> : <EyeOutline />}
+      </NIcon>
+    ),
+    click: toggleDraft,
   },
 ]

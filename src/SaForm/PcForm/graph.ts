@@ -83,6 +83,7 @@ export class PcGraph extends Events implements BasicGraph {
     modifier: ModifierKey.Ctrl,
     showSelectionBox: true,
   }
+  isDraft = false
   grid: Grid = {
     type: 'double-mesh',
     size: 15,
@@ -123,6 +124,9 @@ export class PcGraph extends Events implements BasicGraph {
   }
   setSelection(selection: Partial<Selection>) {
     setObjectValues(this.selection, selection)
+  }
+  setIsDraft(isDraft?: boolean) {
+    this.isDraft = isDraft ?? false
   }
   setGrid(grid: Partial<Grid>) {
     setObjectValues(this.grid, grid)
@@ -568,6 +572,7 @@ export class PcGraph extends Events implements BasicGraph {
       }
     }
 
+    this.setIsDraft(this.selected[0].attrs['is-draft'])
     this.scrollIntoView(this.selected[0])
     this.history.index -= 1
   }
@@ -612,6 +617,7 @@ export class PcGraph extends Events implements BasicGraph {
       }
     }
 
+    this.setIsDraft(this.selected[0].attrs['is-draft'])
     this.scrollIntoView(this.selected[0])
     this.history.index += 1
   }

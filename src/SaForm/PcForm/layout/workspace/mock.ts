@@ -190,7 +190,60 @@ export const createMockPcCanvas: () => PcElement = () => {
     },
   })
 
-  canvas.children?.push(...[child1, child2, child3, child4])
+  const draftChild1 = new PcElement({
+    parent: canvas,
+    attrs: {
+      type: ElementType.Image,
+      id: '8',
+      name: 'Mock Draft Image',
+      width: 200,
+      height: 180,
+      x: 400,
+      y: 220,
+      background: '#4d85ff',
+      'is-draft': true,
+      'border-style': 'solid',
+      'border-width': 1,
+      'border-color': 'rgba(82, 82, 89, 0.68)',
+      'font-size': 14,
+      'font-family': 'Arial',
+      'font-color': '',
+      'font-decoration': 'none',
+      'font-style': 'normal',
+      'align-horizontal': 'center',
+      'align-vertical': 'center',
+    },
+  })
+
+  const draftChild2 = new PcElement({
+    parent: canvas,
+    attrs: {
+      type: ElementType.Contextmenu,
+      id: '9',
+      name: 'Mock Draft Cotextmneu',
+      width: 250,
+      height: 180,
+      x: 1200,
+      y: 350,
+      background: '#D05087FF',
+      'is-draft': true,
+      'border-style': 'solid',
+      'border-width': 1,
+      'border-color': 'rgba(82, 82, 89, 0.68)',
+      'font-size': 14,
+      'font-family': 'Arial',
+      'font-color': '',
+      'font-decoration': 'none',
+      'font-style': 'normal',
+      'align-horizontal': 'center',
+      'align-vertical': 'center',
+      'contextmenu-binds': [child2.attrs.id],
+    },
+  })
+
+  canvas.children?.push(
+    ...[child1, child2, child3, child4, draftChild1, draftChild2]
+  )
 
   return canvas
 }
