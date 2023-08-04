@@ -75,6 +75,7 @@ export const PcPlugin: SaPluginLayout = {
   [ElementType.Tab]: {
     basic: [...basicPlugins, TabPlugins['widget-tab-height']],
   },
+  [ElementType.TabPane]: {},
   [ElementType.TimePicker]: {
     basic: [...basicPlugins, TimePickerPlugins['widget-time-format']],
   },
