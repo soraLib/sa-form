@@ -23,7 +23,7 @@ export const createElementTreeData = (
       children: isTab(elem)
         ? elem.tabs?.map((pane) => ({
             label: pane.label,
-            value: pane.label,
+            value: pane.id,
             type: ElementType.TabPane,
             children: createElementTreeData(pane.children, filter),
             disabled: true,
