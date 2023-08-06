@@ -3,8 +3,10 @@ import { NIcon, NInput, NPopover, NScrollbar, NSwitch, NTree } from 'naive-ui'
 import { ChevronBack, Funnel, Layers } from '@vicons/ionicons5'
 import { useStorage } from '@vueuse/core'
 import { ElementType } from '../../element'
-import { isContainerType } from '../../PcForm/element'
+import { isContainerType, isTab } from '../../PcForm/element'
 import { createElementTreeData } from '../../PcForm/utils/tree'
+import type { BasicElement } from '../../element'
+import type { OnUpdateExpandedKeysImpl } from 'naive-ui/es/tree/src/Tree'
 import type { ElementTreeDataOption } from '../../PcForm/utils/tree'
 import type { PropType } from 'vue'
 import type { BasicGraph } from '../../graph'
@@ -33,12 +35,37 @@ export default defineComponent({
           (!props.graph.isDraft && !elem.attrs['is-draft'])
       )
     )
+    const expandedKeys = ref(new Set<string>())
     const selectedKeys = computed(() =>
       props.graph.selected.map(({ attrs }) => attrs.id)
+    )
+    watch(
+      selectedKeys,
+      () => {
+        const [head] = props.graph.selected
+
+        let cur: BasicElement | undefined = head
+        while (cur) {
+          if (cur.parent && isTab(cur.parent)) {
+            const tabPane = cur.parent.tabs.find((tab) =>
+              tab.children.some((a) => a.attrs.id === cur?.attrs.id)
+            )
+
+            if (tabPane) expandedKeys.value.add(tabPane.id)
+          }
+
+          expandedKeys.value.add(cur.attrs.id)
+          cur = cur.parent
+        }
+      },
+      { deep: true }
     )
     const onUpdateSelectedKeys = (keys: string[]) => {
       const selected = props.graph.setSelected(keys)
       if (selected) props.graph.scrollIntoView(selected[0])
+    }
+    const onUpdateExpandedKeys: OnUpdateExpandedKeysImpl = (keys) => {
+      expandedKeys.value = new Set(keys as string[])
     }
 
     // filter
@@ -136,6 +163,7 @@ export default defineComponent({
                   }
                 }}
                 selectedKeys={selectedKeys.value}
+                expandedKeys={Array.from(expandedKeys.value)}
                 render-label={({
                   option,
                 }: {
@@ -154,6 +182,7 @@ export default defineComponent({
                   option: ElementTreeDataOption
                 }) => <i class={`iconfont ${pcStencilIcons[option.type]}`} />}
                 onUpdate:selectedKeys={onUpdateSelectedKeys}
+                onUpdateExpandedKeys={onUpdateExpandedKeys}
               ></NTree>
             </NScrollbar>
           </div>

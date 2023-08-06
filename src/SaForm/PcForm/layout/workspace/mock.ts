@@ -95,10 +95,12 @@ export const createMockPcCanvas: () => PcElement = () => {
     },
     tabs: [
       {
+        id: 'Pane A',
         label: 'Pane A',
         children: [],
       },
       {
+        id: 'Pane B',
         label: 'Pane B',
         children: [],
       },
