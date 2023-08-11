@@ -56,6 +56,7 @@ export const isContainer = (element: PcElement) =>
   isContainerType(element.attrs.type)
 
 export type TabPane = {
+  id: string
   label: string
   children: PcElement[]
 }
