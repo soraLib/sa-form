@@ -14,9 +14,9 @@ export namespace Stencil {
     const ghost = createGhostElement(attrs)
     evt.dataTransfer?.setDragImage(ghost, attrs.width / 2, attrs.height / 2)
 
-    const cleanupUp = useEventListener('mouseup', () => {
+    const cleanup = useEventListener('dragend', () => {
       document.body.removeChild(ghost)
-      cleanupUp()
+      cleanup()
     })
   }
 }
