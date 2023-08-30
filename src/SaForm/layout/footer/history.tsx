@@ -1,6 +1,7 @@
 import { computed, defineComponent } from 'vue'
-import { NButton, NPopover, NScrollbar } from 'naive-ui'
+import { NButton, NIcon, NPopover, NScrollbar } from 'naive-ui'
 
+import { ArrowBackSharp, GitCommit } from '@vicons/ionicons5'
 import { BasicRecordType } from '../../record'
 import { useClazs } from '../../utils/class'
 import type { BasicGraph } from '../../graph'
@@ -18,17 +19,39 @@ export default defineComponent({
 
   setup(props) {
     const recordsRef = computed(() => props.graph.history.records)
+    const recordsLen = computed(() => recordsRef.value.length - 1)
     const currentRef = computed(() => props.graph.history.index)
+    const index = computed(() => props.graph.history.index)
 
     return () => (
       <NPopover
         class="history-popover"
         placement="top-start"
-        trigger="click"
+        trigger="hover"
         showArrow={false}
       >
         {{
-          trigger: () => <NButton type="primary">history</NButton>,
+          trigger: () => (
+            <NButton secondary size="small" v-slots={{ icon: <GitCommit /> }}>
+              History
+              {(recordsLen.value && (
+                <span class="count flex items-center gap-1">
+                  <span>（</span>
+                  {recordsLen.value}
+                  {index.value !== recordsLen.value && (
+                    <>
+                      <NIcon size={10}>
+                        <ArrowBackSharp />
+                      </NIcon>
+                      {index.value}
+                    </>
+                  )}
+                  <span> ）</span>
+                </span>
+              )) ||
+                ''}
+            </NButton>
+          ),
           default: () => (
             <NScrollbar style={{ maxHeight: '400px' }}>
               <ol class="history-container">

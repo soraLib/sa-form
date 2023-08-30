@@ -1,10 +1,10 @@
 import { computed, defineComponent } from 'vue'
-
 import { useMagicKeys, whenever } from '@vueuse/core'
 import { MoveDirection } from '../../../graph'
 import ShortCutKey from './key'
 import type { BasicGraph } from '../../../graph'
 import type { PropType } from 'vue'
+import { useClazs } from '@/SaForm/utils/class'
 
 import './shotcuts.scss'
 
@@ -25,30 +25,61 @@ export default defineComponent({
   },
 
   setup(props) {
-    const keys = useMagicKeys()
-    const pressedKeys = computed(() => Array.from(keys.current))
+    const {
+      current,
+      Delete,
+      ctrl_c,
+      ctrl_x,
+      ctrl_v,
+      ctrl_z,
+      ctrl_y,
+      ctrl_arrowup,
+      ctrl_arrowleft,
+      ctrl_arrowdown,
+      ctrl_arrowright,
+    } = useMagicKeys({
+      passive: false,
+      onEventFired: (e) => {
+        if (isFired.value) e.preventDefault()
+      },
+    })
+    const pressedKeys = computed(() => Array.from(current))
 
-    whenever(keys.delete, () => props.graph.remove(props.graph.selected))
-    whenever(keys.ctrl_c, () => props.graph.clipboard.copy())
-    whenever(keys.ctrl_x, () => props.graph.clipboard.cut())
-    whenever(keys.ctrl_v, () => props.graph.clipboard.paste())
-    whenever(keys.ctrl_z, () => props.graph.undo())
-    whenever(keys.ctrl_y, () => props.graph.redo())
-    whenever(keys.ctrl_arrowup, () =>
+    const isFired = computed(
+      () =>
+        Delete.value ||
+        ctrl_c.value ||
+        ctrl_x.value ||
+        ctrl_v.value ||
+        ctrl_z.value ||
+        ctrl_y.value ||
+        ctrl_arrowup.value ||
+        ctrl_arrowleft.value ||
+        ctrl_arrowdown.value ||
+        ctrl_arrowright.value
+    )
+
+    whenever(Delete, () => props.graph.remove(props.graph.selected))
+    whenever(ctrl_c, () => props.graph.clipboard.copy())
+    whenever(ctrl_x, () => props.graph.clipboard.cut())
+    whenever(ctrl_v, () => props.graph.clipboard.paste())
+    whenever(ctrl_z, () => props.graph.undo())
+    whenever(ctrl_y, () => props.graph.redo())
+    whenever(ctrl_arrowup, () =>
       props.graph.move(props.graph.selected, { direction: MoveDirection.UP })
     )
-    whenever(keys.ctrl_arrowleft, () =>
+    whenever(ctrl_arrowleft, () =>
       props.graph.move(props.graph.selected, { direction: MoveDirection.LEFT })
     )
-    whenever(keys.ctrl_arrowdown, () =>
+    whenever(ctrl_arrowdown, () =>
       props.graph.move(props.graph.selected, { direction: MoveDirection.DOWN })
     )
-    whenever(keys.ctrl_arrowright, () =>
+    whenever(ctrl_arrowright, () =>
       props.graph.move(props.graph.selected, { direction: MoveDirection.RIGHT })
     )
 
     return () => (
-      <span class="shortcuts">
+      <span class={useClazs('shortcuts', { 'is-fired': isFired.value })}>
         {pressedKeys.value.map((key, index) => (
           <>
             <ShortCutKey>{capitalizeFirstLetter(key)}</ShortCutKey>

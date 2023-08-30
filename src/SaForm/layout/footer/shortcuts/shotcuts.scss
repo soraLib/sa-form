@@ -7,4 +7,9 @@
     opacity: 0.4;
     font-weight: 500;
   }
+
+  &.is-fired .pressed-key {
+    color: var(--c-brand);
+    font-weight: bold;
+  }
 }
