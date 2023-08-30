@@ -21,7 +21,7 @@ export default defineComponent({
 
   setup(props) {
     return () => (
-      <div class="sa-form-footer flex justify-start items-center p-1 gap-4">
+      <div class="sa-form-footer flex justify-start items-center gap-4">
         <GraphHistory graph={props.graph} />
         <GraphShortcuts class="grow" graph={props.graph} />
         <GraphShortcutsGuide />
