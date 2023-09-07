@@ -9,8 +9,8 @@ import SaFormStencil from './layout/stencil'
 import SaFormProperty from './layout/property'
 import SaFormFooter from './layout/footer'
 import SaFormLayer from './layout/layer'
-import type { ILayout } from './config'
 import type { GraphType } from './graph'
+import type { ILayout } from './config'
 import type { PropType } from 'vue'
 
 import './styles/index.scss'
@@ -35,14 +35,6 @@ export default defineComponent({
 
     return () => (
       <section key={layout.graph.canvas.attrs.id} class="flex flex-col h-full">
-        <header>
-          <SaFormHeader
-            toolkits={layout.toolkits}
-            graph={layout.graph}
-            class="sa-bg"
-          />
-        </header>
-
         <main class="mt-1 flex flex-grow gap-1 h-full overflow-auto">
           <section>
             <SaFormStencil
@@ -54,22 +46,38 @@ export default defineComponent({
 
           <SaFormLayer class="shrink-0" graph={layout.graph} />
 
-          <main class="flex item-center flex-col grow overflow-auto">
-            <section class="sa-bg workspace-bg grow">
-              <SaFormWorkspace
-                class="workspace w-full h-full"
+          <main class="flex item-center flex-col flex-grow overflow-auto">
+            <header>
+              <SaFormHeader
+                toolkits={layout.toolkits}
                 graph={layout.graph}
+                class="mb-1"
               />
-            </section>
-            <SaFormFooter class="sa-bg mt-1" graph={layout.graph} />
-          </main>
+            </header>
 
-          <SaFormProperty
-            class="sa-property sa-bg shrink-0"
-            graph={layout.graph}
-            controller={layout.controller}
-          />
+            <main class="flex-grow flex overflow-auto">
+              <section class="flex flex-grow flex-col overflow-auto">
+                <section
+                  class="sa-bg workspace-bg grow"
+                  data-graph-type={layout.graph.type}
+                >
+                  <SaFormWorkspace
+                    class="workspace w-full h-full"
+                    graph={layout.graph}
+                  />
+                </section>
+              </section>
+
+              <SaFormProperty
+                class="sa-property sa-bg shrink-0 ml-1"
+                graph={layout.graph}
+                controller={layout.controller}
+              />
+            </main>
+          </main>
         </main>
+
+        <SaFormFooter class="sa-bg" graph={layout.graph} />
       </section>
     )
   },

@@ -1,5 +1,5 @@
 import { defineComponent } from 'vue'
-import { NButton, NCard, NIcon, NModal, NTable } from 'naive-ui'
+import { NButton, NCard, NModal, NTable } from 'naive-ui'
 import { useToggle } from '@vueuse/core'
 
 import './shortcuts-guide.scss'
@@ -19,25 +19,24 @@ export default defineComponent({
       ['Paste', ['ctrl', 'v']],
       ['Undo', ['ctrl', 'z']],
       ['Redo', ['ctrl', 'y']],
-      ['Save', ['ctrl', 's']],
+      ['Unselect All', ['esc']],
+      ['Toggle Terminal', ['ctrl', '`']],
+      ['Toggle Elements', ['ctrl', 'e']],
+      ['Toggle Layer', ['ctrl', 'l']],
+      ['Toggle Properties', ['ctrl', 'p']],
     ]
 
     return () => (
-      <div class="mr-2 flex align-center">
+      <div class="flex align-center">
         <NButton
           onClick={() => toggleVisible(true)}
-          tertiary
-          circle
-          text
           size="small"
-          v-slots={{
-            icon: (
-              <NIcon>
-                <HelpCircleOutline />
-              </NIcon>
-            ),
-          }}
-        ></NButton>
+          type="warning"
+          class="!rounded-none"
+          v-slots={{ icon: () => <HelpCircleOutline /> }}
+        >
+          Shortcuts Guide
+        </NButton>
 
         <NModal show={visible.value} onUpdate:show={toggleVisible}>
           <NCard
