@@ -114,6 +114,7 @@ const selectWithBox = (box: SelectionBox, graph: PcGraph) => {
   const selections = compares?.length
     ? compares.reduce(
         (selections, cur) =>
+          (cur.attrs['is-draft'] ?? false) === graph.isDraft &&
           isCoincide(box, {
             x: cur.attrs.x,
             y: cur.attrs.y,
