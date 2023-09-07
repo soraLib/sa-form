@@ -45,11 +45,6 @@ export type Selection = {
 export type Scroller = {
   pannable: boolean
 }
-export type Layout = {
-  component: boolean
-  layer: boolean
-  property: boolean
-}
 
 export enum MoveDirection {
   UP = 'up',
@@ -73,10 +68,8 @@ export interface BasicGraph {
   isDraft: boolean
   grid: Grid
   snapline: Snapline
-  layout: Layout
   scroller: Scroller
   clipboard: BasicClipBoard
-  setLayout: (layout: Partial<Layout>) => void
   setSelection: (selection: Partial<Selection>) => void
   setGrid: (grid: Partial<Grid>) => void
   setSnap: (snap: Partial<Snapline>) => void

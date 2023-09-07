@@ -1,4 +1,5 @@
 import { defineComponent } from 'vue'
+import { NScrollbar } from 'naive-ui'
 import Toolkit from './toolkit'
 import Layout from './layout'
 import type { PropType } from 'vue'
@@ -20,9 +21,13 @@ export default defineComponent({
   },
   setup(props) {
     return () => (
-      <div class="sa-form-header p-1">
-        <Layout graph={props.graph} />
-        <Toolkit toolkits={props.toolkits} graph={props.graph} />
+      <div class="sa-form-header overflow-auto">
+        <NScrollbar x-scrollable>
+          <div class="flex flex-col p-1">
+            <Layout graph={props.graph} />
+            <Toolkit toolkits={props.toolkits} graph={props.graph} />
+          </div>
+        </NScrollbar>
       </div>
     )
   },

@@ -1,5 +1,7 @@
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
+import { useClazs } from '../../utils/class'
 import { Stencil } from './stencil'
+import type { BasicGraph } from '../../graph'
 import type { NativeItem } from '.'
 import type { PropType } from 'vue'
 
@@ -10,9 +12,20 @@ export default defineComponent({
       required: true,
       type: Object as PropType<NativeItem>,
     },
+    graph: {
+      required: true,
+      type: Object as PropType<BasicGraph>,
+    },
   },
   setup(props) {
-    const iconClass = `iconfont ${props.item.icon}`
+    const icon = computed(() => {
+      if (typeof props.item.icon === 'string')
+        return <i class={`iconfont ${props.item.icon}`} />
+
+      return props.item.icon
+    })
+
+    const disabled = computed(() => props.item.disabled?.(props.graph) ?? false)
 
     function onDragstart(event: DragEvent) {
       Stencil.start(props.item.attrs, event)
@@ -20,12 +33,14 @@ export default defineComponent({
 
     return () => (
       <div
-        class="stencil-item"
+        class={useClazs('stencil-item', {
+          'is-disabled': disabled.value,
+        })}
         title={props.item.title ?? props.item.attrs.name}
-        draggable
+        draggable={!disabled.value}
         onDragstart={onDragstart}
       >
-        <i class={`${iconClass}`}></i>
+        {icon.value}
       </div>
     )
   },

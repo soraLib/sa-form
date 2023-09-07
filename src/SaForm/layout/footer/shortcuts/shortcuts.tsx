@@ -33,17 +33,26 @@ export default defineComponent({
       ctrl_v,
       ctrl_z,
       ctrl_y,
+      ctrl_l,
+      ctrl_e,
+      ctrl_p,
       ctrl_arrowup,
       ctrl_arrowleft,
       ctrl_arrowdown,
       ctrl_arrowright,
+      ctrl_backquote,
+      escape,
     } = useMagicKeys({
       passive: false,
       onEventFired: (e) => {
-        if (isFired.value) e.preventDefault()
+        if (isFired.value && isInsideGraph()) e.preventDefault()
       },
     })
     const pressedKeys = computed(() => Array.from(current))
+
+    const isInsideGraph = () =>
+      document.activeElement === document.body ||
+      props.graph.canvas.el?.contains(document.activeElement)
 
     const isFired = computed(
       () =>
@@ -53,29 +62,56 @@ export default defineComponent({
         ctrl_v.value ||
         ctrl_z.value ||
         ctrl_y.value ||
+        ctrl_l.value ||
+        ctrl_e.value ||
+        ctrl_p.value ||
+        escape.value ||
         ctrl_arrowup.value ||
         ctrl_arrowleft.value ||
         ctrl_arrowdown.value ||
-        ctrl_arrowright.value
+        ctrl_arrowright.value ||
+        ctrl_backquote.value
     )
 
-    whenever(Delete, () => props.graph.remove(props.graph.selected))
-    whenever(ctrl_c, () => props.graph.clipboard.copy())
-    whenever(ctrl_x, () => props.graph.clipboard.cut())
-    whenever(ctrl_v, () => props.graph.clipboard.paste())
-    whenever(ctrl_z, () => props.graph.undo())
-    whenever(ctrl_y, () => props.graph.redo())
-    whenever(ctrl_arrowup, () =>
-      props.graph.move(props.graph.selected, { direction: MoveDirection.UP })
+    whenever(
+      Delete,
+      () => isInsideGraph() && props.graph.remove(props.graph.selected)
     )
-    whenever(ctrl_arrowleft, () =>
-      props.graph.move(props.graph.selected, { direction: MoveDirection.LEFT })
+    whenever(ctrl_c, () => isInsideGraph() && props.graph.clipboard.copy())
+    whenever(ctrl_x, () => isInsideGraph() && props.graph.clipboard.cut())
+    whenever(ctrl_v, () => isInsideGraph() && props.graph.clipboard.paste())
+    whenever(ctrl_z, () => isInsideGraph() && props.graph.undo())
+    whenever(ctrl_y, () => isInsideGraph() && props.graph.redo())
+    whenever(escape, () => isInsideGraph() && props.graph.setSelected())
+    whenever(
+      ctrl_arrowup,
+      () =>
+        isInsideGraph() &&
+        props.graph.move(props.graph.selected, { direction: MoveDirection.UP })
     )
-    whenever(ctrl_arrowdown, () =>
-      props.graph.move(props.graph.selected, { direction: MoveDirection.DOWN })
+    whenever(
+      ctrl_arrowleft,
+      () =>
+        isInsideGraph() &&
+        props.graph.move(props.graph.selected, {
+          direction: MoveDirection.LEFT,
+        })
     )
-    whenever(ctrl_arrowright, () =>
-      props.graph.move(props.graph.selected, { direction: MoveDirection.RIGHT })
+    whenever(
+      ctrl_arrowdown,
+      () =>
+        isInsideGraph() &&
+        props.graph.move(props.graph.selected, {
+          direction: MoveDirection.DOWN,
+        })
+    )
+    whenever(
+      ctrl_arrowright,
+      () =>
+        isInsideGraph() &&
+        props.graph.move(props.graph.selected, {
+          direction: MoveDirection.RIGHT,
+        })
     )
 
     return () => (

@@ -1,11 +1,14 @@
-import { Transition, computed, defineComponent, ref } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import { FlashOutline } from '@vicons/ionicons5'
 import { NIcon, NInput, NScrollbar } from 'naive-ui'
+import { useLocalStorage, useMagicKeys, whenever } from '@vueuse/core'
 import StencilGroup from './group'
+import type { Predicate } from 'sa-lambda/Predicate'
 import type { PartialOptional } from 'sugar-sajs'
-import type { PropType } from 'vue'
+import type { PropType, VNode } from 'vue'
 import type { BasicGraph } from '../../graph'
 import type { BasicElementAttributes } from '../../element'
+import { Resize } from '@/components/Resize'
 
 import './index.scss'
 
@@ -19,9 +22,10 @@ export type NativeStencil<T = object> = (graph: any /** TODO: */) => {
   groups: { name: string }[]
   nodes: {
     [key in ReturnType<NativeStencil<T>>['groups'][number]['name']]: {
-      icon: string
+      icon: string | VNode
       title?: string
       attrs: StencilAttributes<T>
+      disabled?: Predicate<BasicGraph>
     }[]
   }
 }
@@ -45,8 +49,6 @@ export default defineComponent({
   },
 
   setup(props) {
-    const visible = computed(() => props.graph.layout.component)
-    const refStencil = ref<HTMLDivElement | null>(null)
     const stencilSearch = ref('')
     const stencilSearchChange = (search: string) => {
       stencilSearch.value = search
@@ -85,51 +87,52 @@ export default defineComponent({
 
     nativeStencil.value = (props.stencil as NativeStencil)(props.graph)
 
-    return {
-      visible,
-      stencilSearch,
-      stencilSearchChange,
-      refStencil,
-      nativeStencil,
-      nativeStencilGroups,
-      filteredNativeStencilGroups,
-    }
-  },
+    const stencilWidth = useLocalStorage('form-stencil-width', 220)
+    const { ctrl_e } = useMagicKeys()
+    whenever(ctrl_e, () => {
+      stencilWidth.value = stencilWidth.value < 220 ? 220 : 8
+    })
 
-  render() {
-    return (
-      <Transition name="collapse-x-transition">
-        {this.visible && (
-          <div
-            class={
-              'sa-form-stencil flex flex-col justify-start p-1 box-border relative'
-            }
+    return () => (
+      <Resize
+        width={stencilWidth}
+        onUpdate:width={(width) => (stencilWidth.value = width)}
+        min={8}
+        max={250}
+        direction="right"
+      >
+        <div
+          class={
+            'sa-form-stencil flex flex-col justify-start p-1 box-border relative'
+          }
+        >
+          <NInput
+            class="stencil-search"
+            value={stencilSearch.value}
+            onUpdateValue={stencilSearchChange}
+            clearable
+            placeholder="Search Component"
           >
-            <NInput
-              class="stencil-search"
-              value={this.stencilSearch}
-              onUpdateValue={this.stencilSearchChange}
-              clearable
-              placeholder="Search Component"
-            >
-              {{
-                prefix: () => <NIcon component={FlashOutline} />,
-              }}
-            </NInput>
+            {{
+              prefix: () => <NIcon component={FlashOutline} />,
+            }}
+          </NInput>
 
-            <NScrollbar>
-              {
-                // groups
-                this.filteredNativeStencilGroups
-                  ?.map(
-                    (group) => group[1].length && <StencilGroup group={group} />
-                  )
-                  .filter(Boolean)
-              }
-            </NScrollbar>
-          </div>
-        )}
-      </Transition>
+          <NScrollbar>
+            {
+              // groups
+              filteredNativeStencilGroups.value
+                ?.map(
+                  (group) =>
+                    group[1].length && (
+                      <StencilGroup group={group} graph={props.graph} />
+                    )
+                )
+                .filter(Boolean)
+            }
+          </NScrollbar>
+        </div>
+      </Resize>
     )
   },
 })

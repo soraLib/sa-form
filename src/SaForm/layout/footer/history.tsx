@@ -32,7 +32,13 @@ export default defineComponent({
       >
         {{
           trigger: () => (
-            <NButton secondary size="small" v-slots={{ icon: <GitCommit /> }}>
+            <NButton
+              type="info"
+              secondary
+              size="small"
+              class="!rounded-none"
+              v-slots={{ icon: <GitCommit /> }}
+            >
               History
               {(recordsLen.value && (
                 <span class="count flex items-center gap-1">

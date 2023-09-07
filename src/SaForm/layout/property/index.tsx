@@ -1,13 +1,15 @@
-import { Transition, computed, defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
+import { useLocalStorage, useMagicKeys, whenever } from '@vueuse/core'
 import { ElementType } from '../../element'
 import { isGroupPlugin } from '../../plugin'
 import PluginItem from './item'
 import PluginGroup from './group'
 import type { PropType } from 'vue'
 import type { BasicGraph } from '../../graph'
+import type { SaController } from '../../config'
+import { Resize } from '@/components/Resize'
 
 import './index.scss'
-import type { SaController } from '../../config'
 
 export default defineComponent({
   name: 'SaFormLayoutController',
@@ -23,7 +25,6 @@ export default defineComponent({
   },
 
   setup(props) {
-    const visible = computed(() => props.graph.layout.property)
     const plugin = computed(() => {
       const type = props.graph.selected[0]?.attrs.type
 
@@ -40,29 +41,39 @@ export default defineComponent({
       return undefined
     })
 
+    const propertyWidth = useLocalStorage('form-property-width', 350)
+    const { ctrl_p } = useMagicKeys()
+    whenever(ctrl_p, () => {
+      propertyWidth.value = propertyWidth.value < 350 ? 350 : 8
+    })
+
     return () => (
-      <Transition name="collapse-x-transition">
-        {visible.value && (
-          <div class="plugins-container">
-            {plugin.value &&
-              plugin.value.basic?.map((item) => {
-                return isGroupPlugin(item) ? (
-                  <PluginGroup
-                    plugin={item}
-                    graph={props.graph}
-                    controller={props.controller}
-                  />
-                ) : (
-                  <PluginItem
-                    plugin={item}
-                    graph={props.graph}
-                    controller={props.controller}
-                  />
-                )
-              })}
-          </div>
-        )}
-      </Transition>
+      <Resize
+        width={propertyWidth}
+        onUpdate:width={(width) => (propertyWidth.value = width)}
+        min={8}
+        max={500}
+        direction="left"
+      >
+        <div class="plugins-container">
+          {plugin.value &&
+            plugin.value.basic?.map((item) => {
+              return isGroupPlugin(item) ? (
+                <PluginGroup
+                  plugin={item}
+                  graph={props.graph}
+                  controller={props.controller}
+                />
+              ) : (
+                <PluginItem
+                  plugin={item}
+                  graph={props.graph}
+                  controller={props.controller}
+                />
+              )
+            })}
+        </div>
+      </Resize>
     )
   },
 })
