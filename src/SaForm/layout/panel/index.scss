@@ -1,0 +1,8 @@
+.form-panel-tabs {
+  > .el-tabs__header {
+    margin: 0;
+  }
+  > .el-tabs__content {
+    height: calc(100% - 40px);
+  }
+}

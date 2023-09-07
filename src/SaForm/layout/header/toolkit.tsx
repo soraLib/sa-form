@@ -1,5 +1,4 @@
 import { defineComponent, ref } from 'vue'
-import { PromisifyFn } from '@vueuse/core'
 import { useClazs } from '../../utils/class'
 import type { PropType, VNode } from 'vue'
 import type { BasicGraph } from '../../graph'
@@ -15,6 +14,10 @@ export interface HeaderToolkit {
   click: (graph: any /** TODO: */, e: Event) => Promise<void> | void
   /** a divider separates the icons */
   divider?: boolean
+  /** toolkit size type */
+  size?: 'icon' | 'fit'
+  /** toolkit is actived */
+  active?: (graph: any) => boolean
 }
 
 export default defineComponent({
@@ -40,6 +43,8 @@ export default defineComponent({
             <span
               class={useClazs('header-button', {
                 'is-running': isRunningMap.value[tool.title],
+                'is-actived': tool.active?.(props.graph) ?? false,
+                'is-fit-size': tool.size === 'fit',
               })}
               onClick={async (e) => {
                 if (isRunningMap.value[tool.title]) return

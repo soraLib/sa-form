@@ -1,3 +1,55 @@
+$gap: 4px;
+
+.header-button {
+  height: 36px;
+  width: 36px;
+  overflow: hidden;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--c-transition), background var(--c-transition);
+  border-radius: 4px;
+
+  &.is-fit-size {
+    width: fit-content;
+  }
+
+  &:not(.is-fit-size) {
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--c-bg-hover);
+    }
+
+    &:active {
+      transform: translateY(0.5px);
+    }
+  }
+
+  &.is-active {
+    color: var(--c-brand);
+  }
+
+  &.is-actived {
+    color: var(--c-brand);
+    background-color: var(--c-bg-hover);
+  }
+
+  &.is-running {
+    @apply animate-pulse;
+    cursor: wait;
+    color: var(--c-brand);
+  }
+}
+
+.header-button-divider {
+  margin: 0 $gap * 2 0 $gap * 2.5;
+  border-left: 1px solid var(--c-bg-soft);
+  border-right: 1px solid var(--c-divider);
+  height: 90%;
+}
+
 .header-toolkit-wrapper {
   display: flex;
 

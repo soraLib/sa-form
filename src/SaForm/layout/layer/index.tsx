@@ -1,7 +1,12 @@
-import { Transition, computed, defineComponent, ref, watch } from 'vue'
+import { computed, defineComponent, ref, watch } from 'vue'
 import { NIcon, NInput, NPopover, NScrollbar, NSwitch, NTree } from 'naive-ui'
 import { ChevronBack, Funnel, Layers } from '@vicons/ionicons5'
-import { useStorage } from '@vueuse/core'
+import {
+  useLocalStorage,
+  useMagicKeys,
+  useStorage,
+  whenever,
+} from '@vueuse/core'
 import { ElementType } from '../../element'
 import { isContainerType, isTab } from '../../PcForm/element'
 import { createElementTreeData } from '../../PcForm/utils/tree'
@@ -14,6 +19,7 @@ import type { BasicGraph } from '../../graph'
 import './index.scss'
 import { pcStencilIcons } from '@/SaForm/PcForm/layout/stencil/stencil'
 import { useClazs } from '@/SaForm/utils/class'
+import { Resize } from '@/components/Resize'
 
 export default defineComponent({
   name: 'SaFormLayoutLayer',
@@ -26,7 +32,6 @@ export default defineComponent({
   },
 
   setup(props) {
-    const visible = computed(() => props.graph.layout.layer)
     const treeData = computed(() =>
       createElementTreeData(
         props.graph.canvas.children,
@@ -72,122 +77,127 @@ export default defineComponent({
     const pattern = ref('')
     const hideIrrelevantNodes = useStorage('hide-irrelevant-nodes', true)
 
+    const layerWidth = useLocalStorage('form-layer-width', 200)
+    const { ctrl_l } = useMagicKeys()
+    whenever(ctrl_l, () => {
+      layerWidth.value = layerWidth.value < 200 ? 200 : 8
+    })
+
     return () => (
-      <Transition name="collapse-x-transition">
-        {visible.value && (
-          <div class="sa-form-layer sa-bg p-2">
-            <div class="title flex items-center text-base font-medium">
-              <NIcon class="mr-2" size={20}>
-                <Layers />
-              </NIcon>
-              <span class="mr-auto">Layer</span>
-              <NPopover
-                trigger="click"
-                placement="right-start"
-                width={200}
-                v-slots={{
-                  trigger: () => (
-                    <div
-                      title="Filter"
-                      class={useClazs(
-                        'flex',
-                        'items-center',
-                        'p-1.5',
-                        'cursor-pointer',
-                        { 'is-filtered': pattern.value !== '' }
-                      )}
-                    >
-                      <NIcon size={16}>
-                        <Funnel />
-                      </NIcon>
-                    </div>
-                  ),
-                }}
-              >
-                <div class="flex justify-between">
-                  <span>Hide irrelevant nodes</span>
-                  <NSwitch
-                    value={hideIrrelevantNodes.value}
-                    onUpdate:value={(v: boolean) =>
-                      (hideIrrelevantNodes.value = v)
-                    }
-                  ></NSwitch>
-                </div>
-                <NInput
-                  class="my-2"
-                  size="small"
-                  placeholder="Search by id or name"
-                  clearable
-                  value={pattern.value}
-                  onUpdate:value={(v) => (pattern.value = v)}
-                ></NInput>
-              </NPopover>
-
-              <div
-                class="layer-close-button rounded-full cursor-pointer flex items-center p-1.5"
-                title="Close Layer"
-                onClick={() => props.graph.setLayout({ layer: false })}
-              >
-                <NIcon size={20} {...{}}>
-                  <ChevronBack />
-                </NIcon>
-              </div>
-            </div>
-
-            <NScrollbar class="my-2 pr-3">
-              <NTree
-                keyField="value"
-                block-line
-                block-node
-                showIrrelevantNodes={!hideIrrelevantNodes.value}
-                data={treeData.value}
-                pattern={pattern.value}
-                filter={(pattern, node: any) =>
-                  node.value == pattern || node.label.includes(pattern)
-                }
-                node-props={({ option }: { option: ElementTreeDataOption }) => {
-                  const index = props.graph.selected.findIndex(
-                    (elem) => elem.attrs.id === option.value
-                  )
-                  return {
-                    'is-empty':
-                      isContainerType(option.type) && !option.children?.length,
-                    'layer-tree-status':
-                      index === -1
-                        ? 'not-selected'
-                        : index === 0 && props.graph.selected.length > 1
-                        ? 'is-reference'
-                        : index === 0 && props.graph.selected.length === 1
-                        ? 'is-only-selection'
-                        : 'is-selected',
-                  }
-                }}
-                selectedKeys={selectedKeys.value}
-                expandedKeys={Array.from(expandedKeys.value)}
-                render-label={({
-                  option,
-                }: {
-                  option: ElementTreeDataOption
-                }) => (
+      <Resize
+        width={layerWidth}
+        onUpdate:width={(width) => (layerWidth.value = width)}
+        min={8}
+        direction="right"
+      >
+        <div class="sa-form-layer sa-bg p-2 overflow-hidden">
+          <div class="title flex items-center text-base font-medium">
+            <NIcon class="mr-2" size={20}>
+              <Layers />
+            </NIcon>
+            <span class="mr-auto">Layer</span>
+            <NPopover
+              trigger="click"
+              placement="right-start"
+              width={200}
+              v-slots={{
+                trigger: () => (
                   <div
-                    title={`${ElementType[option.type]}: ${option.label}`}
-                    class="text-left w-full overflow-hidden whitespace-nowrap text-ellipsis"
+                    title="Filter"
+                    class={useClazs(
+                      'flex',
+                      'items-center',
+                      'p-1.5',
+                      'cursor-pointer',
+                      { 'is-filtered': pattern.value !== '' }
+                    )}
                   >
-                    {option.label}
+                    <NIcon size={16}>
+                      <Funnel />
+                    </NIcon>
                   </div>
-                )}
-                render-prefix={({
-                  option,
-                }: {
-                  option: ElementTreeDataOption
-                }) => <i class={`iconfont ${pcStencilIcons[option.type]}`} />}
-                onUpdate:selectedKeys={onUpdateSelectedKeys}
-                onUpdateExpandedKeys={onUpdateExpandedKeys}
-              ></NTree>
-            </NScrollbar>
+                ),
+              }}
+            >
+              <div class="flex justify-between">
+                <span>Hide irrelevant nodes</span>
+                <NSwitch
+                  value={hideIrrelevantNodes.value}
+                  onUpdate:value={(v: boolean) =>
+                    (hideIrrelevantNodes.value = v)
+                  }
+                ></NSwitch>
+              </div>
+              <NInput
+                class="my-2"
+                size="small"
+                placeholder="Search by id or name"
+                clearable
+                value={pattern.value}
+                onUpdate:value={(v) => (pattern.value = v)}
+              ></NInput>
+            </NPopover>
+
+            <div
+              class="layer-close-button rounded-full cursor-pointer flex items-center p-1.5"
+              title="Close Layer"
+              onClick={() => (layerWidth.value = 8)}
+            >
+              <NIcon size={20} {...{}}>
+                <ChevronBack />
+              </NIcon>
+            </div>
           </div>
-        )}
-      </Transition>
+
+          <NScrollbar class="my-2 pr-3">
+            <NTree
+              keyField="value"
+              block-line
+              block-node
+              showIrrelevantNodes={!hideIrrelevantNodes.value}
+              data={treeData.value}
+              pattern={pattern.value}
+              filter={(pattern, node: any) =>
+                node.value == pattern || node.label.includes(pattern)
+              }
+              node-props={({ option }: { option: ElementTreeDataOption }) => {
+                const index = props.graph.selected.findIndex(
+                  (elem) => elem.attrs.id === option.value
+                )
+                return {
+                  'is-empty':
+                    isContainerType(option.type) && !option.children?.length,
+                  'layer-tree-status':
+                    index === -1
+                      ? 'not-selected'
+                      : index === 0 && props.graph.selected.length > 1
+                      ? 'is-reference'
+                      : index === 0 && props.graph.selected.length === 1
+                      ? 'is-only-selection'
+                      : 'is-selected',
+                }
+              }}
+              selectedKeys={selectedKeys.value}
+              expandedKeys={Array.from(expandedKeys.value)}
+              render-label={({ option }: { option: ElementTreeDataOption }) => (
+                <div
+                  title={`${ElementType[option.type]}: ${option.label}`}
+                  class="text-left w-full overflow-hidden whitespace-nowrap text-ellipsis"
+                >
+                  {option.label}
+                </div>
+              )}
+              render-prefix={({
+                option,
+              }: {
+                option: ElementTreeDataOption
+              }) => <i class={`iconfont ${pcStencilIcons[option.type]}`} />}
+              onUpdate:selectedKeys={onUpdateSelectedKeys}
+              onUpdateExpandedKeys={onUpdateExpandedKeys}
+            ></NTree>
+          </NScrollbar>
+        </div>
+      </Resize>
     )
   },
 })

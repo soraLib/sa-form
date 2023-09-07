@@ -4,7 +4,7 @@
 
     <SaForm
       id="1"
-      class="flex-grow mx-24 my-6 overflow-hidden rounded-lg shadow"
+      class="flex-grow mx-24 my-6 overflow-hidden shadow"
       type="PcForm"
     />
   </div>
