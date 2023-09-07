@@ -9,6 +9,7 @@ import SaFormStencil from './layout/stencil'
 import SaFormProperty from './layout/property'
 import SaFormFooter from './layout/footer'
 import SaFormLayer from './layout/layer'
+import SaFormPanel from './layout/panel'
 import type { GraphType } from './graph'
 import type { ILayout } from './config'
 import type { PropType } from 'vue'
@@ -66,6 +67,12 @@ export default defineComponent({
                     graph={layout.graph}
                   />
                 </section>
+
+                <SaFormPanel
+                  class="sa-bg mt-1"
+                  graph={layout.graph}
+                  controller={layout.controller}
+                />
               </section>
 
               <SaFormProperty

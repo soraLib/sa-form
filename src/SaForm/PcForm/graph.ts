@@ -19,7 +19,6 @@ import type {
   BasicGraph,
   GraphType,
   Grid,
-  Layout,
   MousePosition,
   Scroller,
   Selection,
@@ -51,11 +50,6 @@ export type Stick = 'tl' | 'tm' | 'tr' | 'mr' | 'br' | 'bm' | 'bl' | 'ml'
 /** pc graph */
 export class PcGraph extends Events implements BasicGraph {
   type: GraphType
-  layout: Layout = {
-    component: true,
-    layer: true,
-    property: true,
-  }
   canvas: PcElement
   history: BasicRecordStore
   clipboard: PcClipBoard
@@ -117,10 +111,6 @@ export class PcGraph extends Events implements BasicGraph {
         data: [],
       })
     )
-  }
-
-  setLayout(layout: Partial<Layout>) {
-    setObjectValues(this.layout, layout)
   }
   setSelection(selection: Partial<Selection>) {
     setObjectValues(this.selection, selection)
