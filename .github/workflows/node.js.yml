@@ -13,7 +13,7 @@ jobs:
     
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
+        node-version: [16.x]
 
     steps:
       - uses: actions/checkout@v2
@@ -40,20 +40,6 @@ jobs:
         with:
           version: 7
           run_install: false
-
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-
-      - uses: actions/cache@v3
-        name: Setup pnpm cache
-        with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
       - run: pnpm install
       - run: pnpm run build:doc
       - uses: stefanzweifel/git-auto-commit-action@v4
