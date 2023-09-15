@@ -1,0 +1,14 @@
+.sa-form-footer {
+  .scale-ratio {
+    &-selector {
+      width: 100px;
+
+      .n-base-selection__state-border {
+        display: none;
+      }
+    }
+    &-slider {
+      width: 150px;
+    }
+  }
+}

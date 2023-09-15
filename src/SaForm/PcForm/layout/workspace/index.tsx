@@ -11,6 +11,7 @@ import Settings from './settings'
 
 import type { PcGraph } from '../../graph'
 import type { CSSProperties, PropType } from 'vue'
+import { AutoScale } from '@/components/AutoScale'
 
 export default defineComponent({
   name: 'SaPcFormRender',
@@ -71,36 +72,52 @@ linear-gradient(90deg, ${boldLineColor} 1px, transparent 0)`,
     return () => (
       <div class="relative">
         <div class="w-full h-full overflow-auto">
-          <div
-            class={useClazs('relative workspace-container', {
-              'cursor-move': props.graph.isDragging,
-              'cursor-crosshair':
-                props.graph.isSelecting &&
-                props.graph.selectionBox.width > 0 &&
-                props.graph.selectionBox.height > 0,
-              'cursor-grabbing': props.graph.isPanning,
-              'select-none':
-                props.graph.isPanning ||
-                props.graph.isSelecting ||
-                props.graph.isDragging ||
-                props.graph.isResizing,
-            })}
-            style={{
-              width: `${props.graph.canvas.attrs.width}px`,
-              height: `${props.graph.canvas.attrs.height}px`,
-              ...gridStyle.value,
+          <AutoScale
+            modelValue={props.graph.scale.ratio / 100}
+            type={props.graph.scale.type}
+            size={{
+              width: props.graph.canvas.attrs.width,
+              height: props.graph.canvas.attrs.height,
             }}
-            onContextmenu={onContextmenu}
+            onUpdate:model-value={(ratio) =>
+              props.graph.setScale({
+                ratio: ratio * 100,
+              })
+            }
           >
-            <Workspace ref="workspace" graph={props.graph} />
+            <div
+              class={useClazs('relative workspace-container', {
+                'cursor-move': props.graph.isDragging,
+                'cursor-crosshair':
+                  props.graph.isSelecting &&
+                  props.graph.selectionBox.width > 0 &&
+                  props.graph.selectionBox.height > 0,
+                'cursor-grabbing': props.graph.isPanning,
+                'select-none':
+                  props.graph.isPanning ||
+                  props.graph.isSelecting ||
+                  props.graph.isDragging ||
+                  props.graph.isResizing,
+              })}
+              style={{
+                width: `${props.graph.canvas.attrs.width}px`,
+                height: `${props.graph.canvas.attrs.height}px`,
+                ...gridStyle.value,
+              }}
+              onContextmenu={onContextmenu}
+            >
+              <Workspace ref="workspace" graph={props.graph} />
 
-            {props.graph.snapline.enabled && <Snapline graph={props.graph} />}
-            {props.graph.selection.showSelectionBox && (
-              <Group graph={props.graph} />
-            )}
-            {props.graph.selection.enabled && <Selection graph={props.graph} />}
-            <Contextmenu ref={contextmenuRef} graph={props.graph} />
-          </div>
+              {props.graph.snapline.enabled && <Snapline graph={props.graph} />}
+              {props.graph.selection.showSelectionBox && (
+                <Group graph={props.graph} />
+              )}
+              {props.graph.selection.enabled && (
+                <Selection graph={props.graph} />
+              )}
+              <Contextmenu ref={contextmenuRef} graph={props.graph} />
+            </div>
+          </AutoScale>
         </div>
 
         <Transition name="fade-slide-top-transition" appear>
