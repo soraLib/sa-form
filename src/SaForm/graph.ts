@@ -2,6 +2,7 @@ import type { Arrayable } from '@vueuse/core'
 import type { BasicClipBoard } from './clipboard'
 import type { BasicElement } from './element'
 import type { BasicRecord, BasicRecordStore } from './record'
+import type { ScaleType } from '@/components/AutoScale'
 
 export type GraphType =
   /** pc form */
@@ -53,6 +54,11 @@ export enum MoveDirection {
   LEFT = 'left',
 }
 
+export type ScaleOption = {
+  type: ScaleType
+  ratio: number
+}
+
 /** basic graph */
 export interface BasicGraph {
   /** graph type */
@@ -70,6 +76,10 @@ export interface BasicGraph {
   snapline: Snapline
   scroller: Scroller
   clipboard: BasicClipBoard
+
+  scale: ScaleOption
+  setScale: (optons: Partial<ScaleOption>) => void
+
   setSelection: (selection: Partial<Selection>) => void
   setGrid: (grid: Partial<Grid>) => void
   setSnap: (snap: Partial<Snapline>) => void
