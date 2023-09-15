@@ -20,6 +20,7 @@ import type {
   GraphType,
   Grid,
   MousePosition,
+  ScaleOption,
   Scroller,
   Selection,
   Snapline,
@@ -91,6 +92,14 @@ export class PcGraph extends Events implements BasicGraph {
   isPanning = false
   scroller: Scroller = {
     pannable: true,
+  }
+
+  scale: ScaleOption = {
+    ratio: 100,
+    type: 'fixed',
+  }
+  setScale(options: Partial<ScaleOption>) {
+    setObjectValues(this.scale, options)
   }
 
   constructor(config: Partial<PcElement> & { attrs: Record<string, any> }) {
