@@ -12,9 +12,8 @@ import type { PcElement } from '../../../element'
 import type { PropType } from 'vue'
 import type { PcGraph } from '../../../graph'
 
-import type { ContextmenuItem } from '@/components/Contextmenu/src/shared'
-import type { Position } from '@/SaForm/clipboard'
-import Contextmenu from '@/components/Contextmenu/src/Contextmenu.vue'
+import type { ContextmenuItem, Position } from '@/components/Contextmenu'
+import { Contextmenu } from '@/components/Contextmenu'
 
 export default defineComponent({
   name: 'SaPcFormContextmenu',
@@ -37,11 +36,11 @@ export default defineComponent({
     )
     const isPasteable = computed(
       () =>
-        selected.value?.attrs.type &&
+        selected.value?.attrs.type !== undefined &&
         containerElements.includes(selected.value.attrs.type)
     )
     watch(
-      () => selected.value?.key,
+      () => selected.value?.attrs.id,
       () => contextmenuRef.value?.close()
     )
 

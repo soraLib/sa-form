@@ -69,8 +69,8 @@ linear-gradient(90deg, ${boldLineColor} 1px, transparent 0)`,
     })
 
     return () => (
-      <div class="relative">
-        <div class="w-full h-full overflow-auto outline-none">
+      <div class="w-full h-full relative">
+        <div class="w-full h-full overflow-auto">
           <AutoScale
             modelValue={props.graph.scale.ratio / 100}
             type={props.graph.scale.type}
@@ -78,7 +78,7 @@ linear-gradient(90deg, ${boldLineColor} 1px, transparent 0)`,
               width: props.graph.canvas.attrs.width,
               height: props.graph.canvas.attrs.height,
             }}
-            onUpdate:model-value={(ratio) =>
+            onUpdate:model-value={(ratio: number) =>
               props.graph.setScale({
                 ratio: ratio * 100,
               })
@@ -114,9 +114,10 @@ linear-gradient(90deg, ${boldLineColor} 1px, transparent 0)`,
               {props.graph.selection.enabled && (
                 <Selection graph={props.graph} />
               )}
-              <Contextmenu ref={contextmenuRef} graph={props.graph} />
             </div>
           </AutoScale>
+
+          <Contextmenu ref={contextmenuRef} graph={props.graph} />
         </div>
       </div>
     )
