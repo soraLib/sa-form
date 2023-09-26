@@ -70,7 +70,7 @@ linear-gradient(90deg, ${boldLineColor} 1px, transparent 0)`,
 
     return () => (
       <div class="w-full h-full relative">
-        <div class="w-full h-full overflow-auto">
+        <div class="w-full h-full">
           <AutoScale
             modelValue={props.graph.scale.ratio / 100}
             type={props.graph.scale.type}

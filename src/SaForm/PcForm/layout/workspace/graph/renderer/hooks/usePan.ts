@@ -1,4 +1,5 @@
 import type { PcGraph } from '@/SaForm/PcForm/graph'
+import { getScrollContainer } from '@/SaForm/utils/domUtils'
 
 export const getStyle = function (
   element: HTMLElement,
@@ -35,24 +36,6 @@ export const isScroll = (
     : getStyle(el, 'overflow-x')
 
   return overflow.match(/(scroll|auto)/)!
-}
-
-export const getScrollContainer = (
-  el: HTMLElement,
-  isVertical?: boolean
-): undefined | HTMLElement => {
-  let parent: HTMLElement = el
-  while (parent) {
-    if ([window, document, document.documentElement].includes(parent)) {
-      return undefined
-    }
-    if (isScroll(parent, isVertical)) {
-      return parent
-    }
-    parent = parent.parentNode as HTMLElement
-  }
-
-  return parent
 }
 
 const hasVerticalScrollbar = (element: HTMLElement) =>
