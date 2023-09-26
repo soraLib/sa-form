@@ -13,8 +13,7 @@ import { Settings } from '@vicons/ionicons5'
 import { useToggle } from '@vueuse/core'
 import { isNumber } from 'lodash-es'
 import type { PropType } from 'vue'
-import type { PcGraph } from '@/SaForm/PcForm/graph'
-import { ModifierKey } from '@/SaForm/graph'
+import { type BasicGraph, ModifierKey } from '@/SaForm/graph'
 
 import './index.scss'
 
@@ -23,7 +22,7 @@ export default defineComponent({
   props: {
     graph: {
       required: true,
-      type: Object as PropType<PcGraph>,
+      type: Object as PropType<BasicGraph>,
     },
   },
 
@@ -37,9 +36,11 @@ export default defineComponent({
           title="Settings"
           onClick={() => toggleVisible(true)}
         >
-          <NIcon size={24}>
-            <Settings />
-          </NIcon>
+          <div class="setting-button">
+            <NIcon size={18} class="setting-button-icon">
+              <Settings />
+            </NIcon>
+          </div>
         </div>
         <NModal
           title="Settings"

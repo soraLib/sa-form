@@ -4,15 +4,12 @@ import type { BasicElement } from './element'
 import type { BasicRecord, BasicRecordStore } from './record'
 import type { ScaleType } from '@/components/AutoScale'
 
-export type GraphType =
-  /** pc form */
-  'PcForm'
-/** app form */
-// 'AppForm' |
-/** flow form */
-// 'Flow' |
-/** print form */
-// 'Print'
+export enum GraphType {
+  Pc = 'PcForm',
+  // App = 'AppForm',
+  // Flow = 'FlowForm',
+  // Print = 'PrintForm',
+}
 
 export interface Position {
   x: number
@@ -23,13 +20,13 @@ export interface MousePosition extends Position {
   startY: number
 }
 
-export type Grid = {
+export type GridSetting = {
   type: 'dot' | 'mesh' | 'double-mesh'
   size: number
   enabled: boolean
   visible: true
 }
-export type Snapline = {
+export type SnaplineSetting = {
   radius: number
   enabled: boolean
 }
@@ -38,7 +35,7 @@ export enum ModifierKey {
   Alt = 'alt',
   Shift = 'shift',
 }
-export type Selection = {
+export type SelectionSetting = {
   enabled: boolean
   modifier: ModifierKey
   showSelectionBox: boolean
@@ -54,9 +51,23 @@ export enum MoveDirection {
   LEFT = 'left',
 }
 
-export type ScaleOption = {
+export type ScaleSetting = {
   type: ScaleType
   ratio: number
+}
+
+export type IdUpdateData<T extends BasicElement = BasicElement> = {
+  id: string
+  data: Partial<T['attrs']>
+}
+export type ElUpdateData<T extends BasicElement = BasicElement> = {
+  element: BasicElement
+  data: Partial<T['attrs']>
+}
+export function isIdUpdateData<T extends BasicElement = BasicElement>(
+  data: IdUpdateData<T> | ElUpdateData<T>
+): data is IdUpdateData<T> {
+  return Reflect.has(data, 'id')
 }
 
 /** basic graph */
@@ -71,20 +82,25 @@ export interface BasicGraph {
   selected: BasicElement[]
   /** div container */
   containter?: HTMLDivElement
+
+  scale: ScaleSetting
+  setScale: (optons: Partial<ScaleSetting>) => void
+
+  selection: SelectionSetting
+
   isDraft: boolean
-  grid: Grid
-  snapline: Snapline
+  grid: GridSetting
+  snapline: SnaplineSetting
   scroller: Scroller
   clipboard: BasicClipBoard
-
-  scale: ScaleOption
-  setScale: (optons: Partial<ScaleOption>) => void
-
-  setSelection: (selection: Partial<Selection>) => void
-  setGrid: (grid: Partial<Grid>) => void
-  setSnap: (snap: Partial<Snapline>) => void
+  setSelection: (selection: Partial<SelectionSetting>) => void
+  setGrid: (grid: Partial<GridSetting>) => void
+  setSnap: (snap: Partial<SnaplineSetting>) => void
   setScroller: (scroller: Partial<Scroller>) => void
   setIsDraft: (isDraft?: boolean) => void
+  setDevice?: (type: GraphType) => void
+
+  setCanvas(canvas: BasicElement): void
 
   getNextId(): string
 
@@ -109,6 +125,16 @@ export interface BasicGraph {
     data: Partial<BasicElement['attrs']>,
     needRecord?: boolean
   ): BasicElement | undefined
+
+  updateElemsData(
+    data: IdUpdateData[],
+    needRecord?: boolean
+  ): BasicElement[] | undefined
+  updateElemsData(
+    data: ElUpdateData[],
+    needRecord?: boolean
+  ): BasicElement[] | undefined
+
   historyTo(to: number): void
   historyTo(to: BasicRecord): void
 
@@ -127,4 +153,5 @@ export interface BasicGraph {
 
   undo(): void
   redo(): void
+  save(): Promise<void>
 }

@@ -176,6 +176,7 @@ export default defineComponent({
             'is-reference': isReference.value,
             'is-graph': isCanvas.value,
           })}
+          tabindex={0}
           style={elementStyle.value}
           onMousedown={useElementHandler(props.element, props.graph)}
         >

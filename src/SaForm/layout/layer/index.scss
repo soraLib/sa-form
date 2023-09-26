@@ -3,7 +3,12 @@
   flex-direction: column;
   box-sizing: border-box;
   height: 100%;
+  overflow: hidden;
 
+  .title {
+    background-color: var(--c-bg-hover);
+    padding: 2px 8px;
+  }
   .layer-close-button {
     transition: background-color var(--c-transition);
     &:hover {
