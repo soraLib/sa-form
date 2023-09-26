@@ -20,6 +20,7 @@ import './index.scss'
 import { pcStencilIcons } from '@/SaForm/PcForm/layout/stencil/stencil'
 import { useClazs } from '@/SaForm/utils/class'
 import { Resize } from '@/components/Resize'
+import { getScrollContainer, isInContainer } from '@/SaForm/utils/domUtils'
 
 export default defineComponent({
   name: 'SaFormLayoutLayer',
@@ -62,6 +63,13 @@ export default defineComponent({
           expandedKeys.value.add(cur.attrs.id)
           cur = cur.parent
         }
+
+        // scroll selected element into view
+        const node = document.querySelector(
+          '.n-tree-node[is-reference="true"]'
+        ) as HTMLElement
+        if (node && !isInContainer(node, getScrollContainer(node) as any))
+          node.scrollIntoView({ behavior: 'smooth' })
       },
       { deep: true }
     )
@@ -167,6 +175,7 @@ export default defineComponent({
                 return {
                   'is-empty':
                     isContainerType(option.type) && !option.children?.length,
+                  'is-reference': index === 0,
                   'layer-tree-status':
                     index === -1
                       ? 'not-selected'
