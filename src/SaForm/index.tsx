@@ -2,6 +2,7 @@
 
 import { defineComponent, reactive } from 'vue'
 
+import { useLocalStorage, useMagicKeys, whenever } from '@vueuse/core'
 import { LAYOUTS } from './config'
 
 import SaFormHeader from './layout/header'
@@ -10,9 +11,11 @@ import SaFormProperty from './layout/property'
 import SaFormFooter from './layout/footer'
 import SaFormLayer from './layout/layer'
 import SaFormPanel from './layout/panel'
+import { useClazs } from './utils/class'
 import type { GraphType } from './graph'
 import type { ILayout } from './config'
 import type { PropType } from 'vue'
+import { Resize } from '@/components/Resize'
 
 import './styles/index.scss'
 
@@ -34,18 +37,41 @@ export default defineComponent({
 
     const SaFormWorkspace = layout.workspace
 
+    const primarySidebarWidth = useLocalStorage(
+      'form-primary-sidebar-width',
+      220
+    )
+    const { ctrl_p } = useMagicKeys()
+    whenever(ctrl_p, () => {
+      primarySidebarWidth.value = primarySidebarWidth.value < 50 ? 220 : 8
+    })
+
     return () => (
       <section key={layout.graph.canvas.attrs.id} class="flex flex-col h-full">
         <main class="mt-1 flex flex-grow gap-1 h-full overflow-auto">
-          <section>
-            <SaFormStencil
-              stencil={layout.stencil}
-              graph={layout.graph}
-              class="sa-bg h-full"
-            />
+          <section class="h-full">
+            <Resize
+              class="h-full"
+              width={primarySidebarWidth}
+              onUpdate:width={(width) => (primarySidebarWidth.value = width)}
+              min={8}
+              max={250}
+              direction="right"
+            >
+              <div
+                class={useClazs('h-full flex flex-col', {
+                  'opacity-0': primarySidebarWidth.value <= 8,
+                })}
+              >
+                <SaFormStencil
+                  stencil={layout.stencil}
+                  graph={layout.graph}
+                  class="sa-bg grow"
+                />
+                <SaFormLayer class="sa-bg flex-shrink-0" graph={layout.graph} />
+              </div>
+            </Resize>
           </section>
-
-          <SaFormLayer class="shrink-0" graph={layout.graph} />
 
           <main class="flex item-center flex-col flex-grow overflow-auto">
             <header>

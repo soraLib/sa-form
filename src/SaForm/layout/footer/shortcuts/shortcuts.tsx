@@ -1,5 +1,5 @@
 import { computed, defineComponent } from 'vue'
-import { useMagicKeys, whenever } from '@vueuse/core'
+import { useMagicKeys, useTextSelection, whenever } from '@vueuse/core'
 import { MoveDirection } from '../../../graph'
 import ShortCutKey from './key'
 import type { BasicGraph } from '../../../graph'
@@ -49,10 +49,11 @@ export default defineComponent({
       },
     })
     const pressedKeys = computed(() => Array.from(current))
-
+    const state = useTextSelection()
     const isInsideGraph = () =>
-      document.activeElement === document.body ||
-      props.graph.canvas.el?.contains(document.activeElement)
+      !state.text.value &&
+      (document.activeElement === document.body ||
+        props.graph.canvas.el?.contains(document.activeElement))
 
     const isFired = computed(
       () =>

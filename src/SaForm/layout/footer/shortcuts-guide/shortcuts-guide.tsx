@@ -21,9 +21,9 @@ export default defineComponent({
       ['Redo', ['ctrl', 'y']],
       ['Unselect All', ['esc']],
       ['Toggle Terminal', ['ctrl', '`']],
-      ['Toggle Elements', ['ctrl', 'e']],
+      ['Toggle Primary Sidebar', ['ctrl', 'p']],
       ['Toggle Layer', ['ctrl', 'l']],
-      ['Toggle Properties', ['ctrl', 'p']],
+      ['Toggle Element Properties', ['ctrl', 'e']],
     ]
 
     return () => (
