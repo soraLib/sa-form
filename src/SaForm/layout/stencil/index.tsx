@@ -1,14 +1,12 @@
 import { computed, defineComponent, ref } from 'vue'
 import { FlashOutline } from '@vicons/ionicons5'
 import { NIcon, NInput, NScrollbar } from 'naive-ui'
-import { useLocalStorage, useMagicKeys, whenever } from '@vueuse/core'
 import StencilGroup from './group'
 import type { Predicate } from 'sa-lambda/Predicate'
 import type { PartialOptional } from 'sugar-sajs'
 import type { PropType, VNode } from 'vue'
 import type { BasicGraph } from '../../graph'
 import type { BasicElementAttributes } from '../../element'
-import { Resize } from '@/components/Resize'
 
 import './index.scss'
 
@@ -87,52 +85,38 @@ export default defineComponent({
 
     nativeStencil.value = (props.stencil as NativeStencil)(props.graph)
 
-    const stencilWidth = useLocalStorage('form-stencil-width', 220)
-    const { ctrl_e } = useMagicKeys()
-    whenever(ctrl_e, () => {
-      stencilWidth.value = stencilWidth.value < 220 ? 220 : 8
-    })
-
     return () => (
-      <Resize
-        width={stencilWidth}
-        onUpdate:width={(width) => (stencilWidth.value = width)}
-        min={8}
-        max={250}
-        direction="right"
+      <div
+        class={
+          'sa-form-stencil flex flex-col justify-start p-1 box-border relative !overflow-hidden'
+        }
       >
-        <div
-          class={
-            'sa-form-stencil flex flex-col justify-start p-1 box-border relative'
-          }
+        <NInput
+          class="stencil-search"
+          value={stencilSearch.value}
+          onUpdateValue={stencilSearchChange}
+          clearable
+          placeholder="Search Component"
         >
-          <NInput
-            class="stencil-search"
-            value={stencilSearch.value}
-            onUpdateValue={stencilSearchChange}
-            clearable
-            placeholder="Search Component"
-          >
-            {{
-              prefix: () => <NIcon component={FlashOutline} />,
-            }}
-          </NInput>
+          {{
+            prefix: () => <NIcon component={FlashOutline} />,
+          }}
+        </NInput>
 
-          <NScrollbar>
-            {
-              // groups
-              filteredNativeStencilGroups.value
-                ?.map(
-                  (group) =>
-                    group[1].length && (
-                      <StencilGroup group={group} graph={props.graph} />
-                    )
-                )
-                .filter(Boolean)
-            }
-          </NScrollbar>
-        </div>
-      </Resize>
+        <NScrollbar>
+          {
+            // groups
+            filteredNativeStencilGroups.value
+              ?.map(
+                (group) =>
+                  group[1].length && (
+                    <StencilGroup group={group} graph={props.graph} />
+                  )
+              )
+              .filter(Boolean)
+          }
+        </NScrollbar>
+      </div>
     )
   },
 })

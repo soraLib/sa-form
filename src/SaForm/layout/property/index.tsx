@@ -42,8 +42,8 @@ export default defineComponent({
     })
 
     const propertyWidth = useLocalStorage('form-property-width', 350)
-    const { ctrl_p } = useMagicKeys()
-    whenever(ctrl_p, () => {
+    const { ctrl_e } = useMagicKeys()
+    whenever(ctrl_e, () => {
       propertyWidth.value = propertyWidth.value < 350 ? 350 : 8
     })
 

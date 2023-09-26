@@ -4,6 +4,7 @@ import GraphHistory from './history'
 import GraphShortcuts from './shortcuts/shortcuts'
 import GraphScaler from './scaler/scaler'
 import GraphShortcutsGuide from './shortcuts-guide/shortcuts-guide'
+import GraphSettings from './settings'
 
 import type { BasicGraph } from '../../graph'
 import type { PropType } from 'vue'
@@ -26,6 +27,7 @@ export default defineComponent({
         <GraphHistory graph={props.graph} />
         <GraphShortcuts class="grow" graph={props.graph} />
         <GraphScaler graph={props.graph} />
+        <GraphSettings class="mx-2" graph={props.graph} />
         <GraphShortcutsGuide />
       </div>
     )

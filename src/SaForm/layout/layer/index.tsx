@@ -1,6 +1,12 @@
 import { computed, defineComponent, ref, watch } from 'vue'
 import { NIcon, NInput, NPopover, NScrollbar, NSwitch, NTree } from 'naive-ui'
-import { ChevronBack, Funnel, Layers } from '@vicons/ionicons5'
+import {
+  ChevronBack,
+  ChevronDown,
+  ChevronUp,
+  Funnel,
+  Layers,
+} from '@vicons/ionicons5'
 import {
   useLocalStorage,
   useMagicKeys,
@@ -85,20 +91,20 @@ export default defineComponent({
     const pattern = ref('')
     const hideIrrelevantNodes = useStorage('hide-irrelevant-nodes', true)
 
-    const layerWidth = useLocalStorage('form-layer-width', 200)
+    const layerHeight = useLocalStorage('form-layer-height', 400)
     const { ctrl_l } = useMagicKeys()
-    whenever(ctrl_l, () => {
-      layerWidth.value = layerWidth.value < 200 ? 200 : 8
-    })
+    const toggleLayer = () =>
+      (layerHeight.value = layerHeight.value < 50 ? 400 : 32)
+    whenever(ctrl_l, toggleLayer)
 
     return () => (
       <Resize
-        width={layerWidth}
-        onUpdate:width={(width) => (layerWidth.value = width)}
-        min={8}
-        direction="right"
+        height={layerHeight}
+        onUpdate:height={(height) => (layerHeight.value = height)}
+        min={32}
+        direction="top"
       >
-        <div class="sa-form-layer sa-bg p-2 overflow-hidden">
+        <div class="sa-form-layer">
           <div class="title flex items-center text-base font-medium">
             <NIcon class="mr-2" size={20}>
               <Layers />
@@ -149,10 +155,10 @@ export default defineComponent({
             <div
               class="layer-close-button rounded-full cursor-pointer flex items-center p-1.5"
               title="Close Layer"
-              onClick={() => (layerWidth.value = 8)}
+              onClick={toggleLayer}
             >
-              <NIcon size={20} {...{}}>
-                <ChevronBack />
+              <NIcon size={20}>
+                {layerHeight.value < 50 ? <ChevronUp /> : <ChevronDown />}
               </NIcon>
             </div>
           </div>

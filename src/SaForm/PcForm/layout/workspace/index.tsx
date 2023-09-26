@@ -7,7 +7,6 @@ import Snapline from './snapline'
 import Group from './group'
 import Selection from './selection'
 import Contextmenu from './contextmenu'
-import Settings from './settings'
 
 import type { PcGraph } from '../../graph'
 import type { CSSProperties, PropType } from 'vue'
@@ -71,7 +70,7 @@ linear-gradient(90deg, ${boldLineColor} 1px, transparent 0)`,
 
     return () => (
       <div class="relative">
-        <div class="w-full h-full overflow-auto">
+        <div class="w-full h-full overflow-auto outline-none">
           <AutoScale
             modelValue={props.graph.scale.ratio / 100}
             type={props.graph.scale.type}
@@ -119,12 +118,6 @@ linear-gradient(90deg, ${boldLineColor} 1px, transparent 0)`,
             </div>
           </AutoScale>
         </div>
-
-        <Transition name="fade-slide-top-transition" appear>
-          <div class="workspace-tools">
-            <Settings graph={props.graph} />
-          </div>
-        </Transition>
       </div>
     )
   },
