@@ -32,6 +32,13 @@ export function isInViewport(element: HTMLElement) {
   )
 }
 
+export const hasVerticalScrollbar = (element: HTMLElement) =>
+  element.scrollHeight > element.clientHeight
+export const hasHorizontalScrollbar = (element: HTMLElement) =>
+  element.scrollWidth > element.clientWidth
+export const hasScrollbar = (element: HTMLElement) =>
+  hasVerticalScrollbar(element) || hasHorizontalScrollbar(element)
+
 export const isScroll = (
   el: HTMLElement,
   isVertical?: boolean

@@ -12,6 +12,7 @@ export default defineComponent({
     const [visible, toggleVisible] = useToggle(false)
 
     const shortcuts: [string, string[]][] = [
+      ['Panning ', ['space', '🖱']],
       ['Move', ['ctrl', 'arrow']],
       ['Delete ', ['del']],
       ['Copy', ['ctrl', 'c']],

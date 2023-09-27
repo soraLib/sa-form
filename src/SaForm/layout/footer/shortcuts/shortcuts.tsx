@@ -42,6 +42,7 @@ export default defineComponent({
       ctrl_arrowright,
       ctrl_backquote,
       escape,
+      space,
     } = useMagicKeys({
       passive: false,
       onEventFired: (e) => {
@@ -67,6 +68,7 @@ export default defineComponent({
         ctrl_e.value ||
         ctrl_p.value ||
         escape.value ||
+        space.value ||
         ctrl_arrowup.value ||
         ctrl_arrowleft.value ||
         ctrl_arrowdown.value ||
