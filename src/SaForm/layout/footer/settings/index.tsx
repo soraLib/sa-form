@@ -162,28 +162,6 @@ export default defineComponent({
                 />
               </div>
             </div>
-
-            <div class="form-settings-row">
-              <div>Modifier</div>
-              <div>
-                <NRadioGroup
-                  value={props.graph.selection.modifier}
-                  onUpdate:value={(modifier) =>
-                    props.graph.setSelection({ modifier })
-                  }
-                >
-                  <NRadio key="Ctrl" value={ModifierKey.Ctrl}>
-                    Ctrl
-                  </NRadio>
-                  <NRadio key="Alt" value={ModifierKey.Alt}>
-                    Alt
-                  </NRadio>
-                  <NRadio key="Shift" value={ModifierKey.Shift}>
-                    Shift
-                  </NRadio>
-                </NRadioGroup>
-              </div>
-            </div>
           </div>
         </NModal>
       </>

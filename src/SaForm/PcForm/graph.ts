@@ -6,7 +6,7 @@ import {
   isCDRecordDataList,
   isURecordDataList,
 } from '../record'
-import { ModifierKey, MoveDirection } from '../graph'
+import { GraphType, ModifierKey, MoveDirection } from '../graph'
 import { PcElement, getNextId, isTab } from './element'
 import { PcRecord, PcRecordStore } from './record'
 
@@ -17,13 +17,12 @@ import { findNode } from './utils/node'
 import type { Arrayable } from '@vueuse/core'
 import type {
   BasicGraph,
-  GraphType,
-  Grid,
+  GridSetting,
   MousePosition,
-  ScaleOption,
+  ScaleSetting,
   Scroller,
-  Selection,
-  Snapline,
+  SelectionSetting,
+  SnaplineSetting,
 } from '../graph'
 import type { BasicRecordStore, CDRecord } from '../record'
 
@@ -73,39 +72,38 @@ export class PcGraph extends Events implements BasicGraph {
     width: 0,
     height: 0,
   }
-  selection: Selection = {
+  selection: SelectionSetting = {
     enabled: true,
     modifier: ModifierKey.Ctrl,
     showSelectionBox: true,
   }
   isDraft = false
-  grid: Grid = {
+  grid: GridSetting = {
     type: 'double-mesh',
     size: 15,
     enabled: true,
     visible: true,
   }
-  snapline: Snapline = {
+  snapline: SnaplineSetting = {
     radius: 15,
     enabled: true,
   }
-  isPanning = false
   scroller: Scroller = {
     pannable: true,
   }
 
-  scale: ScaleOption = {
+  scale: ScaleSetting = {
     ratio: 100,
     type: 'fixed',
   }
-  setScale(options: Partial<ScaleOption>) {
+  setScale(options: Partial<ScaleSetting>) {
     setObjectValues(this.scale, options)
   }
 
   constructor(config: Partial<PcElement> & { attrs: Record<string, any> }) {
     super()
 
-    this.type = 'PcForm'
+    this.type = GraphType.Pc
     this.history = new PcRecordStore()
     this.clipboard = new PcClipBoard(this)
     this.nextId = '1'
@@ -121,16 +119,16 @@ export class PcGraph extends Events implements BasicGraph {
       })
     )
   }
-  setSelection(selection: Partial<Selection>) {
+  setSelection(selection: Partial<SelectionSetting>) {
     setObjectValues(this.selection, selection)
   }
   setIsDraft(isDraft?: boolean) {
     this.isDraft = isDraft ?? false
   }
-  setGrid(grid: Partial<Grid>) {
+  setGrid(grid: Partial<GridSetting>) {
     setObjectValues(this.grid, grid)
   }
-  setSnap(snap: Partial<Snapline>) {
+  setSnap(snap: Partial<SnaplineSetting>) {
     setObjectValues(this.snapline, snap)
   }
   setScroller(scroller: Partial<Scroller>) {
@@ -168,10 +166,6 @@ export class PcGraph extends Events implements BasicGraph {
     box: Partial<SelectionBox> = { x: 0, y: 0, width: 0, height: 0 }
   ) {
     setObjectValues(this.selectionBox, box)
-  }
-
-  setPanning(isPanning = false) {
-    this.isPanning = isPanning
   }
 
   getNextId() {

@@ -5,13 +5,11 @@ import ElementRenderer from './element-renderer'
 import ElementSpecific from './specifics'
 import { aheadSelected, useElementDrag } from './hooks/useDrag'
 import { useElementSelect } from './hooks/useSelect'
-import { usePan } from './hooks/usePan'
 import { useElementBounding } from './hooks/useBounding'
 import type { CSSProperties, PropType } from 'vue'
 import type { PcElement } from '@/SaForm/PcForm/element'
 import type { PcGraph, Stick } from '@/SaForm/PcForm/graph'
 import { ElementType } from '@/SaForm/element'
-import { ModifierKey } from '@/SaForm/graph'
 import { useClazs } from '@/SaForm/utils/class'
 
 import './element.scss'
@@ -61,20 +59,8 @@ export const useElementHandler =
     }
 
     if (!element.parent) {
-      // canvas
-      const selectionModifer = graph.selection.modifier
-      const isSelectingKey =
-        graph.selection.enabled &&
-        ((event.ctrlKey && selectionModifer === ModifierKey.Ctrl) ||
-          (event.altKey && selectionModifer === ModifierKey.Alt) ||
-          (event.shiftKey && selectionModifer === ModifierKey.Shift))
-      if (isSelectingKey) {
-        // multiple select
-        useElementSelect(event, element, graph)
-      } else {
-        // panning
-        usePan(event, graph)
-      }
+      // multiple select
+      useElementSelect(event, element, graph)
 
       return
     }
