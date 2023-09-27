@@ -153,5 +153,4 @@ export interface BasicGraph {
 
   undo(): void
   redo(): void
-  save(): Promise<void>
 }

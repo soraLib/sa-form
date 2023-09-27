@@ -1,5 +1,6 @@
-import { Transition, computed, defineComponent, ref } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import { useClazs } from '../../../utils/class'
+import { usePanning } from '../../../utils/pan'
 import { createMockPcCanvas } from './mock'
 
 import Workspace from './graph'
@@ -29,6 +30,10 @@ export default defineComponent({
     const onContextmenu = (event: MouseEvent) => {
       event.preventDefault()
       contextmenuRef.value?.open(event)
+    }
+    const { isPanning, isPressSpace, executePanning } = usePanning()
+    const onMousedown = (event: MouseEvent) => {
+      isPressSpace.value && executePanning(event, props.graph)
     }
 
     const gridStyle = computed<CSSProperties>(() => {
@@ -91,9 +96,9 @@ linear-gradient(90deg, ${boldLineColor} 1px, transparent 0)`,
                   props.graph.isSelecting &&
                   props.graph.selectionBox.width > 0 &&
                   props.graph.selectionBox.height > 0,
-                'cursor-grabbing': props.graph.isPanning,
+                'cursor-grabbing': isPanning.value,
                 'select-none':
-                  props.graph.isPanning ||
+                  isPanning.value ||
                   props.graph.isSelecting ||
                   props.graph.isDragging ||
                   props.graph.isResizing,
@@ -104,8 +109,13 @@ linear-gradient(90deg, ${boldLineColor} 1px, transparent 0)`,
                 ...gridStyle.value,
               }}
               onContextmenu={onContextmenu}
+              onMousedown={onMousedown}
             >
-              <Workspace ref="workspace" graph={props.graph} />
+              <Workspace
+                ref="workspace"
+                graph={props.graph}
+                class={useClazs({ 'pointer-events-none': isPressSpace.value })}
+              />
 
               {props.graph.snapline.enabled && <Snapline graph={props.graph} />}
               {props.graph.selection.showSelectionBox && (
