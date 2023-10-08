@@ -1,12 +1,6 @@
 import { computed, defineComponent, ref, watch } from 'vue'
 import { NIcon, NInput, NPopover, NScrollbar, NSwitch, NTree } from 'naive-ui'
-import {
-  ChevronBack,
-  ChevronDown,
-  ChevronUp,
-  Funnel,
-  Layers,
-} from '@vicons/ionicons5'
+import { ChevronDown, ChevronUp, Funnel, Layers } from '@vicons/ionicons5'
 import {
   useLocalStorage,
   useMagicKeys,
@@ -53,11 +47,11 @@ export default defineComponent({
     )
     watch(
       selectedKeys,
-      () => {
+      async () => {
         const [head] = props.graph.selected
 
         let cur: BasicElement | undefined = head
-        while (cur) {
+        while (cur.parent) {
           if (cur.parent && isTab(cur.parent)) {
             const tabPane = cur.parent.tabs.find((tab) =>
               tab.children.some((a) => a.attrs.id === cur?.attrs.id)
@@ -66,7 +60,8 @@ export default defineComponent({
             if (tabPane) expandedKeys.value.add(tabPane.id)
           }
 
-          expandedKeys.value.add(cur.attrs.id)
+          if (cur.children?.length || isTab(cur))
+            expandedKeys.value.add(cur.attrs.id)
           cur = cur.parent
         }
 
