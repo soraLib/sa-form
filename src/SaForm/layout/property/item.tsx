@@ -1,4 +1,4 @@
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, ref, watch } from 'vue'
 import {
   NButton,
   NColorPicker,
@@ -8,6 +8,8 @@ import {
   NInputNumber,
   NSelect,
 } from 'naive-ui'
+import { useDebounceFn } from '@vueuse/core'
+import { isEqual } from 'lodash-es'
 import { SaPluginType, isGroupPlugin } from '../../plugin'
 import { isElementAttribute } from '../../utils/element'
 import { useClazs } from '../../utils/class'
@@ -51,24 +53,56 @@ export default defineComponent({
 
       return undefined
     })
-
     let colorTemp = modelValue.value
+
+    const internalMoelValue = ref<any>()
+    watch(
+      () => selected.value.attrs.id,
+      () => {
+        internalMoelValue.value = modelValue.value
+      },
+      {
+        deep: true,
+        immediate: true,
+      }
+    )
+    watch(
+      modelValue,
+      (cur, prev) => {
+        if (isEqual(prev, internalMoelValue.value))
+          internalMoelValue.value = cur
+      },
+      {
+        deep: true,
+        immediate: true,
+      }
+    )
 
     const handlePluginValueChange = (value: unknown) => {
       props.controller.valueChange(props.plugin.attr, value, props.graph)
     }
+    const debouncedHandlePluginValueChange = useDebounceFn(
+      handlePluginValueChange,
+      400
+    )
+    const onInternalValueUpdate = (value: unknown) => {
+      internalMoelValue.value = value
+      debouncedHandlePluginValueChange(value)
+    }
 
     const createPluginContent = (): VNode => {
       const plugin = props.plugin
+      const filteredValue = plugin.filter
+        ? plugin.filter(internalMoelValue.value)
+        : internalMoelValue.value
 
       switch (plugin.type) {
         case SaPluginType.Input: {
-          // TODO: emit on change not on input
           const Input = (
             <NInput
               class="sa-plugin"
-              value={modelValue.value}
-              onUpdateValue={handlePluginValueChange}
+              value={filteredValue}
+              onUpdateValue={onInternalValueUpdate}
               disabled={plugin.disabled ?? false}
               placeholder=""
             />
@@ -90,8 +124,8 @@ export default defineComponent({
             <NInputNumber
               class="sa-plugin w-full"
               showButton={false}
-              value={modelValue.value}
-              onUpdateValue={handlePluginValueChange}
+              value={filteredValue}
+              onUpdateValue={onInternalValueUpdate}
               disabled={plugin.disabled ?? false}
               placeholder=""
             />
@@ -112,7 +146,7 @@ export default defineComponent({
           const Input = (
             <NSelect
               class="sa-plugin"
-              value={modelValue.value}
+              value={filteredValue}
               onUpdateValue={handlePluginValueChange}
               filterable
               placeholder=""
@@ -153,7 +187,7 @@ export default defineComponent({
             )
           }
           const updateShow = (show: boolean) => {
-            if (!show && modelValue.value !== colorTemp) {
+            if (!show && filteredValue !== colorTemp) {
               updateValue(colorTemp)
             }
           }
@@ -167,7 +201,7 @@ export default defineComponent({
           return (
             <div class="sa-plugin flex">
               <NColorPicker
-                value={modelValue.value}
+                value={filteredValue}
                 showPreview={true}
                 modes={['rgb', 'hex', 'hsl', 'hsv']}
                 actions={['confirm']}
