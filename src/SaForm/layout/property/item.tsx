@@ -200,19 +200,28 @@ export default defineComponent({
 
           return (
             <div class="sa-plugin flex">
-              <NColorPicker
-                value={filteredValue}
-                showPreview={true}
-                modes={['rgb', 'hex', 'hsl', 'hsv']}
-                actions={['confirm']}
-                disabled={plugin.disabled ?? false}
-                onUpdateValue={updateValue}
-                onUpdateShow={updateShow}
-                onConfirm={onConfirm}
-              />
-              <NButton onClick={() => handlePluginValueChange('')}>
-                Reset
-              </NButton>
+              <NInputGroup title={props.plugin.title}>
+                {/* TODO: <NInputGroupLabel>{props.plugin.label}</NInputGroupLabel> */}
+                <NColorPicker
+                  class="color-picker"
+                  value={filteredValue}
+                  showPreview={true}
+                  modes={['rgb', 'hex', 'hsl', 'hsv']}
+                  actions={['confirm']}
+                  disabled={plugin.disabled ?? false}
+                  onUpdateValue={updateValue}
+                  onUpdateShow={updateShow}
+                  onConfirm={onConfirm}
+                />
+                <NButton
+                  type="warning"
+                  secondary
+                  class="color-picker-button"
+                  onClick={() => handlePluginValueChange('')}
+                >
+                  Reset
+                </NButton>
+              </NInputGroup>
             </div>
           )
         }
