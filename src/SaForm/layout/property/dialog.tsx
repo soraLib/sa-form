@@ -95,10 +95,17 @@ export default defineComponent({
     return () => (
       <div class="dialog-container">
         <span title={displayContent.value}>
-          <NInput value={displayContent.value} disabled />
+          <NInput class="dialog-input" value={displayContent.value} disabled />
         </span>
 
-        <NButton onClick={() => (dialogVisible.value = true)}>set</NButton>
+        <NButton
+          class="dialog-button"
+          type="info"
+          secondary
+          onClick={() => (dialogVisible.value = true)}
+        >
+          set
+        </NButton>
 
         {
           <NModal

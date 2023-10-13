@@ -1,7 +1,7 @@
-import { Transition, defineComponent } from 'vue'
+import { defineComponent } from 'vue'
 import { useToggle } from '@vueuse/core'
-import { NButton, NCollapseTransition, NIcon } from 'naive-ui'
-import { ChevronForward } from '@vicons/ionicons5'
+import { NCollapseTransition, NIcon } from 'naive-ui'
+import { ChevronDown } from '@vicons/ionicons5'
 import { useClazs } from '../../utils/class'
 import ControllerItem from './item'
 import type { PropType } from 'vue'
@@ -41,7 +41,7 @@ export default defineComponent({
           <span class="group-collapse-label">{props.plugin.label}</span>
 
           <NIcon class="group-collapse-caret" size={16}>
-            <ChevronForward />
+            <ChevronDown />
           </NIcon>
         </div>
 
