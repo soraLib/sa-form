@@ -94,9 +94,14 @@ export default defineComponent({
 
     return () => (
       <div class="dialog-container">
-        <span title={displayContent.value}>
-          <NInput class="dialog-input" value={displayContent.value} disabled />
-        </span>
+        <NInput
+          {...{
+            title: displayContent.value,
+          }}
+          class="dialog-input"
+          value={displayContent.value}
+          disabled
+        />
 
         <NButton
           class="dialog-button"
@@ -104,7 +109,7 @@ export default defineComponent({
           secondary
           onClick={() => (dialogVisible.value = true)}
         >
-          set
+          Set
         </NButton>
 
         {
