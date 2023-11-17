@@ -1,9 +1,11 @@
 import { getRectangle } from '../graph/renderer/utils/rectangle'
 import { firstOfStick, lastOfStick } from '../graph/renderer/element-renderer'
+import { isCoincide } from '../graph/renderer/hooks/useSelect'
 import type { PcElement, PcElementAttributes } from '../../../element'
 import type { Rect } from '../graph/renderer/utils/rectangle'
 import type { PcGraph } from '../../../graph'
 import type { Position } from '@/SaForm/graph'
+import type { BasicElement } from '@/SaForm/element'
 
 interface RowResult {
   lineY: number
@@ -276,6 +278,84 @@ const calcResizeLines = (
   return snaplines
 }
 
+function calcDistance(rect1: Rect, rect2: Rect): number {
+  // [1111]
+  // [1[xx]2]
+  //   [2222]
+  if (isCoincide(rect1, rect2)) return 0
+  //        [1111]
+  //        [1111]
+  //        |||
+  //     [2222]
+  //     [2222]
+  const coincideVertically = !(
+    rect1.x + rect1.width < rect2.x || rect1.x > rect2.x + rect2.width
+  )
+  if (coincideVertically) {
+    if (rect1.y + rect1.height < rect2.y)
+      return rect2.y - (rect1.y + rect1.height)
+    return rect1.y - (rect2.y + rect2.height)
+  }
+  //         [111]
+  // [222]---[111]
+  // [222]
+  const coincideHorizontally = !(
+    rect1.y + rect1.height < rect2.y || rect1.y > rect2.y + rect2.height
+  )
+  if (coincideHorizontally) {
+    if (rect1.x + rect1.width < rect2.x)
+      return rect2.x - (rect1.x + rect1.width)
+    return rect1.x - (rect2.x + rect2.width)
+  }
+  if (rect1.x < rect2.x) {
+    // [1] 一
+    //  | [2]
+    if (rect1.y < rect2.y)
+      return Math.sqrt(
+        (rect2.x - (rect1.x + rect1.width)) ** 2 +
+          (rect2.y - (rect1.y + rect1.height)) ** 2
+      )
+    //  | [2]
+    // [1] 一
+    return Math.sqrt(
+      (rect2.x - (rect1.x + rect1.width)) ** 2 +
+        (rect1.y - (rect2.y + rect2.height)) ** 2
+    )
+  }
+  //  | [1]
+  // [2] 一
+  if (rect1.y < rect2.y)
+    return Math.sqrt(
+      (rect1.x - (rect2.x + rect2.width)) ** 2 +
+        (rect2.y - (rect1.y + rect1.height)) ** 2
+    )
+  // [2] 一
+  //  | [1]
+  return Math.sqrt(
+    (rect1.x - (rect2.x + rect2.width)) ** 2 +
+      (rect1.y - (rect2.y + rect2.height)) ** 2
+  )
+}
+
+export const sortByDistance = (
+  rect: Rect,
+  others: BasicElement[]
+): BasicElement[] =>
+  others
+    .map((element) => {
+      return {
+        element,
+        distance: calcDistance(rect, {
+          x: element.attrs.x,
+          y: element.attrs.y,
+          width: element.attrs.width,
+          height: element.attrs.height,
+        }),
+      }
+    })
+    .sort((a, b) => a.distance - b.distance)
+    .map(({ element }) => element)
+
 export interface Snapline {
   x?: number
   y?: number
@@ -293,8 +373,11 @@ export const onSnapping = (
   const parent = elements[0].parent
   if (!parent) return new Map()
 
-  const _compares = (compares ?? parent?.children ?? []).filter(
-    (elem) => elem.attrs['is-draft'] === elements[0].attrs['is-draft']
+  const _compares = sortByDistance(
+    getRectangle(elements),
+    (compares ?? parent?.children ?? []).filter(
+      (elem) => elem.attrs['is-draft'] === elements[0].attrs['is-draft']
+    )
   )
 
   const deepOffsetX = getDeepOffset('x', parent)
