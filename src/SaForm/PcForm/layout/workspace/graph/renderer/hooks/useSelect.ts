@@ -99,7 +99,7 @@ export const useElementSelect = (
 /**
  * Returns the two rectangle whether is coincided.
  */
-const isCoincide = (a: Rect, b: Rect): boolean =>
+export const isCoincide = (a: Rect, b: Rect): boolean =>
   !(
     a.x + a.width < b.x ||
     a.x > b.x + b.width ||
