@@ -16,7 +16,8 @@
     }
   }
 
-  .is-filtered {
+  .is-filtered,
+  .is-actived {
     color: var(--c-brand);
   }
 
@@ -40,5 +41,30 @@
     .n-tree-node-content {
       color: var(--c-red-lighter) !important;
     }
+  }
+
+  .layer-paths {
+    padding: 2px 0;
+    font-size: 12px;
+    text-align: start;
+  }
+  .layer-path-item {
+    max-width: 100px;
+    user-select: none;
+    overflow: hidden;
+    padding: 2px 4px;
+    border-radius: 4px;
+    transition: all var(--c-transition);
+
+    &:not(:last-child):hover {
+      cursor: pointer;
+      background-color: var(--c-bg-hover);
+    }
+    &:last-child {
+      color: var(--c-brand);
+    }
+  }
+  .layer-path-divider {
+    margin: 0 2px;
   }
 }

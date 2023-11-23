@@ -1,7 +1,14 @@
 import { computed, defineComponent, ref, watch } from 'vue'
 import { NIcon, NInput, NPopover, NScrollbar, NSwitch, NTree } from 'naive-ui'
-import { ChevronDown, ChevronUp, Funnel, Layers } from '@vicons/ionicons5'
 import {
+  ChevronDown,
+  ChevronUp,
+  Funnel,
+  Layers,
+  Prism,
+} from '@vicons/ionicons5'
+import {
+  promiseTimeout,
   useLocalStorage,
   useMagicKeys,
   useStorage,
@@ -10,17 +17,18 @@ import {
 import { ElementType } from '../../element'
 import { isContainerType, isTab } from '../../PcForm/element'
 import { createElementTreeData } from '../../PcForm/utils/tree'
+import { type BasicGraph, GraphType } from '../../graph'
 import type { BasicElement } from '../../element'
 import type { OnUpdateExpandedKeysImpl } from 'naive-ui/es/tree/src/Tree'
 import type { ElementTreeDataOption } from '../../PcForm/utils/tree'
-import type { PropType } from 'vue'
-import type { BasicGraph } from '../../graph'
+import type { PropType, VNode } from 'vue'
 
 import './index.scss'
-import { pcStencilIcons } from '@/SaForm/PcForm/layout/stencil/stencil'
-import { useClazs } from '@/SaForm/utils/class'
-import { Resize } from '@/components/Resize'
+import { getPaths, getSiblings } from '@/SaForm/utils/element'
 import { getScrollContainer, isInContainer } from '@/SaForm/utils/domUtils'
+import { pcStencilIcons } from '@/SaForm/PcForm/layout/stencil/stencil'
+import { Resize } from '@/components/Resize'
+import { useClazs } from '@/SaForm/utils/class'
 
 export default defineComponent({
   name: 'SaFormLayoutLayer',
@@ -33,15 +41,40 @@ export default defineComponent({
   },
 
   setup(props) {
-    const treeData = computed(() =>
-      createElementTreeData(
-        props.graph.canvas.children,
+    const showCurrentLevelOnly = useLocalStorage(
+      'form-layer-show-current-level-only',
+      false
+    )
+    const toggleShowCurrentLevelOnly = (show?: boolean) => {
+      showCurrentLevelOnly.value = show ?? !showCurrentLevelOnly.value
+    }
+    const selected = computed(() => props.graph.selected[0])
+    const paths = computed<{ id: string; name: string }[]>(() => {
+      if (!showCurrentLevelOnly.value) return []
+
+      return getPaths(selected.value).map((a) => ({
+        id: a.attrs.id,
+        name: a.attrs.name,
+      }))
+    })
+
+    const tree = ref<InstanceType<typeof NTree>>()
+    const treeData = computed(() => {
+      const container = selected.value
+        ? showCurrentLevelOnly.value
+          ? getSiblings(selected.value)
+          : props.graph.canvas.children
+        : props.graph.canvas.children
+
+      return createElementTreeData(
+        container,
         (elem) =>
           (elem.attrs['is-draft'] && props.graph.isDraft) ||
           (!props.graph.isDraft && !elem.attrs['is-draft'])
       )
-    )
-    const expandedKeys = ref(new Set<string>())
+    })
+    const expandedKeySet = ref(new Set<string>())
+    const expandedKeys = computed(() => Array.from(expandedKeySet.value))
     const selectedKeys = computed(() =>
       props.graph.selected.map(({ attrs }) => attrs.id)
     )
@@ -57,15 +90,16 @@ export default defineComponent({
               tab.children.some((a) => a.attrs.id === cur?.attrs.id)
             )
 
-            if (tabPane) expandedKeys.value.add(tabPane.id)
+            if (tabPane)
+              expandedKeySet.value.add(`${cur.parent.attrs.id}-${tabPane.id}`)
           }
 
           if (cur.children?.length || isTab(cur))
-            expandedKeys.value.add(cur.attrs.id)
+            expandedKeySet.value.add(cur.attrs.id)
           cur = cur.parent
         }
 
-        // scroll selected element into view
+        await promiseTimeout(100)
         const node = document.querySelector(
           '.n-tree-node[is-reference="true"]'
         ) as HTMLElement
@@ -79,12 +113,24 @@ export default defineComponent({
       if (selected) props.graph.scrollIntoView(selected[0])
     }
     const onUpdateExpandedKeys: OnUpdateExpandedKeysImpl = (keys) => {
-      expandedKeys.value = new Set(keys as string[])
+      expandedKeySet.value = new Set(keys as string[])
     }
 
     // filter
     const pattern = ref('')
     const hideIrrelevantNodes = useStorage('hide-irrelevant-nodes', true)
+
+    const stencilIcons = computed<Record<number, VNode | string>>(() => {
+      if (props.graph.type === GraphType.Pc) return pcStencilIcons
+
+      return {}
+    })
+
+    const elemType = computed<Record<number, string>>(() => {
+      if (props.graph.type === GraphType.Pc) return ElementType
+
+      return {}
+    })
 
     const layerHeight = useLocalStorage('form-layer-height', 400)
     const { ctrl_l } = useMagicKeys()
@@ -95,16 +141,29 @@ export default defineComponent({
     return () => (
       <Resize
         height={layerHeight}
-        onUpdate:height={(height) => (layerHeight.value = height)}
+        onUpdate:height={(height: number) => (layerHeight.value = height)}
         min={32}
         direction="top"
       >
         <div class="sa-form-layer">
           <div class="title flex items-center text-base font-medium">
-            <NIcon class="mr-2" size={20}>
+            <NIcon class="mr-2" size={20} title="Panel">
               <Layers />
             </NIcon>
-            <span class="mr-auto">Layer</span>
+            <span class="mr-auto"></span>
+
+            <div
+              title="Show Current Level Nodes Only"
+              onClick={() => toggleShowCurrentLevelOnly()}
+              class={useClazs('cursor-pointer flex items-center p-1', {
+                'is-actived': showCurrentLevelOnly.value,
+              })}
+            >
+              <NIcon size={16}>
+                <Prism />
+              </NIcon>
+            </div>
+
             <NPopover
               trigger="click"
               placement="right-start"
@@ -128,7 +187,7 @@ export default defineComponent({
                 ),
               }}
             >
-              <div class="flex justify-between">
+              <div class="flex justify-between gap-2 whitespace-nowrap">
                 <span>Hide irrelevant nodes</span>
                 <NSwitch
                   value={hideIrrelevantNodes.value}
@@ -148,8 +207,8 @@ export default defineComponent({
             </NPopover>
 
             <div
-              class="layer-close-button rounded-full cursor-pointer flex items-center p-1.5"
-              title="Close Layer"
+              class="layer-close-button rounded-full cursor-pointer flex items-center p-1"
+              title="Close Panel"
               onClick={toggleLayer}
             >
               <NIcon size={20}>
@@ -158,8 +217,29 @@ export default defineComponent({
             </div>
           </div>
 
-          <NScrollbar class="my-2 pr-3">
+          {showCurrentLevelOnly.value && paths.value.length > 1 && (
+            <div class="layer-paths">
+              {paths.value.map((path, index) => (
+                <>
+                  <span
+                    class="layer-path-item"
+                    title={`${path.id}: ${path.name}`}
+                    onClick={() => props.graph.setSelected(path.id)}
+                  >
+                    {path.name}
+                  </span>
+                  {index !== paths.value.length - 1 && (
+                    <span class="layer-path-divider">/</span>
+                  )}
+                </>
+              ))}
+            </div>
+          )}
+
+          <NScrollbar>
             <NTree
+              key={selectedKeys.value.join('-')}
+              ref={tree}
               keyField="value"
               block-line
               block-node
@@ -188,10 +268,10 @@ export default defineComponent({
                 }
               }}
               selectedKeys={selectedKeys.value}
-              expandedKeys={Array.from(expandedKeys.value)}
+              expandedKeys={expandedKeys.value}
               render-label={({ option }: { option: ElementTreeDataOption }) => (
                 <div
-                  title={`${ElementType[option.type]}: ${option.label}`}
+                  title={`${elemType.value[option.type]}: ${option.label}`}
                   class="text-left w-full overflow-hidden whitespace-nowrap text-ellipsis"
                 >
                   {option.label}
@@ -201,9 +281,15 @@ export default defineComponent({
                 option,
               }: {
                 option: ElementTreeDataOption
-              }) => <i class={`iconfont ${pcStencilIcons[option.type]}`} />}
+              }) => {
+                const icon = stencilIcons.value[option.type]
+                if (typeof icon === 'string')
+                  return <i class={`iconfont ${icon}`} />
+
+                return icon
+              }}
               onUpdate:selectedKeys={onUpdateSelectedKeys}
-              onUpdateExpandedKeys={onUpdateExpandedKeys}
+              onUpdate:expandedKeys={onUpdateExpandedKeys}
             ></NTree>
           </NScrollbar>
         </div>
