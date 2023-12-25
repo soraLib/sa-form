@@ -28,6 +28,7 @@ export type PcContextmenuAttributes = {
 export type PcTabAttributes = {
   'tab-height'?: number
   'tab-index'?: number
+  tabs?: TabPane[]
 }
 export type PcElementAttributes = BasicElementAttributes &
   PcDraftAttributes &
@@ -55,10 +56,10 @@ export const isContainerType = (type: ElementType) =>
 export const isContainer = (element: PcElement) =>
   isContainerType(element.attrs.type)
 
-export type TabPane = {
+export type TabPane<T = PcElement> = {
   id: string
   label: string
-  children: PcElement[]
+  children: T[]
 }
 export const isTab = (
   a: object

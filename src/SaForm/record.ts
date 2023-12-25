@@ -1,3 +1,4 @@
+import type { TabPane } from './PcForm/element'
 import type { BasicElement, BasicElementAttributes } from './element'
 
 export enum BasicRecordType {
@@ -29,6 +30,7 @@ export type CDBasicElement<T extends BasicElement> = {
   parent?: T
   children?: T[]
   attrs: T['attrs']
+  tabs?: TabPane<T>[]
 }
 export type CDRecord<T extends BasicElement = BasicElement> = CDBasicElement<T>
 /** create or delete record data */

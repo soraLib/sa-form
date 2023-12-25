@@ -1,27 +1,28 @@
+import { use } from 'sa-lambda'
 import { getRectangle } from '../graph/renderer/utils/rectangle'
 import { firstOfStick, lastOfStick } from '../graph/renderer/element-renderer'
-import { isCoincide } from '../graph/renderer/hooks/useSelect'
+import type { BasicElement } from '../../../../element'
 import type { PcElement, PcElementAttributes } from '../../../element'
 import type { Rect } from '../graph/renderer/utils/rectangle'
 import type { PcGraph } from '../../../graph'
 import type { Position } from '@/SaForm/graph'
-import type { BasicElement } from '@/SaForm/element'
+import { sortByDistance } from '@/SaForm/PcForm/utils/element'
 
-interface RowResult {
+export interface RowResult {
   lineY: number
   triggerY: number
 }
-interface ColResult {
+export interface ColResult {
   lineX: number
   triggerX: number
 }
-type CalcResult = RowResult | ColResult
+export type CalcResult = RowResult | ColResult
 
-const directions: Record<
+export const directions: Record<
   'row' | 'col',
   {
     name: string
-    calc: (compare: PcElement, target: Rect) => CalcResult
+    calc: (compare: BasicElement, target: Rect) => CalcResult
   }[]
 > = {
   row: [
@@ -35,23 +36,23 @@ const directions: Record<
     {
       name: 'bt',
       calc: (compare, target) => ({
-        lineY: compare.attrs.y,
-        triggerY: compare.attrs.y - target.height,
+        lineY: compare.attrs.y + 1,
+        triggerY: compare.attrs.y - target.height + 1,
       }),
     },
-    {
-      name: 'cc',
-      calc: (compare, target) => ({
-        lineY: compare.attrs.y + compare.attrs.height / 2,
-        triggerY:
-          compare.attrs.y + compare.attrs.height / 2 - target.height / 2,
-      }),
-    },
+    // {
+    //   name: 'cc',
+    //   calc: (compare, target) => ({
+    //     lineY: compare.attrs.y + compare.attrs.height / 2,
+    //     triggerY:
+    //       compare.attrs.y + compare.attrs.height / 2 - target.height / 2,
+    //   }),
+    // },
     {
       name: 'tb',
       calc: (compare) => ({
-        lineY: compare.attrs.y + compare.attrs.height,
-        triggerY: compare.attrs.y + compare.attrs.height,
+        lineY: compare.attrs.y + compare.attrs.height - 1,
+        triggerY: compare.attrs.y + compare.attrs.height - 1,
       }),
     },
     {
@@ -73,17 +74,17 @@ const directions: Record<
     {
       name: 'lr',
       calc: (compare) => ({
-        lineX: compare.attrs.x + compare.attrs.width,
-        triggerX: compare.attrs.x + compare.attrs.width,
+        lineX: compare.attrs.x + compare.attrs.width - 1,
+        triggerX: compare.attrs.x + compare.attrs.width - 1,
       }),
     },
-    {
-      name: 'cc',
-      calc: (compare, target) => ({
-        lineX: compare.attrs.x + compare.attrs.width / 2,
-        triggerX: compare.attrs.x + compare.attrs.width / 2 - target.width / 2,
-      }),
-    },
+    // {
+    //   name: 'cc',
+    //   calc: (compare, target) => ({
+    //     lineX: compare.attrs.x + compare.attrs.width / 2,
+    //     triggerX: compare.attrs.x + compare.attrs.width / 2 - target.width / 2,
+    //   }),
+    // },
     {
       name: 'rr',
       calc: (compare, target) => ({
@@ -94,8 +95,8 @@ const directions: Record<
     {
       name: 'rl',
       calc: (compare, target) => ({
-        lineX: compare.attrs.x,
-        triggerX: compare.attrs.x - target.width,
+        lineX: compare.attrs.x - 1,
+        triggerX: compare.attrs.x - target.width + 1,
       }),
     },
   ],
@@ -133,9 +134,23 @@ const calcDragLines = (
       const result = direct.calc(compare, rect)
       const { lineY, triggerY } = result as RowResult
 
-      const isMovingCloser =
-        (rect.y >= lineY && pointA.y - pointB.y <= 0) ||
-        (rect.y <= lineY && pointA.y - pointB.y >= 0)
+      const isMovingCloser = use(direct.name[0], (line) => {
+        if (line === 't') {
+          const top = rect.y
+
+          return (
+            (top >= lineY && pointA.y <= pointB.y) ||
+            (top <= lineY && pointA.y >= pointB.y)
+          )
+        }
+
+        const bottom = rect.y + rect.height
+
+        return (
+          (bottom >= lineY && pointA.y <= pointB.y) ||
+          (bottom <= lineY && pointA.y >= pointB.y)
+        )
+      })
 
       if (
         // attempt to snap to row when get closer
@@ -162,9 +177,23 @@ const calcDragLines = (
       const result = direct.calc(compare, rect)
       const { lineX, triggerX } = result as ColResult
 
-      const isMovingCloser =
-        (rect.x >= lineX && pointA.x - pointB.x <= 0) ||
-        (rect.x <= lineX && pointA.x - pointB.x >= 0)
+      const isMovingCloser = use(direct.name[0], (line) => {
+        if (line === 'l') {
+          const left = rect.x
+
+          return (
+            (left >= lineX && pointA.x <= pointB.x) ||
+            (left <= lineX && pointA.x >= pointB.x)
+          )
+        }
+
+        const right = rect.x + rect.width
+
+        return (
+          (right >= lineX && pointA.x <= pointB.x) ||
+          (right <= lineX && pointA.x >= pointB.x)
+        )
+      })
 
       if (
         // attempt to snap to row when get closer
@@ -193,7 +222,7 @@ const calcDragLines = (
 const calcResizeLines = (
   target: PcElement,
   compares: PcElement[],
-  { deepOffsetX, deepOffsetY, graph }: CalcOption
+  { deepOffsetX, deepOffsetY, graph, positions: [pointA, pointB] }: CalcOption
 ) => {
   const rect = getRectangle([target])
 
@@ -222,16 +251,30 @@ const calcResizeLines = (
           const stickY = firstOfStick(graph.resizeStick)
 
           if (stickY === 't' && direct.name[0] === 't') {
-            target.attrs.height = target.attrs.height + target.attrs.y - lineY
-            target.attrs.y = lineY
-            sorption.row = true
-            resized = true
+            const top = rect.y
+            const isMovingCloser =
+              (top >= lineY && pointA.y <= pointB.y) ||
+              (top <= lineY && pointA.y >= pointB.y)
+
+            if (isMovingCloser) {
+              target.attrs.height = target.attrs.height + target.attrs.y - lineY
+              target.attrs.y = lineY
+              sorption.row = true
+              resized = true
+            }
           }
 
           if (stickY === 'b' && direct.name[0] === 'b') {
-            target.attrs.height = lineY - target.attrs.y
-            sorption.row = true
-            resized = true
+            const bottom = rect.y + rect.height
+            const isMovingCloser =
+              (bottom >= lineY && pointA.y <= pointB.y) ||
+              (bottom <= lineY && pointA.y >= pointB.y)
+
+            if (isMovingCloser) {
+              target.attrs.height = lineY - target.attrs.y
+              sorption.row = true
+              resized = true
+            }
           }
         }
 
@@ -255,16 +298,30 @@ const calcResizeLines = (
           const stickX = lastOfStick(graph.resizeStick)
 
           if (stickX === 'l' && direct.name[0] === 'l') {
-            target.attrs.width = target.attrs.width + target.attrs.x - lineX
-            target.attrs.x = lineX
-            sorption.row = true
-            resized = true
+            const left = rect.x
+            const isMovingCloser =
+              (left >= lineX && pointA.x <= pointB.x) ||
+              (left <= lineX && pointA.x >= pointB.x)
+
+            if (isMovingCloser) {
+              target.attrs.width = target.attrs.width + target.attrs.x - lineX
+              target.attrs.x = lineX
+              sorption.row = true
+              resized = true
+            }
           }
 
           if (stickX === 'r' && direct.name[0] === 'r') {
-            target.attrs.width = lineX - target.attrs.x
-            sorption.row = true
-            resized = true
+            const right = rect.x + rect.width
+            const isMovingCloser =
+              (right >= lineX && pointA.x <= pointB.x) ||
+              (right <= lineX && pointA.x >= pointB.x)
+
+            if (isMovingCloser) {
+              target.attrs.width = lineX - target.attrs.x
+              sorption.row = true
+              resized = true
+            }
           }
         }
 
@@ -277,84 +334,6 @@ const calcResizeLines = (
 
   return snaplines
 }
-
-function calcDistance(rect1: Rect, rect2: Rect): number {
-  // [1111]
-  // [1[xx]2]
-  //   [2222]
-  if (isCoincide(rect1, rect2)) return 0
-  //        [1111]
-  //        [1111]
-  //        |||
-  //     [2222]
-  //     [2222]
-  const coincideVertically = !(
-    rect1.x + rect1.width < rect2.x || rect1.x > rect2.x + rect2.width
-  )
-  if (coincideVertically) {
-    if (rect1.y + rect1.height < rect2.y)
-      return rect2.y - (rect1.y + rect1.height)
-    return rect1.y - (rect2.y + rect2.height)
-  }
-  //         [111]
-  // [222]---[111]
-  // [222]
-  const coincideHorizontally = !(
-    rect1.y + rect1.height < rect2.y || rect1.y > rect2.y + rect2.height
-  )
-  if (coincideHorizontally) {
-    if (rect1.x + rect1.width < rect2.x)
-      return rect2.x - (rect1.x + rect1.width)
-    return rect1.x - (rect2.x + rect2.width)
-  }
-  if (rect1.x < rect2.x) {
-    // [1] 一
-    //  | [2]
-    if (rect1.y < rect2.y)
-      return Math.sqrt(
-        (rect2.x - (rect1.x + rect1.width)) ** 2 +
-          (rect2.y - (rect1.y + rect1.height)) ** 2
-      )
-    //  | [2]
-    // [1] 一
-    return Math.sqrt(
-      (rect2.x - (rect1.x + rect1.width)) ** 2 +
-        (rect1.y - (rect2.y + rect2.height)) ** 2
-    )
-  }
-  //  | [1]
-  // [2] 一
-  if (rect1.y < rect2.y)
-    return Math.sqrt(
-      (rect1.x - (rect2.x + rect2.width)) ** 2 +
-        (rect2.y - (rect1.y + rect1.height)) ** 2
-    )
-  // [2] 一
-  //  | [1]
-  return Math.sqrt(
-    (rect1.x - (rect2.x + rect2.width)) ** 2 +
-      (rect1.y - (rect2.y + rect2.height)) ** 2
-  )
-}
-
-export const sortByDistance = (
-  rect: Rect,
-  others: BasicElement[]
-): BasicElement[] =>
-  others
-    .map((element) => {
-      return {
-        element,
-        distance: calcDistance(rect, {
-          x: element.attrs.x,
-          y: element.attrs.y,
-          width: element.attrs.width,
-          height: element.attrs.height,
-        }),
-      }
-    })
-    .sort((a, b) => a.distance - b.distance)
-    .map(({ element }) => element)
 
 export interface Snapline {
   x?: number
