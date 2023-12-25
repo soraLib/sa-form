@@ -11,7 +11,6 @@ import {
 import { useDebounceFn } from '@vueuse/core'
 import { isEqual } from 'lodash-es'
 import { SaPluginType, isGroupPlugin } from '../../plugin'
-import { isElementAttribute } from '../../utils/element'
 import { useClazs } from '../../utils/class'
 import SaDialog from './dialog'
 import type { PropType, VNode } from 'vue'
@@ -19,6 +18,7 @@ import type { SaPlugin } from '../../plugin'
 
 import type { BasicGraph } from '../../graph'
 import type { SaController } from '../../config'
+import { isElementAttribute } from '@/SaForm/utils/element'
 
 export default defineComponent({
   name: 'ControllerItem',
