@@ -1,7 +1,10 @@
 import { ElementType } from '../../../element'
 import { PcElement } from '../../element'
 
-export const createMockPcCanvas: () => PcElement = () => {
+export const createMock: () => {
+  canvas: PcElement
+  children: PcElement[]
+} = () => {
   const canvas = new PcElement({
     parent: undefined,
     children: [],
@@ -243,9 +246,57 @@ export const createMockPcCanvas: () => PcElement = () => {
     },
   })
 
-  canvas.children?.push(
-    ...[child1, child2, child3, child4, draftChild1, draftChild2]
-  )
+  const containerA = new PcElement({
+    parent: canvas,
+    attrs: {
+      id: '10',
+      type: ElementType.Container,
+      name: 'Container A',
+      width: 300,
+      height: 200,
+      x: 500,
+      y: 100,
+      background: '',
+      'border-style': 'dashed',
+      'border-color': '#1FBF5FFF',
+      'border-width': 1,
+    },
+  })
+  const containerAChild1 = new PcElement({
+    parent: containerA,
+    attrs: {
+      id: '11',
+      type: ElementType.Text,
+      name: 'Child A',
+      width: 100,
+      height: 50,
+      x: 50,
+      y: 100,
+      background: '',
+      'border-style': 'none',
+      'border-color': '',
+      'border-width': 1,
+      'font-size': 24,
+      'font-family': 'Arial',
+      'font-color': '#17F1C2FF',
+      'font-decoration': 'line-through',
+      'font-style': 'bold',
+      'align-vertical': 'start',
+      'align-horizontal': 'center',
+    },
+  })
+  containerA.children = [containerAChild1]
 
-  return canvas
+  return {
+    canvas,
+    children: [
+      child1,
+      child2,
+      child3,
+      child4,
+      draftChild1,
+      draftChild2,
+      containerA,
+    ],
+  }
 }
