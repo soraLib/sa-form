@@ -1,7 +1,7 @@
 import { getRectangle } from '../utils/rectangle'
-import { gridFloor } from './utils'
-import type { PcElement } from '@/SaForm/PcForm/element'
+import { gridCeil, gridFloor } from './utils'
 import type { PcGraph } from '@/SaForm/PcForm/graph'
+import type { PcElement } from '@/SaForm/PcForm/element'
 import { PcRecord } from '@/SaForm/PcForm/record'
 import { BasicRecordType } from '@/SaForm/record'
 
@@ -54,6 +54,8 @@ export const useElementDrag = (
 
   const MOVE_START_TIME = new Date()
 
+  let lastMouse: { x: number; y: number } | null = null
+
   const moveCb = (event: MouseEvent) => {
     graph.setMouse({ x: event.screenX, y: event.screenY })
     elementMove(event)
@@ -73,17 +75,48 @@ export const useElementDrag = (
     graph.setDragging(true)
 
     // move distance
-    let moveX = event.screenX - mousePos._startX
-    let moveY = event.screenY - mousePos._startY
+    const moveX = event.screenX - mousePos._startX
+    const moveY = event.screenY - mousePos._startY
+
+    let finalX = rectPos._startX + moveX
+    let finalY = rectPos._startY + moveY
 
     // grid
     if (graph.grid.enabled) {
-      moveX = gridFloor(rect.x + moveX, graph.grid.size) - rect.x
-      moveY = gridFloor(rect.y + moveY, graph.grid.size) - rect.y
-    }
+      const moveToRight = lastMouse
+        ? event.screenX > lastMouse.x
+        : event.screenX > mousePos._startX
+      if (moveToRight) {
+        const lineX = gridCeil(finalX + rect.width, graph.grid.size)
 
-    const finalX = rectPos._startX + moveX
-    const finalY = rectPos._startY + moveY
+        if (lineX - rect.width - finalX < graph.grid.radius) {
+          finalX = lineX - rect.width
+        }
+      } else {
+        const lineX = gridFloor(finalX, graph.grid.size)
+
+        if (Math.abs(finalX - lineX) < graph.grid.radius) {
+          finalX = lineX
+        }
+      }
+
+      const moveToBottom = lastMouse
+        ? event.screenY > lastMouse.y
+        : event.screenY > mousePos._startY
+      if (moveToBottom) {
+        const lineY = gridCeil(finalY + rect.height, graph.grid.size)
+
+        if (lineY - rect.height - finalY < graph.grid.radius) {
+          finalY = lineY - rect.height
+        }
+      } else {
+        const lineY = gridFloor(finalY, graph.grid.size)
+
+        if (Math.abs(finalY - lineY) < graph.grid.radius) {
+          finalY = lineY
+        }
+      }
+    }
 
     const parentBorderLength = (parent.attrs['border-width'] ?? 0) * 2
     const parentWidth = parent.attrs.width - parentBorderLength
@@ -99,13 +132,13 @@ export const useElementDrag = (
         ? parentWidth - rect.width - rectPos._startX
         : finalX < 0
         ? -rectPos._startX
-        : moveX
+        : finalX - rectPos._startX
     const finalMoveY =
       finalY + rect.height > parentHeight
         ? parentHeight - rect.height - rectPos._startY
         : finalY < 0
         ? -rectPos._startY
-        : moveY
+        : finalY - rectPos._startY
 
     graph.updateElemsData(
       graph.selected.map((ele, i) => {
@@ -122,6 +155,8 @@ export const useElementDrag = (
       }),
       false
     )
+
+    lastMouse = { x: event.screenX, y: event.screenY }
   }
   const elementMoveEnd = () => {
     const MOVE_END_TIME = new Date()
@@ -161,7 +196,8 @@ export const useElementDrag = (
               x: elemsPos[i]._startX,
               y: elemsPos[i]._startY,
             },
-          }))
+          })),
+          false
         )
       }
     } else {

@@ -108,6 +108,19 @@ export default defineComponent({
               />
             </div>
 
+            <div class="form-settings-row">
+              <div>Radius</div>
+              <NInputNumber
+                class="ml-0"
+                min={0}
+                max={100}
+                value={props.graph.grid.radius}
+                onUpdate:value={(radius) =>
+                  isNumber(radius) && props.graph.setGrid({ radius })
+                }
+              />
+            </div>
+
             <NDivider />
 
             <h3>Snap</h3>
