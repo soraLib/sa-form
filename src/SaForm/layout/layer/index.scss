@@ -30,6 +30,10 @@
       color: var(--c-brand) !important;
     }
   }
+  .n-tree-node-content__text {
+    overflow: auto;
+  }
+
   [is-empty='true'] .n-tree-node-switcher {
     opacity: 0;
   }
