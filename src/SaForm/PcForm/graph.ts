@@ -259,14 +259,6 @@ export class PcGraph extends Events implements BasicGraph {
     const createdChild = addGraphElement(this, child)
     if (!createdChild) return
 
-    // TODO:
-    const validIntegerRegex = /^-?\d+$/
-    if (child.attrs.id && validIntegerRegex.test(child.attrs.id)) {
-      if (+this.nextId < +child.attrs.id) {
-        this.nextId = `${+child.attrs.id + 1}`
-      }
-    }
-
     if (needRecord) {
       const record = new PcRecord({
         type: BasicRecordType.Add,
@@ -686,9 +678,18 @@ const addGraphElement = (
       parent.children?.push(pcElement)
     }
 
-    collectsElements([pcElement], { map: (a) => a.attrs.name }).forEach(
-      (name) => graph.nameSet.add(name)
-    )
+    collectsElements([pcElement], {
+      map: (a) => ({ name: a.attrs.name, id: a.attrs.id }),
+    }).forEach(({ name, id }) => {
+      graph.nameSet.add(name)
+
+      const validIntegerRegex = /^-?\d+$/
+      if (id && validIntegerRegex.test(id)) {
+        if (+graph.nextId < +id) {
+          graph.nextId = `${+id + 1}`
+        }
+      }
+    })
 
     return pcElement
   }

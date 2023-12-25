@@ -90,6 +90,7 @@ export interface BasicGraph {
   selection: SelectionSetting
 
   isDraft: boolean
+  isDragging?: boolean
   grid: GridSetting
   snapline: SnaplineSetting
   scroller: Scroller

@@ -55,7 +55,12 @@ export const getDeepOffset = (
 ): number =>
   (element.parent ? getDeepOffset(element.parent, attr) : 0) +
   (attr === 'y' && isTab(element) ? element.attrs['tab-height'] : 0) +
-  element.attrs[attr]
+  element.attrs[attr] +
+  (element.attrs['border-width'] &&
+  element.attrs['border-style'] &&
+  element.attrs['border-style'] !== 'none'
+    ? element.attrs['border-width']
+    : 0)
 
 export const createCopyName = (set: Set<string>, name: string): string => {
   if (!name) return ''
