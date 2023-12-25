@@ -8,6 +8,7 @@ import Snapline from './snapline'
 import Group from './group'
 import Selection from './selection'
 import Contextmenu from './contextmenu'
+import Position from './position'
 
 import type { PcGraph } from '../../graph'
 import type { CSSProperties, PropType } from 'vue'
@@ -126,6 +127,7 @@ linear-gradient(90deg, ${boldLineColor} 1px, transparent 0)`,
               {props.graph.selection.enabled && (
                 <Selection graph={props.graph} />
               )}
+              <Position graph={props.graph} />
             </div>
           </AutoScale>
 
