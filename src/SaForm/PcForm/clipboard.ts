@@ -1,6 +1,7 @@
 import { cloneDeep } from 'lodash-es'
 import { setObjectValues } from 'sugar-sajs'
 import { BasicRecordType } from '../record'
+import { createElementRecursively } from '../utils/element'
 import { PcElement } from './element'
 import { PcRecord } from './record'
 import { findNode } from './utils/node'
@@ -83,22 +84,28 @@ export class PcClipBoard implements BasicClipBoard {
 
     const pasteTo = parent ?? clips.elements[0].parent
     const newPasteElements = clips.elements.map((ele) => {
-      const id =
-        clips.type === 'cut' &&
-        !findNode(this.graph.canvas, (a) => a.attrs.id === ele.attrs.id)
-          ? ele.attrs.id
-          : this.graph.getNextId()
-
-      const paste = new PcElement({
-        parent: pasteTo,
-        children: undefined /* TODO: */,
-        attrs: {
-          ...ele.attrs,
-          id,
-          x: options?.position?.left ?? ele.attrs.x + clips.times * this.offset,
-          y: options?.position?.top ?? ele.attrs.y + clips.times * this.offset,
+      const paste = createElementRecursively(
+        {
+          attrs: {
+            ...ele.attrs,
+            x:
+              options?.position?.left ??
+              ele.attrs.x + clips.times * this.offset,
+            y:
+              options?.position?.top ?? ele.attrs.y + clips.times * this.offset,
+            'is-draft': this.graph.isDraft,
+          },
+          children: ele.children,
+          tabs: ele.tabs,
         },
-      })
+        pasteTo,
+        PcElement,
+        {
+          createId: clips.type === 'copy',
+          graph: this.graph,
+          findNode,
+        }
+      )
 
       if (options?.nodeProps) {
         setObjectValues(paste.attrs, options.nodeProps(ele))
