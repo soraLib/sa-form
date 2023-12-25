@@ -1,7 +1,7 @@
 import { computed, defineComponent, ref } from 'vue'
 import { useClazs } from '../../../utils/class'
 import { usePanning } from '../../../utils/pan'
-import { createMockPcCanvas } from './mock'
+import { createMock } from './mock'
 
 import Workspace from './graph'
 import Snapline from './snapline'
@@ -23,7 +23,9 @@ export default defineComponent({
   },
 
   setup(props) {
-    props.graph.setCanvas(createMockPcCanvas())
+    const mock = createMock()
+    props.graph.setCanvas(mock.canvas)
+    props.graph.addChildren(mock.children, mock.canvas)
     props.graph.setSelected(['2', '3'])
 
     const contextmenuRef = ref<InstanceType<typeof Contextmenu> | null>(null)

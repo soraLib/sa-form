@@ -1,6 +1,7 @@
 import { computed, defineComponent, ref, watch } from 'vue'
 import { getRectangle } from '../graph/renderer/utils/rectangle'
 import { useElementBounding } from '../graph/renderer/hooks/useBounding'
+import { ElementType } from '../../../../element'
 import type { CSSProperties, PropType } from 'vue'
 import type { PcGraph } from '../../../graph'
 
@@ -14,7 +15,10 @@ export default defineComponent({
   },
   setup(props) {
     const rect = computed(() => {
-      if (props.graph.selected.length < 2)
+      if (
+        props.graph.selected.length < 2 ||
+        props.graph.selected[0].parent?.attrs.type !== ElementType.Canvas
+      )
         return { x: 0, y: 0, width: 0, height: 0 }
 
       return getRectangle(props.graph.selected)

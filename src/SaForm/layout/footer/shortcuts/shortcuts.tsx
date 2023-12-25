@@ -1,10 +1,12 @@
 import { computed, defineComponent } from 'vue'
 import { useMagicKeys, useTextSelection, whenever } from '@vueuse/core'
+import { use } from 'sa-lambda'
 import { MoveDirection } from '../../../graph'
 import ShortCutKey from './key'
 import type { BasicGraph } from '../../../graph'
 import type { PropType } from 'vue'
 import { useClazs } from '@/SaForm/utils/class'
+import { isContainer } from '@/SaForm/PcForm/element'
 
 import './shotcuts.scss'
 
@@ -82,7 +84,16 @@ export default defineComponent({
     )
     whenever(ctrl_c, () => isInsideGraph() && props.graph.clipboard.copy())
     whenever(ctrl_x, () => isInsideGraph() && props.graph.clipboard.cut())
-    whenever(ctrl_v, () => isInsideGraph() && props.graph.clipboard.paste())
+    whenever(
+      ctrl_v,
+      () =>
+        isInsideGraph() &&
+        props.graph.clipboard.paste(
+          use(props.graph.selected[0], (a) =>
+            isContainer(a) ? a : a.parent ? a.parent : a
+          )
+        )
+    )
     whenever(ctrl_z, () => isInsideGraph() && props.graph.undo())
     whenever(ctrl_y, () => isInsideGraph() && props.graph.redo())
     whenever(escape, () => isInsideGraph() && props.graph.setSelected())
