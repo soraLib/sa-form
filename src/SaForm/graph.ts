@@ -100,8 +100,10 @@ export interface BasicGraph {
   setScroller: (scroller: Partial<Scroller>) => void
   setIsDraft: (isDraft?: boolean) => void
   setDevice?: (type: GraphType) => void
-
   setCanvas(canvas: BasicElement): void
+
+  /** elements name set, used to ensure its uniqueness */
+  nameSet: Set<string>
 
   getNextId(): string
 

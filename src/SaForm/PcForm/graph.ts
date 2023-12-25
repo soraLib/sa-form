@@ -7,13 +7,14 @@ import {
   isURecordDataList,
 } from '../record'
 import { GraphType, ModifierKey, MoveDirection } from '../graph'
+import { createElementRecursively } from '../utils/element'
 import { PcElement, getNextId, isTab } from './element'
 import { PcRecord, PcRecordStore } from './record'
 
 import { PcClipBoard } from './clipboard'
 import { Events } from './events'
 import { getRectangle } from './layout/workspace/graph/renderer/utils/rectangle'
-import { findNode } from './utils/node'
+import { collectsElements, findNode } from './utils/node'
 import type { Arrayable } from '@vueuse/core'
 import type {
   BasicGraph,
@@ -54,7 +55,7 @@ export class PcGraph extends Events implements BasicGraph {
   history: BasicRecordStore
   clipboard: PcClipBoard
   selected: PcElement[] = []
-
+  nameSet: Set<string> = new Set()
   nextId: string
   isDragging = false
   mousePosition = {
@@ -664,7 +665,17 @@ const addGraphElement = (
   const parent = findNode(graph.canvas, (node) => node.attrs.id === pid)
 
   if (parent) {
-    const pcElement = new PcElement(element)
+    const pcElement = createElementRecursively(
+      { ...element },
+      parent,
+      PcElement,
+      {
+        createId: false,
+        graph,
+        findNode,
+      }
+    )
+
     if (isTab(parent)) {
       const pane =
         parent.tabs[
@@ -674,7 +685,10 @@ const addGraphElement = (
     } else {
       parent.children?.push(pcElement)
     }
-    pcElement.parent = parent
+
+    collectsElements([pcElement], { map: (a) => a.attrs.name }).forEach(
+      (name) => graph.nameSet.add(name)
+    )
 
     return pcElement
   }
@@ -705,6 +719,10 @@ const removeGraphElement = (
   } else if (parent.children) {
     parent.children.splice(parent.children.indexOf(finded), 1)
   }
+
+  collectsElements([finded], { map: (a) => a.attrs.name }).forEach((name) =>
+    graph.nameSet.delete(name)
+  )
 
   return finded
 }

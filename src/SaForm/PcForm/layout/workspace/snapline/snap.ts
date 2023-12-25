@@ -6,7 +6,7 @@ import type { PcElement, PcElementAttributes } from '../../../element'
 import type { Rect } from '../graph/renderer/utils/rectangle'
 import type { PcGraph } from '../../../graph'
 import type { Position } from '@/SaForm/graph'
-import { sortByDistance } from '@/SaForm/PcForm/utils/element'
+import { sortByDistance } from '@/SaForm/utils/element'
 
 export interface RowResult {
   lineY: number

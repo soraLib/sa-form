@@ -1,3 +1,6 @@
+import { isTab } from '../element'
+import type { BasicElement } from '@/SaForm/element'
+
 export type Predicate<T> = (value: T) => unknown
 
 export type TreeNode<ChildrenKeys extends string = 'children'> = Partial<
@@ -67,4 +70,52 @@ export function findNode<T extends TreeNode<'children' | 'tabs'>>(
   const predicate = createPredicate(arg1, arg2)
 
   return findNodeHelper(node, predicate)
+}
+
+export function collectsElements<A extends BasicElement>(
+  elems: A[] | undefined
+): A[]
+export function collectsElements<A extends BasicElement>(
+  elems: A[] | undefined,
+  option?: {
+    filter?: Predicate<A>
+  }
+): A[]
+export function collectsElements<A extends BasicElement, B>(
+  elems: A[] | undefined,
+  option?: {
+    filter?: Predicate<A>
+    map: (a: A) => B
+  }
+): B[]
+export function collectsElements<A extends BasicElement, B>(
+  elems: A[] | undefined,
+  option?: {
+    filter?: Predicate<A>
+    map?: (a: A) => B
+  }
+) {
+  if (!elems) return []
+
+  const filteredElems = option?.filter ? elems?.filter(option.filter) : elems
+  const collects: any[] = []
+
+  for (const elem of filteredElems) {
+    collects.push(elem)
+
+    if (elem.children?.length) {
+      collects.push(...collectsElements<A, B>(elem.children as A[]))
+    }
+
+    if (isTab(elem) && elem.tabs?.length) {
+      for (const pane of elem.tabs) {
+        collects.push(...collectsElements<A, B>(pane.children as A[]))
+      }
+    }
+  }
+
+  const map = option?.map
+  if (map) return collects.map(map)
+
+  return collects
 }
