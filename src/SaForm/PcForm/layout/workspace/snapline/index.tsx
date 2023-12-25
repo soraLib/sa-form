@@ -1,5 +1,4 @@
 import { computed, defineComponent, reactive, watch } from 'vue'
-import { throttle } from 'lodash-es'
 import { useClazs } from '../../../../utils/class'
 import { onSnapping } from './snap'
 import type { PropType } from 'vue'
@@ -30,18 +29,15 @@ export default defineComponent({
       snaplines: new Map<string, Snapline>(),
     })
 
-    const useSnap = throttle(
-      (type: SnapType, positions: [Position, Position]) => {
-        line.snaplines = onSnapping(
-          type,
-          props.graph,
-          selectedRef.value,
-          undefined,
-          positions
-        )
-      },
-      200
-    )
+    const useSnap = (type: SnapType, positions: [Position, Position]) => {
+      line.snaplines = onSnapping(
+        type,
+        props.graph,
+        selectedRef.value,
+        undefined,
+        positions
+      )
+    }
 
     watch(
       () => [props.graph.mousePosition.x, props.graph.mousePosition.y],

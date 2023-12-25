@@ -72,12 +72,20 @@ export type BasicElementAttributes = {
   ElementFontAttributes &
   ElementAlignAttributes
 
-/** basic element */
-export interface BasicElement {
-  el?: HTMLElement
+export type TabPaneBase = {
+  id: string
+  label: string
+  children: BasicElement[]
+}
+export type BasicElementBase = {
   parent?: BasicElement
   children?: BasicElement[]
+  tabs?: TabPaneBase[]
   attrs: BasicElementAttributes
-
-  setEl: (el?: HTMLElement) => void
 }
+
+/** basic element */
+export type BasicElement = {
+  el?: HTMLElement
+  setEl: (el?: HTMLElement) => void
+} & BasicElementBase
