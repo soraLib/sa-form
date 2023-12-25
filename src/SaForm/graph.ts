@@ -23,6 +23,7 @@ export interface MousePosition extends Position {
 export type GridSetting = {
   type: 'dot' | 'mesh' | 'double-mesh'
   size: number
+  radius: number
   enabled: boolean
   visible: true
 }

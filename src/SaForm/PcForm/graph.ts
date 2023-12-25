@@ -80,7 +80,8 @@ export class PcGraph extends Events implements BasicGraph {
   isDraft = false
   grid: GridSetting = {
     type: 'double-mesh',
-    size: 15,
+    size: 20,
+    radius: 10,
     enabled: true,
     visible: true,
   }
