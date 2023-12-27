@@ -163,7 +163,6 @@ useStickResize(bottomStickRef, {
 
   &__stick {
     position: absolute;
-    z-index: 1000;
     transition: opacity var(--c-transition);
     background-color: var(--c-bg-hover);
     opacity: 0;
@@ -177,28 +176,28 @@ useStickResize(bottomStickRef, {
       bottom: 0;
       width: 8px;
       height: 100%;
-      cursor: ew-resize;
+      cursor: col-resize;
     }
     &.is-left {
       left: 0;
       top: 0;
       width: 8px;
       height: 100%;
-      cursor: ew-resize;
+      cursor: col-resize;
     }
     &.is-bottom {
       left: 0;
       bottom: 0;
       width: 100%;
       height: 8px;
-      cursor: ns-resize;
+      cursor: row-resize;
     }
     &.is-top {
       left: 0;
       top: 0;
       width: 100%;
       height: 8px;
-      cursor: ns-resize;
+      cursor: row-resize;
     }
   }
 }
