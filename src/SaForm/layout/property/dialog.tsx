@@ -2,6 +2,7 @@ import { computed, defineComponent, h, ref, shallowRef } from 'vue'
 import { NButton, NInput, NModal } from 'naive-ui'
 import { cloneDeep, isEqual } from 'lodash-es'
 import { getPluginValue } from '../../utils/plugin'
+import { pluginValueFilter } from './hooks/filter'
 import type { DefineComponent, PropType, Ref } from 'vue'
 import type { SaController } from '../../config'
 import type { BasicGraph } from '../../graph'
@@ -88,9 +89,20 @@ export default defineComponent({
       dialogVisible.value = false
     }
 
-    const displayContent = computed(() =>
-      props.plugin.filter?.(getPluginValue(props.graph, props.plugin))
-    )
+    const displayContent = computed(() => {
+      try {
+        return pluginValueFilter(
+          getPluginValue(props.graph, props.plugin),
+          props.plugin,
+          props.graph.selected[0],
+          props.graph
+        )
+      } catch (err) {
+        console.error(err)
+
+        return 'NaN'
+      }
+    })
 
     return () => (
       <div class="dialog-container">

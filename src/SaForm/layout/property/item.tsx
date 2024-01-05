@@ -13,12 +13,15 @@ import { isEqual } from 'lodash-es'
 import { SaPluginType, isGroupPlugin } from '../../plugin'
 import { useClazs } from '../../utils/class'
 import SaDialog from './dialog'
+import { pluginValueFilter } from './hooks/filter'
+import { afterValueChange, beforeValueChange } from './hooks/value'
 import type { PropType, VNode } from 'vue'
 import type { SaPlugin } from '../../plugin'
 
 import type { BasicGraph } from '../../graph'
 import type { SaController } from '../../config'
 import { isElementAttribute } from '@/SaForm/utils/element'
+import { isNullish } from '@/SaForm/utils/function'
 
 export default defineComponent({
   name: 'ControllerItem',
@@ -55,12 +58,14 @@ export default defineComponent({
     })
 
     const internalMoelValue = ref<any>()
+    const error = ref('123')
 
     let colorTemp = modelValue.value
 
     watch(
       () => selected.value.attrs.id,
       () => {
+        error.value = ''
         internalMoelValue.value = modelValue.value
         colorTemp = modelValue.value
       },
@@ -82,7 +87,21 @@ export default defineComponent({
     )
 
     const handlePluginValueChange = (value: unknown) => {
-      props.controller.valueChange(props.plugin.attr, value, props.graph)
+      const { value: modifiedValue, error: $error } = beforeValueChange(
+        value,
+        props.plugin,
+        selected.value,
+        props.graph
+      )
+      error.value = $error
+      if ($error) return
+
+      props.controller.valueChange(
+        props.plugin.attr,
+        modifiedValue,
+        props.graph
+      )
+      afterValueChange(value, props.plugin, props.graph)
     }
     const debouncedHandlePluginValueChange = useDebounceFn(
       handlePluginValueChange,
@@ -95,19 +114,39 @@ export default defineComponent({
 
     const createPluginContent = (): VNode => {
       const plugin = props.plugin
-      const filteredValue = plugin.filter
-        ? plugin.filter(internalMoelValue.value)
-        : internalMoelValue.value
+      const internalDisabled = isNullish(plugin.disabled)
+        ? false
+        : typeof plugin.disabled === 'boolean'
+        ? plugin.disabled
+        : plugin.disabled(selected.value)
+      const filteredValue = pluginValueFilter(
+        internalMoelValue.value,
+        props.plugin,
+        selected.value,
+        props.graph
+      )
 
       switch (plugin.type) {
         case SaPluginType.Input: {
           const Input = (
             <NInput
               class="sa-plugin"
+              type="textarea"
               value={filteredValue}
-              onUpdateValue={onInternalValueUpdate}
-              disabled={plugin.disabled ?? false}
-              placeholder=""
+              onUpdate:value={onInternalValueUpdate}
+              disabled={internalDisabled}
+              clearable={props.plugin.clearable}
+              error={error.value}
+              status={error.value ? 'error' : undefined}
+              allowInput={props.plugin.allowInput}
+              placeholder={''}
+              autosize={{
+                minRows: 1,
+              }}
+              v-slots={{
+                prefix: () => props.plugin.prefix,
+                suffix: () => props.plugin.suffix,
+              }}
             />
           )
 
@@ -126,11 +165,18 @@ export default defineComponent({
           const Input = (
             <NInputNumber
               class="sa-plugin w-full"
-              showButton={false}
+              showButton={plugin.showButton ?? true}
+              clearable={plugin.clearable ?? false}
               value={filteredValue}
-              onUpdateValue={onInternalValueUpdate}
-              disabled={plugin.disabled ?? false}
-              placeholder=""
+              onUpdate:value={onInternalValueUpdate}
+              disabled={internalDisabled}
+              min={plugin.min}
+              max={plugin.max}
+              placeholder={''}
+              v-slots={{
+                prefix: () => props.plugin.prefix,
+                suffix: () => props.plugin.suffix,
+              }}
             />
           )
 
@@ -154,7 +200,7 @@ export default defineComponent({
               filterable
               placeholder=""
               consistentMenuWidth={false}
-              disabled={plugin.disabled ?? false}
+              disabled={internalDisabled}
               options={plugin.options ?? []}
             />
           )
@@ -222,11 +268,13 @@ export default defineComponent({
                   onUpdateValue={updateValue}
                   onUpdateShow={updateShow}
                   onConfirm={onConfirm}
+                  disabled={internalDisabled}
                 />
                 <NButton
                   type="warning"
                   secondary
                   class="color-picker-button"
+                  disabled={internalDisabled}
                   onClick={() => handlePluginValueChange('')}
                 >
                   Reset
