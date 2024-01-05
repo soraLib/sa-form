@@ -70,7 +70,9 @@ export function isIdUpdateData<T extends BasicElement = BasicElement>(
 ): data is IdUpdateData<T> {
   return Reflect.has(data, 'id')
 }
-
+export type UpdateElementOptions = {
+  skipEqualCheck?: boolean
+}
 /** basic graph */
 export interface BasicGraph {
   /** graph type */
@@ -122,21 +124,25 @@ export interface BasicGraph {
   updateElemData(
     id: string,
     data: Partial<BasicElement['attrs']>,
-    needRecord?: boolean
+    needRecord?: boolean,
+    options?: UpdateElementOptions
   ): BasicElement | undefined
   updateElemData(
     element: BasicElement,
     data: Partial<BasicElement['attrs']>,
-    needRecord?: boolean
+    needRecord?: boolean,
+    options?: UpdateElementOptions
   ): BasicElement | undefined
 
   updateElemsData(
     data: IdUpdateData[],
-    needRecord?: boolean
+    needRecord?: boolean,
+    options?: UpdateElementOptions
   ): BasicElement[] | undefined
   updateElemsData(
     data: ElUpdateData[],
-    needRecord?: boolean
+    needRecord?: boolean,
+    options?: UpdateElementOptions
   ): BasicElement[] | undefined
 
   historyTo(to: number): void
