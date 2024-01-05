@@ -1,4 +1,5 @@
-import type { ElementType } from './element'
+import type { BasicGraph } from './graph'
+import type { BasicElement, ElementType } from './element'
 
 /** property controller type */
 export enum SaPluginType {
@@ -29,15 +30,38 @@ export interface SaPlugin extends SaPluginBasic {
     component: string
     /** dialog title, set plugin label in default */
     title?: string
+    /** default is `center` */
+    position?: 'center' | 'bottom-right'
   }
+  /** plugin component */
+  component?: string
   /** options for `Select` */
   options?: SaPluginOption[]
   /** value filter for display format data */
-  filter?: (value: any) => string
+  filter?: (value: any, element: BasicElement, graph: BasicGraph) => string
+  /** plugin visiable option */
+  visiable?: (value: any) => Promise<boolean> | boolean
   /** plugin disable option */
-  disabled?: boolean
+  disabled?: boolean | ((a: any) => boolean)
+  /** plugin displayed option */
+  hidden?: boolean | ((a: any, graph: BasicGraph) => boolean)
   /** displayed inline, only works in `SaGroupPlugin` */
   inline?: boolean
+  filterable?: boolean
+  clearable?: boolean
+  /** default value if value is undefined */
+  default?: any
+  /** show button on input number, default is `true` */
+  showButton?: boolean
+  /** range for input number  */
+  min?: number
+  max?: number
+  /** prefix for input */
+  prefix?: string
+  /** suffix for input */
+  suffix?: string
+  /** limit input format */
+  allowInput?: (a: any) => boolean
 }
 export interface SaGroupPlugin extends SaPluginBasic {
   /** group collapsed, default is `true` */
