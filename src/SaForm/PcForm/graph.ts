@@ -1,6 +1,6 @@
 import { nextTick } from 'vue'
 import { setObjectValues } from 'sugar-sajs'
-import { cloneDeep, pick } from 'lodash-es'
+import { cloneDeep, isEqual, pick } from 'lodash-es'
 import {
   BasicRecordType,
   isCDRecordDataList,
@@ -15,6 +15,7 @@ import { PcClipBoard } from './clipboard'
 import { Events } from './events'
 import { getRectangle } from './layout/workspace/graph/renderer/utils/rectangle'
 import { collectsElements, findNode } from './utils/node'
+import type { PcElementAttributes } from './element'
 import type { Arrayable } from '@vueuse/core'
 import type {
   BasicGraph,
@@ -24,6 +25,7 @@ import type {
   Scroller,
   SelectionSetting,
   SnaplineSetting,
+  UpdateElementOptions,
 } from '../graph'
 import type { BasicRecordStore, CDRecord } from '../record'
 
@@ -425,17 +427,20 @@ export class PcGraph extends Events implements BasicGraph {
   updateElemData(
     id: string,
     data: Partial<PcElement['attrs']>,
-    needRecord?: boolean
+    needRecord?: boolean,
+    options?: UpdateElementOptions
   ): PcElement | undefined
   updateElemData(
     element: PcElement,
     data: Partial<PcElement['attrs']>,
-    needRecord?: boolean
+    needRecord?: boolean,
+    options?: UpdateElementOptions
   ): PcElement | undefined
   updateElemData(
     arg: string | PcElement,
     data: Partial<PcElement['attrs']>,
-    needRecord = true
+    needRecord = true,
+    options?: UpdateElementOptions
   ) {
     if (!arg) return
 
@@ -445,6 +450,14 @@ export class PcGraph extends Events implements BasicGraph {
         : arg
 
     if (!element) return undefined
+
+    if (
+      !options?.skipEqualCheck &&
+      Object.entries(data).every(([key, value]) =>
+        isEqual(value, element.attrs[key as keyof PcElementAttributes])
+      )
+    )
+      return
 
     if (needRecord) {
       const record = new PcRecord({
@@ -469,13 +482,19 @@ export class PcGraph extends Events implements BasicGraph {
 
   updateElemsData(
     data: IdUpdateData[],
-    needRecord?: boolean
+    needRecord?: boolean,
+    options?: UpdateElementOptions
   ): PcElement[] | undefined
   updateElemsData(
     data: ElUpdateData[],
-    needRecord?: boolean
+    needRecord?: boolean,
+    options?: UpdateElementOptions
   ): PcElement[] | undefined
-  updateElemsData(arg: IdUpdateData[] | ElUpdateData[], needRecord = true) {
+  updateElemsData(
+    arg: IdUpdateData[] | ElUpdateData[],
+    needRecord = true,
+    options?: UpdateElementOptions
+  ) {
     const batch = arg.map((data) => ({
       el: isIdUpdateData(data)
         ? findNode(this.canvas, (node) => node.attrs.id === data.id)!
@@ -498,7 +517,7 @@ export class PcGraph extends Events implements BasicGraph {
     }
 
     for (const update of batch) {
-      this.updateElemData(update.el, update.data, false)
+      this.updateElemData(update.el, update.data, false, options)
     }
 
     return batch.map((u) => u.el)

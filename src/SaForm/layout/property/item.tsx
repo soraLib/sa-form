@@ -53,13 +53,16 @@ export default defineComponent({
 
       return undefined
     })
-    let colorTemp = modelValue.value
 
     const internalMoelValue = ref<any>()
+
+    let colorTemp = modelValue.value
+
     watch(
       () => selected.value.attrs.id,
       () => {
         internalMoelValue.value = modelValue.value
+        colorTemp = modelValue.value
       },
       {
         deep: true,
@@ -187,28 +190,35 @@ export default defineComponent({
             )
           }
           const updateShow = (show: boolean) => {
-            if (!show && filteredValue !== colorTemp) {
+            if (!show && modelValue.value !== colorTemp) {
               updateValue(colorTemp)
             }
           }
 
           const onConfirm = (v: string) => {
-            updateValue(colorTemp)
-            handlePluginValueChange(v)
             colorTemp = v
+            props.graph.updateElemData(
+              selected.value,
+              {
+                [plugin.attr]: v,
+              },
+              true,
+              {
+                skipEqualCheck: true,
+              }
+            )
           }
 
           return (
             <div class="sa-plugin flex">
               <NInputGroup title={props.plugin.title}>
-                {/* TODO: <NInputGroupLabel>{props.plugin.label}</NInputGroupLabel> */}
+                <NInputGroupLabel>{props.plugin.label}</NInputGroupLabel>
                 <NColorPicker
                   class="color-picker"
-                  value={filteredValue}
+                  value={filteredValue ?? ''}
                   showPreview={true}
-                  modes={['rgb', 'hex', 'hsl', 'hsv']}
+                  modes={['hex']}
                   actions={['confirm']}
-                  disabled={plugin.disabled ?? false}
                   onUpdateValue={updateValue}
                   onUpdateShow={updateShow}
                   onConfirm={onConfirm}
