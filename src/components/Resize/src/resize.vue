@@ -163,6 +163,7 @@ useStickResize(bottomStickRef, {
 
   &__stick {
     position: absolute;
+    z-index: 5;
     transition: opacity var(--c-transition);
     background-color: var(--c-bg-hover);
     opacity: 0;

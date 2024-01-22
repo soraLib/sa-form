@@ -7,7 +7,7 @@
 
   .plugin-label {
     text-align: start;
-    color: var(--c-text-1);
+    color: var(--c-color);
   }
 
   .plugin-item {
@@ -105,9 +105,19 @@
         }
         &-content {
           width: 100%;
+
+          .n-input-group-label {
+            height: unset;
+          }
         }
       }
     }
+  }
+}
+
+.w-lt-280 {
+  .plugin-group .plugin-item {
+    width: 100%;
   }
 }
 
@@ -123,5 +133,15 @@
   .dialog-button {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
+  }
+}
+
+.v-binder-follower-content .n-color-picker-panel {
+  width: 278px;
+}
+
+.sa-form-property-dialog {
+  & > .el-dialog__body {
+    padding: 0 24px 20px;
   }
 }

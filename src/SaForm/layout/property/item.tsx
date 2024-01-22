@@ -22,6 +22,7 @@ import type { BasicGraph } from '../../graph'
 import type { SaController } from '../../config'
 import { isElementAttribute } from '@/SaForm/utils/element'
 import { isNullish } from '@/SaForm/utils/function'
+import { PredefineColors } from '@/SaForm/utils/color'
 
 export default defineComponent({
   name: 'ControllerItem',
@@ -265,16 +266,16 @@ export default defineComponent({
                   showPreview={true}
                   modes={['hex']}
                   actions={['confirm']}
+                  disabled={internalDisabled}
+                  swatches={PredefineColors}
                   onUpdateValue={updateValue}
                   onUpdateShow={updateShow}
                   onConfirm={onConfirm}
-                  disabled={internalDisabled}
                 />
                 <NButton
                   type="warning"
                   secondary
                   class="color-picker-button"
-                  disabled={internalDisabled}
                   onClick={() => handlePluginValueChange('')}
                 >
                   Reset
@@ -306,7 +307,12 @@ export default defineComponent({
         {!props.isInsideGroup && (
           <div class="plugin-item-label">{props.plugin.label}</div>
         )}
-        <div class="plugin-item-content">{createPlugin()}</div>
+        <div
+          class="plugin-item-content"
+          key={props.graph.selected[0]?.attrs.id}
+        >
+          {createPlugin()}
+        </div>
       </div>
     )
   },
