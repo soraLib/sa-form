@@ -66,6 +66,9 @@ export interface SaPlugin extends SaPluginBasic {
 export interface SaGroupPlugin extends SaPluginBasic {
   /** group collapsed, default is `true` */
   collapsed?: boolean
+  /** clear group plugins' value, default is `false` */
+  clearable?: boolean
+  hidden?: boolean | ((a: any, graph: BasicGraph) => boolean)
   plugins: Record<string, SaPlugin>
 }
 export type SaPluginCombination = SaPlugin | SaGroupPlugin
@@ -103,6 +106,25 @@ export const BasicPlugins = {
       },
     },
   },
+  'widget-style': {
+    label: 'style',
+    collapsed: false,
+    plugins: {
+      'widget-class': {
+        label: 'class',
+        attr: 'class',
+        type: SaPluginType.Input,
+        inline: true,
+      },
+      'widget-background': {
+        label: 'BGD',
+        title: 'background',
+        attr: 'background',
+        type: SaPluginType.Color,
+        inline: true,
+      },
+    },
+  },
   'widget-position': {
     label: 'position',
     collapsed: false,
@@ -119,12 +141,7 @@ export const BasicPlugins = {
       },
     },
   },
-  'widget-background': {
-    label: 'BGD',
-    title: 'background',
-    attr: 'background',
-    type: SaPluginType.Color,
-  },
+
   'widget-border': {
     label: 'border',
     collapsed: false,

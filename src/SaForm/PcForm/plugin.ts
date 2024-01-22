@@ -13,7 +13,7 @@ import type { PcElementAttributes } from './element'
 const basicPlugins = [
   BasicPlugins['widget-id'],
   BasicPlugins['widget-name'],
-  BasicPlugins['widget-background'],
+  BasicPlugins['widget-style'],
   BasicPlugins['widget-size'],
   BasicPlugins['widget-position'],
   BasicPlugins['widget-font'],
@@ -25,7 +25,7 @@ export const PcPlugin: SaPluginLayout = {
     basic: [
       BasicPlugins['widget-id'],
       BasicPlugins['widget-name'],
-      BasicPlugins['widget-background'],
+      BasicPlugins['widget-style'],
       BasicPlugins['widget-size'],
       BasicPlugins['widget-font'],
     ],

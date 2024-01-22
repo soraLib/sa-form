@@ -1,7 +1,7 @@
 import { defineComponent } from 'vue'
 import { useToggle } from '@vueuse/core'
-import { NCollapseTransition, NIcon } from 'naive-ui'
-import { ChevronDown } from '@vicons/ionicons5'
+import { NButton, NCollapseTransition, NIcon } from 'naive-ui'
+import { ChevronDown, TrashBinOutline } from '@vicons/ionicons5'
 import { useClazs } from '../../utils/class'
 import ControllerItem from './item'
 import type { PropType } from 'vue'
@@ -11,7 +11,7 @@ import type { BasicGraph } from '../../graph'
 import type { SaController } from '../../config'
 
 export default defineComponent({
-  name: 'ControllerItem',
+  name: 'ControllerGroup',
   props: {
     plugin: {
       required: true,
@@ -30,6 +30,20 @@ export default defineComponent({
   setup(props) {
     const [visible, toggleVisible] = useToggle(true)
 
+    const onClear = (evt: MouseEvent) => {
+      evt.stopPropagation()
+
+      props.graph.updateElemData(
+        props.graph.selected[0],
+        Object.values(props.plugin.plugins).reduce((acc, cur) => {
+          return {
+            ...acc,
+            [cur.attr]: cur.default ?? undefined,
+          }
+        }, {})
+      )
+    }
+
     return () => (
       <div class="plugin-group">
         <div
@@ -38,11 +52,34 @@ export default defineComponent({
           })}
           onClick={() => toggleVisible()}
         >
-          <span class="group-collapse-label">{props.plugin.label}</span>
+          <div class="flex items-center gap-1">
+            <span class="group-collapse-label">{props.plugin.label}</span>
 
-          <NIcon class="group-collapse-caret" size={16}>
-            <ChevronDown />
-          </NIcon>
+            <span class="group-collapse-caret">
+              <NIcon size={14}>
+                <ChevronDown />
+              </NIcon>
+            </span>
+          </div>
+
+          {props.plugin.clearable && (
+            <NButton
+              secondary
+              type="warning"
+              circle
+              text
+              size="small"
+              title="Clear"
+              v-slots={{
+                icon: () => (
+                  <NIcon size={14}>
+                    <TrashBinOutline />
+                  </NIcon>
+                ),
+              }}
+              onClick={onClear}
+            />
+          )}
         </div>
 
         <NCollapseTransition show={visible.value}>
