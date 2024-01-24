@@ -2,6 +2,7 @@ import { cloneDeep } from 'lodash-es'
 import { setObjectValues } from 'sugar-sajs'
 import { BasicRecordType } from '../record'
 import { createElementRecursively } from '../utils/element'
+import { getRectangle } from './layout/workspace/graph/renderer/utils/rectangle'
 import { PcElement } from './element'
 import { PcRecord } from './record'
 import { findNode } from './utils/node'
@@ -83,16 +84,22 @@ export class PcClipBoard implements BasicClipBoard {
     if (this.isEmpty(clips)) return
 
     const pasteTo = parent ?? clips.elements[0].parent
+    const rect = getRectangle(clips.elements)
+
     const newPasteElements = clips.elements.map((ele) => {
+      const offsetX = ele.attrs.x - rect.x
+      const offsetY = ele.attrs.y - rect.y
+
       const paste = createElementRecursively(
         {
           attrs: {
             ...ele.attrs,
-            x:
-              options?.position?.left ??
-              ele.attrs.x + clips.times * this.offset,
-            y:
-              options?.position?.top ?? ele.attrs.y + clips.times * this.offset,
+            x: options?.position?.left
+              ? options.position.left + offsetX
+              : ele.attrs.x + clips.times * this.offset,
+            y: options?.position?.top
+              ? options.position.top + offsetY
+              : ele.attrs.y + clips.times * this.offset,
             'is-draft': this.graph.isDraft,
           },
           children: ele.children,
